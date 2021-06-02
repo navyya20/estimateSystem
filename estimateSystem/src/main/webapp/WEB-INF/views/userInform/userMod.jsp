@@ -98,7 +98,7 @@ function setInitialValueForSelectBox(){
 	<div class="row align-items-center col-12 p-0 m-0" style="height: 80%;">
 		<div id="login_div" class="d-flex justify-content-center col-12 p-0">
 			<form class="col-12 d-flex justify-content-center" id="updateUser" action="updateUser" method="post" accept-charset="utf-8">
-				<input type="hidden" id="userNu," name="userNum" value="${userInform.userNum}">
+				<input type="hidden" id="userNum" name="userNum" value="${userInform.userNum}">
 				<div class="d-flex flex-column col-10 col-md-6">
 					<!-- id -->
 					<div class="input-group">
@@ -195,7 +195,7 @@ function setInitialValueForSelectBox(){
 					
 					<div class="d-block" style="height: 8px;"></div>
 					
-					<!-- 登録button -->
+					<!-- update button -->
 					<div class="p-0 d-flex col-12">
 						<div class="pl-2 pr-2 d-flex col-6">
 							<button type="button" class="col-12 btn btn-secondary" onclick="updateUser()">変更格納</button>

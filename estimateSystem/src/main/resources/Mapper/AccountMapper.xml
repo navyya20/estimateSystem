@@ -9,4 +9,53 @@
 		select * from accountInform order by accountInformNum desc
 	</select>
 	
+	<select id="getAccount" parameterType="int" resultType="accountDTO">
+		select * from accountInform where accountInformNum = #{accountInformNum}
+	</select>
+	
+	<insert id="insertAccount" parameterType="accountDTO">
+		insert into accountInform(
+			accountInformName,
+			bankName,
+			branchName,
+			accountName,
+			hurigana,
+			accountNumber,
+			depositeClassification,
+			insertDate,
+			updateDate,
+			updater
+		)
+		values(
+			#{accountInformName},
+			#{bankName},
+			#{branchName},
+			#{accountName},
+			#{hurigana},
+			#{accountNumber},
+			#{depositeClassification},
+			CURRENT_TIMESTAMP,
+			CURRENT_TIMESTAMP,
+			#{updater}
+		)
+	</insert>
+	
+	<update id="updateAccount" parameterType="accountDTO">
+		update accountInform set
+			accountInformName = #{accountInformName},
+			bankName = #{bankName},
+			branchName = #{branchName},
+			accountName = #{accountName},
+			hurigana = #{hurigana},
+			accountNumber = #{accountNumber},
+			depositeClassification = #{depositeClassification},
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where 
+			accountInformNum = #{accountInformNum}
+	</update>
+	
+	<delete id="deleteAccount" parameterType="int">
+		delete from accountInform where accountInformNum = #{accountInformNum}
+	</delete>
 </mapper>

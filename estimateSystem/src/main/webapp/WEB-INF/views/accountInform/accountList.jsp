@@ -23,8 +23,8 @@ if ( self !== top ) {
 	window.parent.location.href="login";
 }
 
-function goToAccountMod(accountNum){
-	$("#accountNum").val(accountNum);
+function goToAccountMod(accountInformNum){
+	$("#accountInformNum").val(accountInformNum);
 	$("#goToAccountMod").submit();
 }
 </script>
@@ -72,7 +72,7 @@ function goToAccountMod(accountNum){
 					<div class="mt-2 mb-2 col-4 col-md-2 p-0 text-center">${account.bankName}</div>
 					<div class="mt-2 mb-2 col-md-2 p-0 text-center d-none d-md-inline">${account.branchName}</div>
 					<div class="mt-2 mb-2 col-md-2 p-0 text-center d-none d-md-inline">${account.depositeClassification}</div>
-					<div class="mt-2 mb-2 col-4 col-md-2 p-0 text-center">${account.accountNum}</div>
+					<div class="mt-2 mb-2 col-4 col-md-2 p-0 text-center">${account.accountNumber}</div>
 					<div class="mt-2 mb-2 col-4 col-md-2 p-0 text-center">${account.accountName}</div>
 					<div class="mt-2 mb-2 col-md-2 p-0 text-center d-none d-md-inline">${account.hurigana}</div>
 				</div>
@@ -81,7 +81,7 @@ function goToAccountMod(accountNum){
 	</c:forEach>
 	
 	<form id="goToAccountMod" action="accountMod" method="post" accept-charset="utf-8">
-		<input type="hidden" id="accountNum" name="userNum" value="">
+		<input type="hidden" id="accountInformNum" name="accountInformNum" value="">
 	</form>
 </body>
 </html>

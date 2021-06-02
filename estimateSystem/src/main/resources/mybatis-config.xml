@@ -9,10 +9,13 @@
 		<typeAlias type="jp.co.interline.dto.PositionDTO" alias="positionDTO"/>
 		<typeAlias type="jp.co.interline.dto.AuthDTO" alias="authDTO"/>
 		<typeAlias type="jp.co.interline.dto.AccountDTO" alias="accountDTO"/>
+		<typeAlias type="jp.co.interline.dto.CompanyDTO" alias="companyDTO"/>
+		<typeAlias type="jp.co.interline.dto.FileNamesDTO" alias="fileNamesDTO"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="Mapper/UserMapper.xml"/>
 		<mapper resource="Mapper/BasicMapper.xml"/>
 		<mapper resource="Mapper/AccountMapper.xml"/>
+		<mapper resource="Mapper/CompanyMapper.xml"/>
 	</mappers>
 </configuration>

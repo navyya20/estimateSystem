@@ -120,7 +120,7 @@ public class UserController {
 		logger.debug("userNum : {}", userNum);
 		int result = userService.deleteUser(userNum);
 		if (result != 1) {
-			System.out.println("failed for deleting userInform");
+			logger.info("failed for deleting userInform");
 		}
 		logger.info("userInform deleted");
 		return "redirect:/all/userList";
