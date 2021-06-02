@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="jp.co.interline.dao.BasicMapper">
+	<select id="getDepartments" resultType="departmentDTO">
+		select * from department order by departmentNum asc
+	</select>
+	
+	<select id="getPositions" resultType="positionDTO">
+		select * from position order by positionNum asc
+	</select>
+	
+	<select id="getAuths" resultType="authDTO">
+		select * from auth
+	</select>
+	
+</mapper>

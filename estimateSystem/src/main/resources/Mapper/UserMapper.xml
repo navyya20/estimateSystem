@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="jp.co.interline.dao.UserMapper">
+
+	<select id="getUserInformByIdPw" parameterType="userInformDTO" resultType="userInformDTO">
+		select * from userInform where userId=#{userId} and password=#{password}
+	</select>
+	
+	<select id="getUserInformByUserNum" parameterType="int" resultType="userInformDTO">
+		select * from userInform where userNum=#{userNum}
+	</select>
+	
+	
+	<select id="getUserList" parameterType="userInformDTO" resultType="userInformDTO">
+		select u.*, d.department, p.position from 
+		userInform u left outer join department d on (u.departmentNum=d.departmentNum) 
+		left outer join position p on (u.positionNum=p.positionNum)
+		<choose>
+			<when test='auth == "sa"'></when>
+			<when test='auth == "a"'>
+				where u.userId = #{userId}
+			</when>
+			<when test='auth == "u"'>
+				where u.userId = #{userId}
+			</when>
+			<otherwise></otherwise>
+		</choose>
+	</select>
+	
+	
+	<insert id="insertUser" parameterType="userInformDTO">
+		insert into userInform (
+			userId,
+			password,
+			userName,
+			departmentNum,
+			positionNum,
+			auth,
+			phoneNumber,
+			email,
+			state,
+			insertDate,
+			updateDate,
+			updater
+		) 
+		values 
+		(
+			#{userId},
+			#{password},
+			#{userName},
+			<choose>
+				<when test="departmentNum == 0">
+					null,
+				</when>
+				<otherwise>
+					#{departmentNum},
+				</otherwise>
+			</choose>
+			<choose>
+				<when test="positionNum == 0">
+					null,
+				</when>
+				<otherwise>
+					#{positionNum},
+				</otherwise>
+			</choose>
+			#{auth},
+			#{phoneNumber},
+			#{email},
+			#{state},
+			CURRENT_TIMESTAMP,
+			CURRENT_TIMESTAMP,
+			#{updater}
+		);
+	</insert>
+	
+	<update id="updateUser">
+		update userInform set
+			password = #{password},
+			userName = #{userName},
+			departmentNum = <choose>
+								<when test="departmentNum == 0">
+									null,
+								</when>
+								<otherwise>
+									#{departmentNum},
+								</otherwise>
+							</choose>
+			positionNum = 	<choose>
+								<when test="positionNum == 0">
+									null,
+								</when>
+								<otherwise>
+									#{positionNum},
+								</otherwise>
+							</choose>
+			auth = #{auth},
+			phoneNumber = #{phoneNumber},
+			email = #{email},
+			state = #{state},
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where 
+			userNum = #{userNum}
+	</update>
+	
+	<delete id="deleteUser" parameterType="int">
+		delete from userInform where userNum = #{userNum}
+	</delete>
+<!-- 
+	<update id="setStaffResign" parameterType="staffDTO">
+		update USER_M
+		set userResignDate = current_timestamp, userStatusFlag = #{userStatusFlag}, updateDate = current_timestamp, updater = #{updater}
+		where userCode = #{userCode}
+	</update>
+	
+	<select id="getStaffStatus" resultType="staffStatusDTO">
+		select * from WORKSTATUS_M
+	</select>
+ -->
+</mapper>

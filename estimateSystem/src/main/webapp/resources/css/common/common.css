@@ -1,0 +1,78 @@
+@charset "UTF-8";
+@font-face{ 
+	font-family:'SawarabiGothic'; 
+	src:url('../../resources/fonts/SawarabiGothic-Regular.ttf') format('truetype')
+}
+body{
+	font-family: SawarabiGothic;
+}
+
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+	background: #ffffff;
+}
+::-webkit-scrollbar-thumb {
+	border-radius: 3.5px;
+	background-color: #ced4da;
+	hover {
+		background-color: #adb5bd;
+	}
+}
+::-webkit-scrollbar-track {
+	background: #ffffff;
+}
+
+.bgGray1{
+	background-color: rgb(180,180,180);
+}
+.bgGray2{
+	background-color: rgb(230,230,230);
+}
+.bgGray3{
+	background-color: rgb(210,210,210);
+}
+
+.bgYellow1{
+	background-color: rgb(255,255,204);
+}
+.bgYellow2{
+	background-color: rgb(255,255,153);
+}
+.bgYellow3{
+	background-color: rgb(255,255,102);
+}
+.bgBlue1{
+	background-color: rgb(204,245,255);
+}
+.bgBlue2{
+	background-color: rgb(180,245,255);
+}
+.bgBlue3{
+	background-color: rgb(100,245,255);
+}
+.inputRedText{
+	color: rgb(255,0,0);
+}
+.inputBlueText{
+	color: rgb(0,0,255);
+}
+.line{
+	margin-bottom: 0;
+	margin-top: 0;
+	height: 0;
+}
+
+.hoverPointer{
+	cursor: pointer;
+}
+
+
+@media screen{
+	.line{
+		display: none;
+	}
+}
+@media print {
+    .noPrint {display:none;}
+}
