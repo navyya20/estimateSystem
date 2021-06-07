@@ -1,12 +1,6 @@
 package jp.co.interline.service;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.util.Properties;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import javax.servlet.jsp.tagext.TryCatchFinally;
 
 import org.springframework.core.io.ClassPathResource;
 

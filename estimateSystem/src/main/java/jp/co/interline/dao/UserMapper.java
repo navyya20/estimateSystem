@@ -1,9 +1,6 @@
 package jp.co.interline.dao;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.apache.ibatis.session.RowBounds;
 
 import jp.co.interline.dto.UserInformDTO;
 
@@ -23,6 +20,10 @@ public interface UserMapper {
 	int updateUser(UserInformDTO userInform);
 
 	public int deleteUser(int userNum);
+
+	public ArrayList<UserInformDTO> getUserListOrderd(String condition);
+
+
 
 
 

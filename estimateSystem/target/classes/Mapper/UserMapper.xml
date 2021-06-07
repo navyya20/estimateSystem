@@ -30,6 +30,13 @@
 		</choose>
 	</select>
 	
+	<select id="getUserListOrderd" parameterType="String" resultType="userInformDTO">
+		select u.*, d.department, p.position from 
+		userInform u left outer join department d on (u.departmentNum=d.departmentNum) 
+		left outer join position p on (u.positionNum=p.positionNum)
+		${value}
+	</select>
+	
 	
 	<insert id="insertUser" parameterType="userInformDTO">
 		insert into userInform (

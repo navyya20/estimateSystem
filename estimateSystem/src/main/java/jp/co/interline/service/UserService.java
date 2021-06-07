@@ -19,4 +19,6 @@ public interface UserService {
 	public int updateUser(UserInformDTO userInform);
 
 	public int deleteUser(int userNum);
+
+	public ArrayList<UserInformDTO> getUserListOrderd(String where);
 }

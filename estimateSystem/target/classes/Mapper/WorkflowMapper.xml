@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="jp.co.interline.dao.WorkflowMapper">
+	<select id="getWorkflowInformBySystemNum" parameterType="int" resultType="workflowInformDTO">
+		select * from workflowInform where systemNum = #{systemNum}
+	</select>
+	<select id="getWorkflowInformWithNameBySystemNum" parameterType="int" resultType="workflowInformDTO">
+		select w.*, u1.userName approver1Name, u2.userName approver2Name, u3.userName approver3Name from workflowInform w 
+			left outer join userInform u1 on (w.approver1 = u1.userNum) 
+			left outer join userInform u2 on (w.approver2 = u2.userNum)
+			left outer join userInform u3 on (w.approver3 = u3.userNum)
+		where w.systemNum = #{systemNum};
+	</select>
+	  
+	<update id="updateWorkflowInform" parameterType="workflowInformDTO">
+		update workflowInform set
+			<choose>
+				<when test="order == 1">
+					approver1 = #{approver1}
+				</when>
+				<when test="order == 2">
+					approver2 = #{approver2}
+				</when>
+				<when test="order == 3">
+					approver3 = #{approver3}
+				</when>
+			</choose>
+		where 
+			systemNum = #{systemNum}
+	</update>
+	
+	<update id="setWorkflowInformTargetKey" parameterType="workflowInformDTO">
+		update workflowInform set
+			targetKey=#{targetKey}
+		where
+			systemNum = #{systemNum}
+	</update>
+	
+</mapper>

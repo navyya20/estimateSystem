@@ -4,58 +4,70 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="jp.co.interline.dao.CompanyMapper">
-	<!--  
-	<select id="getAccountList" resultType="accountDTO">
-		select * from accountInform order by accountInformNum desc
+	  
+	<select id="getCompanyList" resultType="companyDTO">
+		select * from companyInform order by companyInformNum asc
+	</select>
+
+	<select id="getCompany" parameterType="int" resultType="companyDTO">
+		select * from companyInform where companyInformNum = #{companyInformNum}
 	</select>
 	
-	<select id="getAccount" parameterType="int" resultType="accountDTO">
-		select * from accountInform where accountInformNum = #{accountInformNum}
-	</select>
-	
-	<insert id="insertAccount" parameterType="accountDTO">
-		insert into accountInform(
-			accountInformName,
-			bankName,
-			branchName,
-			accountName,
-			hurigana,
-			accountNumber,
-			depositeClassification,
+	<insert id="insertCompany" parameterType="companyDTO">
+		insert into companyInform(
+			companyInformName,
+			companyName,
+			representative,
+			phoneNumber,
+			address,
+			post,
+			email,
 			insertDate,
 			updateDate,
 			updater
 		)
 		values(
-			#{accountInformName},
-			#{bankName},
-			#{branchName},
-			#{accountName},
-			#{hurigana},
-			#{accountNumber},
-			#{depositeClassification},
+			#{companyInformName},
+			#{companyName},
+			#{representative},
+			#{phoneNumber},
+			#{address},
+			#{post},
+			#{email},
 			CURRENT_TIMESTAMP,
 			CURRENT_TIMESTAMP,
 			#{updater}
 		)
 	</insert>
 	
-	<update id="updateAccount" parameterType="accountDTO">
-		update accountInform set
-			accountInformName = #{accountInformName},
-			bankName = #{bankName},
-			branchName = #{branchName},
-			accountName = #{accountName},
-			hurigana = #{hurigana},
-			accountNumber = #{accountNumber},
-			depositeClassification = #{depositeClassification},
+	<update id="updateCompany" parameterType="companyDTO">
+		update companyInform set
+			companyInformName = #{companyInformName},
+			companyName = #{companyName},
+			representative = #{representative},
+			phoneNumber = #{phoneNumber},
+			address = #{address},
+			post = #{post},
+			email = #{email},
 			updateDate = CURRENT_TIMESTAMP,
 			updater = #{updater}
 		where 
-			accountInformNum = #{accountInformNum}
+			companyInformNum = #{companyInformNum}
 	</update>
 	
-	<delete id="deleteAccount" parameterType="int">
-		delete from accountInform where accountInformNum = #{accountInformNum}
-	</delete>-->
+	<delete id="deleteCompany" parameterType="int">
+		delete from companyInform where companyInformNum = #{companyInformNum}
+	</delete>
+	
+	<update id="setFileName">
+		update fileNames set
+			fileName = #{fileName}
+		where
+			category = #{category}
+	</update>
+	
+	<select id="getfileName" parameterType="String" resultType="fileNamesDTO">
+		select * from fileNames where category=#{category}
+	</select>
+	
 </mapper>

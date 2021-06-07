@@ -37,11 +37,11 @@
 						設定
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="#">会社情報</a>
-						<a class="dropdown-item" href="#">印鑑・LOGO</a>
+						<a class="dropdown-item" href="./companyList">会社情報</a>
+						<a class="dropdown-item" href="./imgList">印鑑・LOGO</a>
 						<a class="dropdown-item" href="./accountList">口座情報</a>
 						<a class="dropdown-item" href="./userList">ユーザ情報</a>
-						<a class="dropdown-item" href="#">Workflow</a>
+						<a class="dropdown-item" href="./workflowList">Workflow</a>
 					</div>
 				</li>
 			</ul>

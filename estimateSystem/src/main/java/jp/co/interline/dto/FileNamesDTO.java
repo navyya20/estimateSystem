@@ -1,32 +1,26 @@
 package jp.co.interline.dto;
 
 public class FileNamesDTO {
-	int fileNamesNum;
-	String stampFileName;
-	String logoFileName;
-	public int getFileNamesNum() {
-		return fileNamesNum;
+	String category;
+	String fileName;
+	public String getCategory() {
+		return category;
 	}
-	public void setFileNamesNum(int fileNamesNum) {
-		this.fileNamesNum = fileNamesNum;
+	public void setCategory(String category) {
+		this.category = category;
 	}
-	public String getStampFileName() {
-		return stampFileName;
+	public String getFileName() {
+		return fileName;
 	}
-	public void setStampFileName(String stampFileName) {
-		this.stampFileName = stampFileName;
-	}
-	public String getLogoFileName() {
-		return logoFileName;
-	}
-	public void setLogoFileName(String logoFileName) {
-		this.logoFileName = logoFileName;
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 	@Override
 	public String toString() {
-		return "FileNamesDTO [fileNamesNum=" + fileNamesNum + ", stampFileName=" + stampFileName + ", logoFileName="
-				+ logoFileName + "]";
+		return "FileNamesDTO [category=" + category + ", fileName=" + fileName + "]";
 	}
+	
+	
 	
 	
 }

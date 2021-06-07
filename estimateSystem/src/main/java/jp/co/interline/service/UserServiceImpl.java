@@ -27,6 +27,10 @@ public class UserServiceImpl implements UserService{
 		return userDao.getUserList(user);
 	}
 
+	@Override
+	public ArrayList<UserInformDTO> getUserListOrderd(String where) {
+		return userDao.getUserListOrderd(where);
+	}
 
 	@Override
 	public int insertUser(UserInformDTO userInform) {
@@ -54,6 +58,9 @@ public class UserServiceImpl implements UserService{
 		int result = userDao.deleteUser(userNum);
 		return result;
 	}
+
+
+	
 
 
 	

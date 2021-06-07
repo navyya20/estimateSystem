@@ -6,7 +6,7 @@
 <mapper namespace="jp.co.interline.dao.AccountMapper">
 	
 	<select id="getAccountList" resultType="accountDTO">
-		select * from accountInform order by accountInformNum desc
+		select * from accountInform order by accountInformNum asc
 	</select>
 	
 	<select id="getAccount" parameterType="int" resultType="accountDTO">

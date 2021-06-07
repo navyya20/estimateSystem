@@ -2,7 +2,6 @@ package jp.co.interline.dao;
 
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +35,14 @@ public class UserDAO implements UserMapper {
 	}
 	
 	@Override
+	public ArrayList<UserInformDTO> getUserListOrderd(String condition) {
+		UserMapper mapper = sqlsession.getMapper(UserMapper.class);
+		ArrayList<UserInformDTO> userList = mapper.getUserListOrderd(condition);
+		return userList;
+	}
+	
+	
+	@Override
 	public int insertUser(UserInformDTO userInform) {
 		UserMapper mapper = sqlsession.getMapper(UserMapper.class);
 		int result = mapper.insertUser(userInform);
@@ -55,12 +62,16 @@ public class UserDAO implements UserMapper {
 		int result = mapper.updateUser(userInform);
 		return result;
 	}
-
+	
+	@Override
 	public int deleteUser(int userNum) {
 		UserMapper mapper = sqlsession.getMapper(UserMapper.class);
 		int result = mapper.deleteUser(userNum);
 		return result;
 	}
+
+	
+
 	
 	
 	

@@ -7,9 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import jp.co.interline.dto.AccountDTO;
-import jp.co.interline.dto.AuthDTO;
-import jp.co.interline.dto.DepartmentDTO;
-import jp.co.interline.dto.PositionDTO;
 
 @Repository
 public class AccountDAO implements AccountMapper {

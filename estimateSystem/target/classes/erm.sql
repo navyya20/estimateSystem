@@ -75,15 +75,14 @@ CREATE TABLE billSheet1
 	post varchar(10) COMMENT '供給者郵便番号',
 	phoneNumber varchar(20) COMMENT '供給者電話番号',
 	representative varchar(30) COMMENT '代表者',
-	stamp varchar(20) COMMENT '印鑑',
+	stamp varchar(25) COMMENT '印鑑',
 	-- 印鑑イメージのファイル名
-	stampFileName varchar(20) NOT NULL COMMENT '印鑑 : 印鑑イメージのファイル名',
+	stampFileName varchar(25) NOT NULL COMMENT '印鑑 : 印鑑イメージのファイル名',
 	-- logoイメージのファイル名
-	logoFileName varchar(20) NOT NULL COMMENT 'logoFileName : logoイメージのファイル名',
-	logoFileName varchar(20) COMMENT 'logoファイル名',
+	logoFileName varchar(25) NOT NULL COMMENT 'logoFileName : logoイメージのファイル名',
 	reciever varchar(40) COMMENT '顧客名',
 	documentName varchar(40) COMMENT '件名',
-	payCondition varchar(40) COMMENT 'お支払い条条件',
+	payCondition varchar(40) COMMENT '支払い条件',
 	deadline varchar(20) COMMENT '支払期限',
 	bankName varchar(30) COMMENT '銀行名',
 	branchName varchar(20) COMMENT '支店名',
@@ -198,11 +197,11 @@ CREATE TABLE estimateSheet1
 	post varchar(10) COMMENT '供給者郵便番号',
 	phoneNumber varchar(20) COMMENT '供給者電話番号',
 	representative varchar(30) COMMENT '代表者',
-	stamp varchar(20) COMMENT '印鑑',
+	stamp varchar(25) COMMENT '印鑑',
 	-- 印鑑イメージのファイル名
-	stampFileName varchar(20) NOT NULL COMMENT '印鑑ファイル名 : 印鑑イメージのファイル名',
+	stampFileName varchar(25) NOT NULL COMMENT '印鑑ファイル名 : 印鑑イメージのファイル名',
 	-- logoイメージのファイル名
-	logoFileName varchar(20) NOT NULL COMMENT 'logoファイル名 : logoイメージのファイル名',
+	logoFileName varchar(25) NOT NULL COMMENT 'logoファイル名 : logoイメージのファイル名',
 	reciever varchar(40) COMMENT '顧客名',
 	documentName varchar(40) COMMENT '件名',
 	deadline varchar(20) COMMENT '納入期限',
@@ -243,14 +242,10 @@ CREATE TABLE estimateSheet1Items
 -- 参照ファイル名
 CREATE TABLE fileNames
 (
-	fileNamesNum int NOT NULL AUTO_INCREMENT COMMENT 'ファイル名の固有番号',
-	-- 印鑑イメージのファイル名
-	stampFileName varchar(20) COMMENT '印鑑 : 印鑑イメージのファイル名',
-	-- logoイメージのファイル名
-	logoFileName varchar(20) COMMENT 'logoFileName : logoイメージのファイル名',
-	PRIMARY KEY (fileNamesNum),
-	UNIQUE (stampFileName),
-	UNIQUE (logoFileName)
+	category varchar(20) NOT NULL AUTO_INCREMENT COMMENT 'ファイル名の固有番号',
+	fileName varchar(25) COMMENT '印鑑 : 印鑑イメージのファイル名',
+	PRIMARY KEY (category),
+	UNIQUE (fileName)
 ) COMMENT = '参照ファイル名';
 
 
@@ -449,37 +444,6 @@ ALTER TABLE estimateSheet1Items
 ;
 
 
-ALTER TABLE billSheet1
-	ADD FOREIGN KEY (stampFileName)
-	REFERENCES fileNames (stampFileName)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE billSheet1
-	ADD FOREIGN KEY (logoFileName)
-	REFERENCES fileNames (logoFileName)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE estimateSheet1
-	ADD FOREIGN KEY (stampFileName)
-	REFERENCES fileNames (stampFileName)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE estimateSheet1
-	ADD FOREIGN KEY (logoFileName)
-	REFERENCES fileNames (logoFileName)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
 
 ALTER TABLE userInform
 	ADD FOREIGN KEY (positionNum)
@@ -574,6 +538,16 @@ INSERT INTO `interline_estimatesystem`.`department` (`department`) VALUES ('代�
 INSERT INTO `interline_estimatesystem`.`auth` (`auth`, `explanation`) VALUES ('sa', 'system admin.');
 INSERT INTO `interline_estimatesystem`.`auth` (`auth`, `explanation`) VALUES ('a', 'normal admin.');
 INSERT INTO `interline_estimatesystem`.`auth` (`auth`, `explanation`) VALUES ('u', 'normal user.');
+
+-- files
+INSERT INTO `interline_estimatesystem`.`filenames` (`category`, `fileName`) VALUES ('logo', 'defaultLogo.png');
+INSERT INTO `interline_estimatesystem`.`filenames` (`category`, `fileName`) VALUES ('stamp', 'defaultStamp.png');
+
+-- system
+INSERT INTO `interline_estimatesystem`.`systemtype` (`systemName`) VALUES ('estimateSystem');
+INSERT INTO `interline_estimatesystem`.`systemtype` (`systemName`) VALUES ('billSystem');
+INSERT INTO `interline_estimatesystem`.`workflowinform` (`systemNum`) VALUES ('1');
+INSERT INTO `interline_estimatesystem`.`workflowinform` (`systemNum`) VALUES ('2');
 
 
 -- system管理者

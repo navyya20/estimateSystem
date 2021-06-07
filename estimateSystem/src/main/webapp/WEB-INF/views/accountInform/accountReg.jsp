@@ -54,7 +54,7 @@ function insertAccount(){
 	console.log(hurigana);
 	if(accountInformName=""){
 		alert("口座情報名を入力してください。情報同士に区別するためです。");
-		$("#userId").focus();
+		$("#accountInformName").focus();
 		return;
 	}
 	
@@ -130,9 +130,7 @@ function insertAccount(){
 					<div class="d-block" style="height: 8px;"></div>
 					
 					<!-- 登録button -->
-					<button type="button" class="col-12 btn btn-secondary" onclick="insertAccount()">ユーザ登録</button>
-					<div class="p-0 d-flex col-6 col-md-2">
-					</div>
+					<button type="button" class="col-12 btn btn-secondary" onclick="insertAccount()">登録</button>
 				</div>
 			</form>
 		</div>
