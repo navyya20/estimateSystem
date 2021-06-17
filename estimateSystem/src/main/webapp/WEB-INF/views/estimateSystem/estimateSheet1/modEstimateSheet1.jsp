@@ -12,12 +12,12 @@
 
 
 
-<script src="http://localhost:8888/oz80/ozhviewer/jquery-2.0.3.min.js"></script>
-<link rel="stylesheet" href="http://localhost:8888/oz80/ozhviewer/jquery-ui.css" type="text/css"/>
-<script src="http://localhost:8888/oz80/ozhviewer/jquery-ui.min.js"></script>
-<link rel="stylesheet" href="http://localhost:8888/oz80/ozhviewer/ui.dynatree.css" type="text/css"/>
-<script type="text/javascript" src="http://localhost:8888/oz80/ozhviewer/jquery.dynatree.js" charset="utf-8"></script>
-<script type="text/javascript" src="http://localhost:8888/oz80/ozhviewer/OZJSViewer.js" charset="utf-8"></script>
+<script src="http://<%out.print(properties.getOzIP());%>/oz80/ozhviewer/jquery-2.0.3.min.js"></script>
+<link rel="stylesheet" href="http://<%out.print(properties.getOzIP());%>/oz80/ozhviewer/jquery-ui.css" type="text/css"/>
+<script src="http://<%out.print(properties.getOzIP());%>/oz80/ozhviewer/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="http://<%out.print(properties.getOzIP());%>/oz80/ozhviewer/ui.dynatree.css" type="text/css"/>
+<script type="text/javascript" src="http://<%out.print(properties.getOzIP());%>/oz80/ozhviewer/jquery.dynatree.js" charset="utf-8"></script>
+<script type="text/javascript" src="http://<%out.print(properties.getOzIP());%>/oz80/ozhviewer/OZJSViewer.js" charset="utf-8"></script>
 <!-- If you want to run the HTML5SVG viewer please change the OZJSViewer.js to OZJSSVGViewer.js.
 <script type="text/javascript" src="http://192.168.0.103:8888/oz80/ozhviewer/OZJSSVGViewer.js" charset="utf-8"></script>   OZJSViewer.js   OZJSSVGViewer.js
 -->
@@ -76,7 +76,7 @@ if ( self !== top ) {
 			oz = document.getElementById("OZViewer");
 			oz.sendToActionScript("viewer.ignore_disable_color_inputcomponent","true");
 			oz.sendToActionScript("viewer.external_functions_path","ozp://estimateSystem/estimateSheet1/JS/estimateSheet1.js");
-			oz.sendToActionScript("connection.servlet","http://localhost:8888/oz80/server");
+			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
 			oz.sendToActionScript("connection.reportname","estimateSystem/estimateSheet1/modEstimateSheet1.ozr");
 			oz.sendToActionScript("connection.pcount","7");
 			oz.sendToActionScript("connection.args1","repeat="+repeat);
@@ -101,7 +101,7 @@ if ( self !== top ) {
 		var isFont = false;		
 		function start_viewer() {
             if (isFont) {
-            	start_ozjs("OZViewer","http://localhost:8888/oz80/ozhviewer/", opt);
+            	start_ozjs("OZViewer","http://<%out.print(properties.getOzIP());%>/oz80/ozhviewer/", opt);
             }
         }
 		console.log("fontSpy함수를 실행합니다.");
