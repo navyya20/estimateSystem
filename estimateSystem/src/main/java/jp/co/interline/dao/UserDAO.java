@@ -70,6 +70,12 @@ public class UserDAO implements UserMapper {
 		return result;
 	}
 
+	public ArrayList<UserInformDTO> getUserListOrderdOnlyAdmin(String where) {
+		UserMapper mapper = sqlsession.getMapper(UserMapper.class);
+		ArrayList<UserInformDTO> userList = mapper.getUserListOrderdOnlyAdmin(where);
+		return userList;
+	}
+
 	
 
 	

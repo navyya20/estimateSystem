@@ -13,7 +13,7 @@
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../css/common/common.css">
 <script src="../js/bootstrap.bundle.js"></script>
-<title>userList</title>
+<title>accountList</title>
 <style type="text/css">
 </style>
 <script>
@@ -39,7 +39,9 @@ function goToAccountMod(accountInformNum){
 	<div class="p-0 container-lg">
 		<div class="p-0 d-flex">
 			<div class="p-0 d-flex col-6 col-md-2">
-				<button type="button" class="col-12 btn btn-secondary" onclick="location.href='accountReg'">新規作成</button>
+				<c:if test="${userInform.auth eq 'sa'}">
+					<button type="button" class="col-12 btn btn-secondary" onclick="location.href='accountReg'">新規作成</button>
+				</c:if>
 			</div>
 		</div>
 	</div>
@@ -66,15 +68,15 @@ function goToAccountMod(accountInformNum){
 		<div class="p-0 container-lg">
 			<div class="p-0 d-flex">
 				<div class="p-0 col-4 col-md-3 d-flex">
-					<div class="mt-2 mb-2 col-12 col-md-12 p-0 text-center"><a onclick="goToAccountMod(${account.accountInformNum})" style="cursor: pointer; color: blue;">${account.accountInformName}</a></div>
+					<div class="mt-2 mb-2 col-12 col-md-12 p-0 text-center text-break"><a onclick="goToAccountMod(${account.accountInformNum})" style="cursor: pointer; color: blue;">${account.accountInformName}</a></div>
 				</div>
 				<div class="p-0 col-8 col-md-9 d-flex">
-					<div class="mt-2 mb-2 col-4 col-md-2 p-0 text-center">${account.bankName}</div>
-					<div class="mt-2 mb-2 col-md-2 p-0 text-center d-none d-md-inline">${account.branchName}</div>
-					<div class="mt-2 mb-2 col-md-2 p-0 text-center d-none d-md-inline">${account.depositeClassification}</div>
-					<div class="mt-2 mb-2 col-4 col-md-2 p-0 text-center">${account.accountNumber}</div>
-					<div class="mt-2 mb-2 col-4 col-md-2 p-0 text-center">${account.accountName}</div>
-					<div class="mt-2 mb-2 col-md-2 p-0 text-center d-none d-md-inline">${account.hurigana}</div>
+					<div class="mt-2 mb-2 col-4 col-md-2 p-0 text-center text-break">${account.bankName}</div>
+					<div class="mt-2 mb-2 col-md-2 p-0 text-center text-break d-none d-md-inline">${account.branchName}</div>
+					<div class="mt-2 mb-2 col-md-2 p-0 text-center text-break d-none d-md-inline">${account.depositeClassification}</div>
+					<div class="mt-2 mb-2 col-4 col-md-2 p-0 text-center text-break">${account.accountNumber}</div>
+					<div class="mt-2 mb-2 col-4 col-md-2 p-0 text-center text-break">${account.accountName}</div>
+					<div class="mt-2 mb-2 col-md-2 p-0 text-center text-break d-none d-md-inline">${account.hurigana}</div>
 				</div>
 			</div>
 		</div>	

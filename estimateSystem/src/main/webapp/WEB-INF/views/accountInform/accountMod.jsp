@@ -12,12 +12,19 @@
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../css/common/common.css">
 <script src="../js/bootstrap.bundle.js"></script>
-	<title>Login</title>
+<script src="../js/inputController.js"></script>
+<title>accountMod</title>
 <style type="text/css">
 </style>
 <script>
 $(document).ready(function(){
-	
+	$("#accountInformName").on("change",function(){limitString("accountInformName",30);})
+	$("#bankName").on("change",function(){limitString("bankName",30);})
+	$("#depositeClassification").on("change",function(){limitString("depositeClassification",10);})
+	$("#branchName").on("change",function(){limitString("branchName",20);})
+	$("#accountNumber").on("change",function(){limitString("accountNumber",20);})
+	$("#accountName").on("change",function(){limitString("accountName",30);})
+	$("#hurigana").on("change",function(){limitString("hurigana",30);})
 });
 //인터셉터로 로그인 들어왔는데 현제페이지가 아이프레임 내부일경우 부모요소를 로그인 페이지로 페이지이동
 if ( self !== top ) {
@@ -41,7 +48,6 @@ function isPassword(asValue) {
 }
 
 function updateAccount(){
-	var accountNum = $("#accountNum").val();
 	var accountInformName = $("#accountInformName").val();
 	var bankName = $("#bankName").val();
 	var depositeClassification = $("#depositeClassification").val();
@@ -49,7 +55,6 @@ function updateAccount(){
 	var accountNumber = $("#accountNumber").val();
 	var accountName = $("#accountName").val();
 	var hurigana = $("#hurigana").val();
-	console.log(accountNum);
 	console.log(accountInformName);
 	console.log(bankName);
 	console.log(depositeClassification);

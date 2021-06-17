@@ -21,4 +21,6 @@ public interface UserService {
 	public int deleteUser(int userNum);
 
 	public ArrayList<UserInformDTO> getUserListOrderd(String where);
+
+	public ArrayList<UserInformDTO> getUserListOrderdOnlyAdmin(String where);
 }

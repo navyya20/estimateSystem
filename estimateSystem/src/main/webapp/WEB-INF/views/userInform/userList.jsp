@@ -39,7 +39,9 @@ function goToUserMod(userNum){
 	<div class="p-0 container-lg">
 		<div class="p-0 d-flex">
 			<div class="p-0 d-flex col-6 col-md-2">
-				<button type="button" class="col-12 btn btn-secondary" onclick="location.href='userReg'">新規作成</button>
+				<c:if test="${userInform.auth eq 'sa'}">
+					<button type="button" class="col-12 btn btn-secondary" onclick="location.href='userReg'">新規作成</button>
+				</c:if>
 			</div>
 		</div>
 	</div>

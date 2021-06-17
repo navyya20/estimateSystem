@@ -12,12 +12,17 @@
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../css/common/common.css">
 <script src="../js/bootstrap.bundle.js"></script>
-	<title>Login</title>
+<script src="../js/inputController.js"></script>
+<title>companyMod</title>
 <style type="text/css">
 </style>
 <script>
 $(document).ready(function(){
-	
+	$("#companyInformName").on("change",function(){limitString("companyInformName",30);})
+	$("#companyName").on("change",function(){limitString("companyName",30);})
+	$("#representative").on("change",function(){limitString("representative",30);})
+	$("#address").on("change",function(){limitString("address",106);})
+	$("#email").on("change",function(){limitString("email",30);})
 });
 //인터셉터로 로그인 들어왔는데 현제페이지가 아이프레임 내부일경우 부모요소를 로그인 페이지로 페이지이동
 if ( self !== top ) {
@@ -46,7 +51,6 @@ function updateCompany(){
 	var representative = $("#representative").val();
 	var phoneNumber = $("#phoneNumber").val();
 	var address = $("#address").val();
-	var companyName = $("#companyName").val();
 	var post = $("#post").val();
 	var email = $("#email").val();
 	console.log(companyInformName);
@@ -54,7 +58,6 @@ function updateCompany(){
 	console.log(representative);
 	console.log(phoneNumber);
 	console.log(address);
-	console.log(companyName);
 	console.log(post);
 	console.log(email);
 	if(companyInformName=""){
@@ -139,7 +142,7 @@ function deleteCompany(){
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="email" id="inputGroup-sizing-default">email</label>
 						</div>
-						<input type="text" class="pl-2 pr-0 col-8 form-control" id="email" name="email" maxlength="30" value="${company.email}">
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="email" name="email" maxlength="40" value="${company.email}">
 					</div>
 					
 					

@@ -1,7 +1,7 @@
 package jp.co.interline.dto;
 
 public class WorkflowInformDTO {
-	int workFlowInformNum;
+	int workflowInformNum;
 	int systemNum;
 	int approver1;
 	int approver2;
@@ -14,11 +14,12 @@ public class WorkflowInformDTO {
 	String updateDate;
 	String updater;
 	int order;
-	public int getWorkFlowInformNum() {
-		return workFlowInformNum;
+	
+	public int getWorkflowInformNum() {
+		return workflowInformNum;
 	}
-	public void setWorkFlowInformNum(int workFlowInformNum) {
-		this.workFlowInformNum = workFlowInformNum;
+	public void setWorkflowInformNum(int workflowInformNum) {
+		this.workflowInformNum = workflowInformNum;
 	}
 	public int getSystemNum() {
 		return systemNum;
@@ -96,8 +97,12 @@ public class WorkflowInformDTO {
 	}
 	@Override
 	public String toString() {
-		return "WorkflowDTO [workFlowInformNum=" + workFlowInformNum + ", systemNum=" + systemNum + ", approver1="
-				+ approver1 + ", approver2=" + approver2 + ", approver3=" + approver3 + ", targetKey=" + targetKey
-				+ ", insertDate=" + insertDate + ", updateDate=" + updateDate + ", updater=" + updater + "]";
+		return "WorkflowInformDTO [workflowInformNum=" + workflowInformNum + ", systemNum=" + systemNum + ", approver1="
+				+ approver1 + ", approver2=" + approver2 + ", approver3=" + approver3 + ", approver1Name="
+				+ approver1Name + ", approver2Name=" + approver2Name + ", approver3Name=" + approver3Name
+				+ ", targetKey=" + targetKey + ", insertDate=" + insertDate + ", updateDate=" + updateDate
+				+ ", updater=" + updater + ", order=" + order + "]";
 	}
+	
+	
 }

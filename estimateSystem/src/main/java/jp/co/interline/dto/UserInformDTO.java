@@ -121,11 +121,13 @@ public class UserInformDTO {
 	}
 	@Override
 	public String toString() {
-		return "UserInform [userNum=" + userNum + ", userId=" + userId + ", password=" + password + ", userName="
+		return "UserInformDTO [userNum=" + userNum + ", userId=" + userId + ", password=" + password + ", userName="
 				+ userName + ", departmentNum=" + departmentNum + ", positionNum=" + positionNum + ", auth=" + auth
 				+ ", phoneNumber=" + phoneNumber + ", email=" + email + ", state=" + state + ", loginDate=" + loginDate
-				+ ", insertDate=" + insertDate + ", updateDate=" + updateDate + ", updater=" + updater + "]";
+				+ ", insertDate=" + insertDate + ", updateDate=" + updateDate + ", updater=" + updater + ", department="
+				+ department + ", position=" + position + "]";
 	}
+	
 	
 	
 	

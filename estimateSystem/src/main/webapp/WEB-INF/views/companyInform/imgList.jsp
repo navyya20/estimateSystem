@@ -13,7 +13,7 @@
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../css/common/common.css">
 <script src="../js/bootstrap.bundle.js"></script>
-<title>userList</title>
+<title>imgList</title>
 <style type="text/css">
 </style>
 <script>

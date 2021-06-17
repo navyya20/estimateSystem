@@ -60,6 +60,12 @@ public class UserServiceImpl implements UserService{
 	}
 
 
+	@Override
+	public ArrayList<UserInformDTO> getUserListOrderdOnlyAdmin(String where) {
+		return userDao.getUserListOrderdOnlyAdmin(where);
+	}
+
+
 	
 
 

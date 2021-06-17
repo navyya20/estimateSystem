@@ -79,7 +79,7 @@ public class UserController {
 			System.out.println("failed for inserting userInform");
 		}
 		System.out.println("userInform inserted");
-		return "userInform/userList";
+		return "redirect:/all/userList";
 	}
 	
 	@RequestMapping(value = "/all/userMod", method = RequestMethod.POST)

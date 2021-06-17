@@ -21,7 +21,7 @@
 	<header class="mb-3">
 		<jsp:include page="menubar.jsp"></jsp:include>
 	</header>
-	aaa
+	<h1>ダッシュボードですが、項目を悩んでいます。</h1>
 	
 	
 </body>

@@ -23,6 +23,8 @@ public interface UserMapper {
 
 	public ArrayList<UserInformDTO> getUserListOrderd(String condition);
 
+	public ArrayList<UserInformDTO> getUserListOrderdOnlyAdmin(String where);
+
 
 
 

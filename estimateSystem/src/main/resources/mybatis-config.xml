@@ -5,6 +5,7 @@
 <configuration>
 	<typeAliases>
 		<typeAlias type="jp.co.interline.dto.UserInformDTO" alias="userInformDTO"/>
+		<typeAlias type="jp.co.interline.dto.UserInformWithOptionDTO" alias="userInformWithOptionDTO"/>
 		<typeAlias type="jp.co.interline.dto.DepartmentDTO" alias="departmentDTO"/>
 		<typeAlias type="jp.co.interline.dto.PositionDTO" alias="positionDTO"/>
 		<typeAlias type="jp.co.interline.dto.AuthDTO" alias="authDTO"/>
@@ -12,6 +13,13 @@
 		<typeAlias type="jp.co.interline.dto.CompanyDTO" alias="companyDTO"/>
 		<typeAlias type="jp.co.interline.dto.FileNamesDTO" alias="fileNamesDTO"/>
 		<typeAlias type="jp.co.interline.dto.WorkflowInformDTO" alias="workflowInformDTO"/>
+		<typeAlias type="jp.co.interline.dto.WorkflowDTO" alias="workflowDTO"/>
+		<typeAlias type="jp.co.interline.dto.SystemDTO" alias="systemDTO"/>
+		<typeAlias type="jp.co.interline.dto.EstimateSheet1DTO" alias="estimateSheet1DTO"/>
+		<typeAlias type="jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO" alias="estimateSheet1ItemsRecieveDTO"/>
+		<typeAlias type="jp.co.interline.dto.BillSheet1DTO" alias="billSheet1DTO"/>
+		<typeAlias type="jp.co.interline.dto.BillSheet1ItemsRecieveDTO" alias="billSheet1ItemsRecieveDTO"/>
+		<typeAlias type="jp.co.interline.dto.EstimateListDTO" alias="estimateListDTO"/>
 	</typeAliases>
 	<mappers>
 		<mapper resource="Mapper/UserMapper.xml"/>
@@ -19,5 +27,8 @@
 		<mapper resource="Mapper/AccountMapper.xml"/>
 		<mapper resource="Mapper/CompanyMapper.xml"/>
 		<mapper resource="Mapper/WorkflowMapper.xml"/>
+		<mapper resource="Mapper/SystemMapper.xml"/>
+		<mapper resource="Mapper/EstimateMapper.xml"/>
+		<mapper resource="Mapper/BillMapper.xml"/>
 	</mappers>
 </configuration>

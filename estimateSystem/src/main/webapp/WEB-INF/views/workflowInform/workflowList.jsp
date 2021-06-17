@@ -77,13 +77,13 @@ function saveApprover(){
 						</div>
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="approver1Estimate" name="approver1" value="${estimateSystem.approver1 eq -1? '設定なし':estimateSystem.approver1Name}" readonly onclick="selectedSystem(1,1)" data-toggle="modal" data-target="#exampleModal">
 					</div>
-					<div class="input-group">
+					<div class="input-group d-none">
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="approver2" id="inputGroup-sizing-default">承認者2</label>
 						</div>
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="approver2Estimate" name="approver2" value="${estimateSystem.approver2 eq -1? '設定なし':estimateSystem.approver2Name}" readonly onclick="selectedSystem(1,2)" data-toggle="modal" data-target="#exampleModal">
 					</div>
-					<div class="input-group">
+					<div class="input-group d-none">
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="approver3" id="inputGroup-sizing-default">承認者3</label>
 						</div>
@@ -100,13 +100,13 @@ function saveApprover(){
 						</div>
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="approver1Estimate" name="approver1" value="${billSystem.approver1 eq -1? '設定なし':billSystem.approver1Name}" readonly onclick="selectedSystem(2,1)" data-toggle="modal" data-target="#exampleModal">
 					</div>
-					<div class="input-group">
+					<div class="input-group d-none">
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="approver2" id="inputGroup-sizing-default">承認者2</label>
 						</div>
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="approver2Estimate" name="approver2" value="${billSystem.approver2 eq -1? '設定なし':billSystem.approver2Name}" readonly onclick="selectedSystem(2,2)" data-toggle="modal" data-target="#exampleModal">
 					</div>
-					<div class="input-group">
+					<div class="input-group d-none">
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="approver3" id="inputGroup-sizing-default">承認者3</label>
 						</div>

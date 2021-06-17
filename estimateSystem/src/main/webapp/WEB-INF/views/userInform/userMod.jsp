@@ -12,12 +12,14 @@
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../css/common/common.css">
 <script src="../js/bootstrap.bundle.js"></script>
-	<title>Login</title>
+<title>userMod</title>
 <style type="text/css">
 </style>
 <script>
 $(document).ready(function(){
 	setInitialValueForSelectBox();	
+	$("#userName").on("change",function(){limitString("userName",30);})
+	$("#email").on("change",function(){limitString("email",30);})
 });
 //인터셉터로 로그인 들어왔는데 현제페이지가 아이프레임 내부일경우 부모요소를 로그인 페이지로 페이지이동
 if ( self !== top ) {

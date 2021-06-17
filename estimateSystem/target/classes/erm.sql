@@ -17,8 +17,8 @@ DROP TABLE IF EXISTS documentType;
 DROP TABLE IF EXISTS fileNames;
 DROP TABLE IF EXISTS masterSeq;
 DROP TABLE IF EXISTS position;
-DROP TABLE IF EXISTS workFlow;
-DROP TABLE IF EXISTS workFlowInform;
+DROP TABLE IF EXISTS workflow;
+DROP TABLE IF EXISTS workflowInform;
 DROP TABLE IF EXISTS systemType;
 
 
@@ -39,7 +39,7 @@ CREATE TABLE accountInform
 	accountNumber varchar(20) COMMENT '口座番号',
 	depositeClassification varchar(10) COMMENT '預金区分',
 	-- このデータが挿入された日時。又はこのデータが有効になった日時。
-	insertDate datetime default CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
+	insertDate datetime DEFAULT CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
 	-- 更新日時
 	updateDate datetime COMMENT 'updateDate : 更新日時',
 	-- データの更新者のuserNum
@@ -70,38 +70,46 @@ CREATE TABLE billSheet1
 	userPosition varchar(10) COMMENT '作成者役職',
 	billDate varchar(20) COMMENT '作成日表示用',
 	documentTypeNum int NOT NULL COMMENT '文書種類の固有番号',
+	-- これがOZRが参照するデータテーブル名になる。
+	-- 例）estimateSheet1 , BillSheet1
+	documentTypeName varchar(40) DEFAULT 'billSheet1' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
+例）estimateSheet1 , BillSheet1',
 	supplier varchar(40) COMMENT '供給者',
 	address varchar(120) COMMENT '供給者住所',
 	post varchar(10) COMMENT '供給者郵便番号',
 	phoneNumber varchar(20) COMMENT '供給者電話番号',
 	representative varchar(30) COMMENT '代表者',
-	stamp varchar(25) COMMENT '印鑑',
-	-- 印鑑イメージのファイル名
-	stampFileName varchar(25) NOT NULL COMMENT '印鑑 : 印鑑イメージのファイル名',
+	stamp varchar(25) COMMENT '印鑑ファイル名',
+	stampFileName varchar(25) COMMENT '印鑑ファイル名',
 	-- logoイメージのファイル名
-	logoFileName varchar(25) NOT NULL COMMENT 'logoFileName : logoイメージのファイル名',
-	reciever varchar(40) COMMENT '顧客名',
+	logoFileName varchar(25) COMMENT 'logoFileName : logoイメージのファイル名',
+	receiver varchar(40) COMMENT '顧客名',
 	documentName varchar(40) COMMENT '件名',
-	payCondition varchar(40) COMMENT '支払い条件',
+	payCondition varchar(40) COMMENT 'お支払い条件',
 	deadline varchar(20) COMMENT '支払期限',
 	bankName varchar(30) COMMENT '銀行名',
 	branchName varchar(20) COMMENT '支店名',
-	acountName varchar(30) COMMENT '口座名',
+	accountName varchar(30) COMMENT '口座名',
 	hurigana varchar(60) COMMENT '口座名フリカナ',
-	acountNumber varchar(20) COMMENT '口座番号',
+	accountNumber varchar(20) COMMENT '口座番号',
 	depositeClassification varchar(10) COMMENT '預金区分',
-	condition varchar(400) COMMENT '備考',
+	note varchar(400) COMMENT '備考',
+	sum bigint COMMENT '総計',
+	tax bigint COMMENT '税金',
+	sumWithTax bigint COMMENT '総計税金込み',
+	sumWithTax2 bigint COMMENT '総計税金込み２',
 	-- wri(作成中),req(依頼済),app(承認済)
 	state varchar(3) NOT NULL COMMENT '状態コード : wri(作成中),req(依頼済),app(承認済)',
 	comment varchar(300) COMMENT 'コメント',
 	workflowNum int COMMENT 'WF情報の固有番号',
 	-- このデータが挿入された日時。又はこのデータが有効になった日時。
-	insertDate datetime default CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
+	insertDate datetime DEFAULT CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
 	-- 更新日時
 	updateDate datetime COMMENT 'updateDate : 更新日時',
 	-- データの更新者のuserNum
 	updater int COMMENT '更新者 : データの更新者のuserNum',
-	PRIMARY KEY (documentNum)
+	PRIMARY KEY (documentNum),
+	UNIQUE (estimateNum)
 ) COMMENT = '請求書１';
 
 
@@ -109,15 +117,13 @@ CREATE TABLE billSheet1
 CREATE TABLE billSheet1Items
 (
 	documentNum varchar(20) NOT NULL COMMENT '請求書の固有番号',
-	itemNum int COMMENT '行数',
+	rowNum int COMMENT '行数',
+	item varchar(2) COMMENT '項目',
 	itemName varchar(60) COMMENT '項目名',
-	itemAmount int COMMENT '数量',
-	itemUnit varchar(5) COMMENT '単位',
-	itemUnitPrice int COMMENT '単価',
-	itemPrice bigint COMMENT '値段',
-	itemSum bigint COMMENT '総合税抜き',
-	itemTax bigint COMMENT '税金',
-	itemSumWithTax bigint COMMENT '総合税金込み'
+	amount int COMMENT '数量',
+	unit varchar(5) COMMENT '単位',
+	unitPrice int COMMENT '単価',
+	price bigint COMMENT '値段'
 ) COMMENT = '請求書１のアイテム';
 
 
@@ -136,7 +142,7 @@ CREATE TABLE companyInform
 	post varchar(10) COMMENT '郵便番号',
 	email varchar(30) COMMENT 'email',
 	-- このデータが挿入された日時。又はこのデータが有効になった日時。
-	insertDate datetime default CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
+	insertDate datetime DEFAULT CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
 	-- 更新日時
 	updateDate datetime COMMENT 'updateDate : 更新日時',
 	-- データの更新者のuserNum
@@ -172,12 +178,15 @@ CREATE TABLE documentType
 	documentTypeNum int NOT NULL AUTO_INCREMENT COMMENT '文書種類の固有番号',
 	-- これがOZRが参照するデータテーブル名になる。
 	-- 例）estimateSheet1 , BillSheet1
-	documentType varchar(20) NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
+	documentTypeName varchar(40) NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
 例）estimateSheet1 , BillSheet1',
 	-- 例）製品用見積書の書式
 	explanation varchar(40) COMMENT '文書種類の説明 : 例）製品用見積書の書式',
+	pair1 int COMMENT 'pair1',
+	pair2 int COMMENT 'pair2',
+	systemNum int NOT NULL COMMENT 'システムの固有番号',
 	PRIMARY KEY (documentTypeNum),
-	UNIQUE (documentType)
+	UNIQUE (documentTypeName)
 ) COMMENT = '文書の種類';
 
 
@@ -192,29 +201,36 @@ CREATE TABLE estimateSheet1
 	userPosition varchar(10) COMMENT '作成者役職',
 	estimateDate varchar(20) COMMENT '作成日表示用',
 	documentTypeNum int NOT NULL COMMENT '文書種類の固有番号',
+	-- これがOZRが参照するデータテーブル名になる。
+	-- 例）estimateSheet1 , BillSheet1
+	documentTypeName varchar(40) DEFAULT 'estimateSheet1' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
+例）estimateSheet1 , BillSheet1',
 	supplier varchar(40) COMMENT '供給者',
 	address varchar(180) COMMENT '供給者住所',
 	post varchar(10) COMMENT '供給者郵便番号',
 	phoneNumber varchar(20) COMMENT '供給者電話番号',
 	representative varchar(30) COMMENT '代表者',
 	stamp varchar(25) COMMENT '印鑑',
-	-- 印鑑イメージのファイル名
-	stampFileName varchar(25) NOT NULL COMMENT '印鑑ファイル名 : 印鑑イメージのファイル名',
+	stampFileName varchar(25) COMMENT '印鑑ファイル名',
 	-- logoイメージのファイル名
-	logoFileName varchar(25) NOT NULL COMMENT 'logoファイル名 : logoイメージのファイル名',
-	reciever varchar(40) COMMENT '顧客名',
+	logoFileName varchar(25) COMMENT 'logoFileName : logoイメージのファイル名',
+	receiver varchar(40) COMMENT '顧客名',
 	documentName varchar(40) COMMENT '件名',
 	deadline varchar(20) COMMENT '納入期限',
 	supplyPoint varchar(120) COMMENT '納入場所',
 	expirationDate varchar(40) COMMENT '見積書の有効期限',
 	payCondition varchar(40) COMMENT '支払い条件',
 	cautions varchar(400) COMMENT '注意事項',
+	sum bigint COMMENT '総計',
+	tax bigint COMMENT '税金',
+	sumWithTax bigint COMMENT '総計税金込み',
+	sumWithTax2 bigint COMMENT '総計税金込み２',
 	-- wri(作成中),req(依頼済),app(承認済)
 	state varchar(3) NOT NULL COMMENT '状態コード : wri(作成中),req(依頼済),app(承認済)',
 	comment varchar(300) COMMENT 'コメント',
 	workflowNum int COMMENT 'WF情報の固有番号',
 	-- このデータが挿入された日時。又はこのデータが有効になった日時。
-	insertDate datetime default CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
+	insertDate datetime DEFAULT CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
 	-- 更新日時
 	updateDate datetime COMMENT 'updateDate : 更新日時',
 	-- データの更新者のuserNum
@@ -227,23 +243,22 @@ CREATE TABLE estimateSheet1
 CREATE TABLE estimateSheet1Items
 (
 	documentNum varchar(20) NOT NULL COMMENT '見積書の固有番号',
-	itemNum int COMMENT '行数',
+	rowNum int COMMENT '行数',
+	item varchar(2) COMMENT '項目',
 	itemName varchar(60) COMMENT '項目名',
-	itemAmount int COMMENT '数量',
-	itemUnit varchar(5) COMMENT '単位',
-	itemUnitPrice int COMMENT '単価',
-	itemPrice bigint COMMENT '値段',
-	itemSum bigint COMMENT '総合税抜き',
-	itemTax bigint COMMENT '税金',
-	itemSumWithTax bigint COMMENT '総合税金込み'
+	amount int COMMENT '数量',
+	unit varchar(5) COMMENT '単位',
+	unitPrice int COMMENT '単価',
+	price bigint COMMENT '値段'
 ) COMMENT = '見積書１のアイテム';
 
 
 -- 参照ファイル名
 CREATE TABLE fileNames
 (
-	category varchar(20) NOT NULL AUTO_INCREMENT COMMENT 'ファイル名の固有番号',
-	fileName varchar(25) COMMENT '印鑑 : 印鑑イメージのファイル名',
+	category varchar(20) NOT NULL COMMENT 'ファイル種類',
+	-- 印鑑イメージのファイル名
+	fileName varchar(25) COMMENT 'ファイル名 : 印鑑イメージのファイル名',
 	PRIMARY KEY (category),
 	UNIQUE (fileName)
 ) COMMENT = '参照ファイル名';
@@ -270,10 +285,10 @@ CREATE TABLE position
 -- システム定義
 CREATE TABLE systemType
 (
-	systemNum int NOT NULL AUTO_INCREMENT COMMENT 'システムの固有番号',
+	systemNum int NOT NULL COMMENT 'システムの固有番号',
 	-- 例）見積システム、請求システム
-	systemName varchar(20) NOT NULL COMMENT 'システムの名前 : 例）見積システム、請求システム',
-	explanation varchar(80) COMMENT 'システムの説明',
+	systemName varchar(20) NOT NULL COMMENT '文書種類の名前 : 例）見積システム、請求システム',
+	explanation varchar(80) COMMENT '説明',
 	PRIMARY KEY (systemNum)
 ) COMMENT = 'システム定義';
 
@@ -308,15 +323,14 @@ CREATE TABLE userInform
 	-- データの更新者のuserNum
 	updater int DEFAULT 1 COMMENT '更新者 : データの更新者のuserNum',
 	PRIMARY KEY (userNum),
-	UNIQUE (uesrId)
+	UNIQUE (userId)
 ) COMMENT = 'ユーザ情報';
 
 
 -- WF状況テーブル
-CREATE TABLE workFlow
+CREATE TABLE workflow
 (
 	workflowNum int NOT NULL AUTO_INCREMENT COMMENT 'WF情報の固有番号',
-	systemNum int NOT NULL COMMENT 'システムの固有番号',
 	-- ユーザ情報の固有ナンバー
 	userNum int COMMENT 'ユーザ情報の固有番号 : ユーザ情報の固有ナンバー',
 	documentTypeNum int NOT NULL COMMENT '文書種類の固有番号',
@@ -326,45 +340,46 @@ CREATE TABLE workFlow
 	approver2 int COMMENT '承認者２',
 	approver3 int COMMENT '承認者３',
 	-- n(not yet), a(approved)
-	approver1state varchar(1) DEFAULT 'n' COMMENT '承認者１の承認状態 : n(not yet), a(approved)',
+	approver1State varchar(1) DEFAULT 'n' COMMENT '承認者１の承認状態 : n(not yet), a(approved)',
 	-- n(not yet), a(approved)
-	approver2state varchar(1) DEFAULT 'n' COMMENT '承認者２の承認状態 : n(not yet), a(approved)',
+	approver2State varchar(1) DEFAULT 'n' COMMENT '承認者２の承認状態 : n(not yet), a(approved)',
 	-- n(not yet), a(approved)
-	approver3state varchar(1) DEFAULT 'n' COMMENT '承認者３の承認状態 : n(not yet), a(approved)',
+	approver3State varchar(1) DEFAULT 'n' COMMENT '承認者３の承認状態 : n(not yet), a(approved)',
 	-- 現在approver1,2,3のなかで何の段階か
 	presentApproverNum int DEFAULT 1 COMMENT '現在承認者順番 : 現在approver1,2,3のなかで何の段階か',
 	presentApprover int COMMENT '現在承認者',
 	-- 承認済みの判断条件になる。
 	targetKey varchar(5) COMMENT 'targetKey : 承認済みの判断条件になる。',
-	-- 承認済みの判断条件になる。
-	targetKey varchar(5) COMMENT 'targetKey : 承認済みの判断条件になる。',
+	targetValue varchar(5) COMMENT 'targetValue',
 	-- このデータが挿入された日時。又はこのデータが有効になった日時。
-	insertDate datetime default CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
+	insertDate datetime DEFAULT CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
 	-- 更新日時
 	updateDate datetime COMMENT 'updateDate : 更新日時',
 	-- データの更新者のuserNum
 	updater int COMMENT '更新者 : データの更新者のuserNum',
-	PRIMARY KEY (workflowNum)
+	systemNum int NOT NULL COMMENT 'システムの固有番号',
+	PRIMARY KEY (workflowNum),
+	UNIQUE (documentNum)
 ) COMMENT = 'WF状況テーブル';
 
 
 -- WF情報定義
-CREATE TABLE workFlowInform
+CREATE TABLE workflowInform
 (
-	workFlowInformNum int NOT NULL AUTO_INCREMENT COMMENT 'WF情報の固有番号',
-	systemNum int NOT NULL COMMENT 'システムの固有番号',
-	approver1 int COMMENT '承認者１',
-	approver2 int COMMENT '承認者２',
-	approver3 int COMMENT '承認者３',
+	workflowInformNum int NOT NULL AUTO_INCREMENT COMMENT 'WF情報の固有番号',
+	approver1 int DEFAULT -1 COMMENT '承認者１',
+	approver2 int DEFAULT -1 COMMENT '承認者２',
+	approver3 int DEFAULT -1 COMMENT '承認者３',
 	-- 承認済みの判断条件になる。
-	targetKey varchar(5) COMMENT 'targetKey : 承認済みの判断条件になる。',
+	targetKey varchar(5) DEFAULT 'aaa' COMMENT 'targetKey : 承認済みの判断条件になる。',
 	-- このデータが挿入された日時。又はこのデータが有効になった日時。
-	insertDate datetime default CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
+	insertDate datetime DEFAULT CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
 	-- 更新日時
 	updateDate datetime COMMENT 'updateDate : 更新日時',
 	-- データの更新者のuserNum
 	updater int COMMENT '更新者 : データの更新者のuserNum',
-	PRIMARY KEY (workFlowInformNum),
+	systemNum int NOT NULL COMMENT 'システムの固有番号',
+	PRIMARY KEY (workflowInformNum),
 	UNIQUE (systemNum)
 ) COMMENT = 'WF情報定義';
 
@@ -384,7 +399,7 @@ ALTER TABLE billSheet1Items
 	ADD FOREIGN KEY (documentNum)
 	REFERENCES billSheet1 (documentNum)
 	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
+	ON DELETE CASCADE
 ;
 
 
@@ -432,7 +447,7 @@ ALTER TABLE billSheet1
 	ADD FOREIGN KEY (estimateNum)
 	REFERENCES estimateSheet1 (documentNum)
 	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
+	ON DELETE CASCADE
 ;
 
 
@@ -440,9 +455,8 @@ ALTER TABLE estimateSheet1Items
 	ADD FOREIGN KEY (documentNum)
 	REFERENCES estimateSheet1 (documentNum)
 	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
+	ON DELETE CASCADE
 ;
-
 
 
 ALTER TABLE userInform
@@ -453,7 +467,7 @@ ALTER TABLE userInform
 ;
 
 
-ALTER TABLE workFlow
+ALTER TABLE documentType
 	ADD FOREIGN KEY (systemNum)
 	REFERENCES systemType (systemNum)
 	ON UPDATE RESTRICT
@@ -461,7 +475,15 @@ ALTER TABLE workFlow
 ;
 
 
-ALTER TABLE workFlowInform
+ALTER TABLE workflow
+	ADD FOREIGN KEY (systemNum)
+	REFERENCES systemType (systemNum)
+	ON UPDATE RESTRICT
+	ON DELETE RESTRICT
+;
+
+
+ALTER TABLE workflowInform
 	ADD FOREIGN KEY (systemNum)
 	REFERENCES systemType (systemNum)
 	ON UPDATE RESTRICT
@@ -487,36 +509,32 @@ ALTER TABLE estimateSheet1
 
 ALTER TABLE billSheet1
 	ADD FOREIGN KEY (workflowNum)
-	REFERENCES workFlow (workflowNum)
+	REFERENCES workflow (workflowNum)
 	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
+	ON DELETE SET NULL
 ;
 
 
 ALTER TABLE estimateSheet1
 	ADD FOREIGN KEY (workflowNum)
-	REFERENCES workFlow (workflowNum)
+	REFERENCES workflow (workflowNum)
 	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
+	ON DELETE SET NULL
 ;
 
+INSERT INTO masterSeq VALUES (0, 'estimateSeq');
+INSERT INTO masterSeq VALUES (0, 'billSeq');
 
 
-
-DROP FUNCTION IF EXISTS getSeq;  /*혹시 이미 만들어져 있다면 삭제합니다.*/
-DELIMITER $$
-CREATE FUNCTION getSeq (p_seq_name VARCHAR(45))
-RETURNS INT READS SQL DATA
-BEGIN
-DECLARE RESULT_ID INT;
-UPDATE masterSeq SET id = LAST_INSERT_ID(id+1) WHERE seqName = p_seq_name;
-SET RESULT_ID = (SELECT LAST_INSERT_ID());
-RETURN RESULT_ID;
-END $$
-DELIMITER ;
-
-
-INSERT INTO masterSeq VALUES (1, 'estimateSeq');
+CREATE EVENT IF NOT EXISTS setSeqZero
+    ON SCHEDULE
+           EVERY 1 DAY
+           STARTS '2021-06-16 23:59:59'
+    ON COMPLETION NOT PRESERVE
+    ENABLE
+    COMMENT 'setSeqZero'
+    DO 
+	update materSeq set id = 0;
 
 -- 役職
 INSERT INTO `interline_estimatesystem`.`position` (`position`) VALUES ('社員');
@@ -544,10 +562,18 @@ INSERT INTO `interline_estimatesystem`.`filenames` (`category`, `fileName`) VALU
 INSERT INTO `interline_estimatesystem`.`filenames` (`category`, `fileName`) VALUES ('stamp', 'defaultStamp.png');
 
 -- system
-INSERT INTO `interline_estimatesystem`.`systemtype` (`systemName`) VALUES ('estimateSystem');
-INSERT INTO `interline_estimatesystem`.`systemtype` (`systemName`) VALUES ('billSystem');
+INSERT INTO `interline_estimatesystem`.`systemtype` (`systemNum`,`systemName`) VALUES (1,'estimateSystem');
+INSERT INTO `interline_estimatesystem`.`systemtype` (`systemNum`,`systemName`) VALUES (2,'billSystem');
+
+INSERT INTO `interline_estimatesystem`.`documenttype` (`documentTypeNum`,`documentTypeName`,`pair1`,`systemNum`) VALUES (1,'estimateSheet1',2,1);
+INSERT INTO `interline_estimatesystem`.`documenttype` (`documentTypeNum`,`documentTypeName`,`systemNum`) VALUES (2,'billSheet1',2);
+
 INSERT INTO `interline_estimatesystem`.`workflowinform` (`systemNum`) VALUES ('1');
 INSERT INTO `interline_estimatesystem`.`workflowinform` (`systemNum`) VALUES ('2');
+
+INSERT INTO `interline_estimatesystem`.`documentstate` (`state`, `name`) VALUES ('wri', '作成中');
+INSERT INTO `interline_estimatesystem`.`documentstate` (`state`, `name`) VALUES ('req', '依頼済');
+INSERT INTO `interline_estimatesystem`.`documentstate` (`state`, `name`) VALUES ('app', '承認済');
 
 
 -- system管理者
@@ -559,3 +585,16 @@ INSERT INTO `interline_estimatesystem`.`userinform` (`userId`, `password`, `user
 -- testユーザ
 INSERT INTO `interline_estimatesystem`.`userinform` (`userId`, `password`, `userName`, `auth`) VALUES ('test', 'test', 'test', 'u');
 INSERT INTO `interline_estimatesystem`.`userinform` (`userId`, `password`, `userName`, `auth`) VALUES ('test2', 'test2', 'test2', 'u');
+
+
+DROP FUNCTION IF EXISTS getSeq;  /*혹시 이미 만들어져 있다면 삭제합니다.*/
+DELIMITER $$
+CREATE FUNCTION getSeq (p_seq_name VARCHAR(45))
+RETURNS INT READS SQL DATA
+BEGIN
+DECLARE RESULT_ID INT;
+UPDATE masterSeq SET id = LAST_INSERT_ID(id+1) WHERE seqName = p_seq_name;
+SET RESULT_ID = (SELECT LAST_INSERT_ID());
+RETURN RESULT_ID;
+END $$
+DELIMITER ;

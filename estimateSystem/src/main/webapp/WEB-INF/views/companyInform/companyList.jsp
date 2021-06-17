@@ -13,7 +13,7 @@
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../css/common/common.css">
 <script src="../js/bootstrap.bundle.js"></script>
-<title>userList</title>
+<title>companyList</title>
 <style type="text/css">
 </style>
 <script>
@@ -39,7 +39,9 @@ function goToCompanyMod(companyInformNum){
 	<div class="p-0 container-lg">
 		<div class="p-0 d-flex">
 			<div class="p-0 d-flex col-6 col-md-2">
-				<button type="button" class="col-12 btn btn-secondary" onclick="location.href='companyReg'">新規作成</button>
+				<c:if test="${userInform.auth eq 'sa'}">
+					<button type="button" class="col-12 btn btn-secondary" onclick="location.href='companyReg'">新規作成</button>
+				</c:if>
 			</div>
 		</div>
 	</div>
@@ -64,13 +66,13 @@ function goToCompanyMod(companyInformNum){
 		<div class="p-0 container-lg">
 			<div class="p-0 d-flex">
 				<div class="p-0 col-4 col-md-3 d-flex">
-					<div class="mt-2 mb-2 col-12 col-md-12 p-0 text-center"><a onclick="goToCompanyMod(${company.companyInformNum})" style="cursor: pointer; color: blue;">${company.companyInformName}</a></div>
+					<div class="mt-2 mb-2 col-12 col-md-12 p-0 text-center text-break"><a onclick="goToCompanyMod(${company.companyInformNum})" style="cursor: pointer; color: blue;">${company.companyInformName}</a></div>
 				</div>
 				<div class="p-0 col-8 col-md-9 d-flex">
-					<div class="mt-2 mb-2 col-6 col-md-3 p-0 text-center">${company.companyName}</div>
-					<div class="mt-2 mb-2 col-6 col-md-3 p-0 text-center">${company.representative}</div>
-					<div class="mt-2 mb-2 col-3 p-0 text-center d-none d-md-inline">${company.email}</div>
-					<div class="mt-2 mb-2 col-3 p-0 text-center d-none d-md-inline">${company.phoneNumber}</div>
+					<div class="mt-2 mb-2 col-6 col-md-3 p-0 text-center text-break">${company.companyName}</div>
+					<div class="mt-2 mb-2 col-6 col-md-3 p-0 text-center text-break">${company.representative}</div>
+					<div class="mt-2 mb-2 col-3 p-0 text-center d-none d-md-inline text-break">${company.email}</div>
+					<div class="mt-2 mb-2 col-3 p-0 text-center d-none d-md-inline text-break">${company.phoneNumber}</div>
 				</div>
 			</div>
 		</div>	

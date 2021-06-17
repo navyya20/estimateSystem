@@ -113,7 +113,7 @@ public class CompanyController {
 	public String uploadImgFile(HttpSession session, MultipartFile imgFile, String category) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		String path =  session.getServletContext().getRealPath("");
-		path = path+ "/resources/uploaded";
+		path = path+ "resources/uploaded";
 		path = path.replace('/', File.separatorChar);
 		logger.info("save path : {}",path);
 		

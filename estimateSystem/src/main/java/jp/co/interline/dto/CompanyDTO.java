@@ -3,7 +3,7 @@ package jp.co.interline.dto;
 public class CompanyDTO {
 	int companyInformNum;
 	String companyInformName;
-	String CompanyName;
+	String companyName;
 	String representative;
 	String phoneNumber;
 	String address;
@@ -24,12 +24,7 @@ public class CompanyDTO {
 	public void setCompanyInformName(String companyInformName) {
 		this.companyInformName = companyInformName;
 	}
-	public String getCompanyName() {
-		return CompanyName;
-	}
-	public void setCompanyName(String companyName) {
-		CompanyName = companyName;
-	}
+	
 	public String getRepresentative() {
 		return representative;
 	}
@@ -78,13 +73,20 @@ public class CompanyDTO {
 	public void setUpdater(int updater) {
 		this.updater = updater;
 	}
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
 	@Override
 	public String toString() {
 		return "CompanyDTO [companyInformNum=" + companyInformNum + ", companyInformName=" + companyInformName
-				+ ", CompanyName=" + CompanyName + ", representative=" + representative + ", phoneNumber=" + phoneNumber
+				+ ", companyName=" + companyName + ", representative=" + representative + ", phoneNumber=" + phoneNumber
 				+ ", address=" + address + ", post=" + post + ", email=" + email + ", insertDate=" + insertDate
 				+ ", updateDate=" + updateDate + ", updater=" + updater + "]";
 	}
+	
 	
 	
 	

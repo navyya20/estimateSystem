@@ -39,4 +39,139 @@
 			systemNum = #{systemNum}
 	</update>
 	
+	<!-- 모든 테이블을 합쳐서 문서번호로 state를 찾는다.  -->
+	<select id="getState" parameterType="String" resultType="String">
+		select master.state from 
+			(
+					select documentNum, state 
+				from 
+					estimateSheet1 
+				union
+					select documentNum, state from billSheet1
+			) master
+		where
+			master.documentNum = #{documentNum}
+	</select>
+	
+	<insert id="insertWorkflow" parameterType="workflowDTO" useGeneratedKeys="true" keyProperty="workflowNum">
+		insert into workflow (
+			systemNum,
+			userNum, 
+			documentTypeNum,
+			documentNum,
+			approver1,
+			approver2,
+			approver3,
+			approver1State,
+			approver2State,
+			approver3State,
+			presentApproverNum,
+			presentApprover,
+			targetKey,
+			targetValue,
+			updateDate,
+			updater
+		) values (
+			#{systemNum},
+			#{userNum},
+			#{documentTypeNum},
+			#{documentNum},
+			#{approver1},
+			#{approver2},
+			#{approver3},
+			#{approver1State},
+			#{approver2State},
+			#{approver3State},
+			#{presentApproverNum},
+			#{presentApprover},
+			#{targetKey},
+			#{targetValue},
+			CURRENT_TIMESTAMP,
+			#{updater}
+			
+		)
+	</insert>
+	
+	<select id="getWorkflowByWorkflowNum" parameterType="int" resultType="workflowDTO">
+		select * from workflow where workflowNum = #{value}
+	</select>
+	<update id="renewWorkflow" parameterType="workflowDTO">
+		update workflow set
+			approver1State = #{approver1State},
+			approver2State = #{approver2State},
+			approver3State = #{approver3State},
+			presentApprover = #{presentApprover},
+			presentApproverNum = #{presentApproverNum},
+			targetValue = #{targetValue},
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where
+			workflowNum = #{workflowNum}
+	</update>
+	<update id="updateWorkflowNum">
+		update ${documentTypeName} set
+			workflowNum = #{workflowNum}
+		where
+			documentNum = #{documentNum}
+	</update>
+	<update id="updateState" parameterType="workflowDTO">
+		update ${documentTypeName} set
+			state = #{state}
+		where
+			documentNum = #{documentNum}
+	</update>
+	
+	<select id="getNumberOfWorkflows" parameterType="int" resultType="int">
+		select count(workflowNum) from workflow where presentApprover = #{value} and targetValue != 'aaa'
+	</select>
+	<select id="getWorkflowWaitingList" parameterType="int" resultType="workflowDTO">
+		select w.*, d.documentTypeName documentTypeName, u1.userName ,d1.department userDepartment
+			from
+				workflow w 
+			join 
+				documentType d on (w.documentTypeNum = d.documentTypeNum)
+			left outer join 
+				userInform u1 on (w.userNum = u1.userNum)
+			left outer join 
+				department d1 on (u1.departmentNum = d1.departmentNum)
+		where
+			presentApprover = #{value} and targetValue != 'aaa'
+	</select>
+	
+	<select id="getWorkflowByDocumentNum" parameterType="String" resultType="workflowDTO">
+		select w.*, d.documentTypeName documentTypeName, u1.userName ,d1.department userDepartment
+			from
+				workflow w 
+			join 
+				documentType d on (w.documentTypeNum = d.documentTypeNum)
+			left outer join 
+				userInform u1 on (w.userNum = u1.userNum)
+			left outer join 
+				department d1 on (u1.departmentNum = d1.departmentNum)
+		where
+			w.documentNum = #{documentNum}
+	</select>
+	
+	<update id="updateApprove" parameterType="workflowDTO">
+		update workflow set
+			approver1State = #{approver1State},
+			approver2State = #{approver2State},
+			approver3State = #{approver3State},
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where
+			documentNum = #{documentNum}
+	</update>
+	
+	<delete	id="deleteWorkflow" parameterType="int">
+		delete from workflow where workflowNum = #{workflowNum}
+	</delete>
+	
+	<update id="stampConfirm" parameterType="systemDTO">
+		update ${documentTypeName} set
+			stamp=#{stampFileName},
+			logoFileName=#{logoFileName}
+		where
+			documentNum=#{documentNum}
+	</update>
 </mapper>

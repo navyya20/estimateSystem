@@ -6,7 +6,10 @@
 <mapper namespace="jp.co.interline.dao.UserMapper">
 
 	<select id="getUserInformByIdPw" parameterType="userInformDTO" resultType="userInformDTO">
-		select * from userInform where userId=#{userId} and password=#{password}
+		select u.*, d.department, p.position from 
+		userInform u left outer join department d on (u.departmentNum=d.departmentNum) 
+		left outer join position p on (u.positionNum=p.positionNum) 
+		where u.userId=#{userId} and u.password=#{password}
 	</select>
 	
 	<select id="getUserInformByUserNum" parameterType="int" resultType="userInformDTO">
@@ -34,6 +37,15 @@
 		select u.*, d.department, p.position from 
 		userInform u left outer join department d on (u.departmentNum=d.departmentNum) 
 		left outer join position p on (u.positionNum=p.positionNum)
+		${value}
+	</select>
+	
+	
+	<select id="getUserListOrderdOnlyAdmin" parameterType="String" resultType="userInformDTO">
+		select u.*, d.department, p.position from 
+		userInform u left outer join department d on (u.departmentNum=d.departmentNum) 
+		left outer join position p on (u.positionNum=p.positionNum)
+		where u.auth = 'a'
 		${value}
 	</select>
 	

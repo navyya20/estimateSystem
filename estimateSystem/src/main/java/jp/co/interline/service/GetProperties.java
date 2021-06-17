@@ -9,9 +9,7 @@ public class GetProperties {
 	
 	String webIP="";
 	String ozIP="";
-	String serverPath="";
-	String serverPath2="";
-	
+	String projectRoot="";
 	public GetProperties() {
 		ClassPathResource resource = new ClassPathResource("user.properties");
 		
@@ -25,8 +23,7 @@ public class GetProperties {
 		}
 	    webIP=properties.getProperty("webIP","localhost:8888");
 	    ozIP=properties.getProperty("ozIP","localhost:8888");
-	    serverPath=properties.getProperty("serverPath","/usr/local/lib/apache-tomcat-8.5.57");
-	    serverPath2=properties.getProperty("serverPath2","C:/Apache Software Foundation/Tomcat 8.5");
+	    projectRoot=properties.getProperty("projectRoot","estimateSystem");
 	}
 
 
@@ -43,21 +40,11 @@ public class GetProperties {
 	public void setOzIP(String ozIP) {
 		this.ozIP = ozIP;
 	}
-
-
-	public String getServerPath() {
-		return serverPath;
+	public String getProjectRoot() {
+		return projectRoot;
 	}
-	public void setServerPath(String serverPath) {
-		this.serverPath = serverPath;
-	}
-	
-	
-	public String getServerPath2() {
-		return serverPath2;
-	}
-	public void setServerPath2(String serverPath2) {
-		this.serverPath2 = serverPath2;
+	public void setProjectRoot(String projectRoot) {
+		this.projectRoot = projectRoot;
 	}
 
 
