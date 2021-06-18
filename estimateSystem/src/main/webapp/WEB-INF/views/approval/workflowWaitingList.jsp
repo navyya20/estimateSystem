@@ -40,14 +40,6 @@ function readDocument(documentTypeName,documentNum){
 		<jsp:include page="../menubar.jsp"></jsp:include>
 	</header>
 	
-	<!-- 퀀한 검사로 sa만 보이도록 -->
-	<div class="p-0 container-lg">
-		<div class="p-0 d-flex">
-			<div class="p-0 d-flex col-6 col-md-2">
-				<button type="button" class="col-12 btn btn-secondary" onclick="location.href='companyReg'">新規作成</button>
-			</div>
-		</div>
-	</div>
 	
 	<div class="d-block" style="height: 8px;"></div>
 	

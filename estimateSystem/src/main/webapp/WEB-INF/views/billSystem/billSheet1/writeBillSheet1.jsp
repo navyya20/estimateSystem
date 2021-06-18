@@ -58,7 +58,7 @@ if ( self !== top ) {
 			<button type="button" class="col-12 btn btn-secondary" onclick="saveAndRequestButton('wri')">承認依頼</button>
 		</div>
 		<div class="pl-2 pr-2 d-flex col-4">
-			<button type="button" class="col-12 btn btn-secondary" onclick="deleteCompany()">戻り</button>
+			<button type="button" class="col-12 btn btn-secondary" onclick="location.href='estimateList'">戻り</button>
 		</div>
 	</div>	
 

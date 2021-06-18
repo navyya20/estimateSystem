@@ -57,7 +57,7 @@ if ( self !== top ) {
 			<button type="button" class="col-12 btn btn-secondary" onclick="saveButton('${state}')">臨時格納</button>
 		</div>
 		<div class="pl-2 pr-2 d-flex col-4">
-			<c:if test="${state eq 'wri'}">
+			<c:if test="${state eq 'wri' and userNum eq userInform.userNum}">
 				<button type="button" class="col-12 btn btn-secondary" onclick="saveAndRequestButton('${state}')">承認依頼</button>
 			</c:if>
 		</div>

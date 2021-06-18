@@ -5,7 +5,7 @@
 
 <mapper namespace="jp.co.interline.dao.EstimateMapper">
 	<insert id="insertEstimateSheet1" parameterType="estimateSheet1DTO">
-		insert into EstimateSheet1 (
+		insert into estimateSheet1 (
 			documentNum,
 			userNum,
 			userName,
@@ -81,7 +81,7 @@
 		)
 	</insert>
 	<insert id="insertEstimateSheet1Items" parameterType="estimateSheet1ItemsRecieveDTO">
-		insert into EstimateSheet1Items (
+		insert into estimateSheet1Items (
 			documentNum,rowNum,item,itemName,amount,unit,unitPrice,price
 		)
 		values
@@ -167,7 +167,7 @@
 	</select>
 	
 	<update id="updateEstimateSheet1" parameterType="estimateSheet1DTO">
-		update EstimateSheet1 set
+		update estimateSheet1 set
 			userNum = #{userNum},
 			userName = #{userName},
 			userDepartment = #{userDepartment},
@@ -210,62 +210,62 @@
 			documentNum = #{documentNum}
 	</update>
 	<update id="updateEstimateSheet1Items" parameterType="estimateSheet1ItemsRecieveDTO">
-		update EstimateSheet1Items set
+		update estimateSheet1Items set
 			item = #{item1}, itemName = #{itemName1}, amount = ${amount1}, unit = #{unit1}, unitPrice = ${unitPrice1}, price = ${price1}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum1};
 			
-		update EstimateSheet1Items set
+		update estimateSheet1Items set
 			item = #{item2}, itemName = #{itemName2}, amount = ${amount2}, unit = #{unit2}, unitPrice = ${unitPrice2}, price = ${price2}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum2};
 			
-		update EstimateSheet1Items set
+		update estimateSheet1Items set
 			item = #{item3}, itemName = #{itemName3}, amount = ${amount3}, unit = #{unit3}, unitPrice = ${unitPrice3}, price = ${price3}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum3};
 			
-		update EstimateSheet1Items set
+		update estimateSheet1Items set
 			item = #{item4}, itemName = #{itemName4}, amount = ${amount4}, unit = #{unit4}, unitPrice = ${unitPrice4}, price = ${price4}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum4};
 			
-		update EstimateSheet1Items set
+		update estimateSheet1Items set
 			item = #{item5}, itemName = #{itemName5}, amount = ${amount5}, unit = #{unit5}, unitPrice = ${unitPrice5}, price = ${price5}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum5};
 			
-		update EstimateSheet1Items set
+		update estimateSheet1Items set
 			item = #{item6}, itemName = #{itemName6}, amount = ${amount6}, unit = #{unit6}, unitPrice = ${unitPrice6}, price = ${price6}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum6};
 			
-		update EstimateSheet1Items set
+		update estimateSheet1Items set
 			item = #{item7}, itemName = #{itemName7}, amount = ${amount7}, unit = #{unit7}, unitPrice = ${unitPrice7}, price = ${price7}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum7};
 			
-		update EstimateSheet1Items set
+		update estimateSheet1Items set
 			item = #{item8}, itemName = #{itemName8}, amount = ${amount8}, unit = #{unit8}, unitPrice = ${unitPrice8}, price = ${price8}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum8};
 			
-		update EstimateSheet1Items set
+		update estimateSheet1Items set
 			item = #{item9}, itemName = #{itemName9}, amount = ${amount9}, unit = #{unit9}, unitPrice = ${unitPrice9}, price = ${price9}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum9};
 			
-		update EstimateSheet1Items set
+		update estimateSheet1Items set
 			item = #{item10}, itemName = #{itemName10}, amount = ${amount10}, unit = #{unit10}, unitPrice = ${unitPrice10}, price = ${price10}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum10};
 			
-		update EstimateSheet1Items set
+		update estimateSheet1Items set
 			item = #{item11}, itemName = #{itemName11}, amount = ${amount11}, unit = #{unit11}, unitPrice = ${unitPrice11}, price = ${price11}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum11};
 		
-		update EstimateSheet1Items set
+		update estimateSheet1Items set
 			item = #{item12}, itemName = #{itemName12}, amount = ${amount12}, unit = #{unit12}, unitPrice = ${unitPrice12}, price = ${price12}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum12}

@@ -139,9 +139,7 @@ function rejectButton(){
 			</c:if>
 		</div>
 		<div class="pl-2 pr-2 d-flex col-3">
-			<c:if test="${(userInform.auth eq 'u' and state eq 'wri') or userInform.auth eq 'a'}">
-				<button type="button" class="col-12 mr-2 ml-2 btn btn-secondary" onclick="deleteButton()">削除</button>
-			</c:if>
+			<button type="button" class="col-12 mr-2 ml-2 btn btn-secondary" onclick="location.href='estimateList'">戻り</button>
 		</div>
 	</div>	
 

@@ -129,9 +129,10 @@ public class EstimateController {
 	@RequestMapping(value = "/all/modEstimateSheet1", method = RequestMethod.POST)
 	public String modEstimateSheet1(HttpSession session, Model model, String documentNum) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		String state = workflowService.getState(documentNum);
+		EstimateSheet1DTO estimateSheet1 = estimateService.getEstimateSheet1ByDocumentNum(documentNum);
 		//모든 문서를 통틀어서 state를 가져옴. 새로운 시스템 추가시 sql에 유니온 필요.
-		model.addAttribute("state", state);
+		model.addAttribute("state", estimateSheet1.getState());
+		model.addAttribute("userNum", estimateSheet1.getUserNum());
 		model.addAttribute("estimateNum", documentNum);
 		
 		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
