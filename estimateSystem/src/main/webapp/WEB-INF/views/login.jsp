@@ -71,6 +71,9 @@ if ( self !== top ) {
 </head>
 
 <body class="body" style="height: 100%;">
+20210617.ver=1<br>
+20210622.ver=2<br>
+20210623.ver=3<br>
 	<div class="row align-items-center col-12 p-0 m-0" style="height: 100%;">
 		<div id="login_div" class="d-flex justify-content-center col-12 p-0">
 			<div class="d-flex flex-column col-10 col-md-4">

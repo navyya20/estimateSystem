@@ -1,6 +1,7 @@
 package jp.co.interline.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 
@@ -32,5 +33,9 @@ public interface EstimateMapper {
 	int deleteSheet(SystemDTO system);
 
 	EstimateSheet1DTO getEstimateSheet1ByDocumentNum(String documentNum);
+
+	String getBillNum(String documentNum);
+
+	void testTest(ArrayList<HashMap<String, String>> arr);
 
 }

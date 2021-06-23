@@ -2,24 +2,29 @@ package jp.co.interline.dto;
 
 public class EstimateListDTO {
 	String documentNumE;
-	int documentTypeNumE;
 	String documentTypeNameE;
-	String receiver;
-	String documentName;
+	String nextDocumentTypeNameE;
+	String receiverE;
+	String documentNameE;
 	String updateDateE;
 	int userNumE;
 	String userNameE;
 	String userDepartmentE;
+	String userPositionE;
 	String stateE;
 	String stateNameE;
 	
 	String documentNumB;
-	int documentTypeNumB;
+	String estimateNumB;
 	String documentTypeNameB;
+	String nextDocumentTypeNameB;
+	String receiverB;
+	String documentNameB;
 	String updateDateB;
 	int userNumB;
 	String userNameB;
 	String userDepartmentB;
+	String userPositionB;
 	String stateB;
 	String stateNameB;
 	public String getDocumentNumE() {
@@ -28,29 +33,35 @@ public class EstimateListDTO {
 	public void setDocumentNumE(String documentNumE) {
 		this.documentNumE = documentNumE;
 	}
-	public int getDocumentTypeNumE() {
-		return documentTypeNumE;
+	public String getDocumentTypeNameE() {
+		return documentTypeNameE;
 	}
-	public void setDocumentTypeNumE(int documentTypeNumE) {
-		this.documentTypeNumE = documentTypeNumE;
+	public void setDocumentTypeNameE(String documentTypeNameE) {
+		this.documentTypeNameE = documentTypeNameE;
 	}
-	public String getReceiver() {
-		return receiver;
+	public String getReceiverE() {
+		return receiverE;
 	}
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
+	public void setReceiverE(String receiverE) {
+		this.receiverE = receiverE;
 	}
-	public String getDocumentName() {
-		return documentName;
+	public String getDocumentNameE() {
+		return documentNameE;
 	}
-	public void setDocumentName(String documentName) {
-		this.documentName = documentName;
+	public void setDocumentNameE(String documentNameE) {
+		this.documentNameE = documentNameE;
 	}
 	public String getUpdateDateE() {
 		return updateDateE;
 	}
 	public void setUpdateDateE(String updateDateE) {
 		this.updateDateE = updateDateE;
+	}
+	public int getUserNumE() {
+		return userNumE;
+	}
+	public void setUserNumE(int userNumE) {
+		this.userNumE = userNumE;
 	}
 	public String getUserNameE() {
 		return userNameE;
@@ -63,6 +74,12 @@ public class EstimateListDTO {
 	}
 	public void setUserDepartmentE(String userDepartmentE) {
 		this.userDepartmentE = userDepartmentE;
+	}
+	public String getUserPositionE() {
+		return userPositionE;
+	}
+	public void setUserPositionE(String userPositionE) {
+		this.userPositionE = userPositionE;
 	}
 	public String getStateE() {
 		return stateE;
@@ -82,17 +99,41 @@ public class EstimateListDTO {
 	public void setDocumentNumB(String documentNumB) {
 		this.documentNumB = documentNumB;
 	}
-	public int getDocumentTypeNumB() {
-		return documentTypeNumB;
+	public String getEstimateNumB() {
+		return estimateNumB;
 	}
-	public void setDocumentTypeNumB(int documentTypeNumB) {
-		this.documentTypeNumB = documentTypeNumB;
+	public void setEstimateNumB(String estimateNumB) {
+		this.estimateNumB = estimateNumB;
+	}
+	public String getDocumentTypeNameB() {
+		return documentTypeNameB;
+	}
+	public void setDocumentTypeNameB(String documentTypeNameB) {
+		this.documentTypeNameB = documentTypeNameB;
+	}
+	public String getReceiverB() {
+		return receiverB;
+	}
+	public void setReceiverB(String receiverB) {
+		this.receiverB = receiverB;
+	}
+	public String getDocumentNameB() {
+		return documentNameB;
+	}
+	public void setDocumentNameB(String documentNameB) {
+		this.documentNameB = documentNameB;
 	}
 	public String getUpdateDateB() {
 		return updateDateB;
 	}
 	public void setUpdateDateB(String updateDateB) {
 		this.updateDateB = updateDateB;
+	}
+	public int getUserNumB() {
+		return userNumB;
+	}
+	public void setUserNumB(int userNumB) {
+		this.userNumB = userNumB;
 	}
 	public String getUserNameB() {
 		return userNameB;
@@ -105,6 +146,12 @@ public class EstimateListDTO {
 	}
 	public void setUserDepartmentB(String userDepartmentB) {
 		this.userDepartmentB = userDepartmentB;
+	}
+	public String getUserPositionB() {
+		return userPositionB;
+	}
+	public void setUserPositionB(String userPositionB) {
+		this.userPositionB = userPositionB;
 	}
 	public String getStateB() {
 		return stateB;
@@ -119,44 +166,31 @@ public class EstimateListDTO {
 		this.stateNameB = stateNameB;
 	}
 	
-	public String getDocumentTypeNameE() {
-		return documentTypeNameE;
-	}
-	public void setDocumentTypeNameE(String documentTypeNameE) {
-		this.documentTypeNameE = documentTypeNameE;
-	}
-	public String getDocumentTypeNameB() {
-		return documentTypeNameB;
-	}
-	public void setDocumentTypeNameB(String documentTypeNameB) {
-		this.documentTypeNameB = documentTypeNameB;
-	}
 	
-	
-	public int getUserNumE() {
-		return userNumE;
+	public String getNextDocumentTypeNameE() {
+		return nextDocumentTypeNameE;
 	}
-	public void setUserNumE(int userNumE) {
-		this.userNumE = userNumE;
+	public void setNextDocumentTypeNameE(String nextDocumentTypeNameE) {
+		this.nextDocumentTypeNameE = nextDocumentTypeNameE;
 	}
-	public int getUserNumB() {
-		return userNumB;
+	public String getNextDocumentTypeNameB() {
+		return nextDocumentTypeNameB;
 	}
-	public void setUserNumB(int userNumB) {
-		this.userNumB = userNumB;
+	public void setNextDocumentTypeNameB(String nextDocumentTypeNameB) {
+		this.nextDocumentTypeNameB = nextDocumentTypeNameB;
 	}
 	@Override
 	public String toString() {
-		return "EstimateListDTO [documentNumE=" + documentNumE + ", documentTypeNumE=" + documentTypeNumE
-				+ ", documentTypeNameE=" + documentTypeNameE + ", receiver=" + receiver + ", documentName="
-				+ documentName + ", updateDateE=" + updateDateE + ", userNumE=" + userNumE + ", userNameE=" + userNameE
-				+ ", userDepartmentE=" + userDepartmentE + ", stateE=" + stateE + ", stateNameE=" + stateNameE
-				+ ", documentNumB=" + documentNumB + ", documentTypeNumB=" + documentTypeNumB + ", documentTypeNameB="
-				+ documentTypeNameB + ", updateDateB=" + updateDateB + ", userNumB=" + userNumB + ", userNameB="
-				+ userNameB + ", userDepartmentB=" + userDepartmentB + ", stateB=" + stateB + ", stateNameB="
-				+ stateNameB + "]";
+		return "EstimateListDTO [documentNumE=" + documentNumE + ", documentTypeNameE=" + documentTypeNameE
+				+ ", nextDocumentTypeNameE=" + nextDocumentTypeNameE + ", receiverE=" + receiverE + ", documentNameE="
+				+ documentNameE + ", updateDateE=" + updateDateE + ", userNumE=" + userNumE + ", userNameE=" + userNameE
+				+ ", userDepartmentE=" + userDepartmentE + ", userPositionE=" + userPositionE + ", stateE=" + stateE
+				+ ", stateNameE=" + stateNameE + ", documentNumB=" + documentNumB + ", estimateNumB=" + estimateNumB
+				+ ", documentTypeNameB=" + documentTypeNameB + ", nextDocumentTypeNameB=" + nextDocumentTypeNameB
+				+ ", receiverB=" + receiverB + ", documentNameB=" + documentNameB + ", updateDateB=" + updateDateB
+				+ ", userNumB=" + userNumB + ", userNameB=" + userNameB + ", userDepartmentB=" + userDepartmentB
+				+ ", userPositionB=" + userPositionB + ", stateB=" + stateB + ", stateNameB=" + stateNameB + "]";
 	}
-	
 	
 	
 }

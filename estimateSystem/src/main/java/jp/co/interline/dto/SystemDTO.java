@@ -14,7 +14,6 @@ public class SystemDTO {
 	String name;
 	
 	//documentType
-	int documentTypeNum;
 	String documentTypeName;
 	String explanation;
 	int pair1;
@@ -65,17 +64,6 @@ public class SystemDTO {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
-	}
-
-	
-	
-	
-	public int getDocumentTypeNum() {
-		return documentTypeNum;
-	}
-
-	public void setDocumentTypeNum(int documentTypeNum) {
-		this.documentTypeNum = documentTypeNum;
 	}
 
 
@@ -147,9 +135,9 @@ public class SystemDTO {
 	public String toString() {
 		return "SystemDTO [seqNum=" + seqNum + ", category=" + category + ", fileName=" + fileName + ", logoFileName="
 				+ logoFileName + ", stampFileName=" + stampFileName + ", state=" + state + ", name=" + name
-				+ ", documentTypeNum=" + documentTypeNum + ", documentTypeName=" + documentTypeName + ", explanation="
-				+ explanation + ", pair1=" + pair1 + ", pair2=" + pair2 + ", systemNum=" + systemNum + ", documentNum="
-				+ documentNum + "]";
+				+ ", documentTypeName=" + documentTypeName + ", explanation=" + explanation + ", pair1=" + pair1
+				+ ", pair2=" + pair2 + ", systemNum=" + systemNum + ", documentNum=" + documentNum + "]";
 	}
+	
 	
 }

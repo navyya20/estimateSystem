@@ -43,6 +43,9 @@ function isPassword(asValue) {
 }
 
 function updateUser(){
+	//폼으로 보내기전에 selectbox를 잠시 풀어중
+	$("#auth").attr("disabled",false);
+	
 	var userNum = $("#userNum").val();
 	var userId = $("#userId").val();
 	var password = $("#password").val();
@@ -164,7 +167,7 @@ function setInitialValueForSelectBox(){
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="auth" style="text-align: center;">権限</label>
 						</div>
-						<select class="p-0 col-8 custom-Select" id="auth" name="auth">
+						<select class="p-0 col-8 custom-Select" id="auth" name="auth" ${userInform.auth != 'sa' ? 'disabled':''}>
 							<option selected value="u">選択してください．．．</option>
 							<c:forEach items="${auths}" var="auth" varStatus="status">
 								<option value="${auth.auth}">
@@ -183,7 +186,7 @@ function setInitialValueForSelectBox(){
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="phoneNumber" id="inputGroup-sizing-default">電話番号</label>
 						</div>
-						<input type="text" class="pl-2 pr-0 col-8 form-control" id="phoneNumber" name="phoneNumber" maxlength="13" value="${userInform.phoneNumber}">
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="phoneNumber" name="phoneNumber" maxlength="20" value="${userInform.phoneNumber}">
 					</div>
 					
 					<!-- email -->
@@ -200,7 +203,7 @@ function setInitialValueForSelectBox(){
 					<!-- update button -->
 					<div class="p-0 d-flex col-12">
 						<div class="pl-2 pr-2 d-flex col-6">
-							<button type="button" class="col-12 btn btn-secondary" onclick="updateUser()">変更格納</button>
+							<button type="button" class="col-12 btn btn-secondary" onclick="updateUser()">更新</button>
 						</div>
 						<div class="pl-2 pr-2 d-flex col-6">
 							<button type="button" class="col-12 btn btn-secondary" onclick="deleteUser()">削除</button>

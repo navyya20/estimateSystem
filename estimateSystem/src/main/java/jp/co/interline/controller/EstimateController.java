@@ -71,6 +71,8 @@ public class EstimateController {
 	@RequestMapping(value = "/all/insertEstimateSheet1", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertEstimateSheet1(HttpSession session, Model model, EstimateSheet1DTO estimateSheet1, EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("EstimateController.insertEstimateSheet1,user:{}",user.getUserNum());
+		
 		//채번
 		String documentNum = estimateService.getDocoumentNum();
 		//기본정보등록
@@ -99,13 +101,16 @@ public class EstimateController {
 		return result;
 	}
 	
-	
+	/*
+	 * option:order by절에 들어갈 스트링
+	 * page: pageNavigator를 위한 page수
+	 */
 	@RequestMapping(value = "/all/estimateList", method = RequestMethod.GET)
 	public String estimateList(HttpSession session, Model model, @RequestParam(value="option", defaultValue="e.updateDate desc")String option, @RequestParam(value="page", defaultValue="1") int page) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("EstimateController.esimateList,user:{}",user.getUserNum());
 		
 		ArrayList<EstimateListDTO> estimateList = estimateService.getEstimateList(model, user,option,page);
-		
 		
 		model.addAttribute("estimateList", estimateList);
 		model.addAttribute("option", option);
@@ -117,6 +122,7 @@ public class EstimateController {
 	@RequestMapping(value = "/all/readEstimateSheet1", method = RequestMethod.POST)
 	public String readEstimateSheet1(HttpSession session, Model model, String documentNum, String approveMode) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("EstimateController.readEstimateSheet1,user:{}",user.getUserNum());
 		EstimateSheet1DTO estimateSheet1 = estimateService.getEstimateSheet1ByDocumentNum(documentNum);
 		//모든 문서를 통틀어서 state를 가져옴. 새로운 시스템 추가시 sql에 유니온 필요.
 		model.addAttribute("state", estimateSheet1.getState());
@@ -133,7 +139,7 @@ public class EstimateController {
 		//모든 문서를 통틀어서 state를 가져옴. 새로운 시스템 추가시 sql에 유니온 필요.
 		model.addAttribute("state", estimateSheet1.getState());
 		model.addAttribute("userNum", estimateSheet1.getUserNum());
-		model.addAttribute("estimateNum", documentNum);
+		model.addAttribute("documentNum", documentNum);
 		
 		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
 		Gson gson = new Gson();
@@ -171,18 +177,27 @@ public class EstimateController {
 		result.put("documentNum", estimateSheet1.getDocumentNum());
 		return result;
 	}
-	
+	/*
+	 * 지울 다큐먼트 리스트를 가져온다.
+	 * estiamteMaster에서 딸린 청구서가 있는지 확인한다.
+	 * 있으면 documentMaster에서 청구서 먼져 지우고 본 문서를 지운다. 
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/all/deleteSheets", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> updateEstimateSheet1(HttpSession session, Model model, String[] documentArr) {
 		for (int i = 0; i < documentArr.length; i++) {
 			System.out.println(documentArr[i]);
-			String[] arr = documentArr[i].split("\\^");
-			String documentNum = arr[0];
-			String documentTypeName = arr[1];
-			estimateService.deleteSheet(documentNum,documentTypeName);
+			String documentNum = documentArr[i];
+			estimateService.deleteSheet(documentNum);
 		}
 		return null;
+	}
+	
+	
+	@RequestMapping(value = "/all/test", method = RequestMethod.GET)
+	public String test(HttpSession session, Model model, String documentNum) {
+		estimateService.test();
+		return "";
 	}
 	
 }

@@ -23,9 +23,11 @@ public interface EstimateService {
 
 	int updateEstimateSheet1Items(EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever);
 
-	int deleteSheet(String documentNum, String documentTypeName);
+	int deleteSheet(String documentNum);
 
 	EstimateSheet1DTO getEstimateSheet1ByDocumentNum(String documentNum);
+
+	void test();
 
 
 }

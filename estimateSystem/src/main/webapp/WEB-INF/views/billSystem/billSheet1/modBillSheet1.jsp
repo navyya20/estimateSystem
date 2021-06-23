@@ -120,15 +120,16 @@ if ( self !== top ) {
             }
         });
 
-
-      //보존버튼을 누루면 작동. 
-		//뷰어의 모든 값을 제이슨스트링으로 가져옴.
-		function saveButton(state){
+      //뷰어의 모든 값을 제이슨스트링으로 가져와 컨트롤러가 받을수있게 함.
+		//int형같은경우 null은 안되고
+		//금액같은경우 쉼표와 ￥표시는 없어야함.
+		function processJson(state){
 			var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
 			var inputJson=JSON.parse(inputJsonString);
 			inputJson["sum"] = inputJson["sum"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["tax"] = inputJson["tax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax"] = inputJson["sumWithTax"].replace(/,/gi, "").replace(/￥/gi, "");
+			//inputJson["sumWithTax2"] = inputJson["sumWithTax2"].replace(/,/gi, "").replace(/￥/gi, "");
 			for(i=1 ; i<=repeat ; i++){
 				inputJson["unitPrice"+i] =inputJson["unitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");
 				inputJson["price"+i] = inputJson["price"+i].replace(/,/gi, "").replace(/￥/gi, "");				
@@ -140,6 +141,13 @@ if ( self !== top ) {
 			inputJson.state=state;
 			if(inputJson["workflowNum"]==""){inputJson.workflowNum=0};
 			console.log("제이슨:"+JSON.stringify(inputJson));
+			return inputJson;
+		}
+
+      	//보존버튼을 누루면 작동. 
+		//뷰어의 모든 값을 제이슨스트링으로 가져옴.
+		function saveButton(state){
+			var inputJson = processJson(state);
 			$.ajax(
 					{
 						url: "updateBillSheet1",
@@ -159,22 +167,7 @@ if ( self !== top ) {
 		}
 
 		function saveAndRequestButton(state){
-			var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
-			var inputJson=JSON.parse(inputJsonString);
-			inputJson["sum"] = inputJson["sum"].replace(/,/gi, "").replace(/￥/gi, "");
-			inputJson["tax"] = inputJson["tax"].replace(/,/gi, "").replace(/￥/gi, "");
-			inputJson["sumWithTax"] = inputJson["sumWithTax"].replace(/,/gi, "").replace(/￥/gi, "");
-			for(i=1 ; i<=repeat ; i++){
-				inputJson["unitPrice"+i] =inputJson["unitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");
-				inputJson["price"+i] = inputJson["price"+i].replace(/,/gi, "").replace(/￥/gi, "");				
-				inputJson["amount"+i] = inputJson["amount"+i].replace(/,/gi, "").replace(/￥/gi, "");
-				if(inputJson["amount"+i]==""){inputJson["amount"+i]="null"}
-				if(inputJson["unitPrice"+i]==""){inputJson["unitPrice"+i]="null"}
-				if(inputJson["price"+i]==""){inputJson["price"+i]="null"}
-			}
-			inputJson.state=state;
-			if(inputJson["workflowNum"]==""){inputJson.workflowNum=0};
-			console.log("제이슨:"+JSON.stringify(inputJson));
+			var inputJson = processJson(state);
 			$.ajax(
 					{
 						url: "updateBillSheet1",
@@ -183,7 +176,7 @@ if ( self !== top ) {
 						dataType:"json",
 						success: function(r){
 							if(r["errorFlag"]==0){
-								alert("請求書を作成しました。");
+								alert("請求書を修正しました。");
 							}else{
 								alert(r["error"]);
 							}
@@ -205,10 +198,10 @@ if ( self !== top ) {
 					{
 						url: "requestApproval",
 						type: 'POST',
-						data: {"documentTypeNum":inputJson["documentTypeNum"], "documentTypeName":inputJson["documentTypeName"], "documentNum" : documentNum, "systemNum":inputJson["systemNum"]},
+						data: {"documentTypeName":inputJson["documentTypeName"], "documentNum" : documentNum, "systemNum":inputJson["systemNum"]},
 						dataType:"text",
 						success: function(r){
-							alert("承認依頼完了");
+							alert(r);
 							location.href="estimateList";
 						},
 						error: function(e){

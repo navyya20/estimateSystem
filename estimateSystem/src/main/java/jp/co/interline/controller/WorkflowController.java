@@ -80,63 +80,30 @@ public class WorkflowController {
 	
 	@ResponseBody
 	@RequestMapping(value = "/all/requestApproval", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-	public String requestApproval(HttpSession session, Model model, int documentTypeNum, String documentTypeName, String documentNum, int systemNum) {
+	public String requestApproval(HttpSession session, Model model, String documentTypeName, String documentNum, int systemNum) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		System.out.println(documentTypeNum);
-		System.out.println(documentTypeName);
-		System.out.println(documentNum);
-		System.out.println(systemNum);
-		
 		//시스템에 해당하는 워크플로우 인폼 가져오기
 		WorkflowInformDTO workflowInform = workflowService.getWorkflowInformBySystemNum(systemNum);
 		
 		//워크플로우 꾸미기 및 인서트
-		int workflowNum = workflowService.insertWorkflow(workflowInform,documentTypeNum,documentTypeName,documentNum,user);
-		
+		int workflowNum = workflowService.insertWorkflow(workflowInform,documentTypeName,documentNum,user);
+		if (workflowNum == 0) {return "workflow生成失敗";}
 		//문서에 워크플로우등록
 		WorkflowDTO document = new WorkflowDTO();
 		document.setDocumentNum(documentNum);
 		document.setDocumentTypeName(documentTypeName);
 		document.setWorkflowNum(workflowNum);
 		int result0 =  workflowService.updateWorkflowNum(document);
+		if (result0 ==0) {return "workflow登録失敗";}
 		
 		//워크플로우 최신화(승인이 일어났을때, 최초 인서트시  실행시켜야함.)
 		int result1 = workflowService.renewWorkflow(workflowNum,user);
-		
+		if (result1==0) {return "workflow更新失敗";}
 		//워크플로우 최종승인확인.
-		Boolean state = workflowService.confirmation(workflowNum);
-		int result2=0;
-		int result3=0;
-		if (state == true) {
-			//문서 상태를 app로
-			WorkflowDTO workflow = new WorkflowDTO();
-			workflow.setDocumentTypeName(documentTypeName);
-			workflow.setDocumentNum(documentNum);
-			workflow.setState("app");
-			result2 =  workflowService.updateState(workflow);
-			//도장 로고
-			FileNamesDTO stampFileName = companyService.getfileName("stamp");
-			FileNamesDTO logoFileName = companyService.getfileName("logo");
-			SystemDTO system = new SystemDTO();
-			system.setStampFileName(stampFileName.getFileName());
-			system.setLogoFileName(logoFileName.getFileName());
-			system.setDocumentTypeName(documentTypeName);
-			system.setDocumentNum(documentNum);
-			result3=workflowService.stampConfirm(system);
-		}else {
-			//문서상태 req로
-			WorkflowDTO workflow = new WorkflowDTO();
-			workflow.setDocumentTypeName(documentTypeName);
-			workflow.setDocumentNum(documentNum);
-			workflow.setState("req");
-			result2 =  workflowService.updateState(workflow);
-		}
-		if (result2!=1) {
-			System.out.println(result2);
-			System.out.println("문서상태update문제");
-		}
+		Boolean result2 = workflowService.confirmation(workflowNum,documentNum,documentTypeName);
+		if (result2==false) {return "承認確認失敗";}
 		
-		return "";
+		return "承認依頼完了";
 	}
 	
 	@ResponseBody
@@ -157,51 +124,30 @@ public class WorkflowController {
 		return "approval/workflowWaitingList";
 	}
 	
+	/*
+	 * 1.workflow의 presentApproverNum번째의 approveState#를 a로 바꾼다.
+	 * 2.바뀐 approveState#로 새롭게 presentApprover와 presentApproverNum을 설정한다.
+	 * 3.만약 approveState1~3가 모두 a 즉 targetValue가 aaa라면 승인완료 처리를 한다.
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/all/approval", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public String approval(HttpSession session, Model model, String documentTypeName, String documentNum, int workflowNum) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		WorkflowDTO workflow = workflowService.getWorkflowByDocumentNum(documentNum);
+		//승인하려고 하는 주체가  현제승인자와 일치하지않을 경우 에러.
 		if (user.getUserNum()!= workflow.getPresentApprover()) {
 			return "承認権限がありません。";
 		}
 		
 		//승인처리
 		int result0 = workflowService.updateApprove(workflow,user);
+		if (result0==0) {return "承認処理中問題発生しました。";}
 		//워크플로우 정보 갱신
 		int result1 = workflowService.renewWorkflow(workflow.getWorkflowNum(),user);
+		if (result1==0) {return "workflow更新失敗";}
 		//워크플로우 최종승인확인.
-		Boolean state = workflowService.confirmation(workflowNum);
-		int result2=0;
-		int result3=0;
-		if (state == true) {
-			//문서 상태를 app로
-			WorkflowDTO w = new WorkflowDTO();
-			w.setDocumentTypeName(documentTypeName);
-			w.setDocumentNum(workflow.getDocumentNum());
-			w.setState("app");
-			result2 =  workflowService.updateState(w);
-			//도장 찍기, 로고 확정
-			FileNamesDTO stampFileName = companyService.getfileName("stamp");
-			FileNamesDTO logoFileName = companyService.getfileName("logo");
-			SystemDTO system = new SystemDTO();
-			system.setStampFileName(stampFileName.getFileName());
-			system.setLogoFileName(logoFileName.getFileName());
-			system.setDocumentTypeName(documentTypeName);
-			system.setDocumentNum(documentNum);
-			result3=workflowService.stampConfirm(system);
-		}else {
-			//문서상태 req로
-			WorkflowDTO w = new WorkflowDTO();
-			w.setDocumentTypeName(documentTypeName);
-			w.setDocumentNum(workflow.getDocumentNum());
-			w.setState("req");
-			result2 =  workflowService.updateState(w);
-		}
-		if (result2!=1) {
-			System.out.println(result2);
-			return "承認はできましたが、文書状態を更新に失敗しました。";
-		}
+		Boolean result2 = workflowService.confirmation(workflowNum,documentNum,documentTypeName);
+		if (result2=false) {return "承認確認失敗";}
 		
 		return "承認完了";
 	}
@@ -214,11 +160,7 @@ public class WorkflowController {
 		
 		
 		//문서상태 wri로
-		WorkflowDTO w = new WorkflowDTO();
-		w.setDocumentTypeName(documentTypeName);
-		w.setDocumentNum(documentNum);
-		w.setState("wri");
-		int result2 =  workflowService.updateState(w);
+		int result2 =  workflowService.updateStateWRI(documentNum);
 		if (result2 != 1) {
 			return "差し戻し中エラーが発生しました。管理者にお問い合わせください。";
 		}

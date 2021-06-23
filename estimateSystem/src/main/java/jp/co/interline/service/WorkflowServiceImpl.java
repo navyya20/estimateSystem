@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import jp.co.interline.dao.CompanyDAO;
 import jp.co.interline.dao.WorkflowDAO;
+import jp.co.interline.dto.FileNamesDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.dto.WorkflowDTO;
@@ -15,6 +17,9 @@ import jp.co.interline.dto.WorkflowInformDTO;
 public class WorkflowServiceImpl implements WorkflowService {
 	@Autowired
 	WorkflowDAO workflowDao;
+	@Autowired
+	CompanyDAO companyDao;
+	
 
 	@Override
 	public WorkflowInformDTO getWorkflowInformBySystemNum(int systemNum) {
@@ -89,13 +94,14 @@ public class WorkflowServiceImpl implements WorkflowService {
 	
 	
 	//워크플로우 꾸미기 및 인서트
+	//해당systemNum의 저장된 workflowNum을 가져와서 workflow객체를 꾸민다.
 	@Override
-	public int insertWorkflow(WorkflowInformDTO workflowInform, int documentTypeNum, String documentTypeName, String documentNum, UserInformDTO user) {
+	public int insertWorkflow(WorkflowInformDTO workflowInform, String documentTypeName, String documentNum, UserInformDTO user) {
 		WorkflowDTO workflow = new WorkflowDTO();
 		
 		workflow.setSystemNum(workflowInform.getSystemNum());
 		workflow.setUserNum(user.getUserNum());
-		workflow.setDocumentTypeNum(documentTypeNum);
+		workflow.setDocumentTypeName(documentTypeName);
 		workflow.setDocumentNum(documentNum);
 		workflow.setApprover1(workflowInform.getApprover1());
 		workflow.setApprover2(workflowInform.getApprover2());
@@ -108,6 +114,7 @@ public class WorkflowServiceImpl implements WorkflowService {
 		workflow.setTargetKey(workflowInform.getTargetKey());
 		workflow.setTargetValue("nnn");
 		workflow.setUpdater(user.getUserNum());
+		
 		int workflowNum = workflowDao.insertWorkflow(workflow);
 		return workflowNum;
 	}
@@ -156,14 +163,42 @@ public class WorkflowServiceImpl implements WorkflowService {
 		return result;
 	}
 	@Override
-	public Boolean confirmation(int workflowNum) {
+	public Boolean confirmation(int workflowNum, String documentNum, String documentTypeName) {
 		WorkflowDTO w = workflowDao.getWorkflowByWorkflowNum(workflowNum);
-		
-		return w.getTargetKey().equals(w.getTargetValue());
+		boolean state = w.getTargetKey().equals(w.getTargetValue());
+		if (state == true) {
+			//문서 상태를 app로
+			WorkflowDTO workflow = new WorkflowDTO();
+			workflow.setDocumentNum(documentNum);
+			workflow.setState("app");
+			int result1 =  workflowDao.updateState(workflow);
+			if (result1==0) {return false;}
+			//도장 로고
+			FileNamesDTO stampFileName = companyDao.getfileName("stamp");
+			FileNamesDTO logoFileName = companyDao.getfileName("logo");
+			SystemDTO system = new SystemDTO();
+			system.setStampFileName(stampFileName.getFileName());
+			system.setLogoFileName(logoFileName.getFileName());
+			system.setDocumentTypeName(documentTypeName);
+			int result2=workflowDao.stampConfirm(system);
+			if (result2==0) {return false;}
+		}else {
+			//문서상태 req로
+			WorkflowDTO workflow = new WorkflowDTO();
+			workflow.setDocumentNum(documentNum);
+			workflow.setState("req");
+			int result =  workflowDao.updateState(workflow);
+			if (result==0) {return false;}
+		}
+		return true;
 	}
 	@Override
-	public int updateState(WorkflowDTO workflow) {
-		int result = workflowDao.updateState(workflow);
+	public int updateStateWRI(String documentNum) {
+		//문서상태 wri로
+		WorkflowDTO w = new WorkflowDTO();
+		w.setDocumentNum(documentNum);
+		w.setState("wri");
+		int result = workflowDao.updateState(w);
 		return result;
 	}
 	@Override
@@ -217,7 +252,4 @@ public class WorkflowServiceImpl implements WorkflowService {
 		return result;
 	}
 
-	
-	
-	
 }

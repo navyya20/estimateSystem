@@ -17,10 +17,10 @@ public interface WorkflowService {
 
 	int updateTarget(int systemNum);
 	String getState(String billNum);
-	int insertWorkflow(WorkflowInformDTO workflowInform, int documentTypeNum, String documentTypeName, String documentNum, UserInformDTO user);
+	int insertWorkflow(WorkflowInformDTO workflowInform, String documentTypeName, String documentNum, UserInformDTO user);
 	int renewWorkflow(int workflowNum, UserInformDTO user);
-	Boolean confirmation(int workflowNum);
-	int updateState(WorkflowDTO workflow);
+	Boolean confirmation(int workflowNum, String documentNum, String documentTypeName);
+	int updateStateWRI(String documentNum);
 	int updateWorkflowNum(WorkflowDTO document);
 	int getNumberOfWorkflows(int userNum);
 	ArrayList<WorkflowDTO> getWorkflowWaitingList(int userNum);

@@ -17,12 +17,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 
 import jp.co.interline.dto.CompanyDTO;
+import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.AccountDTO;
 import jp.co.interline.dto.BillSheet1DTO;
 import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
@@ -51,6 +53,23 @@ public class BillController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(BillController.class);
 	
+	/*
+	 * option:order by절에 들어갈 스트링
+	 * page: pageNavigator를 위한 page수
+	 */
+	@RequestMapping(value = "/all/billList", method = RequestMethod.GET)
+	public String billList(HttpSession session, Model model, @RequestParam(value="option", defaultValue="b.updateDate desc")String option, @RequestParam(value="page", defaultValue="1") int page) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("BillController.esimateList,user:{}",user.getUserNum());
+		
+		ArrayList<EstimateListDTO> billList = billService.getBillList(model, user,option,page);
+		
+		model.addAttribute("billList", billList);
+		model.addAttribute("option", option);
+		//네비게이션에대한 모델은 서비스에서 넣어준다.
+		return "billSystem/billList";
+	}
+	
 	@RequestMapping(value = "/all/writeBillSheet1", method = RequestMethod.GET)
 	public String writeBillSheet1(HttpSession session, Model model, String estimateNum) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -64,13 +83,11 @@ public class BillController {
 		return "billSystem/billSheet1/writeBillSheet1";
 	}
 	
-	
 	@ResponseBody
 	@RequestMapping(value = "/all/insertBillSheet1", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertBillSheet1(HttpSession session, Model model, BillSheet1DTO billSheet1, BillSheet1ItemsRecieveDTO billSheet1ItemsReciever) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		System.out.println(billSheet1);
-		System.out.println(billSheet1ItemsReciever);
+		logger.debug("BillController.insertBillSheet1,user:{}",user.getUserNum());
 		//채번
 		String documentNum = billService.getDocoumentNum();
 		//기본정보등록

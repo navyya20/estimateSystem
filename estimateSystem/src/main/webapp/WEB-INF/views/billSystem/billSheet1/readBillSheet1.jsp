@@ -39,11 +39,9 @@ if ( self !== top ) {
 	window.parent.location.href="login";
 }
 function modButton(billNum){
-
 	$('#modDocument').attr("action","modBillSheet1");
 	$('#documentNum').val(billNum);
 	$('#modDocument').submit();
-	//location.href="modBillSheet1?documentNum="+billNum;
 }
 function requestButton(){
 	var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
@@ -52,10 +50,10 @@ function requestButton(){
 			{
 				url: "requestApproval",
 				type: 'POST',
-				data: {"documentTypeNum":inputJson["documentTypeNum"], "documentTypeName":inputJson["documentTypeName"], "documentNum" : inputJson["documentNum"], "systemNum":inputJson["systemNum"]},
+				data: {"documentTypeName":inputJson["documentTypeName"], "documentNum":inputJson["documentNum"], "systemNum":inputJson["systemNum"]},
 				dataType:"text",
 				success: function(r){
-					alert("承認依頼完了");
+					alert(r);
 					location.href="estimateList";
 				},
 				error: function(e){
@@ -109,7 +107,8 @@ function deleteButton(){
 	var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
 	var inputJson=JSON.parse(inputJsonString);
 	var documentArr=new Array();
-	documentArr.push(inputJson["documentNum"]+"^"+inputJson["documentTypeName"]);
+	documentArr.push(inputJson["documentNum"]);
+	if(!confirm("削除しますか。")){ return false; }
 	$.ajax(
 			{
 				url: "deleteSheets",
@@ -142,7 +141,7 @@ function deleteButton(){
 		<div class="pl-2 pr-2 d-flex col-3">
 			<!-- (유져&작성중)  or 관리자-->
 			<c:if test="${(userInform.auth eq 'u' and state eq 'wri') or userInform.auth eq 'a'}">
-				<button type="button" class="col-12 mr-2 ml-2 btn btn-secondary" onclick="modButton('${billNum}')">修正</button>
+				<button type="button" class="col-12 mr-2 ml-2 btn btn-secondary" onclick="modButton('${billNum}')">修正モード</button>
 			</c:if>
 		</div>
 		<div class="pl-2 pr-2 d-flex col-3">
@@ -206,8 +205,6 @@ function deleteButton(){
             }
         });
 
-
-    
 	</script>
 	
 	<form id="modDocument" action="companyMod" method="post" accept-charset="utf-8">

@@ -5,69 +5,23 @@
 
 <mapper namespace="jp.co.interline.dao.EstimateMapper">
 	<insert id="insertEstimateSheet1" parameterType="estimateSheet1DTO">
-		insert into estimateSheet1 (
+		insert into documentMaster (
 			documentNum,
-			userNum,
-			userName,
-			userDepartment,
-			userPosition,
-			estimateDate,
-			documentTypeNum,
-			supplier,
-			address,
-			post,
-			phoneNumber,
-			representative,
-			stamp,
-			stampFileName,
-			logoFileName,
-			receiver,
-			documentName,
-			deadline,
-			supplyPoint,
-			expirationDate,
-			payCondition,
-			cautions,
-			sum,
-			tax,
-			sumWithTax,
-			sumWithTax2,	
-			state,
-			comment,
+			systemNum,
+			documentTypeName,
+			nextDocumentTypeName,
+			userNum, userName, userDepartment, userPosition,
 			workflowNum,
+			state,
 			updateDate,
 			updater
-		) 
-		values
-		(
+		)
+		values(
 			#{documentNum},
-			#{userNum},
-			#{userName},
-			#{userDepartment},
-			#{userPosition},
-			#{estimateDate},
-			#{documentTypeNum},
-			#{supplier},
-			#{address},
-			#{post},
-			#{phoneNumber},
-			#{representative},
-			#{stamp},
-			#{stampFileName},
-			#{logoFileName},
-			#{receiver},
-			#{documentName},
-			#{deadline},
-			#{supplyPoint},
-			#{expirationDate},
-			#{payCondition},
-			#{cautions},
-			#{sum},
-			#{tax},
-			#{sumWithTax},
-			#{sumWithTax2},	
-			#{state},
-			#{comment},
+			#{systemNum},
+			#{documentTypeName},
+			#{nextDocumentTypeName},
+			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
 			<choose>
 				<when test="workflowNum == 0">
 					null,
@@ -76,8 +30,63 @@
 					#{workflowNum},
 				</when>
 			</choose>
+			#{state},
 			CURRENT_TIMESTAMP,
 			#{updater}
+		);
+		
+		insert into estimateMaster(
+			documentNum,
+			receiver,
+			documentName
+		)
+		values(
+			#{documentNum},
+			#{receiver},
+			#{documentName}
+		);
+		
+		insert into estimateSheet1 (
+			documentNum,
+			documentTypeName,
+			userNum, userName, userDepartment, userPosition,
+			estimateDate,
+			supplier,
+			address,
+			post,
+			phoneNumber,
+			representative,
+			stamp, stampFileName, logoFileName,
+			receiver,
+			documentName,
+			deadline,
+			supplyPoint,
+			expirationDate,
+			payCondition,
+			cautions,
+			sum, tax, sumWithTax, sumWithTax2,	
+			comment
+		) 
+		values(
+			#{documentNum},
+			#{documentTypeName},
+			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
+			#{estimateDate},
+			#{supplier},
+			#{address},
+			#{post},
+			#{phoneNumber},
+			#{representative},
+			#{stamp}, #{stampFileName}, #{logoFileName},
+			#{receiver},
+			#{documentName},
+			#{deadline},
+			#{supplyPoint},
+			#{expirationDate},
+			#{payCondition},
+			#{cautions},
+			#{sum}, #{tax}, #{sumWithTax}, #{sumWithTax2},	
+			#{comment}
 		)
 	</insert>
 	<insert id="insertEstimateSheet1Items" parameterType="estimateSheet1ItemsRecieveDTO">
@@ -100,12 +109,36 @@
 	</insert>
 	
 	<select id="getTotalEstimateSheet" parameterType="userInformWithOptionDTO" resultType="int">
-		select count(e.documentNum) from 
-				(select documentNum, documentTypeNum, receiver, documentName, updateDate, userNum, userName, userDepartment, state from estimateSheet1) e
-			left outer join
-				(select documentNum, estimateNum, documentTypeNum, updateDate, userNum, userName, userDepartment, state from billSheet1) b
-			on 
-				(e.documentNum = b.estimateNum)
+		select
+			count(e.documentNum)
+		from
+			(
+				select d.*,em1.receiver,em1.documentName,ds.name stateName from
+						(select * from documentMaster where systemNum=1) d 
+					join 
+						estimateMaster em1 
+					on 
+						(d.documentNum = em1.documentNum)
+					join
+						documentState ds
+					on
+						(d.state = ds.state)
+			) e
+		left outer join
+			(
+				select d.*,em1.receiver,em1.documentName,em1.estimateNum,ds.name stateName from
+						(select * from documentMaster where systemNum=2) d 
+					join 
+						estimateMaster em1 
+					on 
+						(d.documentNum = em1.documentNum)
+					join
+						documentState ds
+					on
+						(d.state = ds.state)
+			) b
+		on
+			(e.documentNum = b.estimateNum)
 			<choose>
 				<when test='auth == "u"'>
 					where e.userNum=#{userNum} or b.userNum=#{userNum} or e.state='app' or b.state='app'
@@ -120,41 +153,59 @@
 	<select id="getEstimateList" parameterType="userInformWithOptionDTO" resultType="estimateListDTO">
 		select
 			e.documentNum documentNumE,
-			e.documentTypeNum documentTypeNumE,
 			e.documentTypeName documentTypeNameE,
-			e.receiver,
-			e.documentName,
+			e.nextDocumentTypeName nextDocumentTypeNameE,
+			e.receiver receiverE,
+			e.documentName documentNameE,
 			e.updateDate updateDateE,
 			e.userNum userNumE,
 			e.userName userNameE,
 			e.userDepartment userDepartmentE,
+			e.userPosition userPositionE,
 			e.state stateE,
-			se.name stateNameE,
+			e.stateName stateNameE,
+			
 			b.documentNum documentNumB,
-			b.documentTypeNum documentTypeNumB,
+			b.estimateNum estimateNumB,
 			b.documentTypeName documentTypeNameB,
+			b.nextDocumentTypeName nextDocumentTypeNameB,
+			b.receiver receiverB,
+			b.documentName documentNameB,
 			b.updateDate updateDateB,
 			b.userNum userNumB,
 			b.userName userNameB,
 			b.userDepartment userDepartmentB,
+			b.userPosition userPositionB,
 			b.state stateB,
-			sb.name stateNameB
-		from 
-				(select documentNum, documentTypeNum, documentTypeName, receiver, documentName, updateDate, userNum, userName, userDepartment, state from estimateSheet1) e
-			left outer join
-				(select documentNum, estimateNum, documentTypeNum, documentTypeName, updateDate, userNum, userName, userDepartment, state from billSheet1) b
-			on 
-				(e.documentNum = b.estimateNum)
-			
-			left outer join
-				documentState se
-			on
-				(e.state = se.state)
-			
-			left outer join
-				documentState sb
-			on
-				(b.state = sb.state)
+			b.stateName stateNameB
+		from
+			(
+				select d.*,em1.receiver,em1.documentName,ds.name stateName from
+						(select * from documentMaster where systemNum=1) d 
+					join 
+						estimateMaster em1 
+					on 
+						(d.documentNum = em1.documentNum)
+					join
+						documentState ds
+					on
+						(d.state = ds.state)
+			) e
+		left outer join
+			(
+				select d.*,em1.receiver,em1.documentName,em1.estimateNum,ds.name stateName from
+						(select * from documentMaster where systemNum=2) d 
+					join 
+						estimateMaster em1 
+					on 
+						(d.documentNum = em1.documentNum)
+					join
+						documentState ds
+					on
+						(d.state = ds.state)
+			) b
+		on
+			(e.documentNum = b.estimateNum)
 			<choose>
 				<when test='auth == "u"'>
 					where e.userNum=#{userNum} or b.userNum=#{userNum} or e.state='app' or b.state='app'
@@ -173,7 +224,6 @@
 			userDepartment = #{userDepartment},
 			userPosition = #{userPosition},
 			estimateDate = #{estimateDate},
-			documentTypeNum = #{documentTypeNum},
 			supplier = #{supplier},
 			address = #{address},
 			post = #{post},
@@ -193,17 +243,7 @@
 			tax = #{tax},
 			sumWithTax = #{sumWithTax},
 			sumWithTax2 = #{sumWithTax2},	
-			state = #{state},
 			comment = #{comment},
-			workflowNum = 
-				<choose>
-					<when test="workflowNum == 0">
-						null,
-					</when>
-					<when test="workflowNum != 0">
-						#{workflowNum},
-					</when>
-				</choose>
 			updateDate = CURRENT_TIMESTAMP,
 			updater = #{updater}
 		where
@@ -271,13 +311,29 @@
 			documentNum=#{documentNum} and rowNum = #{rowNum12}
 	</update>
 	
+	<select id="getBillNum" parameterType="String" resultType="String">
+		select documentNum from estimateMaster where estimateNum = #{value}
+	</select>
+	
 	<delete id="deleteSheet" parameterType="systemDTO">
-		delete from workflow where documentNum = #{documentNum};
-		delete from workflow where documentNum = (select documentNum from billSheet1 where estimateNum = #{documentNum});
-		delete from ${documentTypeName} where documentNum = #{documentNum};
+		delete from documentMaster where documentNum = #{documentNum};
 	</delete>
 	
+	
 	<select id="getEstimateSheet1ByDocumentNum" parameterType="String" resultType="estimateSheet1DTO">
-		select state, userNum from estimateSheet1 where documentNum = #{value}
+		select d.state state, e.userNum userNum from
+			estimateSheet1 e
+		join
+			documentMaster d
+		on
+			(e.documentNum = d.documentNum)
+		where 
+			e.documentNum = #{value}
 	</select>
+	
+	<insert id="testTest" parameterType="List">
+		insert into ${list[0].dbName}
+			(${list[1].colName}, ${list[2].colName}, ${list[3].colName} )
+			values(#{list[1].colVal}, #{list[2].colVal}, ${list[3].colVal})
+	</insert>
 </mapper>

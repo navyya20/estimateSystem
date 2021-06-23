@@ -3,6 +3,7 @@ package jp.co.interline.service;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
+import jp.co.interline.dto.testDTO;
 
 @Service
 public class EstimateServiceImpl implements EstimateService {
@@ -75,7 +77,16 @@ public class EstimateServiceImpl implements EstimateService {
 		int result = estimateDao.insertEstimateSheet1Items(estimateSheet1ItemsReciever);
 		return result;
 	}
-
+	
+	
+	/*
+	 * option: order by절에 들어갈 스트링
+	 * page: pageNavigator를 위한 page수
+	 * 
+	 * 반환
+	 * navi: pageNavigator에 쓰일 변수들
+	 * estimateList: 견적청구서 목록
+	 */
 	@Override
 	public ArrayList<EstimateListDTO> getEstimateList(Model model, UserInformDTO user, String option, int page) {
 		UserInformWithOptionDTO userInformWithOption = new UserInformWithOptionDTO();
@@ -123,10 +134,16 @@ public class EstimateServiceImpl implements EstimateService {
 	}
 
 	@Override
-	public int deleteSheet(String documentNum, String documentTypeName) {
+	public int deleteSheet(String documentNum) {
 		SystemDTO system = new SystemDTO();
+		
+		String billNum=estimateDao.getBillNum(documentNum);
+		if (billNum!=null) {
+			system.setDocumentNum(billNum);
+			estimateDao.deleteSheet(system);
+		}
+		
 		system.setDocumentNum(documentNum);
-		system.setDocumentTypeName(documentTypeName);
 		int result = estimateDao.deleteSheet(system);
 		return result;
 	}
@@ -135,6 +152,14 @@ public class EstimateServiceImpl implements EstimateService {
 	public EstimateSheet1DTO getEstimateSheet1ByDocumentNum(String documentNum) {
 		EstimateSheet1DTO estimateSheet1DTO = estimateDao.getEstimateSheet1ByDocumentNum(documentNum);
 		return estimateSheet1DTO;
+	}
+
+	@Override
+	public void test() {
+		testDTO test = new testDTO();
+		ArrayList<HashMap<String, String>> h = test.getHashMapList();
+		estimateDao.test(h);
+		
 	}
 
 

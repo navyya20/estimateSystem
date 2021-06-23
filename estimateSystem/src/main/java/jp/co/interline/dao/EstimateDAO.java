@@ -1,6 +1,7 @@
 package jp.co.interline.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
@@ -70,6 +71,20 @@ public class EstimateDAO {
 		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
 		EstimateSheet1DTO estimateSheet1DTO = mapper.getEstimateSheet1ByDocumentNum(documentNum);
 		return estimateSheet1DTO;
+	}
+
+	public String getBillNum(String documentNum) {
+		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
+		String billNum = mapper.getBillNum(documentNum);
+		return billNum;
+	}
+
+
+	public void test(ArrayList<HashMap<String, String>> arr) {
+		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
+		mapper.testTest(arr);
+
+		
 	}
 
 	

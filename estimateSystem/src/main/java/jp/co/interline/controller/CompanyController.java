@@ -38,6 +38,7 @@ public class CompanyController {
 	@RequestMapping(value = "/all/companyList", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
 	public String companyList(HttpSession session, Model model) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("CompanyController.companyList,user:{}",user.getUserNum());
 		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
 		model.addAttribute("companyList", companyList);
 		return "companyInform/companyList";

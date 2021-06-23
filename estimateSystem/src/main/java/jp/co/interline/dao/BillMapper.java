@@ -2,9 +2,13 @@ package jp.co.interline.dao;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.session.RowBounds;
+
 import jp.co.interline.dto.BillSheet1DTO;
 import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
+import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.SystemDTO;
+import jp.co.interline.dto.UserInformWithOptionDTO;
 
 
 
@@ -24,6 +28,10 @@ public interface BillMapper {
 	int updateBillSheet1Items(BillSheet1ItemsRecieveDTO billSheet1ItemsReciever);
 
 	BillSheet1DTO getBillSheet1ByDocumentNum(String documentNum);
+
+	int getTotalBillSheet(UserInformWithOptionDTO userInformWithOption);
+
+	ArrayList<EstimateListDTO> getBillList(RowBounds rbs, UserInformWithOptionDTO userInformWithOption);
 
 
 }

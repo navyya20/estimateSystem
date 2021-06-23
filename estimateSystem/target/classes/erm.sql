@@ -65,7 +65,7 @@ CREATE TABLE billSheet1
 	estimateNum varchar(20) NOT NULL COMMENT '見積書の固有番号',
 	-- ユーザ情報の固有ナンバー
 	userNum int NOT NULL COMMENT '作成者 : ユーザ情報の固有ナンバー',
-	userName varchar(20) COMMENT '作成者名前',
+	userName varchar(30) COMMENT '作成者名前',
 	userDepartment varchar(10) COMMENT '依頼部署',
 	userPosition varchar(10) COMMENT '作成者役職',
 	billDate varchar(20) COMMENT '作成日表示用',

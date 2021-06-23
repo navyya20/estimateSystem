@@ -66,13 +66,13 @@ public class HomeController {
 			
 			switch (user.getAuth()) {
 			case "u":
-				result.put("url", "all/dashboard");
+				result.put("url", "all/estimateList");
 				break;
 			case "a":
-				result.put("url", "all/dashboard");
+				result.put("url", "all/estimateList");
 				break;
 			case "sa":
-				result.put("url", "all/dashboard");
+				result.put("url", "all/estimateList");
 				break;
 			default:
 				result.put("error","権限に当たるURLの読み込みに失敗しました。");

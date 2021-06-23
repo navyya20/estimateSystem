@@ -5,15 +5,55 @@
 
 <mapper namespace="jp.co.interline.dao.BillMapper">
 	<insert id="insertBillSheet1" parameterType="billSheet1DTO">
+		insert into documentMaster (
+			documentNum,
+			systemNum,
+			documentTypeName,
+			nextDocumentTypeName,
+			userNum, userName, userDepartment, userPosition,
+			workflowNum,
+			state,
+			updateDate,
+			updater
+		)
+		values(
+			#{documentNum},
+			#{systemNum},
+			#{documentTypeName},
+			#{nextDocumentTypeName},
+			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
+			<choose>
+				<when test="workflowNum == 0">
+					null,
+				</when>
+				<when test="workflowNum != 0">
+					#{workflowNum},
+				</when>
+			</choose>
+			#{state},
+			CURRENT_TIMESTAMP,
+			#{updater}
+		);
+		
+		insert into estimateMaster(
+			documentNum,
+			receiver,
+			documentName,
+			estimateNum
+		)values(
+			#{documentNum},
+			#{receiver},
+			#{documentName},
+			#{estimateNum}
+		);
+		
 		insert into billSheet1 (
 			documentNum,
-			estimateNum,
 			userNum,
 			userName,
 			userDepartment,
 			userPosition,
 			billDate,
-			documentTypeNum,
 			supplier,
 			address,
 			post,
@@ -37,22 +77,18 @@
 			tax,
 			sumWithTax,
 			sumWithTax2,	
-			state,
 			comment,
-			workflowNum,
 			updateDate,
 			updater
 		) 
 		values
 		(
 			#{documentNum},
-			#{estimateNum},
 			#{userNum},
 			#{userName},
 			#{userDepartment},
 			#{userPosition},
 			#{billDate},
-			#{documentTypeNum},
 			#{supplier},
 			#{address},
 			#{post},
@@ -76,16 +112,7 @@
 			#{tax},
 			#{sumWithTax},
 			#{sumWithTax2},	
-			#{state},
 			#{comment},
-			<choose>
-				<when test="workflowNum == 0">
-					null,
-				</when>
-				<when test="order != 0">
-					#{workflowNum},
-				</when>
-			</choose>
 			CURRENT_TIMESTAMP,
 			#{updater}
 		)
@@ -110,11 +137,72 @@
 	</insert>
 	
 	
-	<select id="getBillType" parameterType="int" resultType="systemDTO">
-		select d2.documentTypeNum documentTypeNum, d2.documentTypeName from documentType d1 join documentType d2 on (d1.pair1=d2.documentTypeNum)  where d1.documentTypeNum = #{value}
+	
+	
+	<select id="getTotalBillSheet" parameterType="userInformWithOptionDTO" resultType="int">
+		select
+			count(b.documentNum)
+		from
+			(
+				select d.*,em1.receiver,em1.documentName,em1.estimateNum,ds.name stateName from
+						(select * from documentMaster where systemNum=2) d 
+					join 
+						estimateMaster em1 
+					on 
+						(d.documentNum = em1.documentNum)
+					join
+						documentState ds
+					on
+						(d.state = ds.state)
+			) b
+		<choose>
+			<when test='auth == "u"'>
+				where b.userNum=#{userNum} or b.state='app'
+			</when>
+			<when test='auth == "a"'>
+				
+			</when>
+		</choose>
+		order by ${option}
 	</select>
-	<select id="getBillTypeName" parameterType="int" resultType="systemDTO">
-		select * from documentType where documentTypeNum = #{value}
+	
+	<select id="getBillList" parameterType="userInformWithOptionDTO" resultType="estimateListDTO">
+		select
+			b.documentNum documentNumB,
+			b.estimateNum estimateNumB,
+			b.documentTypeName documentTypeNameB,
+			b.nextDocumentTypeName nextDocumentTypeNameB,
+			b.receiver receiverB,
+			b.documentName documentNameB,
+			b.updateDate updateDateB,
+			b.userNum userNumB,
+			b.userName userNameB,
+			b.userDepartment userDepartmentB,
+			b.userPosition userPositionB,
+			b.state stateB,
+			b.stateName stateNameB
+		from
+			(
+				select d.*,em1.receiver,em1.documentName,em1.estimateNum,ds.name stateName from
+						(select * from documentMaster where systemNum=2) d 
+					join 
+						estimateMaster em1 
+					on 
+						(d.documentNum = em1.documentNum)
+					join
+						documentState ds
+					on
+						(d.state = ds.state)
+			) b
+		<choose>
+			<when test='auth == "u"'>
+				where b.userNum=#{userNum} or b.state='app'
+			</when>
+			<when test='auth == "a"'>
+				
+			</when>
+		</choose>
+		order by ${option}
 	</select>
 	
 	
@@ -125,7 +213,6 @@
 			userDepartment = #{userDepartment},
 			userPosition = #{userPosition},
 			billDate = #{billDate},
-			documentTypeNum = #{documentTypeNum},
 			supplier = #{supplier},
 			address = #{address},
 			post = #{post},
@@ -149,17 +236,7 @@
 			tax = #{tax},
 			sumWithTax = #{sumWithTax},
 			sumWithTax2 = #{sumWithTax2},	
-			state = #{state},
 			comment = #{comment},
-			workflowNum = 
-				<choose>
-					<when test="workflowNum == 0">
-						null,
-					</when>
-					<when test="workflowNum != 0">
-						#{workflowNum},
-					</when>
-				</choose>
 			updateDate = CURRENT_TIMESTAMP,
 			updater = #{updater}
 		where
@@ -227,6 +304,13 @@
 			documentNum=#{documentNum} and rowNum = #{rowNum12}
 	</update>
 	<select id="getBillSheet1ByDocumentNum" parameterType="String" resultType="billSheet1DTO">
-		select state, userNum from billSheet1 where documentNum = #{value}
+		select d.state state, b.userNum userNum from
+			billSheet1 b
+		join
+			documentMaster d
+		on
+			(b.documentNum = d.documentNum)
+		where 
+			b.documentNum = #{value}
 	</select>
 </mapper>

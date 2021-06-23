@@ -92,7 +92,7 @@ if ( self !== top ) {
 			oz.sendToActionScript("global.language", "ja_JP");
 			oz.sendToActionScript("odi.odinames", "modEstimateSheet1");
 	 		oz.sendToActionScript("odi.modEstimateSheet1.pcount", "1");
-			oz.sendToActionScript("odi.modEstimateSheet1.args1", "documentNum="+'${estimateNum}');
+			oz.sendToActionScript("odi.modEstimateSheet1.args1", "documentNum="+'${documentNum}');
 			oz.sendToActionScript("pdf.fontembedding","true");
 			return true;
 		}

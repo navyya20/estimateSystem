@@ -8,8 +8,8 @@ public class BillSheet1DTO {
 	String userDepartment;
 	String userPosition;
 	String billDate;
-	int documentTypeNum;
 	String documentTypeName;
+	String nextDocumentTypeName;
 	String supplier;
 	String address;
 	String post;
@@ -39,6 +39,7 @@ public class BillSheet1DTO {
 	String insertDate;
 	String updateDate;
 	int updater;
+	int systemNum;
 	public String getDocumentNum() {
 		return documentNum;
 	}
@@ -80,12 +81,6 @@ public class BillSheet1DTO {
 	}
 	public void setBillDate(String billDate) {
 		this.billDate = billDate;
-	}
-	public int getDocumentTypeNum() {
-		return documentTypeNum;
-	}
-	public void setDocumentTypeNum(int documentTypeNum) {
-		this.documentTypeNum = documentTypeNum;
 	}
 	public String getSupplier() {
 		return supplier;
@@ -268,12 +263,24 @@ public class BillSheet1DTO {
 	public void setDocumentTypeName(String documentTypeName) {
 		this.documentTypeName = documentTypeName;
 	}
+	public int getSystemNum() {
+		return systemNum;
+	}
+	public void setSystemNum(int systemNum) {
+		this.systemNum = systemNum;
+	}
+	public String getNextDocumentTypeName() {
+		return nextDocumentTypeName;
+	}
+	public void setNextDocumentTypeName(String nextDocumentTypeName) {
+		this.nextDocumentTypeName = nextDocumentTypeName;
+	}
 	@Override
 	public String toString() {
 		return "BillSheet1DTO [documentNum=" + documentNum + ", estimateNum=" + estimateNum + ", userNum=" + userNum
 				+ ", userName=" + userName + ", userDepartment=" + userDepartment + ", userPosition=" + userPosition
-				+ ", billDate=" + billDate + ", documentTypeNum=" + documentTypeNum + ", documentTypeName="
-				+ documentTypeName + ", supplier=" + supplier + ", address=" + address + ", post=" + post
+				+ ", billDate=" + billDate + ", documentTypeName=" + documentTypeName + ", nextDocumentTypeName="
+				+ nextDocumentTypeName + ", supplier=" + supplier + ", address=" + address + ", post=" + post
 				+ ", phoneNumber=" + phoneNumber + ", representative=" + representative + ", stamp=" + stamp
 				+ ", stampFileName=" + stampFileName + ", logoFileName=" + logoFileName + ", receiver=" + receiver
 				+ ", documentName=" + documentName + ", payCondition=" + payCondition + ", deadline=" + deadline
@@ -282,7 +289,7 @@ public class BillSheet1DTO {
 				+ depositeClassification + ", note=" + note + ", sum=" + sum + ", tax=" + tax + ", sumWithTax="
 				+ sumWithTax + ", sumWithTax2=" + sumWithTax2 + ", state=" + state + ", comment=" + comment
 				+ ", workflowNum=" + workflowNum + ", insertDate=" + insertDate + ", updateDate=" + updateDate
-				+ ", updater=" + updater + "]";
+				+ ", updater=" + updater + ", systemNum=" + systemNum + "]";
 	}
 	
 }

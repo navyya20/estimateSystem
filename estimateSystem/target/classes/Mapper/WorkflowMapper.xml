@@ -57,7 +57,7 @@
 		insert into workflow (
 			systemNum,
 			userNum, 
-			documentTypeNum,
+			documentTypeName,
 			documentNum,
 			approver1,
 			approver2,
@@ -74,7 +74,7 @@
 		) values (
 			#{systemNum},
 			#{userNum},
-			#{documentTypeNum},
+			#{documentTypeName},
 			#{documentNum},
 			#{approver1},
 			#{approver2},
@@ -88,7 +88,6 @@
 			#{targetValue},
 			CURRENT_TIMESTAMP,
 			#{updater}
-			
 		)
 	</insert>
 	
@@ -109,13 +108,13 @@
 			workflowNum = #{workflowNum}
 	</update>
 	<update id="updateWorkflowNum">
-		update ${documentTypeName} set
+		update documentMaster set
 			workflowNum = #{workflowNum}
 		where
 			documentNum = #{documentNum}
 	</update>
 	<update id="updateState" parameterType="workflowDTO">
-		update ${documentTypeName} set
+		update documentMaster set
 			state = #{state}
 		where
 			documentNum = #{documentNum}
@@ -125,11 +124,9 @@
 		select count(workflowNum) from workflow where presentApprover = #{value} and targetValue != 'aaa'
 	</select>
 	<select id="getWorkflowWaitingList" parameterType="int" resultType="workflowDTO">
-		select w.*, d.documentTypeName documentTypeName, u1.userName ,d1.department userDepartment
+		select w.*, u1.userName ,d1.department userDepartment
 			from
-				workflow w 
-			join 
-				documentType d on (w.documentTypeNum = d.documentTypeNum)
+				workflow w
 			left outer join 
 				userInform u1 on (w.userNum = u1.userNum)
 			left outer join 
@@ -139,11 +136,9 @@
 	</select>
 	
 	<select id="getWorkflowByDocumentNum" parameterType="String" resultType="workflowDTO">
-		select w.*, d.documentTypeName documentTypeName, u1.userName ,d1.department userDepartment
+		select w.*, u1.userName ,d1.department userDepartment
 			from
 				workflow w 
-			join 
-				documentType d on (w.documentTypeNum = d.documentTypeNum)
 			left outer join 
 				userInform u1 on (w.userNum = u1.userNum)
 			left outer join 

@@ -156,7 +156,7 @@ function insertUser(){
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="phoneNumber" id="inputGroup-sizing-default">電話番号</label>
 						</div>
-						<input type="text" class="pl-2 pr-0 col-8 form-control" id="phoneNumber" name="phoneNumber" maxlength="13">
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="phoneNumber" name="phoneNumber" maxlength="20">
 					</div>
 					
 					<!-- email -->

@@ -26,7 +26,12 @@
 			<ul class="navbar-nav">
 				<li class="nav-item active">
 					<c:if test="${sessionScope.userInform.auth eq 'a' or sessionScope.userInform.auth eq 'u'}">
-						<a class="nav-link" href="./estimateList">見積請求書 <span class="sr-only">(current)</span></a>
+						<a class="nav-link" href="./estimateList">見積書 <span class="sr-only">(current)</span></a>
+					</c:if>
+				</li>
+				<li class="nav-item active">
+					<c:if test="${sessionScope.userInform.auth eq 'a' or sessionScope.userInform.auth eq 'u'}">
+						<a class="nav-link" href="./billList">請求書 <span class="sr-only">(current)</span></a>
 					</c:if>
 				</li>
 				<li class="nav-item active">
@@ -35,8 +40,31 @@
 						<a class="nav-link" href="workflowWaitingList">承認待機(<span id=waitApproval></span>)</a>
 					</c:if>
 				</li>
+				<li class="nav-item active">
+					<c:if test="${sessionScope.userInform.auth eq 'sa'}">
+						<a class="nav-link" href="./imgList">印鑑・LOGO</a>
+					</c:if>
+				</li>
+				<li class="nav-item active">
+					<c:if test="${sessionScope.userInform.auth eq 'sa'}">
+						<a class="nav-link" href="./workflowList">Workflow</a>
+					</c:if>
+				</li>
+				<li class="nav-item active">
+					<c:if test="${sessionScope.userInform.auth eq 'sa'}">
+						<a class="nav-link" href="./companyList">会社情報</a>
+					</c:if>
+				</li>
+				<li class="nav-item active">
+					<c:if test="${sessionScope.userInform.auth eq 'sa'}">
+						<a class="nav-link" href="./accountList">口座情報</a>
+					</c:if>
+				</li>
+				<li class="nav-item active">
+						<a class="nav-link" href="./userList">ユーザ情報</a>
+				</li>
 				
-				<li class="nav-item dropdown active">
+				<%-- <li class="nav-item dropdown active">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						設定
 					</a>
@@ -51,7 +79,7 @@
 						</c:if>
 						<a class="dropdown-item" href="./userList">ユーザ情報</a>
 					</div>
-				</li>
+				</li> --%>
 				<li class="nav-item active">
 					<a class="nav-link" href="../">LogOut</a>
 				</li>

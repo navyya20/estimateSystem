@@ -1,3 +1,14 @@
+SET GLOBAL validate_password.policy=low;
+SET GLOBAL validate_password.length=4;
+SET GLOBAL validate_password.mixed_case_count=0;
+SET GLOBAL validate_password.number_count=0;
+SET GLOBAL validate_password.special_char_count=0;
+create database interline_EstimateSystem default character set utf8;
+create user 'hrhr6'@'%' identified by "hrhr";
+GRANT ALL privileges ON interline_EstimateSystem.* TO 'hrhr6'@'%';
+SET GLOBAL log_bin_trust_function_creators = 1;
+
+
 use interline_EstimateSystem;
 SET SESSION FOREIGN_KEY_CHECKS=0;
 
@@ -220,7 +231,8 @@ CREATE TABLE estimateMaster
 	documentName varchar(40) COMMENT '件名',
 	-- 関われている見積書のdocumentNum
 	estimateNum varchar(20) COMMENT 'estimateNum : 関われている見積書のdocumentNum',
-	PRIMARY KEY (documentNum)
+	PRIMARY KEY (documentNum),
+    UNIQUE (estimateNum)
 ) COMMENT = '新規テーブル';
 
 
@@ -493,7 +505,7 @@ ALTER TABLE estimateSheet1Items
 	ADD FOREIGN KEY (documentNum)
 	REFERENCES estimateSheet1 (documentNum)
 	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
+	ON DELETE CASCADE
 ;
 
 
@@ -549,7 +561,7 @@ ALTER TABLE documentMaster
 	ADD FOREIGN KEY (workflowNum)
 	REFERENCES workflow (workflowNum)
 	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
+	ON DELETE SET NULL
 ;
 
 
@@ -594,6 +606,7 @@ INSERT INTO `interline_estimatesystem`.`documentstate` (`state`, `name`) VALUES 
 INSERT INTO `interline_estimatesystem`.`documentstate` (`state`, `name`) VALUES ('app', '承認済');
 
 
+
 -- system管理者
 INSERT INTO `interline_estimatesystem`.`userinform` (`userId`, `password`, `userName`, `auth`) VALUES ('sadmin', 'sadmin', 'sadmin', 'sa');
 
@@ -609,11 +622,13 @@ INSERT INTO `interline_estimatesystem`.`userinform` (`userId`, `password`, `user
 
 
 
-
-
-
-
-
+-- ERM에서 작성이안되어 따로 작성함
+ALTER TABLE workflow
+	ADD FOREIGN KEY (documentNum)
+	REFERENCES documentMaster (documentNum)
+	ON UPDATE RESTRICT
+	ON DELETE CASCADE
+;
 
 
 INSERT INTO masterSeq VALUES (0, 'estimateSeq');

@@ -39,12 +39,15 @@ if ( self !== top ) {
 	window.parent.location.href="login";
 }
 
-function modButton(estimateNum){
+function modButton(){
 	var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
-	$('#modDocument').attr("action","modEstimateSheet1");
-	$('#documentNum').val(estimateNum);
+	var inputJson=JSON.parse(inputJsonString);
+	var documentTypeName = inputJson["documentTypeName"];
+	var documentNum = inputJson["documentNum"];
+	var url = "mod"+documentTypeName.charAt(0).toUpperCase()+documentTypeName.slice(1);
+	$('#modDocument').attr("action",url);
+	$('#documentNum').val(documentNum);
 	$('#modDocument').submit();
-	//location.href="modEstimateSheet1?documentNum="+estimateNum;
 }
 function requestButton(){
 	var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
@@ -53,10 +56,10 @@ function requestButton(){
 			{
 				url: "requestApproval",
 				type: 'POST',
-				data: {"documentTypeNum":inputJson["documentTypeNum"], "documentTypeName":inputJson["documentTypeName"], "documentNum" : inputJson["documentNum"], "systemNum":inputJson["systemNum"]},
+				data: {"documentTypeName":inputJson["documentTypeName"], "documentNum":inputJson["documentNum"], "systemNum":inputJson["systemNum"]},
 				dataType:"text",
 				success: function(r){
-					alert("承認依頼完了");
+					alert(r);
 					location.href="estimateList";
 				},
 				error: function(e){
@@ -121,7 +124,7 @@ function rejectButton(){
 		<div class="pl-2 pr-2 d-flex col-3">
 			<!-- (유져&작성중)  or 관리자-->
 			<c:if test="${(userInform.auth eq 'u' and state eq 'wri') or userInform.auth eq 'a'}">
-				<button type="button" class="col-12 mr-2 ml-2 btn btn-secondary" onclick="modButton('${estimateNum}')">修正</button>
+				<button type="button" class="col-12 mr-2 ml-2 btn btn-secondary" onclick="modButton()">修正モード</button>
 			</c:if>
 		</div>
 		<div class="pl-2 pr-2 d-flex col-3">

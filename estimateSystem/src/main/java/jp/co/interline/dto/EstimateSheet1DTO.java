@@ -7,8 +7,8 @@ public class EstimateSheet1DTO {
 	String userDepartment;
 	String userPosition;
 	String estimateDate;
-	int documentTypeNum;
 	String documentTypeName;
+	String nextDocumentTypeName;
 	String supplier;
 	String address;
 	String post;
@@ -34,6 +34,7 @@ public class EstimateSheet1DTO {
 	String insertDate;
 	String updateDate;
 	int updater;
+	int systemNum;
 	public String getDocumentNum() {
 		return documentNum;
 	}
@@ -69,12 +70,6 @@ public class EstimateSheet1DTO {
 	}
 	public void setEstimateDate(String estimateDate) {
 		this.estimateDate = estimateDate;
-	}
-	public int getDocumentTypeNum() {
-		return documentTypeNum;
-	}
-	public void setDocumentTypeNum(int documentTypeNum) {
-		this.documentTypeNum = documentTypeNum;
 	}
 	public String getSupplier() {
 		return supplier;
@@ -236,20 +231,37 @@ public class EstimateSheet1DTO {
 	public void setDocumentTypeName(String documentTypeName) {
 		this.documentTypeName = documentTypeName;
 	}
+	
+	
+	public int getSystemNum() {
+		return systemNum;
+	}
+	public void setSystemNum(int systemNum) {
+		this.systemNum = systemNum;
+	}
+	
+	
+	public String getNextDocumentTypeName() {
+		return nextDocumentTypeName;
+	}
+	public void setNextDocumentTypeName(String nextDocumentTypeName) {
+		this.nextDocumentTypeName = nextDocumentTypeName;
+	}
 	@Override
 	public String toString() {
 		return "EstimateSheet1DTO [documentNum=" + documentNum + ", userNum=" + userNum + ", userName=" + userName
 				+ ", userDepartment=" + userDepartment + ", userPosition=" + userPosition + ", estimateDate="
-				+ estimateDate + ", documentTypeNum=" + documentTypeNum + ", documentTypeName=" + documentTypeName
-				+ ", supplier=" + supplier + ", address=" + address + ", post=" + post + ", phoneNumber=" + phoneNumber
-				+ ", representative=" + representative + ", stamp=" + stamp + ", stampFileName=" + stampFileName
-				+ ", logoFileName=" + logoFileName + ", receiver=" + receiver + ", documentName=" + documentName
-				+ ", deadline=" + deadline + ", supplyPoint=" + supplyPoint + ", expirationDate=" + expirationDate
-				+ ", payCondition=" + payCondition + ", cautions=" + cautions + ", sum=" + sum + ", tax=" + tax
-				+ ", sumWithTax=" + sumWithTax + ", sumWithTax2=" + sumWithTax2 + ", state=" + state + ", comment="
-				+ comment + ", workflowNum=" + workflowNum + ", insertDate=" + insertDate + ", updateDate=" + updateDate
-				+ ", updater=" + updater + "]";
+				+ estimateDate + ", documentTypeName=" + documentTypeName + ", nextDocumentTypeName="
+				+ nextDocumentTypeName + ", supplier=" + supplier + ", address=" + address + ", post=" + post
+				+ ", phoneNumber=" + phoneNumber + ", representative=" + representative + ", stamp=" + stamp
+				+ ", stampFileName=" + stampFileName + ", logoFileName=" + logoFileName + ", receiver=" + receiver
+				+ ", documentName=" + documentName + ", deadline=" + deadline + ", supplyPoint=" + supplyPoint
+				+ ", expirationDate=" + expirationDate + ", payCondition=" + payCondition + ", cautions=" + cautions
+				+ ", sum=" + sum + ", tax=" + tax + ", sumWithTax=" + sumWithTax + ", sumWithTax2=" + sumWithTax2
+				+ ", state=" + state + ", comment=" + comment + ", workflowNum=" + workflowNum + ", insertDate="
+				+ insertDate + ", updateDate=" + updateDate + ", updater=" + updater + ", systemNum=" + systemNum + "]";
 	}
+	
 	
 	
 	

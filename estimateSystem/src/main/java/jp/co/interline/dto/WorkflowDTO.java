@@ -5,7 +5,6 @@ public class WorkflowDTO {
 	int workflowNum;
 	int systemNum;
 	int userNum;
-	int documentTypeNum;
 	String documentNum;
 	int approver1;
 	int approver2;
@@ -43,12 +42,6 @@ public class WorkflowDTO {
 	}
 	public void setUserNum(int userNum) {
 		this.userNum = userNum;
-	}
-	public int getDocumentTypeNum() {
-		return documentTypeNum;
-	}
-	public void setDocumentTypeNum(int documentTypeNum) {
-		this.documentTypeNum = documentTypeNum;
 	}
 	public String getDocumentNum() {
 		return documentNum;
@@ -163,15 +156,13 @@ public class WorkflowDTO {
 	@Override
 	public String toString() {
 		return "WorkflowDTO [workflowNum=" + workflowNum + ", systemNum=" + systemNum + ", userNum=" + userNum
-				+ ", documentTypeNum=" + documentTypeNum + ", documentNum=" + documentNum + ", approver1=" + approver1
-				+ ", approver2=" + approver2 + ", approver3=" + approver3 + ", approver1State=" + approver1State
-				+ ", approver2State=" + approver2State + ", approver3State=" + approver3State + ", presentApproverNum="
-				+ presentApproverNum + ", presentApprover=" + presentApprover + ", targetKey=" + targetKey
-				+ ", targetValue=" + targetValue + ", insertDate=" + insertDate + ", updateDate=" + updateDate
-				+ ", updater=" + updater + ", documentTypeName=" + documentTypeName + ", state=" + state + ", userName="
-				+ userName + ", userDepartment=" + userDepartment + "]";
+				+ ", documentNum=" + documentNum + ", approver1=" + approver1 + ", approver2=" + approver2
+				+ ", approver3=" + approver3 + ", approver1State=" + approver1State + ", approver2State="
+				+ approver2State + ", approver3State=" + approver3State + ", presentApproverNum=" + presentApproverNum
+				+ ", presentApprover=" + presentApprover + ", targetKey=" + targetKey + ", targetValue=" + targetValue
+				+ ", insertDate=" + insertDate + ", updateDate=" + updateDate + ", updater=" + updater
+				+ ", documentTypeName=" + documentTypeName + ", state=" + state + ", userName=" + userName
+				+ ", userDepartment=" + userDepartment + "]";
 	}
-	
-	
 	
 }
