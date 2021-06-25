@@ -144,7 +144,7 @@ CREATE TABLE companyInform
 	-- 会社名
 	companyName varchar(40) COMMENT '会社名 : 会社名',
 	representative varchar(30) COMMENT '代表者',
-	phoneNumber varchar(15) COMMENT '電話番号',
+	phoneNumber varchar(20) COMMENT '電話番号',
 	address varchar(120) COMMENT '住所',
 	post varchar(10) COMMENT '郵便番号',
 	email varchar(30) COMMENT 'email',
@@ -343,7 +343,7 @@ CREATE TABLE userInform
 	-- ユーザがログインするとき使うID
 	userId varchar(30) NOT NULL COMMENT 'ユーザID : ユーザがログインするとき使うID',
 	-- ユーザがログインするとき使う暗証番号。
-	password varchar(15) NOT NULL COMMENT '暗証番号 : ユーザがログインするとき使う暗証番号。',
+	password varchar(20) NOT NULL COMMENT '暗証番号 : ユーザがログインするとき使う暗証番号。',
 	-- ユーザの名前
 	userName varchar(30) NOT NULL COMMENT '名前 : ユーザの名前',
 	departmentNum int COMMENT '所属Num',
@@ -351,7 +351,7 @@ CREATE TABLE userInform
 	-- u(ユーザ)、a(管理者)、sa(システム管理者)
 	auth varchar(3) NOT NULL COMMENT '権限 : u(ユーザ)、a(管理者)、sa(システム管理者)',
 	-- ユーザの携帯電話番号。
-	phoneNumber varchar(15) COMMENT 'phoneNumber : ユーザの携帯電話番号。',
+	phoneNumber varchar(20) COMMENT 'phoneNumber : ユーザの携帯電話番号。',
 	-- メールアドレス
 	email varchar(30) COMMENT 'email : メールアドレス',
 	-- このユーザの状態。在職、休業、削除、退職

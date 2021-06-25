@@ -76,6 +76,12 @@ public class UserDAO implements UserMapper {
 		return userList;
 	}
 
+	public int updateLoginDate(UserInformDTO user) {
+		UserMapper mapper = sqlsession.getMapper(UserMapper.class);
+		int result = mapper.updateLoginDate(user);
+		return result;
+	}
+
 	
 
 	

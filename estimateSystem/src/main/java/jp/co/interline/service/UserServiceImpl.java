@@ -66,6 +66,13 @@ public class UserServiceImpl implements UserService{
 	}
 
 
+	@Override
+	public int updateLoginDate(UserInformDTO user) {
+		return userDao.updateLoginDate(user);
+		
+	}
+
+
 	
 
 

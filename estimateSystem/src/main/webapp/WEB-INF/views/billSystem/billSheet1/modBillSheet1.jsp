@@ -69,6 +69,7 @@ if ( self !== top ) {
 
 	<script type="text/javascript" >
 		var accountList = '${accountList}';
+		var companyList = '${companyList}';
 		accountList=accountList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
 		var repeat=12;
 
@@ -82,13 +83,15 @@ if ( self !== top ) {
 			oz.sendToActionScript("viewer.external_functions_path","ozp://billSystem/billSheet1/JS/billSheet1.js");
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
 			oz.sendToActionScript("connection.reportname","billSystem/billSheet1/modBillSheet1.ozr");
-			oz.sendToActionScript("connection.pcount","6");
+			oz.sendToActionScript("connection.pcount","7");
 			oz.sendToActionScript("connection.args1","accountList="+accountList);
 			oz.sendToActionScript("connection.args2","userNum="+user.userNum);
 			oz.sendToActionScript("connection.args3","userPosition="+(user.position==null? '':user.position));
 			oz.sendToActionScript("connection.args4","userDepartment="+(user.department==null? '':user.department));
 			oz.sendToActionScript("connection.args5","userName="+user.userName);
 			oz.sendToActionScript("connection.args6","path=http://"+'<%out.print(properties.getWebIP());%>'+'/<%out.print(properties.getProjectRoot());%>/resources/uploaded/');
+			oz.sendToActionScript("connection.args7","companyList="+companyList);
+
 			oz.sendToActionScript("pdf.fontembedding","true");
 
 			oz.sendToActionScript("global.language", "ja_JP");

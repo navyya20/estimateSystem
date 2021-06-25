@@ -16,6 +16,12 @@
 		select * from userInform where userNum=#{userNum}
 	</select>
 	
+	<update id="updateLoginDate">
+		update userInform set
+			loginDate = CURRENT_TIMESTAMP
+		where
+			userNum = #{userNum}
+	</update>
 	
 	<select id="getUserList" parameterType="userInformDTO" resultType="userInformDTO">
 		select u.*, d.department, p.position from 

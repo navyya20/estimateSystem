@@ -25,6 +25,8 @@ public interface UserMapper {
 
 	public ArrayList<UserInformDTO> getUserListOrderdOnlyAdmin(String where);
 
+	public int updateLoginDate(UserInformDTO user);
+
 
 
 

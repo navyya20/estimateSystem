@@ -65,6 +65,7 @@ if ( self !== top ) {
 	<script type="text/javascript" >
 		var estimateNum = '${estimateNum}';
 		var accountList = '${accountList}';
+		var companyList = '${companyList}';
 		accountList=accountList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
 		console.log(accountList);
 		var repeat=12;
@@ -79,7 +80,7 @@ if ( self !== top ) {
 			oz.sendToActionScript("viewer.external_functions_path","ozp://billSystem/billSheet1/JS/billSheet1.js");
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
 			oz.sendToActionScript("connection.reportname","billSystem/billSheet1/writeBillSheet1.ozr");
-			oz.sendToActionScript("connection.pcount","8");
+			oz.sendToActionScript("connection.pcount","9");
 			oz.sendToActionScript("connection.args1","repeat="+repeat);
 			oz.sendToActionScript("connection.args2","accountList="+accountList);
 			oz.sendToActionScript("connection.args3","userNum="+user.userNum);
@@ -88,6 +89,7 @@ if ( self !== top ) {
 			oz.sendToActionScript("connection.args6","userName="+user.userName);
 			oz.sendToActionScript("connection.args7","path=http://"+'<%out.print(properties.getWebIP());%>'+'/<%out.print(properties.getProjectRoot());%>/resources/uploaded/');
 			oz.sendToActionScript("connection.args8","estimateNum="+estimateNum);
+			oz.sendToActionScript("connection.args9","companyList="+companyList);
 
 			oz.sendToActionScript("global.language", "ja_JP");
 			oz.sendToActionScript("odi.odinames", "writeBillSheet1");
@@ -160,7 +162,11 @@ if ( self !== top ) {
 							}else{
 								alert(r["error"]);
 							}
-							location.href="estimateList";
+							if(estimateNum ==''){
+								location.href="billList";
+							}else{
+								location.href="estimateList";
+							}
 						},
 						error: function(e){
 							console.log(JSON.stringify(e));
@@ -206,7 +212,11 @@ if ( self !== top ) {
 						dataType:"text",
 						success: function(r){
 							alert(r);
-							location.href="estimateList";
+							if(estimateNum ==''){
+								location.href="billList";
+							}else{
+								location.href="estimateList";
+							}
 						},
 						error: function(e){
 							console.log(JSON.stringify(e));

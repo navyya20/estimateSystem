@@ -153,7 +153,7 @@ function deleteCompany(){
 					<!-- update button -->
 					<div class="p-0 d-flex col-12">
 						<div class="pl-2 pr-2 d-flex col-6">
-							<button type="button" class="col-12 btn btn-secondary" onclick="updateCompany()">変更格納</button>
+							<button type="button" class="col-12 btn btn-secondary" onclick="updateCompany()">更新</button>
 						</div>
 						<div class="pl-2 pr-2 d-flex col-6">
 							<button type="button" class="col-12 btn btn-secondary" onclick="deleteCompany()">削除</button>

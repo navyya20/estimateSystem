@@ -57,7 +57,7 @@ public class HomeController {
 		HashMap<String,String> result = new HashMap<>();
 		
 		if(user != null){
-			
+			userService.updateLoginDate(user);
 			session.setAttribute("loginId", user.getUserId());
 			session.setAttribute("userInform", user);
 			JSONObject jsonObject = new JSONObject(user);
@@ -72,7 +72,7 @@ public class HomeController {
 				result.put("url", "all/estimateList");
 				break;
 			case "sa":
-				result.put("url", "all/estimateList");
+				result.put("url", "all/dashboard");
 				break;
 			default:
 				result.put("error","権限に当たるURLの読み込みに失敗しました。");

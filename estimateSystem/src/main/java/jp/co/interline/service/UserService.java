@@ -23,4 +23,6 @@ public interface UserService {
 	public ArrayList<UserInformDTO> getUserListOrderd(String where);
 
 	public ArrayList<UserInformDTO> getUserListOrderdOnlyAdmin(String where);
+
+	public int updateLoginDate(UserInformDTO user);
 }

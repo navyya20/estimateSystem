@@ -36,6 +36,7 @@ import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.dto.WorkflowInformDTO;
 import jp.co.interline.service.AccountService;
 import jp.co.interline.service.BillService;
+import jp.co.interline.service.CompanyService;
 import jp.co.interline.service.WorkflowService;
 
 /**
@@ -49,7 +50,8 @@ public class BillController {
 	BillService billService;
 	@Autowired
 	AccountService accountService;
-	
+	@Autowired
+	CompanyService companyService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(BillController.class);
 	
@@ -74,9 +76,12 @@ public class BillController {
 	public String writeBillSheet1(HttpSession session, Model model, String estimateNum) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		ArrayList<AccountDTO> accountList = accountService.getAccountList();
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
 		Gson gson = new Gson();
 		String accountListString = gson.toJson(accountList);
+		String companyListString = gson.toJson(companyList);
 		model.addAttribute("accountList", accountListString);
+		model.addAttribute("companyList", companyListString);
 		String userString = gson.toJson(user);
 		model.addAttribute("user", userString);
 		model.addAttribute("estimateNum", estimateNum);
@@ -151,16 +156,21 @@ public class BillController {
 	@RequestMapping(value = "/all/modBillSheet1", method = RequestMethod.POST)
 	public String modBillSheet1(HttpSession session, Model model, String documentNum) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		//모든 문서를 통틀어서 state를 가져옴. 새로운 시스템 추가시 sql에 유니온 필요.
+		
+		//state를 가져옴. 새로운 시스템 추가시 sql에 유니온 필요.
 		BillSheet1DTO billSheet1 = billService.getBillSheet1ByDocumentNum(documentNum);
 		model.addAttribute("state", billSheet1.getState());
 		model.addAttribute("userNum", billSheet1.getUserNum());
 		model.addAttribute("billNum", documentNum);
 		
 		ArrayList<AccountDTO> accountList = accountService.getAccountList();
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
 		Gson gson = new Gson();
 		String accountListString = gson.toJson(accountList);
+		String companyListString = gson.toJson(companyList);
 		model.addAttribute("accountList", accountListString);
+		model.addAttribute("companyList", companyListString);
+		
 		String userString = gson.toJson(user);
 		model.addAttribute("user", userString);
 		return "billSystem/billSheet1/modBillSheet1";

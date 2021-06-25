@@ -137,6 +137,7 @@ public class EstimateServiceImpl implements EstimateService {
 	public int deleteSheet(String documentNum) {
 		SystemDTO system = new SystemDTO();
 		
+		//문서에 연결된 청구서가 있을경우 청구서부터 지움.
 		String billNum=estimateDao.getBillNum(documentNum);
 		if (billNum!=null) {
 			system.setDocumentNum(billNum);
