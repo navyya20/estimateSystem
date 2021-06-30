@@ -120,6 +120,10 @@ public class BillServiceImpl implements BillService {
 
 	@Override
 	public int updateBillSheet1(BillSheet1DTO billSheet1) {
+		//청구서 단독 작성시 estimateNum이 ""로 들어옴. 그대로 넣으면 유니크 속성에 걸림.
+		if (billSheet1.getEstimateNum().equals("")) {
+			billSheet1.setEstimateNum(null);
+		}
 		ArrayList<SystemDTO> system = systemDao.getFileNames();
 		SystemDTO sys=null;
 		String stampFileName="";

@@ -70,6 +70,7 @@ function saveApprover(){
 				<div class="d-flex flex-column col-10 col-md-6">
 				
 					<!-- estimateSystem -->
+					<!-- 3명까지 선택가능 하나 현제 요구사항이 1명지정이므로 나머지 2명에대한 항목은 d-none옵션으로 보이지 않게 했음. d-none만 풀어주면 최대 3명짜리로 작동가능 -->
 					<div class="col-12">見積書</div>
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
@@ -93,6 +94,7 @@ function saveApprover(){
 					<div class="d-block d-md-none" style="height: 5px;"></div>
 					
 					<!-- billSystem -->
+					<!-- 3명까지 선택가능 하나 현제 요구사항이 1명지정이므로 나머지 2명에대한 항목은 d-none옵션으로 보이지 않게 했음. d-none만 풀어주면 최대 3명짜리로 작동가능 -->
 					<div class="col-12">請求書</div>
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">

@@ -95,7 +95,7 @@ public class UserController {
 		model.addAttribute("departments", departments);
 		model.addAttribute("positions", positions);
 		model.addAttribute("auths", auths);
-		model.addAttribute("userInform", userInform);
+		model.addAttribute("user", userInform);
 		return "userInform/userMod";
 	}
 	
@@ -108,6 +108,10 @@ public class UserController {
 		int result = userService.updateUser(userInform);
 		if (result != 1) {
 			System.out.println("failed for inserting userInform");
+		}
+		if(userInform.getUserNum()==user.getUserNum()) {
+			UserInformDTO updatedUser = userService.getUserInformByUserNum(user.getUserNum());
+			session.setAttribute("userInform", updatedUser);
 		}
 		logger.info("userInform updated");
 		return "redirect:/all/userList";

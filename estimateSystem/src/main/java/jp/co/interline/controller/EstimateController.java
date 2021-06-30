@@ -150,6 +150,25 @@ public class EstimateController {
 		return "estimateSystem/estimateSheet1/modEstimateSheet1";
 	}
 	
+	@RequestMapping(value = "/all/copyEstimateSheet1", method = RequestMethod.POST)
+	public String copyEstimateSheet1(HttpSession session, Model model, String documentNum, String documentTypeName) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("EstimateController.copyEstimateSheet1,user:{}",user.getUserNum());
+		EstimateSheet1DTO estimateSheet1 = estimateService.getEstimateSheet1ByDocumentNum(documentNum);
+		//아이템도 가져오기 DTO만들어야함.
+		
+		//서비스로 불러서 꾸민다음에 인서트
+		//채번
+		String newDocumentNum = estimateService.getDocoumentNum();
+		//기본정보등록
+		estimateSheet1.setDocumentNum(newDocumentNum);
+		estimateSheet1.setUpdater(user.getUserNum());
+		
+		
+		return "redirect:/all/estimateList";
+	}
+	
+	
 	@ResponseBody
 	@RequestMapping(value = "/all/updateEstimateSheet1", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> updateEstimateSheet1(HttpSession session, Model model, EstimateSheet1DTO estimateSheet1, EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever) {

@@ -375,7 +375,7 @@ CREATE TABLE workflow
 	workflowNum int NOT NULL AUTO_INCREMENT COMMENT 'WF情報の固有番号',
 	-- ユーザ情報の固有ナンバー
 	userNum int COMMENT 'ユーザ情報の固有番号 : ユーザ情報の固有ナンバー',
-	documentTypeNum int NOT NULL COMMENT '文書種類の固有番号',
+	documentTypeName varchar(20) NOT NULL COMMENT '文書種類',
 	-- このWFを使っている文書番号
 	documentNum varchar(20) COMMENT '文書番号 : このWFを使っている文書番号',
 	approver1 int COMMENT '承認者１',

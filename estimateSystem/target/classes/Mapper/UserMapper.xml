@@ -6,14 +6,17 @@
 <mapper namespace="jp.co.interline.dao.UserMapper">
 
 	<select id="getUserInformByIdPw" parameterType="userInformDTO" resultType="userInformDTO">
-		select u.*, d.department, p.position from 
+		select u.*, d.department department, p.position position from 
 		userInform u left outer join department d on (u.departmentNum=d.departmentNum) 
 		left outer join position p on (u.positionNum=p.positionNum) 
 		where u.userId=#{userId} and u.password=#{password}
 	</select>
 	
 	<select id="getUserInformByUserNum" parameterType="int" resultType="userInformDTO">
-		select * from userInform where userNum=#{userNum}
+		select u.*, d.department department, p.position position from 
+		userInform u left outer join department d on (u.departmentNum=d.departmentNum) 
+		left outer join position p on (u.positionNum=p.positionNum) 
+		where u.userNum=#{userNum}
 	</select>
 	
 	<update id="updateLoginDate">

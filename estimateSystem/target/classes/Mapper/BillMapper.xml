@@ -207,6 +207,21 @@
 	
 	
 	<update id="updateBillSheet1" parameterType="billSheet1DTO">
+		update documentMaster set
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where 
+			documentNum = #{documentNum};
+		
+		
+		update estimateMaster set
+			receiver = #{receiver},
+			documentName = #{documentName},
+			estimateNum= #{estimateNum}
+		where
+			documentNum = #{documentNum};
+		
+		
 		update billSheet1 set
 			userNum = #{userNum},
 			userName = #{userName},

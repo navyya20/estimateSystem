@@ -180,6 +180,7 @@ public class WorkflowServiceImpl implements WorkflowService {
 			system.setStampFileName(stampFileName.getFileName());
 			system.setLogoFileName(logoFileName.getFileName());
 			system.setDocumentTypeName(documentTypeName);
+			system.setDocumentNum(documentNum);
 			int result2=workflowDao.stampConfirm(system);
 			if (result2==0) {return false;}
 		}else {

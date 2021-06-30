@@ -70,6 +70,7 @@ if ( self !== top ) {
 
 		var userString = '${user}';
 		var user=JSON.parse(userString);
+		console.log(JSON.stringify(user));
 		function SetOZParamters_OZViewer(){
 			
 			var oz;

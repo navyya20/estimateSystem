@@ -88,9 +88,9 @@ function deleteUser(){
 }
 
 function setInitialValueForSelectBox(){
-	$('#departmentNum').find('option[value="${userInform.departmentNum eq null ? 0 : userInform.departmentNum}"]').attr("selected",true);
-	$('#positionNum').find('option[value="${userInform.positionNum eq null ? 0 : userInform.positionNum}"]').attr("selected",true);
-	$('#auth').find('option[value="${userInform.auth}"]').attr("selected",true);
+	$('#departmentNum').find('option[value="${user.departmentNum eq null ? 0 : user.departmentNum}"]').attr("selected",true);
+	$('#positionNum').find('option[value="${user.positionNum eq null ? 0 : user.positionNum}"]').attr("selected",true);
+	$('#auth').find('option[value="${user.auth}"]').attr("selected",true);
 }
 
 </script>
@@ -103,14 +103,14 @@ function setInitialValueForSelectBox(){
 	<div class="row align-items-center col-12 p-0 m-0" style="height: 80%;">
 		<div id="login_div" class="d-flex justify-content-center col-12 p-0">
 			<form class="col-12 d-flex justify-content-center" id="updateUser" action="updateUser" method="post" accept-charset="utf-8">
-				<input type="hidden" id="userNum" name="userNum" value="${userInform.userNum}">
+				<input type="hidden" id="userNum" name="userNum" value="${user.userNum}">
 				<div class="d-flex flex-column col-10 col-md-6">
 					<!-- id -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="userId" id="inputGroup-sizing-default">*ID</label>
 						</div>
-						<input type="text" class="pl-2 pr-0 col-8 form-control" id="userId" name="userId" value="${userInform.userId}" readonly>
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="userId" name="userId" value="${user.userId}" readonly>
 					</div>
 					
 					<!-- pw -->
@@ -118,14 +118,14 @@ function setInitialValueForSelectBox(){
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="password" id="inputGroup-sizing-default">*PW</label>
 						</div>
-						<input type="password" class="pl-2 pr-0 col-8 form-control" id="password" name="password" value="${userInform.password}">
+						<input type="password" class="pl-2 pr-0 col-8 form-control" id="password" name="password" value="${user.password}">
 					</div>
 					<!-- pw confirm -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="password" id="inputGroup-sizing-default">*PW確認</label>
 						</div>
-						<input type="password" class="pl-2 pr-0 col-8 form-control" id="password2" value="${userInform.password}">
+						<input type="password" class="pl-2 pr-0 col-8 form-control" id="password2" value="${user.password}">
 					</div>
 					
 					<!-- name -->
@@ -133,7 +133,7 @@ function setInitialValueForSelectBox(){
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="userName" id="inputGroup-sizing-default">名前</label>
 						</div>
-						<input type="text" class="pl-2 pr-0 col-8 form-control" id="userName" name="userName" maxlength="30" value="${userInform.userName}">
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="userName" name="userName" maxlength="30" value="${user.userName}">
 					</div>
 					
 					<!-- department -->
@@ -141,7 +141,7 @@ function setInitialValueForSelectBox(){
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="departmentNum" style="text-align: center;">所属</label>
 						</div>
-						<select class="p-0 col-8 custom-Select" id="departmentNum" name="departmentNum">
+						<select class="p-0 col-8 custom-Select" id="departmentNum" name="departmentNum" ${userInform.auth != 'sa' ? 'disabled':''}>
 							<option selected value="0">選択してください．．．</option>
 							<c:forEach items="${departments}" var="department" varStatus="status">
 								<option value="${department.departmentNum}">${department.department}</option>
@@ -154,7 +154,7 @@ function setInitialValueForSelectBox(){
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="positionNum" style="text-align: center;">役職</label>
 						</div>
-						<select class="p-0 col-8 custom-Select" id="positionNum" name="positionNum">
+						<select class="p-0 col-8 custom-Select" id="positionNum" name="positionNum" ${userInform.auth != 'sa' ? 'disabled':''}>
 							<option selected value="0">選択してください．．．</option>
 							<c:forEach items="${positions}" var="position" varStatus="status">
 								<option value="${position.positionNum}">${position.position}</option>
@@ -186,7 +186,7 @@ function setInitialValueForSelectBox(){
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="phoneNumber" id="inputGroup-sizing-default">電話番号</label>
 						</div>
-						<input type="text" class="pl-2 pr-0 col-8 form-control" id="phoneNumber" name="phoneNumber" maxlength="20" value="${userInform.phoneNumber}">
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="phoneNumber" name="phoneNumber" maxlength="20" value="${user.phoneNumber}">
 					</div>
 					
 					<!-- email -->
@@ -194,7 +194,7 @@ function setInitialValueForSelectBox(){
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="email" id="inputGroup-sizing-default">E-mail</label>
 						</div>
-						<input type="text" class="pl-2 pr-0 col-8 form-control" id="email" name="email" maxlength="30" value="${userInform.email}">
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="email" name="email" maxlength="30" value="${user.email}">
 					</div>
 					
 					
@@ -214,7 +214,7 @@ function setInitialValueForSelectBox(){
 		</div>
 	</div>
 	<form id="deleteUser" action="deleteUser" method="post" accept-charset="utf-8">
-		<input type="hidden" name="userNum" value="${userInform.userNum}">
+		<input type="hidden" name="userNum" value="${user.userNum}">
 	</form>
 </body>
 </html>
