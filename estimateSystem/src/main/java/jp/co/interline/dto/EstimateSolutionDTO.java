@@ -1,6 +1,6 @@
 package jp.co.interline.dto;
 
-public class EstimateSheet1DTO {
+public class EstimateSolutionDTO {
 	String documentNum;
 	int userNum;
 	String userName;
@@ -25,6 +25,7 @@ public class EstimateSheet1DTO {
 	String payCondition;
 	String cautions;
 	String sum;
+	String taxRate;
 	String tax;
 	String sumWithTax;
 	String sumWithTax2;	
@@ -231,21 +232,31 @@ public class EstimateSheet1DTO {
 	public void setDocumentTypeName(String documentTypeName) {
 		this.documentTypeName = documentTypeName;
 	}
+	
+	
 	public int getSystemNum() {
 		return systemNum;
 	}
 	public void setSystemNum(int systemNum) {
 		this.systemNum = systemNum;
 	}
+	
+	
 	public String getNextDocumentTypeName() {
 		return nextDocumentTypeName;
 	}
 	public void setNextDocumentTypeName(String nextDocumentTypeName) {
 		this.nextDocumentTypeName = nextDocumentTypeName;
 	}
+	public String getTaxRate() {
+		return taxRate;
+	}
+	public void setTaxRate(String taxRate) {
+		this.taxRate = taxRate;
+	}
 	@Override
 	public String toString() {
-		return "EstimateSheet1DTO [documentNum=" + documentNum + ", userNum=" + userNum + ", userName=" + userName
+		return "EstimateSolutionDTO [documentNum=" + documentNum + ", userNum=" + userNum + ", userName=" + userName
 				+ ", userDepartment=" + userDepartment + ", userPosition=" + userPosition + ", estimateDate="
 				+ estimateDate + ", documentTypeName=" + documentTypeName + ", nextDocumentTypeName="
 				+ nextDocumentTypeName + ", supplier=" + supplier + ", address=" + address + ", post=" + post
@@ -253,10 +264,12 @@ public class EstimateSheet1DTO {
 				+ ", stampFileName=" + stampFileName + ", logoFileName=" + logoFileName + ", receiver=" + receiver
 				+ ", documentName=" + documentName + ", deadline=" + deadline + ", supplyPoint=" + supplyPoint
 				+ ", expirationDate=" + expirationDate + ", payCondition=" + payCondition + ", cautions=" + cautions
-				+ ", sum=" + sum + ", tax=" + tax + ", sumWithTax=" + sumWithTax + ", sumWithTax2=" + sumWithTax2
-				+ ", state=" + state + ", comment=" + comment + ", workflowNum=" + workflowNum + ", insertDate="
-				+ insertDate + ", updateDate=" + updateDate + ", updater=" + updater + ", systemNum=" + systemNum + "]";
+				+ ", sum=" + sum + ", taxRate=" + taxRate + ", tax=" + tax + ", sumWithTax=" + sumWithTax
+				+ ", sumWithTax2=" + sumWithTax2 + ", state=" + state + ", comment=" + comment + ", workflowNum="
+				+ workflowNum + ", insertDate=" + insertDate + ", updateDate=" + updateDate + ", updater=" + updater
+				+ ", systemNum=" + systemNum + "]";
 	}
+	
 	
 	
 	

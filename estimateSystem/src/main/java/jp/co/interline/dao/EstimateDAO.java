@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.EstimateSheet1DTO;
 import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
+import jp.co.interline.dto.EstimateSolutionDTO;
+import jp.co.interline.dto.EstimateSolutionItemsRecieveDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
@@ -67,11 +69,6 @@ public class EstimateDAO {
 		return result;
 	}
 
-	public EstimateSheet1DTO getEstimateSheet1ByDocumentNum(String documentNum) {
-		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
-		EstimateSheet1DTO estimateSheet1DTO = mapper.getEstimateSheet1ByDocumentNum(documentNum);
-		return estimateSheet1DTO;
-	}
 
 	public String getBillNum(String documentNum) {
 		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
@@ -87,9 +84,36 @@ public class EstimateDAO {
 		
 	}
 
-	
+	public int insertEstimateSolution(EstimateSolutionDTO estimateSolution) {
+		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
+		int result = mapper.insertEstimateSolution(estimateSolution);
+		return result;
+	}
 
-	
+	public int insertEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever) {
+		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
+		int result = mapper.insertEstimateSolutionItems(estimateSolutionItemsReciever);
+		return result;
+	}
+
+	public SystemDTO getEstimate(SystemDTO system) {
+		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
+		SystemDTO sys = mapper.getEstimate(system);
+		return sys;
+	}
+
+	public int updateEstimateSolution(EstimateSolutionDTO estimateSolution) {
+		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
+		int result = mapper.updateEstimateSolution(estimateSolution);
+		return result;
+	}
+
+	public int updateEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever) {
+		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
+		int result = mapper.updateEstimateSolutionItems(estimateSolutionItemsReciever);
+		return result;
+	}
+
 
 
 

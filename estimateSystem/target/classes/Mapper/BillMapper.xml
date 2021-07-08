@@ -4,6 +4,77 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="jp.co.interline.dao.BillMapper">
+
+	<select id="getTotalBillSheet" parameterType="userInformWithOptionDTO" resultType="int">
+		select
+			count(b.documentNum)
+		from
+			(
+				select d.*,em1.receiver,em1.documentName,em1.estimateNum,ds.name stateName from
+						(select * from documentMaster where systemNum=2) d 
+					join 
+						estimateMaster em1 
+					on 
+						(d.documentNum = em1.documentNum)
+					join
+						documentState ds
+					on
+						(d.state = ds.state)
+			) b
+		<choose>
+			<when test='auth == "u"'>
+				where b.userNum=#{userNum} or b.state='app'
+			</when>
+			<when test='auth == "a"'>
+				
+			</when>
+		</choose>
+		order by ${option}
+	</select>
+	
+	<select id="getBillList" parameterType="userInformWithOptionDTO" resultType="estimateListDTO">
+		select
+			b.documentNum documentNumB,
+			b.estimateNum estimateNumB,
+			b.documentTypeName documentTypeNameB,
+			b.nextDocumentTypeName nextDocumentTypeNameB,
+			b.receiver receiverB,
+			b.documentName documentNameB,
+			b.updateDate updateDateB,
+			b.userNum userNumB,
+			b.userName userNameB,
+			b.userDepartment userDepartmentB,
+			b.userPosition userPositionB,
+			b.state stateB,
+			b.stateName stateNameB
+		from
+			(
+				select d.*,em1.receiver,em1.documentName,em1.estimateNum,ds.name stateName from
+						(select * from documentMaster where systemNum=2) d 
+					join 
+						estimateMaster em1 
+					on 
+						(d.documentNum = em1.documentNum)
+					join
+						documentState ds
+					on
+						(d.state = ds.state)
+			) b
+		<choose>
+			<when test='auth == "u"'>
+				where b.userNum=#{userNum} or b.state='app'
+			</when>
+			<when test='auth == "a"'>
+				
+			</when>
+		</choose>
+		order by ${option}
+	</select>
+	
+	
+	
+
+<!-- ////////////////////////////billSheet1///////////////////////////////////// -->
 	<insert id="insertBillSheet1" parameterType="billSheet1DTO">
 		insert into documentMaster (
 			documentNum,
@@ -136,76 +207,6 @@
 		(#{documentNum},#{rowNum12},#{item12},#{itemName12},${amount12},#{unit12},${unitPrice12},${price12})
 	</insert>
 	
-	
-	
-	
-	<select id="getTotalBillSheet" parameterType="userInformWithOptionDTO" resultType="int">
-		select
-			count(b.documentNum)
-		from
-			(
-				select d.*,em1.receiver,em1.documentName,em1.estimateNum,ds.name stateName from
-						(select * from documentMaster where systemNum=2) d 
-					join 
-						estimateMaster em1 
-					on 
-						(d.documentNum = em1.documentNum)
-					join
-						documentState ds
-					on
-						(d.state = ds.state)
-			) b
-		<choose>
-			<when test='auth == "u"'>
-				where b.userNum=#{userNum} or b.state='app'
-			</when>
-			<when test='auth == "a"'>
-				
-			</when>
-		</choose>
-		order by ${option}
-	</select>
-	
-	<select id="getBillList" parameterType="userInformWithOptionDTO" resultType="estimateListDTO">
-		select
-			b.documentNum documentNumB,
-			b.estimateNum estimateNumB,
-			b.documentTypeName documentTypeNameB,
-			b.nextDocumentTypeName nextDocumentTypeNameB,
-			b.receiver receiverB,
-			b.documentName documentNameB,
-			b.updateDate updateDateB,
-			b.userNum userNumB,
-			b.userName userNameB,
-			b.userDepartment userDepartmentB,
-			b.userPosition userPositionB,
-			b.state stateB,
-			b.stateName stateNameB
-		from
-			(
-				select d.*,em1.receiver,em1.documentName,em1.estimateNum,ds.name stateName from
-						(select * from documentMaster where systemNum=2) d 
-					join 
-						estimateMaster em1 
-					on 
-						(d.documentNum = em1.documentNum)
-					join
-						documentState ds
-					on
-						(d.state = ds.state)
-			) b
-		<choose>
-			<when test='auth == "u"'>
-				where b.userNum=#{userNum} or b.state='app'
-			</when>
-			<when test='auth == "a"'>
-				
-			</when>
-		</choose>
-		order by ${option}
-	</select>
-	
-	
 	<update id="updateBillSheet1" parameterType="billSheet1DTO">
 		update documentMaster set
 			updateDate = CURRENT_TIMESTAMP,
@@ -213,14 +214,11 @@
 		where 
 			documentNum = #{documentNum};
 		
-		
 		update estimateMaster set
 			receiver = #{receiver},
-			documentName = #{documentName},
-			estimateNum= #{estimateNum}
+			documentName = #{documentName}
 		where
 			documentNum = #{documentNum};
-		
 		
 		update billSheet1 set
 			userNum = #{userNum},
@@ -318,14 +316,255 @@
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum12}
 	</update>
-	<select id="getBillSheet1ByDocumentNum" parameterType="String" resultType="billSheet1DTO">
-		select d.state state, b.userNum userNum from
-			billSheet1 b
-		join
-			documentMaster d
-		on
-			(b.documentNum = d.documentNum)
+	
+	
+	
+	
+<!-- /////////////////////////billSolution////////////////////////// -->
+	<insert id="insertBillSolution" parameterType="billSolutionDTO">
+		insert into documentMaster (
+			documentNum,
+			systemNum,
+			documentTypeName,
+			nextDocumentTypeName,
+			userNum, userName, userDepartment, userPosition,
+			workflowNum,
+			state,
+			updateDate,
+			updater
+		)
+		values(
+			#{documentNum},
+			#{systemNum},
+			#{documentTypeName},
+			#{nextDocumentTypeName},
+			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
+			<choose>
+				<when test="workflowNum == 0">
+					null,
+				</when>
+				<when test="workflowNum != 0">
+					#{workflowNum},
+				</when>
+			</choose>
+			#{state},
+			CURRENT_TIMESTAMP,
+			#{updater}
+		);
+		
+		insert into estimateMaster(
+			documentNum,
+			receiver,
+			documentName,
+			estimateNum
+		)values(
+			#{documentNum},
+			#{receiver},
+			#{documentName},
+			#{estimateNum}
+		);
+		
+		insert into billSolution (
+			documentNum,
+			userNum,
+			userName,
+			userDepartment,
+			userPosition,
+			billDate,
+			supplier,
+			address,
+			post,
+			phoneNumber,
+			representative,
+			stamp,
+			stampFileName,
+			logoFileName,
+			receiver,
+			documentName,
+			payCondition,
+			deadline,
+			bankName,
+			branchName,
+			accountName,
+			hurigana,
+			accountNumber,
+			depositeClassification,
+			note,
+			sum,
+			taxRate,
+			tax,
+			sumWithTax,
+			sumWithTax2,	
+			comment,
+			updateDate,
+			updater
+		) 
+		values
+		(
+			#{documentNum},
+			#{userNum},
+			#{userName},
+			#{userDepartment},
+			#{userPosition},
+			#{billDate},
+			#{supplier},
+			#{address},
+			#{post},
+			#{phoneNumber},
+			#{representative},
+			#{stamp},
+			#{stampFileName},
+			#{logoFileName},
+			#{receiver},
+			#{documentName},
+			#{payCondition},
+			#{deadline},
+			#{bankName},
+			#{branchName},
+			#{accountName},
+			#{hurigana},
+			#{accountNumber},
+			#{depositeClassification},
+			#{note},
+			#{sum},
+			#{taxRate},
+			#{tax},
+			#{sumWithTax},
+			#{sumWithTax2},	
+			#{comment},
+			CURRENT_TIMESTAMP,
+			#{updater}
+		)
+	</insert>
+	<insert id="insertBillSolutionItems" parameterType="billSolutionItemsRecieveDTO">
+		insert into billSolutionItems (
+			documentNum,rowNum,item,itemName,amount,unit,unitPrice,price
+		)
+		values
+		(#{documentNum},#{rowNum1},#{item1},#{itemName1},${amount1},#{unit1},${unitPrice1},${price1}),
+		(#{documentNum},#{rowNum2},#{item2},#{itemName2},${amount2},#{unit2},${unitPrice2},${price2}),
+		(#{documentNum},#{rowNum3},#{item3},#{itemName3},${amount3},#{unit3},${unitPrice3},${price3}),
+		(#{documentNum},#{rowNum4},#{item4},#{itemName4},${amount4},#{unit4},${unitPrice4},${price4}),
+		(#{documentNum},#{rowNum5},#{item5},#{itemName5},${amount5},#{unit5},${unitPrice5},${price5}),
+		(#{documentNum},#{rowNum6},#{item6},#{itemName6},${amount6},#{unit6},${unitPrice6},${price6}),
+		(#{documentNum},#{rowNum7},#{item7},#{itemName7},${amount7},#{unit7},${unitPrice7},${price7}),
+		(#{documentNum},#{rowNum8},#{item8},#{itemName8},${amount8},#{unit8},${unitPrice8},${price8}),
+		(#{documentNum},#{rowNum9},#{item9},#{itemName9},${amount9},#{unit9},${unitPrice9},${price9}),
+		(#{documentNum},#{rowNum10},#{item10},#{itemName10},${amount10},#{unit10},${unitPrice10},${price10}),
+		(#{documentNum},#{rowNum11},#{item11},#{itemName11},${amount11},#{unit11},${unitPrice11},${price11}),
+		(#{documentNum},#{rowNum12},#{item12},#{itemName12},${amount12},#{unit12},${unitPrice12},${price12})
+	</insert>
+	
+	<update id="updateBillSolution" parameterType="billSolutionDTO">
+		update documentMaster set
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
 		where 
-			b.documentNum = #{value}
-	</select>
+			documentNum = #{documentNum};
+		
+		update estimateMaster set
+			receiver = #{receiver},
+			documentName = #{documentName}
+		where
+			documentNum = #{documentNum};
+		
+		update billSolution set
+			userNum = #{userNum},
+			userName = #{userName},
+			userDepartment = #{userDepartment},
+			userPosition = #{userPosition},
+			billDate = #{billDate},
+			supplier = #{supplier},
+			address = #{address},
+			post = #{post},
+			phoneNumber = #{phoneNumber},
+			representative = #{representative},
+			stamp = #{stamp},
+			stampFileName = #{stampFileName},
+			logoFileName = #{logoFileName},
+			receiver = #{receiver},
+			documentName = #{documentName},
+			payCondition = #{payCondition},
+			deadline = #{deadline},
+			bankName = #{bankName},
+			branchName = #{branchName},
+			accountName = #{accountName},
+			hurigana = #{hurigana},
+			accountNumber = #{accountNumber},
+			depositeClassification = #{depositeClassification},
+			note = #{note},
+			sum = #{sum},
+			taxRate = #{taxRate},
+			tax = #{tax},
+			sumWithTax = #{sumWithTax},
+			sumWithTax2 = #{sumWithTax2},	
+			comment = #{comment},
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where
+			documentNum = #{documentNum}
+	</update>
+	<update id="updateBillSolutionItems" parameterType="billSolutionItemsRecieveDTO">
+		update billSolutionItems set
+			item = #{item1}, itemName = #{itemName1}, amount = ${amount1}, unit = #{unit1}, unitPrice = ${unitPrice1}, price = ${price1}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum1};
+			
+		update billSolutionItems set
+			item = #{item2}, itemName = #{itemName2}, amount = ${amount2}, unit = #{unit2}, unitPrice = ${unitPrice2}, price = ${price2}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum2};
+			
+		update billSolutionItems set
+			item = #{item3}, itemName = #{itemName3}, amount = ${amount3}, unit = #{unit3}, unitPrice = ${unitPrice3}, price = ${price3}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum3};
+			
+		update billSolutionItems set
+			item = #{item4}, itemName = #{itemName4}, amount = ${amount4}, unit = #{unit4}, unitPrice = ${unitPrice4}, price = ${price4}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum4};
+			
+		update billSolutionItems set
+			item = #{item5}, itemName = #{itemName5}, amount = ${amount5}, unit = #{unit5}, unitPrice = ${unitPrice5}, price = ${price5}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum5};
+			
+		update billSolutionItems set
+			item = #{item6}, itemName = #{itemName6}, amount = ${amount6}, unit = #{unit6}, unitPrice = ${unitPrice6}, price = ${price6}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum6};
+			
+		update billSolutionItems set
+			item = #{item7}, itemName = #{itemName7}, amount = ${amount7}, unit = #{unit7}, unitPrice = ${unitPrice7}, price = ${price7}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum7};
+			
+		update billSolutionItems set
+			item = #{item8}, itemName = #{itemName8}, amount = ${amount8}, unit = #{unit8}, unitPrice = ${unitPrice8}, price = ${price8}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum8};
+			
+		update billSolutionItems set
+			item = #{item9}, itemName = #{itemName9}, amount = ${amount9}, unit = #{unit9}, unitPrice = ${unitPrice9}, price = ${price9}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum9};
+			
+		update billSolutionItems set
+			item = #{item10}, itemName = #{itemName10}, amount = ${amount10}, unit = #{unit10}, unitPrice = ${unitPrice10}, price = ${price10}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum10};
+			
+		update billSolutionItems set
+			item = #{item11}, itemName = #{itemName11}, amount = ${amount11}, unit = #{unit11}, unitPrice = ${unitPrice11}, price = ${price11}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum11};
+		
+		update billSolutionItems set
+			item = #{item12}, itemName = #{itemName12}, amount = ${amount12}, unit = #{unit12}, unitPrice = ${unitPrice12}, price = ${price12}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum12}
+	</update>
+	
+	
 </mapper>

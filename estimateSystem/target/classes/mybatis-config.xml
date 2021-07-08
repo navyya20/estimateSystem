@@ -17,8 +17,12 @@
 		<typeAlias type="jp.co.interline.dto.SystemDTO" alias="systemDTO"/>
 		<typeAlias type="jp.co.interline.dto.EstimateSheet1DTO" alias="estimateSheet1DTO"/>
 		<typeAlias type="jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO" alias="estimateSheet1ItemsRecieveDTO"/>
+		<typeAlias type="jp.co.interline.dto.EstimateSolutionDTO" alias="estimateSolutionDTO"/>
+		<typeAlias type="jp.co.interline.dto.EstimateSolutionItemsRecieveDTO" alias="estimateSolutionItemsRecieveDTO"/>
 		<typeAlias type="jp.co.interline.dto.BillSheet1DTO" alias="billSheet1DTO"/>
 		<typeAlias type="jp.co.interline.dto.BillSheet1ItemsRecieveDTO" alias="billSheet1ItemsRecieveDTO"/>
+		<typeAlias type="jp.co.interline.dto.BillSolutionDTO" alias="billSolutionDTO"/>
+		<typeAlias type="jp.co.interline.dto.BillSolutionItemsRecieveDTO" alias="billSolutionItemsRecieveDTO"/>
 		<typeAlias type="jp.co.interline.dto.EstimateListDTO" alias="estimateListDTO"/>
 		<typeAlias type="jp.co.interline.dto.testDTO" alias="testDTO"/>
 	</typeAliases>

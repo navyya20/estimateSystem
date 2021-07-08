@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@page import="jp.co.interline.service.GetProperties"%>
+<%@ page import="jp.co.interline.service.GetProperties" %>
 <% GetProperties properties= new GetProperties(); %>
 <!DOCTYPE html>
 <html style="height: 100%;">
@@ -28,7 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../css/common/common.css">
 <script src="../js/bootstrap.bundle.js"></script>
-<title>writeEstimateSheet1</title>
+<title>writeBillSolution</title>
 <style type="text/css">
 </style>
 <script>
@@ -63,32 +63,39 @@ if ( self !== top ) {
 	</div>	
 
 	<script type="text/javascript" >
+		var estimateNum = '${estimateNum}';
+		var accountList = '${accountList}';
 		var companyList = '${companyList}';
-		companyList=companyList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
-
+		accountList=accountList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
+		console.log(accountList);
 		var repeat=12;
 
 		var userString = '${user}';
 		var user=JSON.parse(userString);
-		console.log(JSON.stringify(user));
 		function SetOZParamters_OZViewer(){
 			
 			var oz;
 			oz = document.getElementById("OZViewer");
 			oz.sendToActionScript("viewer.ignore_disable_color_inputcomponent","true");
-			oz.sendToActionScript("viewer.external_functions_path","ozp://estimateSystem/estimateSheet1/JS/estimateSheet1.js");
+			oz.sendToActionScript("viewer.external_functions_path","ozp://billSystem/billSolution/JS/billSolution.js");
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
-			oz.sendToActionScript("connection.reportname","estimateSystem/estimateSheet1/writeEstimateSheet1.ozr");
-			oz.sendToActionScript("connection.inputjson",'${copy}');
-			oz.sendToActionScript("global.language", "ja_JP");
-			oz.sendToActionScript("connection.pcount","7");
+			oz.sendToActionScript("connection.reportname","billSystem/billSolution/writeBillSolution.ozr");
+			oz.sendToActionScript("connection.pcount","9");
 			oz.sendToActionScript("connection.args1","repeat="+repeat);
-			oz.sendToActionScript("connection.args2","companyList="+companyList);
+			oz.sendToActionScript("connection.args2","accountList="+accountList);
 			oz.sendToActionScript("connection.args3","userNum="+user.userNum);
 			oz.sendToActionScript("connection.args4","userPosition="+(user.position==null? '':user.position));
 			oz.sendToActionScript("connection.args5","userDepartment="+(user.department==null? '':user.department));
 			oz.sendToActionScript("connection.args6","userName="+user.userName);
 			oz.sendToActionScript("connection.args7","path=http://"+'<%out.print(properties.getWebIP());%>'+'/<%out.print(properties.getProjectRoot());%>/resources/uploaded/');
+			oz.sendToActionScript("connection.args8","estimateNum="+estimateNum);
+			oz.sendToActionScript("connection.args9","companyList="+companyList);
+
+			oz.sendToActionScript("global.language", "ja_JP");
+			oz.sendToActionScript("odi.odinames", "writeBillSolution");
+	 		oz.sendToActionScript("odi.writeBillSolution.pcount", "1");
+			oz.sendToActionScript("odi.writeBillSolution.args1", "documentNum="+estimateNum);
+			
 			oz.sendToActionScript("pdf.fontembedding","true");
 			return true;
 		}
@@ -114,7 +121,6 @@ if ( self !== top ) {
             }
         });
 
-
 		//뷰어의 모든 값을 제이슨스트링으로 가져와 컨트롤러가 받을수있게 함.
 		//int형같은경우 null은 안되고
 		//금액같은경우 쉼표와 ￥표시는 없어야함.
@@ -122,6 +128,7 @@ if ( self !== top ) {
 			var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
 			var inputJson=JSON.parse(inputJsonString);
 			inputJson["sum"] = inputJson["sum"].replace(/,/gi, "").replace(/￥/gi, "");
+			inputJson["taxRate"] = inputJson["taxRate"].replace(/,/gi, "").replace(/%/gi, "");
 			inputJson["tax"] = inputJson["tax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax"] = inputJson["sumWithTax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax2"] = inputJson["sumWithTax2"].replace(/,/gi, "").replace(/￥/gi, "");
@@ -135,55 +142,60 @@ if ( self !== top ) {
 			}
 			inputJson.state=state;
 			if(inputJson["workflowNum"]==""){inputJson.workflowNum=0};
+			if(inputJson["taxRate"]==""){inputJson.taxRate=0};
 			console.log("제이슨:"+JSON.stringify(inputJson));
 			return inputJson;
 		}
-
-      //보존버튼을 누루면 작동. 
+		
+      	//보존버튼을 누루면 작동. 
+		//뷰어의 모든 값을 제이슨스트링으로 가져옴.
 		function saveButton(state){
 			var inputJson = processJson(state);
 			$.ajax(
 					{
-						url: "insertEstimateSheet1",
+						url: "insertBillSolution",
 						type: 'POST',
 						data: inputJson,
+						dataType:"json",
 						success: function(r){
 							if(r["errorFlag"]==0){
-								alert("見積書を作成しました。");
+								alert("請求書を作成しました。");
 							}else{
 								alert(r["error"]);
 							}
-							location.href="estimateList";
+							if(estimateNum ==''){
+								location.href="billList";
+							}else{
+								location.href="estimateList";
+							}
 						},
 						error: function(e){
 							console.log(JSON.stringify(e));
-							alert('エラー！');
+							alert('ajaxエラー！');
 						}
 					}		
 			);
 			
 		}
-
-
-
 		function saveAndRequestButton(state){
 			var inputJson = processJson(state);
 			$.ajax(
 					{
-						url: "insertEstimateSheet1",
+						url: "insertBillSolution",
 						type: 'POST',
 						data: inputJson,
+						dataType:"json",
 						success: function(r){
 							if(r["errorFlag"]==0){
-								alert("見積書を作成しました。");
-								requestButton(r["documentNum"]);
+								alert("請求書を作成しました。");
 							}else{
 								alert(r["error"]);
 							}
+							requestButton(r["documentNum"]);
 						},
 						error: function(e){
 							console.log(JSON.stringify(e));
-							alert('エラー！');
+							alert('ajaxエラー！');
 						}
 					}		
 			);
@@ -197,11 +209,15 @@ if ( self !== top ) {
 					{
 						url: "requestApproval",
 						type: 'POST',
-						data: {"documentTypeName":inputJson["documentTypeName"], "documentNum":documentNum, "systemNum":inputJson["systemNum"]},
+						data: {"documentTypeName":inputJson["documentTypeName"], "documentNum" : documentNum, "systemNum":inputJson["systemNum"]},
 						dataType:"text",
 						success: function(r){
 							alert(r);
-							location.href="estimateList";
+							if(estimateNum ==''){
+								location.href="billList";
+							}else{
+								location.href="estimateList";
+							}
 						},
 						error: function(e){
 							console.log(JSON.stringify(e));

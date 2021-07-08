@@ -8,6 +8,8 @@ import org.apache.ibatis.session.RowBounds;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.EstimateSheet1DTO;
 import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
+import jp.co.interline.dto.EstimateSolutionDTO;
+import jp.co.interline.dto.EstimateSolutionItemsRecieveDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
@@ -32,10 +34,18 @@ public interface EstimateMapper {
 
 	int deleteSheet(SystemDTO system);
 
-	EstimateSheet1DTO getEstimateSheet1ByDocumentNum(String documentNum);
-
 	String getBillNum(String documentNum);
 
 	void testTest(ArrayList<HashMap<String, String>> arr);
+
+	int insertEstimateSolution(EstimateSolutionDTO estimateSolution);
+
+	int insertEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever);
+
+	SystemDTO getEstimate(SystemDTO system);
+
+	int updateEstimateSolution(EstimateSolutionDTO estimateSolution);
+
+	int updateEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever);
 
 }

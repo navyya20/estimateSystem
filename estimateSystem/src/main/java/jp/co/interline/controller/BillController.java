@@ -28,6 +28,8 @@ import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.AccountDTO;
 import jp.co.interline.dto.BillSheet1DTO;
 import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
+import jp.co.interline.dto.BillSolutionDTO;
+import jp.co.interline.dto.BillSolutionItemsRecieveDTO;
 import jp.co.interline.dto.EstimateSheet1DTO;
 import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
 import jp.co.interline.dto.FileNamesDTO;
@@ -37,6 +39,7 @@ import jp.co.interline.dto.WorkflowInformDTO;
 import jp.co.interline.service.AccountService;
 import jp.co.interline.service.BillService;
 import jp.co.interline.service.CompanyService;
+import jp.co.interline.service.EstimateService;
 import jp.co.interline.service.WorkflowService;
 
 /**
@@ -48,6 +51,8 @@ public class BillController {
 	WorkflowService workflowService;
 	@Autowired
 	BillService billService;
+	@Autowired
+	EstimateService estimateService;
 	@Autowired
 	AccountService accountService;
 	@Autowired
@@ -72,6 +77,17 @@ public class BillController {
 		return "billSystem/billList";
 	}
 	
+	@RequestMapping(value = "/all/selectBill", method = RequestMethod.GET)
+	public String selectBill(HttpSession session, Model model) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("BillController.selectBill,user:{}",user.getUserNum());
+		
+		return "billSystem/billSelect";
+	}
+
+	
+///////////////////////////billSheet1//////////////////////////////////////////////////
+//write,insert,mod,update
 	@RequestMapping(value = "/all/writeBillSheet1", method = RequestMethod.GET)
 	public String writeBillSheet1(HttpSession session, Model model, String estimateNum) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -120,47 +136,18 @@ public class BillController {
 		return result;
 	}
 	
-	//estimateTypeNum으로 부터 상응하는 billTypeName을 가져온다.
-	@ResponseBody
-	@RequestMapping(value = "/all/getBillType", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-	public String getBillType(HttpSession session, Model model, int documentTypeNum) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		SystemDTO billType = billService.getBillType(documentTypeNum);
-		
-		return billType.getDocumentTypeName();
-	}
-	@ResponseBody
-	@RequestMapping(value = "/all/getBillTypeName", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-	public String getBillTypeName(HttpSession session, Model model, int documentTypeNum) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		SystemDTO billType = billService.getBillTypeName(documentTypeNum);
-		return billType.getDocumentTypeName();
-	}
-	
-	
-	/*
-	 * 청구서 일기 페이지
-	 * 모든 문서시스템을 통들어서 state를 가져옴.
-	 */
-	@RequestMapping(value = "/all/readBillSheet1", method = RequestMethod.POST)
-	public String readBillSheet1(HttpSession session, Model model, String documentNum, String approveMode) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		//모든 문서를 통틀어서 state를 가져옴. 새로운 시스템 추가시 sql에 유니온 필요.
-		BillSheet1DTO billSheet1 = billService.getBillSheet1ByDocumentNum(documentNum);
-		model.addAttribute("state", billSheet1.getState());
-		model.addAttribute("userNum", billSheet1.getUserNum());
-		model.addAttribute("billNum", documentNum);
-		model.addAttribute("approveMode", approveMode);
-		return "billSystem/billSheet1/readBillSheet1";
-	}
 	@RequestMapping(value = "/all/modBillSheet1", method = RequestMethod.POST)
-	public String modBillSheet1(HttpSession session, Model model, String documentNum) {
+	public String modBillSheet1(HttpSession session, Model model, String documentNum, String documentTypeName) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		
-		//state를 가져옴. 새로운 시스템 추가시 sql에 유니온 필요.
-		BillSheet1DTO billSheet1 = billService.getBillSheet1ByDocumentNum(documentNum);
-		model.addAttribute("state", billSheet1.getState());
-		model.addAttribute("userNum", billSheet1.getUserNum());
+		//state를 가져옴.
+		//documentTypeName에따라 조인되는 DB가 다르니 주의!
+		SystemDTO system = new SystemDTO();
+		system.setDocumentNum(documentNum);
+		system.setDocumentTypeName(documentTypeName);
+		SystemDTO sys = estimateService.getEstimate(system);
+		model.addAttribute("state", sys.getState());
+		model.addAttribute("userNum", sys.getUserNum());
 		model.addAttribute("billNum", documentNum);
 		
 		ArrayList<AccountDTO> accountList = accountService.getAccountList();
@@ -203,6 +190,154 @@ public class BillController {
 		result.put("documentNum", billSheet1.getDocumentNum());
 		return result;
 	}
+	
+	
+	
+	
+	
+/////////////////////////////billSolution//////////////////////////////////////////////////
+//write,insert,mod,update	
+	
+	@RequestMapping(value = "/all/writeBillSolution", method = RequestMethod.GET)
+	public String writeBillSolution(HttpSession session, Model model, String estimateNum) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		ArrayList<AccountDTO> accountList = accountService.getAccountList();
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
+		Gson gson = new Gson();
+		String accountListString = gson.toJson(accountList);
+		String companyListString = gson.toJson(companyList);
+		model.addAttribute("accountList", accountListString);
+		model.addAttribute("companyList", companyListString);
+		String userString = gson.toJson(user);
+		model.addAttribute("user", userString);
+		model.addAttribute("estimateNum", estimateNum);
+		return "billSystem/billSolution/writeBillSolution";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/all/insertBillSolution", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public HashMap<String, String> insertBillSolution(HttpSession session, Model model, BillSolutionDTO billSolution, BillSolutionItemsRecieveDTO billSolutionItemsReciever) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("BillController.insertBillSolution,user:{}",user.getUserNum());
+		//채번
+		String documentNum = billService.getDocoumentNum();
+		//기본정보등록
+		billSolution.setDocumentNum(documentNum);
+		billSolution.setUpdater(user.getUserNum());
+		
+		HashMap<String, String> result = new HashMap<String, String>();
+		
+		int result1 = billService.insertBillSolution(billSolution);
+		if(result1 != 1) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求基本情報格納エラー");
+			return result;
+		}
+		//아이템등록
+		billSolutionItemsReciever.setDocumentNum(documentNum);
+		int result2 = billService.insertBillSolutionItems(billSolutionItemsReciever);
+		if (result2 ==0) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求ITEM情報格納エラー");
+			return result;
+		}
+		result.put("errorFlag", "0");
+		result.put("documentNum", documentNum);
+		return result;
+	}
+	
+	@RequestMapping(value = "/all/modBillSolution", method = RequestMethod.POST)
+	public String modBillSolution(HttpSession session, Model model, String documentNum, String documentTypeName) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		
+		//state를 가져옴.
+		//documentTypeName에따라 조인되는 DB가 다르니 주의!
+		SystemDTO system = new SystemDTO();
+		system.setDocumentNum(documentNum);
+		system.setDocumentTypeName(documentTypeName);
+		SystemDTO sys = estimateService.getEstimate(system);
+		model.addAttribute("state", sys.getState());
+		model.addAttribute("userNum", sys.getUserNum());
+		model.addAttribute("billNum", documentNum);
+		
+		ArrayList<AccountDTO> accountList = accountService.getAccountList();
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
+		Gson gson = new Gson();
+		String accountListString = gson.toJson(accountList);
+		String companyListString = gson.toJson(companyList);
+		model.addAttribute("accountList", accountListString);
+		model.addAttribute("companyList", companyListString);
+		
+		String userString = gson.toJson(user);
+		model.addAttribute("user", userString);
+		return "billSystem/billSolution/modBillSolution";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/all/updateBillSolution", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public HashMap<String, String> updateBillSolution(HttpSession session, Model model, BillSolutionDTO billSolution, BillSolutionItemsRecieveDTO billSolutionItemsReciever) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		
+		HashMap<String, String> result = new HashMap<String, String>();
+		//기본정보등록
+		int result1 = billService.updateBillSolution(billSolution);
+		if(result1 != 1) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求基本情報格納エラー");
+			return result;
+		}
+		//아이템등록
+		billSolutionItemsReciever.setDocumentNum(billSolution.getDocumentNum());
+		int result2 = billService.updateBillSolutionItems(billSolutionItemsReciever);
+		if (result2 ==0) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求ITEM情報格納エラー");
+			return result;
+		}
+		
+		
+		result.put("errorFlag", "0");
+		result.put("documentNum", billSolution.getDocumentNum());
+		return result;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/*
+	 * //estimateTypeNum으로 부터 상응하는 billTypeName을 가져온다.
+	 * 
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping(value = "/all/getBillType", method = RequestMethod.POST,
+	 * produces="application/json;charset=UTF-8") public String
+	 * getBillType(HttpSession session, Model model, int documentTypeNum) {
+	 * UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+	 * SystemDTO billType = billService.getBillType(documentTypeNum);
+	 * 
+	 * return billType.getDocumentTypeName(); }
+	 * 
+	 * @ResponseBody
+	 * 
+	 * @RequestMapping(value = "/all/getBillTypeName", method = RequestMethod.POST,
+	 * produces="application/json;charset=UTF-8") public String
+	 * getBillTypeName(HttpSession session, Model model, int documentTypeNum) {
+	 * UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+	 * SystemDTO billType = billService.getBillTypeName(documentTypeNum); return
+	 * billType.getDocumentTypeName(); }
+	 */
+	
+	
+	
 	
 	
 	

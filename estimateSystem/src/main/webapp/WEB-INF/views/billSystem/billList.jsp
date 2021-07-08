@@ -44,10 +44,12 @@ function writeBill(estimateNum,nextDocumentTypeName){
 	var url = "write"+nextDocumentTypeName.charAt(0).toUpperCase()+nextDocumentTypeName.slice(1);
 	location.href=url+"?estimateNum="+estimateNum;
 }
+
 function readBill(billNum,documentTypeName){
-	var url="read"+documentTypeName.charAt(0).toUpperCase()+documentTypeName.slice(1);
+	var url="readEstimate";
 	$('#readDocument').attr("action",url);
 	$('#documentNum').val(billNum);
+	$('#documentTypeName').val(documentTypeName);
 	$('#readDocument').submit();
 }
 
@@ -133,7 +135,7 @@ function sort(option){
 		<div class="p-0 d-flex">
 			<div class="p-0 d-flex col-6">
 				<div class="p-0 d-flex col-12 col-md-4">
-					<button type="button" class="col-12 btn btn-secondary" onclick="location.href='writeBillSheet1'">新規作成</button>
+					<button type="button" class="col-12 btn btn-secondary" onclick="location.href='selectBill'">新規作成</button>
 				</div>
 			</div>
 			<div class="p-0 d-flex col-6 justify-content-end">
@@ -202,8 +204,9 @@ function sort(option){
 		<input type="hidden" id="page">
 	</div>
 	
-	<form id="readDocument" action="companyMod" method="post" accept-charset="utf-8">
+	<form id="readDocument" action="" method="post" accept-charset="utf-8">
 		<input type="hidden" id="documentNum" name="documentNum" value="">
+		<input type="hidden" id="documentTypeName" name="documentTypeName" value="">
 	</form>
 </body>
 </html>

@@ -15,6 +15,8 @@ import jp.co.interline.dao.WorkflowDAO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.EstimateSheet1DTO;
 import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
+import jp.co.interline.dto.EstimateSolutionDTO;
+import jp.co.interline.dto.EstimateSolutionItemsRecieveDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
@@ -48,23 +50,9 @@ public class EstimateServiceImpl implements EstimateService {
 
 	@Override
 	public int insertEstimateSheet1(EstimateSheet1DTO estimateSheet1) {
-		
 		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		SystemDTO sys=null;
-		String stampFileName="";
-		String logoFileName="";
-		for (int i = 0; i < system.size(); i++) {
-			sys = system.get(i);
-			if (sys.getCategory().equals("stamp")) {
-				stampFileName=sys.getFileName();
-			}
-		}
-		for (int i = 0; i < system.size(); i++) {
-			sys = system.get(i);
-			if (sys.getCategory().equals("logo")) {
-				logoFileName=sys.getFileName();
-			}
-		}
+		String stampFileName=returnFileName(system, "stamp");
+		String logoFileName=returnFileName(system, "logo");
 		estimateSheet1.setStampFileName(stampFileName);
 		estimateSheet1.setLogoFileName(logoFileName);
 		int result = estimateDao.insertEstimateSheet1(estimateSheet1);
@@ -106,21 +94,8 @@ public class EstimateServiceImpl implements EstimateService {
 	@Override
 	public int updateEstimateSheet1(EstimateSheet1DTO estimateSheet1) {
 		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		SystemDTO sys=null;
-		String stampFileName="";
-		String logoFileName="";
-		for (int i = 0; i < system.size(); i++) {
-			sys = system.get(i);
-			if (sys.getCategory().equals("stamp")) {
-				stampFileName=sys.getFileName();
-			}
-		}
-		for (int i = 0; i < system.size(); i++) {
-			sys = system.get(i);
-			if (sys.getCategory().equals("logo")) {
-				logoFileName=sys.getFileName();
-			}
-		}
+		String stampFileName=returnFileName(system, "stamp");
+		String logoFileName=returnFileName(system, "logo");
 		estimateSheet1.setStampFileName(stampFileName);
 		estimateSheet1.setLogoFileName(logoFileName);
 		int result = estimateDao.updateEstimateSheet1(estimateSheet1);
@@ -150,10 +125,11 @@ public class EstimateServiceImpl implements EstimateService {
 	}
 
 	@Override
-	public EstimateSheet1DTO getEstimateSheet1ByDocumentNum(String documentNum) {
-		EstimateSheet1DTO estimateSheet1DTO = estimateDao.getEstimateSheet1ByDocumentNum(documentNum);
-		return estimateSheet1DTO;
+	public SystemDTO getEstimate(SystemDTO system) {
+		SystemDTO sys = estimateDao.getEstimate(system);
+		return sys;
 	}
+	
 
 	@Override
 	public void test() {
@@ -163,6 +139,53 @@ public class EstimateServiceImpl implements EstimateService {
 		
 	}
 
+	@Override
+	public String returnFileName(ArrayList<SystemDTO> systems, String category) {
+		SystemDTO sys=null;
+		for (int i = 0; i < systems.size(); i++) {
+			sys = systems.get(i);
+			if (sys.getCategory().equals(category)) {
+				return sys.getFileName();
+			}
+		}
+		return "";
+	}
+
+	
+	
+	@Override
+	public int insertEstimateSolution(EstimateSolutionDTO estimateSolution) {
+		ArrayList<SystemDTO> system = systemDao.getFileNames();
+		String stampFileName=returnFileName(system, "stamp");
+		String logoFileName=returnFileName(system, "logo");
+		estimateSolution.setStampFileName(stampFileName);
+		estimateSolution.setLogoFileName(logoFileName);
+		int result = estimateDao.insertEstimateSolution(estimateSolution);
+		return result;
+	}
+
+	@Override
+	public int insertEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever) {
+		int result = estimateDao.insertEstimateSolutionItems(estimateSolutionItemsReciever);
+		return result;
+	}
+
+	@Override
+	public int updateEstimateSolution(EstimateSolutionDTO estimateSolution) {
+		ArrayList<SystemDTO> system = systemDao.getFileNames();
+		String stampFileName=returnFileName(system, "stamp");
+		String logoFileName=returnFileName(system, "logo");
+		estimateSolution.setStampFileName(stampFileName);
+		estimateSolution.setLogoFileName(logoFileName);
+		int result = estimateDao.updateEstimateSolution(estimateSolution);
+		return result;
+	}
+
+	@Override
+	public int updateEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever) {
+		int result = estimateDao.updateEstimateSolutionItems(estimateSolutionItemsReciever);
+		return result;
+	}
 
 	
 	

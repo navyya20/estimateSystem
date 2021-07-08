@@ -76,9 +76,9 @@ if ( self !== top ) {
 			var oz;
 			oz = document.getElementById("OZViewer");
 			oz.sendToActionScript("viewer.ignore_disable_color_inputcomponent","true");
-			oz.sendToActionScript("viewer.external_functions_path","ozp://estimateSystem/estimateSheet1/JS/estimateSheet1.js");
+			oz.sendToActionScript("viewer.external_functions_path","ozp://estimateSystem/estimateSolution/JS/estimateSolution.js");
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
-			oz.sendToActionScript("connection.reportname","estimateSystem/estimateSheet1/writeEstimateSheet1.ozr");
+			oz.sendToActionScript("connection.reportname","estimateSystem/estimateSolution/writeEstimateSolution.ozr");
 			oz.sendToActionScript("connection.inputjson",'${copy}');
 			oz.sendToActionScript("global.language", "ja_JP");
 			oz.sendToActionScript("connection.pcount","7");
@@ -122,6 +122,7 @@ if ( self !== top ) {
 			var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
 			var inputJson=JSON.parse(inputJsonString);
 			inputJson["sum"] = inputJson["sum"].replace(/,/gi, "").replace(/￥/gi, "");
+			inputJson["taxRate"] = inputJson["taxRate"].replace(/,/gi, "").replace(/%/gi, "");
 			inputJson["tax"] = inputJson["tax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax"] = inputJson["sumWithTax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax2"] = inputJson["sumWithTax2"].replace(/,/gi, "").replace(/￥/gi, "");
@@ -135,6 +136,7 @@ if ( self !== top ) {
 			}
 			inputJson.state=state;
 			if(inputJson["workflowNum"]==""){inputJson.workflowNum=0};
+			if(inputJson["taxRate"]==""){inputJson.taxRate=0};
 			console.log("제이슨:"+JSON.stringify(inputJson));
 			return inputJson;
 		}
@@ -144,7 +146,7 @@ if ( self !== top ) {
 			var inputJson = processJson(state);
 			$.ajax(
 					{
-						url: "insertEstimateSheet1",
+						url: "insertEstimateSolution",
 						type: 'POST',
 						data: inputJson,
 						success: function(r){
@@ -170,7 +172,7 @@ if ( self !== top ) {
 			var inputJson = processJson(state);
 			$.ajax(
 					{
-						url: "insertEstimateSheet1",
+						url: "insertEstimateSolution",
 						type: 'POST',
 						data: inputJson,
 						success: function(r){
@@ -213,3 +215,8 @@ if ( self !== top ) {
 	</script>
 </body>
 </html>
+
+
+
+
+

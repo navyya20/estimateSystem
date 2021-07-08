@@ -12,6 +12,7 @@ public class SystemDTO {
 	//documentState
 	String state;
 	String name;
+	int userNum;
 	
 	//documentType
 	String documentTypeName;
@@ -19,6 +20,7 @@ public class SystemDTO {
 	int pair1;
 	int pair2;
 	int systemNum;
+	String systemName;
 	
 	String documentNum;
 	
@@ -129,6 +131,22 @@ public class SystemDTO {
 
 	public void setDocumentNum(String documentNum) {
 		this.documentNum = documentNum;
+	}
+
+	public int getUserNum() {
+		return userNum;
+	}
+
+	public void setUserNum(int userNum) {
+		this.userNum = userNum;
+	}
+
+	public String getSystemName() {
+		return systemName;
+	}
+
+	public void setSystemName(String systemName) {
+		this.systemName = systemName;
 	}
 
 	@Override

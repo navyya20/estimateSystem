@@ -28,6 +28,8 @@ import jp.co.interline.dto.CompanyDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.EstimateSheet1DTO;
 import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
+import jp.co.interline.dto.EstimateSolutionDTO;
+import jp.co.interline.dto.EstimateSolutionItemsRecieveDTO;
 import jp.co.interline.dto.FileNamesDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
@@ -52,8 +54,57 @@ public class EstimateController {
 	
 	private static final Logger logger = LoggerFactory.getLogger(EstimateController.class);
 	
+	
+	/*
+	 * option:order by절에 들어갈 스트링
+	 * page: pageNavigator를 위한 page수
+	 */
+	@RequestMapping(value = "/all/estimateList", method = RequestMethod.GET)
+	public String estimateList(HttpSession session, Model model, @RequestParam(value="option", defaultValue="e.updateDate desc")String option, @RequestParam(value="page", defaultValue="1") int page) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("EstimateController.esimateList,user:{}",user.getUserNum());
+		
+		ArrayList<EstimateListDTO> estimateList = estimateService.getEstimateList(model, user,option,page);
+		
+		model.addAttribute("estimateList", estimateList);
+		model.addAttribute("option", option);
+		//네비게이션에대한 모델은 서비스에서 넣어준다.
+		return "estimateSystem/estimateList";
+	}
+	
+	
+	@RequestMapping(value = "/all/selectEstimate", method = RequestMethod.GET)
+	public String selectEstimate(HttpSession session, Model model) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("EstimateController.selectEstimate,user:{}",user.getUserNum());
+		
+		return "estimateSystem/estimateSelect";
+	}
+	
+	
+	@RequestMapping(value = "/all/readEstimate", method = RequestMethod.POST)
+	public String readEstimate(HttpSession session, Model model, String documentNum, String documentTypeName, String approveMode) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("EstimateController.readEstimateSheet1,user:{}",user.getUserNum());
+		//state를 가져옴.
+		//documentTypeName에따라 조인되는 DB가 다르니 주의!
+		SystemDTO system = new SystemDTO();
+		system.setDocumentNum(documentNum);
+		system.setDocumentTypeName(documentTypeName);
+		SystemDTO sys = estimateService.getEstimate(system);
+		model.addAttribute("state", sys.getState());
+		model.addAttribute("userNum", sys.getUserNum());
+		model.addAttribute("systemName", sys.getSystemName());
+		model.addAttribute("estimateNum", documentNum);
+		model.addAttribute("documentTypeName", documentTypeName);
+		model.addAttribute("approveMode", approveMode);
+		return "estimateSystem/readEstimate";
+	}
+	
+/////////////////////////////////////estimateSheet1///////////////////////////////////////////////////
+//write,insert,mod,update,copy,read
 	@RequestMapping(value = "/all/writeEstimateSheet1", method = RequestMethod.GET)
-	public String writeEstimateSheet1(HttpSession session, Model model) {
+	public String writeEstimateSheet1(HttpSession session, Model model, String copy) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
 		Gson gson = new Gson();
@@ -61,11 +112,21 @@ public class EstimateController {
 		model.addAttribute("companyList", companyListString);
 		String userString = gson.toJson(user);
 		model.addAttribute("user", userString);
+		model.addAttribute("copy", copy);
 		return "estimateSystem/estimateSheet1/writeEstimateSheet1";
 	}
-	
-	
-	
+	@RequestMapping(value = "/all/writeEstimateSheet1", method = RequestMethod.POST)
+	public String writeEstimateSheet12(HttpSession session, Model model, String copy) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
+		Gson gson = new Gson();
+		String companyListString = gson.toJson(companyList);
+		model.addAttribute("companyList", companyListString);
+		String userString = gson.toJson(user);
+		model.addAttribute("user", userString);
+		model.addAttribute("copy", copy);
+		return "estimateSystem/estimateSheet1/writeEstimateSheet1";
+	}
 	
 	@ResponseBody
 	@RequestMapping(value = "/all/insertEstimateSheet1", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
@@ -101,44 +162,18 @@ public class EstimateController {
 		return result;
 	}
 	
-	/*
-	 * option:order by절에 들어갈 스트링
-	 * page: pageNavigator를 위한 page수
-	 */
-	@RequestMapping(value = "/all/estimateList", method = RequestMethod.GET)
-	public String estimateList(HttpSession session, Model model, @RequestParam(value="option", defaultValue="e.updateDate desc")String option, @RequestParam(value="page", defaultValue="1") int page) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		logger.debug("EstimateController.esimateList,user:{}",user.getUserNum());
-		
-		ArrayList<EstimateListDTO> estimateList = estimateService.getEstimateList(model, user,option,page);
-		
-		model.addAttribute("estimateList", estimateList);
-		model.addAttribute("option", option);
-		//네비게이션에대한 모델은 서비스에서 넣어준다.
-		return "estimateSystem/estimateList";
-	}
-	
-	
-	@RequestMapping(value = "/all/readEstimateSheet1", method = RequestMethod.POST)
-	public String readEstimateSheet1(HttpSession session, Model model, String documentNum, String approveMode) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		logger.debug("EstimateController.readEstimateSheet1,user:{}",user.getUserNum());
-		EstimateSheet1DTO estimateSheet1 = estimateService.getEstimateSheet1ByDocumentNum(documentNum);
-		//모든 문서를 통틀어서 state를 가져옴. 새로운 시스템 추가시 sql에 유니온 필요.
-		model.addAttribute("state", estimateSheet1.getState());
-		model.addAttribute("userNum", estimateSheet1.getUserNum());
-		model.addAttribute("estimateNum", documentNum);
-		model.addAttribute("approveMode", approveMode);
-		return "estimateSystem/estimateSheet1/readEstimateSheet1";
-	}
 	
 	@RequestMapping(value = "/all/modEstimateSheet1", method = RequestMethod.POST)
-	public String modEstimateSheet1(HttpSession session, Model model, String documentNum) {
+	public String modEstimateSheet1(HttpSession session, Model model, String documentNum, String documentTypeName) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		EstimateSheet1DTO estimateSheet1 = estimateService.getEstimateSheet1ByDocumentNum(documentNum);
-		//모든 문서를 통틀어서 state를 가져옴. 새로운 시스템 추가시 sql에 유니온 필요.
-		model.addAttribute("state", estimateSheet1.getState());
-		model.addAttribute("userNum", estimateSheet1.getUserNum());
+		//state를 가져옴.
+		//documentTypeName에따라 조인되는 DB가 다르니 주의!
+		SystemDTO system = new SystemDTO();
+		system.setDocumentNum(documentNum);
+		system.setDocumentTypeName(documentTypeName);
+		SystemDTO sys = estimateService.getEstimate(system);
+		model.addAttribute("state", sys.getState());
+		model.addAttribute("userNum", sys.getUserNum());
 		model.addAttribute("documentNum", documentNum);
 		
 		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
@@ -150,19 +185,20 @@ public class EstimateController {
 		return "estimateSystem/estimateSheet1/modEstimateSheet1";
 	}
 	
+	
 	@RequestMapping(value = "/all/copyEstimateSheet1", method = RequestMethod.POST)
 	public String copyEstimateSheet1(HttpSession session, Model model, String documentNum, String documentTypeName) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		logger.debug("EstimateController.copyEstimateSheet1,user:{}",user.getUserNum());
-		EstimateSheet1DTO estimateSheet1 = estimateService.getEstimateSheet1ByDocumentNum(documentNum);
+		
 		//아이템도 가져오기 DTO만들어야함.
 		
 		//서비스로 불러서 꾸민다음에 인서트
 		//채번
-		String newDocumentNum = estimateService.getDocoumentNum();
+		//String newDocumentNum = estimateService.getDocoumentNum();
 		//기본정보등록
-		estimateSheet1.setDocumentNum(newDocumentNum);
-		estimateSheet1.setUpdater(user.getUserNum());
+		//estimateSheet1.setDocumentNum(newDocumentNum);
+		//estimateSheet1.setUpdater(user.getUserNum());
 		
 		
 		return "redirect:/all/estimateList";
@@ -196,6 +232,122 @@ public class EstimateController {
 		result.put("documentNum", estimateSheet1.getDocumentNum());
 		return result;
 	}
+//-----------------------------------------------------------------------------------------------------------------------------------
+	
+	
+/////////////////////////////////////estimateSolution///////////////////////////////////////////////////
+//write,insert,mod,update,copy
+	@RequestMapping(value = "/all/writeEstimateSolution", method = RequestMethod.GET)
+	public String writeEstimateSolution(HttpSession session, Model model, String copy) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
+		Gson gson = new Gson();
+		String companyListString = gson.toJson(companyList);
+		model.addAttribute("companyList", companyListString);
+		String userString = gson.toJson(user);
+		model.addAttribute("user", userString);
+		model.addAttribute("copy", copy);
+		return "estimateSystem/estimateSolution/writeEstimateSolution";
+	}
+	@RequestMapping(value = "/all/writeEstimateSolution", method = RequestMethod.POST)
+	public String writeEstimateSolution2(HttpSession session, Model model, String copy) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
+		Gson gson = new Gson();
+		String companyListString = gson.toJson(companyList);
+		model.addAttribute("companyList", companyListString);
+		String userString = gson.toJson(user);
+		model.addAttribute("user", userString);
+		model.addAttribute("copy", copy);
+		return "estimateSystem/estimateSolution/writeEstimateSolution";
+	}
+	
+	
+	@ResponseBody
+	@RequestMapping(value = "/all/insertEstimateSolution", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public HashMap<String, String> insertEstimateSolution(HttpSession session, Model model, EstimateSolutionDTO estimateSolution, EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("EstimateController.insertEstimateSolution,user:{}",user.getUserNum());
+		
+		//채번
+		String documentNum = estimateService.getDocoumentNum();
+		//기본정보등록
+		estimateSolution.setDocumentNum(documentNum);
+		estimateSolution.setUpdater(user.getUserNum());
+		
+		HashMap<String, String> result = new HashMap<String, String>();
+		
+		int result1 = estimateService.insertEstimateSolution(estimateSolution);
+		if(result1 != 1) {
+			result.put("errorFlag", "1");
+			result.put("error", "見積基本情報格納エラー");
+			return result;
+		}
+		//아이템등록
+		estimateSolutionItemsReciever.setDocumentNum(documentNum);
+		int result2 = estimateService.insertEstimateSolutionItems(estimateSolutionItemsReciever);
+		if (result2 ==0) {
+			result.put("errorFlag", "1");
+			result.put("error", "見積ITEM情報格納エラー");
+			return result;
+		}
+		result.put("errorFlag", "0");
+		result.put("documentNum", documentNum);
+		
+		return result;
+	}
+	
+	@RequestMapping(value = "/all/modEstimateSolution", method = RequestMethod.POST)
+	public String modEstimateSolution(HttpSession session, Model model, String documentNum, String documentTypeName) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		//state를 가져옴.
+		//documentTypeName에따라 조인되는 DB가 다르니 주의!
+		SystemDTO system = new SystemDTO();
+		system.setDocumentNum(documentNum);
+		system.setDocumentTypeName(documentTypeName);
+		SystemDTO sys = estimateService.getEstimate(system);
+		model.addAttribute("state", sys.getState());
+		model.addAttribute("userNum", sys.getUserNum());
+		model.addAttribute("documentNum", documentNum);
+		
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
+		Gson gson = new Gson();
+		String companyListString = gson.toJson(companyList);
+		model.addAttribute("companyList", companyListString);
+		String userString = gson.toJson(user);
+		model.addAttribute("user", userString);
+		return "estimateSystem/estimateSolution/modEstimateSolution";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/all/updateEstimateSolution", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public HashMap<String, String> updateEstimateSolution(HttpSession session, Model model, EstimateSolutionDTO estimateSolution, EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		System.out.println(estimateSolution);
+		System.out.println(estimateSolutionItemsReciever);
+		
+		HashMap<String, String> result = new HashMap<String, String>();
+		//기본정보등록
+		int result1 = estimateService.updateEstimateSolution(estimateSolution);
+		if(result1 != 1) {
+			result.put("errorFlag", "1");
+			result.put("error", "見積基本情報格納エラー");
+			return result;
+		}
+		//아이템등록
+		estimateSolutionItemsReciever.setDocumentNum(estimateSolution.getDocumentNum());
+		int result2 = estimateService.updateEstimateSolutionItems(estimateSolutionItemsReciever);
+		if (result2 ==0) {
+			result.put("errorFlag", "1");
+			result.put("error", "見積ITEM情報格納エラー");
+			return result;
+		}
+		result.put("errorFlag", "0");
+		result.put("documentNum", estimateSolution.getDocumentNum());
+		return result;
+	}
+//-----------------------------------------------------------------------------------------------------------------------------------	
+	
 	/*
 	 * 지울 다큐먼트 리스트를 가져온다.
 	 * estiamteMaster에서 딸린 청구서가 있는지 확인한다.

@@ -24,10 +24,13 @@ if ( self !== top ) {
 	window.parent.location.href="login";
 }
 
-function readDocument(documentTypeName,documentNum){
-	//location.href="read"+documentTypeName.charAt(0).toUpperCase()+documentTypeName.slice(1)+"?documentNum="+documentNum+"&approveMode=on";
-	$('#readDocument').attr("action","read"+documentTypeName.charAt(0).toUpperCase()+documentTypeName.slice(1));
+function readDocument(system,documentTypeName,documentNum){
+	//billSystem은 열람페이지를 estimateSystem와 공유하기때문에 bill로 들어올경우 estimate로 바꿔준다.
+	if(system == "bill"){system="estimate"}
+	
+	$('#readDocument').attr("action","read"+system.charAt(0).toUpperCase()+system.slice(1));
 	$('#documentNum').val(documentNum);
+	$('#documentTypeName').val(documentTypeName);
 	$('#approveMode').val("on");
 	
 	$('#readDocument').submit();
@@ -56,13 +59,14 @@ function readDocument(documentTypeName,documentNum){
 		</div>
 	</div>
 	<c:set var = "arr" value='<%= new String[]{"","見積書","請求書"} %>' />
+	<c:set var = "sysArr" value='<%= new String[]{"","estimate","bill"} %>' />
 	<c:forEach items="${workflowList}" var="w" varStatus="status">
 		<div class="p-0 container-lg">
 			<div class="p-0 d-flex ">
 				<div class="p-0 col-12 d-flex">
 					<div class="mt-2 mb-2 col-2 p-0 text-center">${ arr[w.systemNum] }</div>
 					<div class="mt-2 mb-2 col-2 p-0 text-center">${w.documentTypeName}</div>
-					<div class="mt-2 mb-2 col-2 p-0 text-center link" onclick="readDocument('${w.documentTypeName}','${w.documentNum}')">${w.documentNum}</div>
+					<div class="mt-2 mb-2 col-2 p-0 text-center link" onclick="readDocument('${sysArr[w.systemNum]}','${w.documentTypeName}','${w.documentNum}')">${w.documentNum}</div>
 					<div class="mt-2 mb-2 col-2 p-0 text-center">${w.userDepartment}(${w.userName})</div>
 					<div class="mt-2 mb-2 col-2 p-0 text-center"><fmt:parseDate value="${w.insertDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/></div>
 					<div class="mt-2 mb-2 col-2 p-0 text-center"><fmt:parseDate value="${w.updateDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/></div>
@@ -73,6 +77,7 @@ function readDocument(documentTypeName,documentNum){
 	
 	<form id="readDocument" action="companyMod" method="post" accept-charset="utf-8">
 		<input type="hidden" id="documentNum" name="documentNum" value="">
+		<input type="hidden" id="documentTypeName" name="documentTypeName" value="">
 		<input type="hidden" id="approveMode" name="approveMode" value="">
 	</form>
 </body>

@@ -7,6 +7,9 @@ import org.springframework.ui.Model;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.EstimateSheet1DTO;
 import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
+import jp.co.interline.dto.EstimateSolutionDTO;
+import jp.co.interline.dto.EstimateSolutionItemsRecieveDTO;
+import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
 
 public interface EstimateService {
@@ -25,9 +28,18 @@ public interface EstimateService {
 
 	int deleteSheet(String documentNum);
 
-	EstimateSheet1DTO getEstimateSheet1ByDocumentNum(String documentNum);
-
 	void test();
+	
+	String returnFileName(ArrayList<SystemDTO> systems, String category);
 
+	int insertEstimateSolution(EstimateSolutionDTO estimateSolution);
+
+	int insertEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever);
+
+	SystemDTO getEstimate(SystemDTO system);
+
+	int updateEstimateSolution(EstimateSolutionDTO estimateSolution);
+
+	int updateEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever);
 
 }

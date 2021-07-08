@@ -28,7 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../css/common/common.css">
 <script src="../js/bootstrap.bundle.js"></script>
-<title>writeEstimateSheet1</title>
+<title>modEstimateSolution</title>
 <style type="text/css">
 </style>
 <script>
@@ -52,10 +52,12 @@ if ( self !== top ) {
 	<!--buttons -->
 	<div class="p-0 d-flex col-12">
 		<div class="pl-2 pr-2 d-flex col-4">
-			<button type="button" class="col-12 btn btn-secondary" onclick="saveButton('wri')">臨時格納</button>
+			<button type="button" class="col-12 btn btn-secondary" onclick="saveButton('${state}')">臨時格納</button>
 		</div>
 		<div class="pl-2 pr-2 d-flex col-4">
-			<button type="button" class="col-12 btn btn-secondary" onclick="saveAndRequestButton('wri')">承認依頼</button>
+			<c:if test="${state eq 'wri' and userNum eq userInform.userNum}">
+				<button type="button" class="col-12 btn btn-secondary" onclick="saveAndRequestButton('${state}')">承認依頼</button>
+			</c:if>
 		</div>
 		<div class="pl-2 pr-2 d-flex col-4">
 			<button type="button" class="col-12 btn btn-secondary" onclick="location.href='estimateList'">戻り</button>
@@ -70,17 +72,14 @@ if ( self !== top ) {
 
 		var userString = '${user}';
 		var user=JSON.parse(userString);
-		console.log(JSON.stringify(user));
 		function SetOZParamters_OZViewer(){
 			
 			var oz;
 			oz = document.getElementById("OZViewer");
 			oz.sendToActionScript("viewer.ignore_disable_color_inputcomponent","true");
-			oz.sendToActionScript("viewer.external_functions_path","ozp://estimateSystem/estimateSheet1/JS/estimateSheet1.js");
+			oz.sendToActionScript("viewer.external_functions_path","ozp://estimateSystem/estimateSolution/JS/estimateSolution.js");
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
-			oz.sendToActionScript("connection.reportname","estimateSystem/estimateSheet1/writeEstimateSheet1.ozr");
-			oz.sendToActionScript("connection.inputjson",'${copy}');
-			oz.sendToActionScript("global.language", "ja_JP");
+			oz.sendToActionScript("connection.reportname","estimateSystem/estimateSolution/modEstimateSolution.ozr");
 			oz.sendToActionScript("connection.pcount","7");
 			oz.sendToActionScript("connection.args1","repeat="+repeat);
 			oz.sendToActionScript("connection.args2","companyList="+companyList);
@@ -89,6 +88,11 @@ if ( self !== top ) {
 			oz.sendToActionScript("connection.args5","userDepartment="+(user.department==null? '':user.department));
 			oz.sendToActionScript("connection.args6","userName="+user.userName);
 			oz.sendToActionScript("connection.args7","path=http://"+'<%out.print(properties.getWebIP());%>'+'/<%out.print(properties.getProjectRoot());%>/resources/uploaded/');
+
+			oz.sendToActionScript("global.language", "ja_JP");
+			oz.sendToActionScript("odi.odinames", "modEstimateSolution");
+	 		oz.sendToActionScript("odi.modEstimateSolution.pcount", "1");
+			oz.sendToActionScript("odi.modEstimateSolution.args1", "documentNum="+'${documentNum}');
 			oz.sendToActionScript("pdf.fontembedding","true");
 			return true;
 		}
@@ -115,13 +119,12 @@ if ( self !== top ) {
         });
 
 
-		//뷰어의 모든 값을 제이슨스트링으로 가져와 컨트롤러가 받을수있게 함.
-		//int형같은경우 null은 안되고
-		//금액같은경우 쉼표와 ￥표시는 없어야함.
-		function processJson(state){
+        
+        function processJson(state){
 			var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
 			var inputJson=JSON.parse(inputJsonString);
 			inputJson["sum"] = inputJson["sum"].replace(/,/gi, "").replace(/￥/gi, "");
+			inputJson["taxRate"] = inputJson["taxRate"].replace(/,/gi, "").replace(/%/gi, "");
 			inputJson["tax"] = inputJson["tax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax"] = inputJson["sumWithTax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax2"] = inputJson["sumWithTax2"].replace(/,/gi, "").replace(/￥/gi, "");
@@ -135,24 +138,22 @@ if ( self !== top ) {
 			}
 			inputJson.state=state;
 			if(inputJson["workflowNum"]==""){inputJson.workflowNum=0};
+			if(inputJson["taxRate"]==""){inputJson.taxRate=0};
 			console.log("제이슨:"+JSON.stringify(inputJson));
 			return inputJson;
 		}
 
       //보존버튼을 누루면 작동. 
+		//뷰어의 모든 값을 제이슨스트링으로 가져옴.
 		function saveButton(state){
 			var inputJson = processJson(state);
 			$.ajax(
 					{
-						url: "insertEstimateSheet1",
+						url: "updateEstimateSolution",
 						type: 'POST',
 						data: inputJson,
 						success: function(r){
-							if(r["errorFlag"]==0){
-								alert("見積書を作成しました。");
-							}else{
-								alert(r["error"]);
-							}
+							alert("見積書を修正しました。");
 							location.href="estimateList";
 						},
 						error: function(e){
@@ -161,25 +162,22 @@ if ( self !== top ) {
 						}
 					}		
 			);
-			
 		}
-
-
 
 		function saveAndRequestButton(state){
 			var inputJson = processJson(state);
 			$.ajax(
 					{
-						url: "insertEstimateSheet1",
+						url: "updateEstimateSolution",
 						type: 'POST',
 						data: inputJson,
 						success: function(r){
 							if(r["errorFlag"]==0){
 								alert("見積書を作成しました。");
-								requestButton(r["documentNum"]);
 							}else{
 								alert(r["error"]);
 							}
+							requestButton(r["documentNum"]);
 						},
 						error: function(e){
 							console.log(JSON.stringify(e));
@@ -200,7 +198,7 @@ if ( self !== top ) {
 						data: {"documentTypeName":inputJson["documentTypeName"], "documentNum":documentNum, "systemNum":inputJson["systemNum"]},
 						dataType:"text",
 						success: function(r){
-							alert(r);
+							alert("承認依頼完了");
 							location.href="estimateList";
 						},
 						error: function(e){

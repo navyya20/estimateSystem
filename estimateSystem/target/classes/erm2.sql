@@ -295,6 +295,73 @@ CREATE TABLE estimateSheet1Items
 ) COMMENT = '見積書１のアイテム';
 
 
+
+-- 見積書[Solution事業部]
+CREATE TABLE estimateSolution
+(
+	documentNum varchar(20) NOT NULL COMMENT 'documentNum',
+	-- ユーザ情報の固有ナンバー
+	userNum int NOT NULL COMMENT '作成者 : ユーザ情報の固有ナンバー',
+	userName varchar(30) COMMENT '作成者名前',
+	userDepartment varchar(10) COMMENT '依頼部署',
+	userPosition varchar(10) COMMENT '作成者役職',
+	estimateDate varchar(20) COMMENT '作成日表示用',
+	-- これがOZRが参照するデータテーブル名になる。
+	-- 例）estimateSolution , BillSolution
+	documentTypeName varchar(20) DEFAULT 'estimateSolution' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
+例）estimateSolution , BillSolution',
+	supplier varchar(40) COMMENT '供給者',
+	address varchar(180) COMMENT '供給者住所',
+	post varchar(10) COMMENT '供給者郵便番号',
+	phoneNumber varchar(20) COMMENT '供給者電話番号',
+	representative varchar(30) COMMENT '代表者',
+	stamp varchar(25) COMMENT '印鑑',
+	stampFileName varchar(25) COMMENT '印鑑ファイル名',
+	-- logoイメージのファイル名
+	logoFileName varchar(25) COMMENT 'logoFileName : logoイメージのファイル名',
+	receiver varchar(40) COMMENT '顧客名',
+	documentName varchar(40) COMMENT '件名',
+	deadline varchar(20) COMMENT '納入期限',
+	supplyPoint varchar(120) COMMENT '納入場所',
+	expirationDate varchar(40) COMMENT '見積書の有効期限',
+	payCondition varchar(40) COMMENT '支払い条件',
+	cautions varchar(400) COMMENT '注意事項',
+	sum bigint COMMENT '総計',
+    taxRate int ,
+	tax bigint COMMENT '税金',
+	sumWithTax bigint COMMENT '総計税金込み',
+	sumWithTax2 bigint COMMENT '総計税金込み２',
+	comment varchar(300) COMMENT 'コメント',
+	-- このデータが挿入された日時。又はこのデータが有効になった日時。
+	insertDate datetime DEFAULT CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
+	-- 更新日時
+	updateDate datetime COMMENT 'updateDate : 更新日時',
+	-- データの更新者のuserNum
+	updater int COMMENT '更新者 : データの更新者のuserNum',
+	PRIMARY KEY (documentNum)
+) COMMENT = '見積書１';
+
+
+-- 見積書１のアイテム[Solution事業部]
+CREATE TABLE estimateSolutionItems
+(
+	rowNum int COMMENT '行数',
+	item varchar(2) COMMENT '項目',
+	itemName varchar(60) COMMENT '項目名',
+	amount int COMMENT '数量',
+	unit varchar(5) COMMENT '単位',
+	unitPrice int COMMENT '単価',
+	price bigint COMMENT '値段',
+	documentNum varchar(20) NOT NULL COMMENT 'documentNum'
+) COMMENT = '見積書１のアイテム';
+
+
+
+
+
+
+
+
 -- 参照ファイル名
 CREATE TABLE fileNames
 (
@@ -565,6 +632,21 @@ ALTER TABLE documentMaster
 ;
 
 
+ALTER TABLE estimateSolution
+	ADD FOREIGN KEY (documentNum)
+	REFERENCES estimateMaster (documentNum)
+	ON UPDATE RESTRICT
+	ON DELETE CASCADE
+;
+
+ALTER TABLE estimateSolutionItems
+	ADD FOREIGN KEY (documentNum)
+	REFERENCES estimateSolution (documentNum)
+	ON UPDATE RESTRICT
+	ON DELETE CASCADE
+;
+
+
 
 -- 役職
 INSERT INTO `interline_estimatesystem`.`position` (`position`) VALUES ('社員');
@@ -597,6 +679,7 @@ INSERT INTO `interline_estimatesystem`.`systemtype` (`systemNum`,`systemName`) V
 
 INSERT INTO `interline_estimatesystem`.`documenttype` (`documentTypeName`,`systemNum`) VALUES ('estimateSheet1',1);
 INSERT INTO `interline_estimatesystem`.`documenttype` (`documentTypeName`,`systemNum`) VALUES ('billSheet1',2);
+INSERT INTO `interline_estimatesystem`.`documenttype` (`documentTypeName`, `systemNum`) VALUES ('estimateSolution', '1');
 
 INSERT INTO `interline_estimatesystem`.`workflowinform` (`systemNum`) VALUES ('1');
 INSERT INTO `interline_estimatesystem`.`workflowinform` (`systemNum`) VALUES ('2');
@@ -657,3 +740,81 @@ SET RESULT_ID = (SELECT LAST_INSERT_ID());
 RETURN RESULT_ID;
 END $$
 DELIMITER ;
+
+
+-- 請求書2 solution事業部
+CREATE TABLE billSolution
+(
+	documentNum varchar(20) NOT NULL COMMENT 'documentNum',
+	-- ユーザ情報の固有ナンバー
+	userNum int NOT NULL COMMENT '作成者 : ユーザ情報の固有ナンバー',
+	userName varchar(30) COMMENT '作成者名前',
+	userDepartment varchar(10) COMMENT '依頼部署',
+	userPosition varchar(10) COMMENT '作成者役職',
+	billDate varchar(20) COMMENT '作成日表示用',
+	-- これがOZRが参照するデータテーブル名になる。
+	-- 例）estimateSheet1 , BillSheet1
+	documentTypeName varchar(20) DEFAULT 'billSheet1' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
+例）estimateSheet1 , BillSheet1',
+	supplier varchar(40) COMMENT '供給者',
+	address varchar(120) COMMENT '供給者住所',
+	post varchar(10) COMMENT '供給者郵便番号',
+	phoneNumber varchar(20) COMMENT '供給者電話番号',
+	representative varchar(30) COMMENT '代表者',
+	stamp varchar(25) COMMENT '印鑑ファイル名',
+	stampFileName varchar(25) COMMENT '印鑑ファイル名',
+	-- logoイメージのファイル名
+	logoFileName varchar(25) COMMENT 'logoFileName : logoイメージのファイル名',
+	receiver varchar(40) COMMENT '顧客名',
+	documentName varchar(40) COMMENT '件名',
+	payCondition varchar(40) COMMENT 'お支払い条件',
+	deadline varchar(20) COMMENT '支払期限',
+	bankName varchar(30) COMMENT '銀行名',
+	branchName varchar(20) COMMENT '支店名',
+	accountName varchar(30) COMMENT '口座名',
+	hurigana varchar(60) COMMENT '口座名フリカナ',
+	accountNumber varchar(20) COMMENT '口座番号',
+	depositeClassification varchar(10) COMMENT '預金区分',
+	note varchar(400) COMMENT '備考',
+	sum bigint COMMENT '総計',
+    taxRate int ,
+	tax bigint COMMENT '税金',
+	sumWithTax bigint COMMENT '総計税金込み',
+	sumWithTax2 bigint COMMENT '総計税金込み２',
+	comment varchar(300) COMMENT 'コメント',
+	-- このデータが挿入された日時。又はこのデータが有効になった日時。
+	insertDate datetime DEFAULT CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
+	-- 更新日時
+	updateDate datetime COMMENT 'updateDate : 更新日時',
+	-- データの更新者のuserNum
+	updater int COMMENT '更新者 : データの更新者のuserNum',
+	PRIMARY KEY (documentNum)
+) COMMENT = '請求書１';
+
+
+-- 請求書2 solution事業部のアイテム
+CREATE TABLE billSolutionItems
+(
+	rowNum int COMMENT '行数',
+	item varchar(2) COMMENT '項目',
+	itemName varchar(60) COMMENT '項目名',
+	amount int COMMENT '数量',
+	unit varchar(5) COMMENT '単位',
+	unitPrice int COMMENT '単価',
+	price bigint COMMENT '値段',
+	documentNum varchar(20) NOT NULL COMMENT 'documentNum'
+) COMMENT = '請求書１のアイテム';
+
+ALTER TABLE billSolution
+	ADD FOREIGN KEY (documentNum)
+	REFERENCES estimateMaster (documentNum)
+	ON UPDATE RESTRICT
+	ON DELETE CASCADE
+;
+
+ALTER TABLE billSolutionItems
+	ADD FOREIGN KEY (documentNum)
+	REFERENCES billSolution (documentNum)
+	ON UPDATE RESTRICT
+	ON DELETE CASCADE
+;

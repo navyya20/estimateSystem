@@ -1,12 +1,13 @@
 package jp.co.interline.dto;
 
-public class EstimateSheet1DTO {
+public class BillSolutionDTO {
 	String documentNum;
+	String estimateNum;
 	int userNum;
 	String userName;
 	String userDepartment;
 	String userPosition;
-	String estimateDate;
+	String billDate;
 	String documentTypeName;
 	String nextDocumentTypeName;
 	String supplier;
@@ -19,12 +20,17 @@ public class EstimateSheet1DTO {
 	String logoFileName;
 	String receiver;
 	String documentName;
-	String deadline;
-	String supplyPoint;
-	String expirationDate;
 	String payCondition;
-	String cautions;
+	String deadline;
+	String bankName;
+	String branchName;
+	String accountName;
+	String hurigana;
+	String accountNumber;
+	String depositeClassification;	
+	String note;
 	String sum;
+	String taxRate;
 	String tax;
 	String sumWithTax;
 	String sumWithTax2;	
@@ -40,6 +46,12 @@ public class EstimateSheet1DTO {
 	}
 	public void setDocumentNum(String documentNum) {
 		this.documentNum = documentNum;
+	}
+	public String getEstimateNum() {
+		return estimateNum;
+	}
+	public void setEstimateNum(String estimateNum) {
+		this.estimateNum = estimateNum;
 	}
 	public int getUserNum() {
 		return userNum;
@@ -65,11 +77,11 @@ public class EstimateSheet1DTO {
 	public void setUserPosition(String userPosition) {
 		this.userPosition = userPosition;
 	}
-	public String getEstimateDate() {
-		return estimateDate;
+	public String getBillDate() {
+		return billDate;
 	}
-	public void setEstimateDate(String estimateDate) {
-		this.estimateDate = estimateDate;
+	public void setBillDate(String billDate) {
+		this.billDate = billDate;
 	}
 	public String getSupplier() {
 		return supplier;
@@ -119,7 +131,6 @@ public class EstimateSheet1DTO {
 	public void setLogoFileName(String logoFileName) {
 		this.logoFileName = logoFileName;
 	}
-	
 	public String getReceiver() {
 		return receiver;
 	}
@@ -132,74 +143,59 @@ public class EstimateSheet1DTO {
 	public void setDocumentName(String documentName) {
 		this.documentName = documentName;
 	}
-	public String getDeadline() {
-		return deadline;
-	}
-	public void setDeadline(String deadline) {
-		this.deadline = deadline;
-	}
-	public String getSupplyPoint() {
-		return supplyPoint;
-	}
-	public void setSupplyPoint(String supplyPoint) {
-		this.supplyPoint = supplyPoint;
-	}
-	public String getExpirationDate() {
-		return expirationDate;
-	}
-	public void setExpirationDate(String expirationDate) {
-		this.expirationDate = expirationDate;
-	}
 	public String getPayCondition() {
 		return payCondition;
 	}
 	public void setPayCondition(String payCondition) {
 		this.payCondition = payCondition;
 	}
-	
-	public String getCautions() {
-		return cautions;
+	public String getDeadline() {
+		return deadline;
 	}
-	public void setCautions(String cautions) {
-		this.cautions = cautions;
+	public void setDeadline(String deadline) {
+		this.deadline = deadline;
 	}
-	public String getState() {
-		return state;
+	public String getBankName() {
+		return bankName;
 	}
-	public void setState(String state) {
-		this.state = state;
+	public void setBankName(String bankName) {
+		this.bankName = bankName;
 	}
-	public String getComment() {
-		return comment;
+	public String getBranchName() {
+		return branchName;
 	}
-	public void setComment(String comment) {
-		this.comment = comment;
+	public void setBranchName(String branchName) {
+		this.branchName = branchName;
 	}
-	
-	
-	public int getWorkflowNum() {
-		return workflowNum;
+	public String getAccountName() {
+		return accountName;
 	}
-	public void setWorkflowNum(int workflowNum) {
-		this.workflowNum = workflowNum;
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
 	}
-	public String getInsertDate() {
-		return insertDate;
+	public String getHurigana() {
+		return hurigana;
 	}
-	public void setInsertDate(String insertDate) {
-		this.insertDate = insertDate;
+	public void setHurigana(String hurigana) {
+		this.hurigana = hurigana;
 	}
-	public String getUpdateDate() {
-		return updateDate;
+	public String getAccountNumber() {
+		return accountNumber;
 	}
-	public void setUpdateDate(String updateDate) {
-		this.updateDate = updateDate;
+	public void setAccountNumber(String accountNumber) {
+		this.accountNumber = accountNumber;
 	}
-	public int getUpdater() {
-		return updater;
+	public String getDepositeClassification() {
+		return depositeClassification;
 	}
-	public void setUpdater(int updater) {
-		this.updater = updater;
+	public void setDepositeClassification(String depositeClassification) {
+		this.depositeClassification = depositeClassification;
+	}
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
 	}
 	public String getSum() {
 		return sum;
@@ -225,6 +221,43 @@ public class EstimateSheet1DTO {
 	public void setSumWithTax2(String sumWithTax2) {
 		this.sumWithTax2 = sumWithTax2;
 	}
+	public String getState() {
+		return state;
+	}
+	public void setState(String state) {
+		this.state = state;
+	}
+	public String getComment() {
+		return comment;
+	}
+	public void setComment(String comment) {
+		this.comment = comment;
+	}
+	
+	public int getWorkflowNum() {
+		return workflowNum;
+	}
+	public void setWorkflowNum(int workflowNum) {
+		this.workflowNum = workflowNum;
+	}
+	public String getInsertDate() {
+		return insertDate;
+	}
+	public void setInsertDate(String insertDate) {
+		this.insertDate = insertDate;
+	}
+	public String getUpdateDate() {
+		return updateDate;
+	}
+	public void setUpdateDate(String updateDate) {
+		this.updateDate = updateDate;
+	}
+	public int getUpdater() {
+		return updater;
+	}
+	public void setUpdater(int updater) {
+		this.updater = updater;
+	}
 	public String getDocumentTypeName() {
 		return documentTypeName;
 	}
@@ -243,22 +276,27 @@ public class EstimateSheet1DTO {
 	public void setNextDocumentTypeName(String nextDocumentTypeName) {
 		this.nextDocumentTypeName = nextDocumentTypeName;
 	}
+	public String getTaxRate() {
+		return taxRate;
+	}
+	public void setTaxRate(String taxRate) {
+		this.taxRate = taxRate;
+	}
 	@Override
 	public String toString() {
-		return "EstimateSheet1DTO [documentNum=" + documentNum + ", userNum=" + userNum + ", userName=" + userName
-				+ ", userDepartment=" + userDepartment + ", userPosition=" + userPosition + ", estimateDate="
-				+ estimateDate + ", documentTypeName=" + documentTypeName + ", nextDocumentTypeName="
+		return "BillSheet1DTO [documentNum=" + documentNum + ", estimateNum=" + estimateNum + ", userNum=" + userNum
+				+ ", userName=" + userName + ", userDepartment=" + userDepartment + ", userPosition=" + userPosition
+				+ ", billDate=" + billDate + ", documentTypeName=" + documentTypeName + ", nextDocumentTypeName="
 				+ nextDocumentTypeName + ", supplier=" + supplier + ", address=" + address + ", post=" + post
 				+ ", phoneNumber=" + phoneNumber + ", representative=" + representative + ", stamp=" + stamp
 				+ ", stampFileName=" + stampFileName + ", logoFileName=" + logoFileName + ", receiver=" + receiver
-				+ ", documentName=" + documentName + ", deadline=" + deadline + ", supplyPoint=" + supplyPoint
-				+ ", expirationDate=" + expirationDate + ", payCondition=" + payCondition + ", cautions=" + cautions
-				+ ", sum=" + sum + ", tax=" + tax + ", sumWithTax=" + sumWithTax + ", sumWithTax2=" + sumWithTax2
-				+ ", state=" + state + ", comment=" + comment + ", workflowNum=" + workflowNum + ", insertDate="
-				+ insertDate + ", updateDate=" + updateDate + ", updater=" + updater + ", systemNum=" + systemNum + "]";
+				+ ", documentName=" + documentName + ", payCondition=" + payCondition + ", deadline=" + deadline
+				+ ", bankName=" + bankName + ", branchName=" + branchName + ", accountName=" + accountName
+				+ ", hurigana=" + hurigana + ", accountNumber=" + accountNumber + ", depositeClassification="
+				+ depositeClassification + ", note=" + note + ", sum=" + sum + ", tax=" + tax + ", sumWithTax="
+				+ sumWithTax + ", sumWithTax2=" + sumWithTax2 + ", state=" + state + ", comment=" + comment
+				+ ", workflowNum=" + workflowNum + ", insertDate=" + insertDate + ", updateDate=" + updateDate
+				+ ", updater=" + updater + ", systemNum=" + systemNum + "]";
 	}
-	
-	
-	
 	
 }

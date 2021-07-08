@@ -37,23 +37,29 @@ function formSubmit(page){
 							
 	document.location.href = "estimateList?page=" + pp.value+"&option="+option;
 }
+
 function writeBill(estimateNum,nextDocumentTypeName){
 	if(nextDocumentTypeName==""){
-		alert("この書式は連係がない書式です。");
+		alert("この書式は連係の請求書がない書式です。");
+		return;
 	}
 	var url = "write"+nextDocumentTypeName.charAt(0).toUpperCase()+nextDocumentTypeName.slice(1);
 	location.href=url+"?estimateNum="+estimateNum;
 }
-function readBill(billNum,documentTypeName){
-	var url="read"+documentTypeName.charAt(0).toUpperCase()+documentTypeName.slice(1);
-	$('#readDocument').attr("action",url);
-	$('#documentNum').val(billNum);
-	$('#readDocument').submit();
-}
+
 function readEstimate(estimateNum,documentTypeName){
-	var url="read"+documentTypeName.charAt(0).toUpperCase()+documentTypeName.slice(1);
+	var url="readEstimate";
 	$('#readDocument').attr("action",url);
 	$('#documentNum').val(estimateNum);
+	$('#documentTypeName').val(documentTypeName);
+	$('#readDocument').submit();
+}
+function readBill(billNum,documentTypeName){
+	//read는 어차피 ozr,odi읽는 것이므로 readEstimate와 통일
+	var url="readEstimate";
+	$('#readDocument').attr("action",url);
+	$('#documentNum').val(billNum);
+	$('#documentTypeName').val(documentTypeName);
 	$('#readDocument').submit();
 }
 function copyDocument(documentNum,documentTypeName){
@@ -146,7 +152,7 @@ function sort(option){
 		<div class="p-0 d-flex">
 			<div class="p-0 d-flex col-6">
 				<div class="p-0 d-flex col-12 col-md-4">
-					<button type="button" class="col-12 btn btn-secondary" onclick="location.href='writeEstimateSheet1'">新規作成</button>
+					<button type="button" class="col-12 btn btn-secondary" onclick="location.href='selectEstimate'">新規作成</button>
 				</div>
 			</div>
 			<div class="p-0 d-flex col-6 justify-content-end">
@@ -237,8 +243,9 @@ function sort(option){
 		<input type="hidden" id="page">
 	</div>
 	
-	<form id="readDocument" action="companyMod" method="post" accept-charset="utf-8">
+	<form id="readDocument" action="" method="post" accept-charset="utf-8">
 		<input type="hidden" id="documentNum" name="documentNum" value="">
+		<input type="hidden" id="documentTypeName" name="documentTypeName" value="">
 	</form>
 </body>
 </html>
