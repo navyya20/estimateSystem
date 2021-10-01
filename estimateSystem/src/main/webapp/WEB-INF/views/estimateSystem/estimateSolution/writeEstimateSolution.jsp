@@ -65,6 +65,7 @@ if ( self !== top ) {
 	<script type="text/javascript" >
 		var companyList = '${companyList}';
 		companyList=companyList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
+		var copy = "";
 		<c:if test="${copy != null}">
 			copy = '${copy}';
 			copy=copy.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
