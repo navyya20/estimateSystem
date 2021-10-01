@@ -28,6 +28,8 @@ import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.AccountDTO;
 import jp.co.interline.dto.BillSheet1DTO;
 import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
+import jp.co.interline.dto.BillSiDTO;
+import jp.co.interline.dto.BillSiItemsRecieveDTO;
 import jp.co.interline.dto.BillSolutionDTO;
 import jp.co.interline.dto.BillSolutionItemsRecieveDTO;
 import jp.co.interline.dto.EstimateSheet1DTO;
@@ -101,6 +103,23 @@ public class BillController {
 		String userString = gson.toJson(user);
 		model.addAttribute("user", userString);
 		model.addAttribute("estimateNum", estimateNum);
+		return "billSystem/billSheet1/writeBillSheet1";
+	}
+	
+	@RequestMapping(value = "/all/writeBillSheet1", method = RequestMethod.POST)
+	public String writeBillSheet1Copy(HttpSession session, Model model, String estimateNum, String copy) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		ArrayList<AccountDTO> accountList = accountService.getAccountList();
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
+		Gson gson = new Gson();
+		String accountListString = gson.toJson(accountList);
+		String companyListString = gson.toJson(companyList);
+		model.addAttribute("accountList", accountListString);
+		model.addAttribute("companyList", companyListString);
+		String userString = gson.toJson(user);
+		model.addAttribute("user", userString);
+		model.addAttribute("estimateNum", estimateNum);
+		model.addAttribute("copy", copy);
 		return "billSystem/billSheet1/writeBillSheet1";
 	}
 	
@@ -214,6 +233,23 @@ public class BillController {
 		return "billSystem/billSolution/writeBillSolution";
 	}
 	
+	@RequestMapping(value = "/all/writeBillSolution", method = RequestMethod.POST)
+	public String writeBillSolutionCopy(HttpSession session, Model model, String estimateNum, String copy) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		ArrayList<AccountDTO> accountList = accountService.getAccountList();
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
+		Gson gson = new Gson();
+		String accountListString = gson.toJson(accountList);
+		String companyListString = gson.toJson(companyList);
+		model.addAttribute("accountList", accountListString);
+		model.addAttribute("companyList", companyListString);
+		String userString = gson.toJson(user);
+		model.addAttribute("user", userString);
+		model.addAttribute("estimateNum", estimateNum);
+		model.addAttribute("copy", copy);
+		return "billSystem/billSolution/writeBillSolution";
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/all/insertBillSolution", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertBillSolution(HttpSession session, Model model, BillSolutionDTO billSolution, BillSolutionItemsRecieveDTO billSolutionItemsReciever) {
@@ -298,6 +334,131 @@ public class BillController {
 		
 		result.put("errorFlag", "0");
 		result.put("documentNum", billSolution.getDocumentNum());
+		return result;
+	}
+	
+	
+	
+	
+/////////////////////////////billSi//////////////////////////////////////////////////
+//write,insert,mod,update	
+	
+	@RequestMapping(value = "/all/writeBillSi", method = RequestMethod.GET)
+	public String writeBillSi(HttpSession session, Model model, String estimateNum) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		ArrayList<AccountDTO> accountList = accountService.getAccountList();
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
+		Gson gson = new Gson();
+		String accountListString = gson.toJson(accountList);
+		String companyListString = gson.toJson(companyList);
+		model.addAttribute("accountList", accountListString);
+		model.addAttribute("companyList", companyListString);
+		String userString = gson.toJson(user);
+		model.addAttribute("user", userString);
+		model.addAttribute("estimateNum", estimateNum);
+		return "billSystem/billSi/writeBillSi";
+	}
+	
+	@RequestMapping(value = "/all/writeBillSi", method = RequestMethod.POST)
+	public String writeBillSiCopy(HttpSession session, Model model, String estimateNum, String copy) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		ArrayList<AccountDTO> accountList = accountService.getAccountList();
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
+		Gson gson = new Gson();
+		String accountListString = gson.toJson(accountList);
+		String companyListString = gson.toJson(companyList);
+		model.addAttribute("accountList", accountListString);
+		model.addAttribute("companyList", companyListString);
+		String userString = gson.toJson(user);
+		model.addAttribute("user", userString);
+		model.addAttribute("estimateNum", estimateNum);
+		model.addAttribute("copy", copy);
+		return "billSystem/billSi/writeBillSi";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/all/insertBillSi", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public HashMap<String, String> insertBillSi(HttpSession session, Model model, BillSiDTO billSi, BillSiItemsRecieveDTO billSiItemsReciever) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("BillController.insertBillSi,user:{}",user.getUserNum());
+		//채번
+		String documentNum = billService.getDocoumentNum();
+		//기본정보등록
+		billSi.setDocumentNum(documentNum);
+		billSi.setUpdater(user.getUserNum());
+		
+		HashMap<String, String> result = new HashMap<String, String>();
+		
+		int result1 = billService.insertBillSi(billSi);
+		if(result1 != 1) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求基本情報格納エラー");
+			return result;
+		}
+		//아이템등록
+		billSiItemsReciever.setDocumentNum(documentNum);
+		int result2 = billService.insertBillSiItems(billSiItemsReciever);
+		if (result2 ==0) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求ITEM情報格納エラー");
+			return result;
+		}
+		result.put("errorFlag", "0");
+		result.put("documentNum", documentNum);
+		return result;
+	}
+	
+	@RequestMapping(value = "/all/modBillSi", method = RequestMethod.POST)
+	public String modBillSi(HttpSession session, Model model, String documentNum, String documentTypeName) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		
+		//state를 가져옴.
+		//documentTypeName에따라 조인되는 DB가 다르니 주의!
+		SystemDTO system = new SystemDTO();
+		system.setDocumentNum(documentNum);
+		system.setDocumentTypeName(documentTypeName);
+		SystemDTO sys = estimateService.getEstimate(system);
+		model.addAttribute("state", sys.getState());
+		model.addAttribute("userNum", sys.getUserNum());
+		model.addAttribute("billNum", documentNum);
+		
+		ArrayList<AccountDTO> accountList = accountService.getAccountList();
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
+		Gson gson = new Gson();
+		String accountListString = gson.toJson(accountList);
+		String companyListString = gson.toJson(companyList);
+		model.addAttribute("accountList", accountListString);
+		model.addAttribute("companyList", companyListString);
+		
+		String userString = gson.toJson(user);
+		model.addAttribute("user", userString);
+		return "billSystem/billSi/modBillSi";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/all/updateBillSi", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public HashMap<String, String> updateBillSi(HttpSession session, Model model, BillSiDTO billSi, BillSiItemsRecieveDTO billSiItemsReciever) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		
+		HashMap<String, String> result = new HashMap<String, String>();
+		//기본정보등록
+		int result1 = billService.updateBillSi(billSi);
+		if(result1 != 1) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求基本情報格納エラー");
+			return result;
+		}
+		//아이템등록
+		billSiItemsReciever.setDocumentNum(billSi.getDocumentNum());
+		int result2 = billService.updateBillSiItems(billSiItemsReciever);
+		if (result2 ==0) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求ITEM情報格納エラー");
+			return result;
+		}
+		
+		result.put("errorFlag", "0");
+		result.put("documentNum", billSi.getDocumentNum());
 		return result;
 	}
 	

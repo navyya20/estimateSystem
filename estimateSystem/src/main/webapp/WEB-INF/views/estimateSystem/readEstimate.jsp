@@ -129,6 +129,7 @@ function copyButton(){
 	if(inputJson.hasOwnProperty("nextDocumentTypeName"))delete inputJson.nextDocumentTypeName;
 	var jsonString = JSON.stringify(inputJson);
 	console.log(jsonString);
+	alert();
 	$('#copyDocument').attr("action",url);
 	$('#copy').val(jsonString);
 	$('#copyDocument').submit();

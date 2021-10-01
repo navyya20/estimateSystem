@@ -15,14 +15,23 @@
 		<typeAlias type="jp.co.interline.dto.WorkflowInformDTO" alias="workflowInformDTO"/>
 		<typeAlias type="jp.co.interline.dto.WorkflowDTO" alias="workflowDTO"/>
 		<typeAlias type="jp.co.interline.dto.SystemDTO" alias="systemDTO"/>
+		
 		<typeAlias type="jp.co.interline.dto.EstimateSheet1DTO" alias="estimateSheet1DTO"/>
 		<typeAlias type="jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO" alias="estimateSheet1ItemsRecieveDTO"/>
 		<typeAlias type="jp.co.interline.dto.EstimateSolutionDTO" alias="estimateSolutionDTO"/>
 		<typeAlias type="jp.co.interline.dto.EstimateSolutionItemsRecieveDTO" alias="estimateSolutionItemsRecieveDTO"/>
+		<typeAlias type="jp.co.interline.dto.EstimateLanguageDTO" alias="estimateLanguageDTO"/>
+		<typeAlias type="jp.co.interline.dto.EstimateLanguageItemsRecieveDTO" alias="estimateLanguageItemsRecieveDTO"/>
+		<typeAlias type="jp.co.interline.dto.EstimateSiDTO" alias="estimateSiDTO"/>
+		<typeAlias type="jp.co.interline.dto.EstimateSiItemsRecieveDTO" alias="estimateSiItemsRecieveDTO"/>
+		
 		<typeAlias type="jp.co.interline.dto.BillSheet1DTO" alias="billSheet1DTO"/>
 		<typeAlias type="jp.co.interline.dto.BillSheet1ItemsRecieveDTO" alias="billSheet1ItemsRecieveDTO"/>
 		<typeAlias type="jp.co.interline.dto.BillSolutionDTO" alias="billSolutionDTO"/>
 		<typeAlias type="jp.co.interline.dto.BillSolutionItemsRecieveDTO" alias="billSolutionItemsRecieveDTO"/>
+		<typeAlias type="jp.co.interline.dto.BillSiDTO" alias="billSiDTO"/>
+		<typeAlias type="jp.co.interline.dto.BillSiItemsRecieveDTO" alias="billSiItemsRecieveDTO"/>
+		
 		<typeAlias type="jp.co.interline.dto.EstimateListDTO" alias="estimateListDTO"/>
 		<typeAlias type="jp.co.interline.dto.testDTO" alias="testDTO"/>
 	</typeAliases>

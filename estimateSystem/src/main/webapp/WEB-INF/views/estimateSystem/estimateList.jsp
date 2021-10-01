@@ -39,7 +39,7 @@ function formSubmit(page){
 }
 
 function writeBill(estimateNum,nextDocumentTypeName){
-	if(nextDocumentTypeName==""){
+	if(nextDocumentTypeName==""||nextDocumentTypeName==null){
 		alert("この書式は連係の請求書がない書式です。");
 		return;
 	}
@@ -147,7 +147,9 @@ function sort(option){
 	<header class="mb-3">
 		<jsp:include page="../menubar.jsp"></jsp:include>
 	</header>
-	※「保存日時」labelを　「クリック時→降順」　「ダブルクリック時→昇順」　整列
+	<div class="p-0 container-xl">
+		※「保存日時」labelを　「クリック時→降順」　「ダブルクリック時→昇順」　整列
+	</div>
 	<div class="p-0 container-xl">
 		<div class="p-0 d-flex">
 			<div class="p-0 d-flex col-6">

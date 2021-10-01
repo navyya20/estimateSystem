@@ -34,7 +34,9 @@ function goToCompanyMod(companyInformNum){
 	<header class="mb-3">
 		<jsp:include page="../menubar.jsp"></jsp:include>
 	</header>
-	
+	<div class="p-0 container-xl">
+		複数設定可能。
+	</div>
 	<!-- 퀀한 검사로 sa만 보이도록 -->
 	<div class="p-0 container-lg">
 		<div class="p-0 d-flex">

@@ -13,6 +13,8 @@ import jp.co.interline.dao.SystemDAO;
 import jp.co.interline.dao.WorkflowDAO;
 import jp.co.interline.dto.BillSheet1DTO;
 import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
+import jp.co.interline.dto.BillSiDTO;
+import jp.co.interline.dto.BillSiItemsRecieveDTO;
 import jp.co.interline.dto.BillSolutionDTO;
 import jp.co.interline.dto.BillSolutionItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
@@ -188,6 +190,52 @@ public class BillServiceImpl implements BillService {
 		return result;
 	}
 
+	
+	
+////////////////////////////billSi///////////////////////////////////////////////
+	@Override
+	public int insertBillSi(BillSiDTO billSi) {
+		//청구서 단독 작성시 estimateNum이 ""로 들어옴. 그대로 넣으면 유니크 속성에 걸림.
+		if (billSi.getEstimateNum().equals("")) {
+			billSi.setEstimateNum(null);
+		}
+		
+		ArrayList<SystemDTO> system = systemDao.getFileNames();
+		String stampFileName=returnFileName(system, "stamp");
+		String logoFileName=returnFileName(system, "logo");
+		billSi.setStampFileName(stampFileName);
+		billSi.setLogoFileName(logoFileName);
+		int result = billDao.insertBillSi(billSi);
+		return result;
+	}
+	
+	@Override
+	public int insertBillSiItems(BillSiItemsRecieveDTO billSiItemsReciever) {
+		int result = billDao.insertBillSiItems(billSiItemsReciever);
+		return result;
+	}
+	
+	@Override
+	public int updateBillSi(BillSiDTO billSi) {
+		//청구서 단독 작성시 estimateNum이 ""로 들어옴. 그대로 넣으면 유니크 속성에 걸림.
+		if (billSi.getEstimateNum().equals("")) {
+			billSi.setEstimateNum(null);
+		}
+		ArrayList<SystemDTO> system = systemDao.getFileNames();
+		String stampFileName=returnFileName(system, "stamp");
+		String logoFileName=returnFileName(system, "logo");
+		billSi.setStampFileName(stampFileName);
+		billSi.setLogoFileName(logoFileName);
+		int result = billDao.updateBillSi(billSi);
+		return result;
+	}
+	
+	@Override
+	public int updateBillSiItems(BillSiItemsRecieveDTO billSiItemsReciever) {
+		int result = billDao.updateBillSiItems(billSiItemsReciever);
+		return result;
+	}
+	
 	
 	
 }

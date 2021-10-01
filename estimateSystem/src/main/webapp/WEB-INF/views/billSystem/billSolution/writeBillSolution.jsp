@@ -66,12 +66,15 @@ if ( self !== top ) {
 		var estimateNum = '${estimateNum}';
 		var accountList = '${accountList}';
 		var companyList = '${companyList}';
+		companyList=companyList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
 		accountList=accountList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
-		console.log(accountList);
+		<c:if test="${copy != null}">
+			copy = '${copy}';
+			copy=copy.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
+		</c:if>
 		var repeat=12;
 
 		var userString = '${user}';
-		var user=JSON.parse(userString);
 		function SetOZParamters_OZViewer(){
 			
 			var oz;
@@ -80,6 +83,7 @@ if ( self !== top ) {
 			oz.sendToActionScript("viewer.external_functions_path","ozp://billSystem/billSolution/JS/billSolution.js");
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
 			oz.sendToActionScript("connection.reportname","billSystem/billSolution/writeBillSolution.ozr");
+			oz.sendToActionScript("connection.inputjson",copy);
 			oz.sendToActionScript("connection.pcount","9");
 			oz.sendToActionScript("connection.args1","repeat="+repeat);
 			oz.sendToActionScript("connection.args2","accountList="+accountList);

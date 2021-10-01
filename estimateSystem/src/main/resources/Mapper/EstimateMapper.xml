@@ -114,6 +114,36 @@
 			order by ${option}
 	</select>
 	
+	<select id="getEstimate" parameterType="systemDTO" resultType="systemDTO">
+		select d.state state, e.userNum userNum, s.systemName systemName from
+			${documentTypeName} e
+		join
+			documentMaster d
+		on
+			(e.documentNum = d.documentNum)
+		join
+			systemType s
+		on
+			(d.systemNum = s.systemNum)
+		where 
+			e.documentNum = #{documentNum}
+	</select>
+	
+	
+	<select id="getBillNum" parameterType="String" resultType="String">
+		select documentNum from estimateMaster where estimateNum = #{value}
+	</select>
+	
+	<delete id="deleteSheet" parameterType="systemDTO">
+		delete from documentMaster where documentNum = #{documentNum};
+	</delete>
+	
+	<insert id="testTest" parameterType="List">
+		insert into ${list[0].dbName}
+			(${list[1].colName}, ${list[2].colName}, ${list[3].colName} )
+			values(#{list[1].colVal}, #{list[2].colVal}, ${list[3].colVal})
+	</insert>
+	
 	
 	
 	
@@ -331,9 +361,7 @@
 	
 	
 	
-	
-	
-	<!-- estimateSolution -->
+<!-- estimateSolution -->
 	<insert id="insertEstimateSolution" parameterType="estimateSolutionDTO">
 		insert into documentMaster (
 			documentNum,
@@ -547,38 +575,379 @@
 
 
 
-
-
-
-
-	<select id="getEstimate" parameterType="systemDTO" resultType="systemDTO">
-		select d.state state, e.userNum userNum, s.systemName systemName from
-			${documentTypeName} e
-		join
-			documentMaster d
-		on
-			(e.documentNum = d.documentNum)
-		join
-			systemType s
-		on
-			(d.systemNum = s.systemNum)
-		where 
-			e.documentNum = #{documentNum}
-	</select>
-	
-	
-	<select id="getBillNum" parameterType="String" resultType="String">
-		select documentNum from estimateMaster where estimateNum = #{value}
-	</select>
-	
-	<delete id="deleteSheet" parameterType="systemDTO">
-		delete from documentMaster where documentNum = #{documentNum};
-	</delete>
-	
-	<insert id="testTest" parameterType="List">
-		insert into ${list[0].dbName}
-			(${list[1].colName}, ${list[2].colName}, ${list[3].colName} )
-			values(#{list[1].colVal}, #{list[2].colVal}, ${list[3].colVal})
+<!-- estimateLanguage -->
+	<insert id="insertEstimateLanguage" parameterType="estimateLanguageDTO">
+		insert into documentMaster (
+			documentNum,
+			systemNum,
+			documentTypeName,
+			nextDocumentTypeName,
+			userNum, userName, userDepartment, userPosition,
+			workflowNum,
+			state,
+			updateDate,
+			updater
+		)
+		values(
+			#{documentNum},
+			#{systemNum},
+			#{documentTypeName},
+			#{nextDocumentTypeName},
+			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
+			<choose>
+				<when test="workflowNum == 0">
+					null,
+				</when>
+				<when test="workflowNum != 0">
+					#{workflowNum},
+				</when>
+			</choose>
+			#{state},
+			CURRENT_TIMESTAMP,
+			#{updater}
+		);
+		
+		insert into estimateMaster(
+			documentNum,
+			receiver,
+			documentName
+		)
+		values(
+			#{documentNum},
+			#{receiver},
+			#{documentName}
+		);
+		
+		insert into estimateLanguage (
+			documentNum,
+			documentTypeName,
+			userNum, userName, userDepartment, userPosition,
+			estimateDate,
+			supplier,
+			address,
+			post,
+			phoneNumber,
+			representative,
+			stamp, stampFileName, logoFileName,
+			receiver,
+			documentName,
+			deadline,
+			expirationDate,
+			payCondition,
+			sum, discountName, discountRate, discount, tax, sumWithTax, sumWithTax2,
+			bankName,
+			branchName,
+			accountName,
+			hurigana,
+			accountNumber,
+			depositeClassification,
+			cautions,
+			comment
+		) 
+		values(
+			#{documentNum},
+			#{documentTypeName},
+			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
+			#{estimateDate},
+			#{supplier},
+			#{address},
+			#{post},
+			#{phoneNumber},
+			#{representative},
+			#{stamp}, #{stampFileName}, #{logoFileName},
+			#{receiver},
+			#{documentName},
+			#{deadline},
+			#{expirationDate},
+			#{payCondition},
+			#{sum}, #{discountName}, #{discountRate}, #{discount}, #{tax}, #{sumWithTax}, #{sumWithTax2},
+			#{bankName},
+			#{branchName},
+			#{accountName},
+			#{hurigana},
+			#{accountNumber},
+			#{depositeClassification},	
+			#{cautions},
+			#{comment}
+		)
 	</insert>
+	
+	<insert id="insertEstimateLanguageItems" parameterType="estimateLanguageItemsRecieveDTO">
+		insert into estimateLanguageItems (
+			documentNum,rowNum,itemName,amount,unitPrice,price
+		)
+		values
+		(#{documentNum},#{rowNum1},#{itemName1},${amount1},${unitPrice1},${price1}),
+		(#{documentNum},#{rowNum2},#{itemName2},${amount2},${unitPrice2},${price2}),
+		(#{documentNum},#{rowNum3},#{itemName3},${amount3},${unitPrice3},${price3}),
+		(#{documentNum},#{rowNum4},#{itemName4},${amount4},${unitPrice4},${price4}),
+		(#{documentNum},#{rowNum5},#{itemName5},${amount5},${unitPrice5},${price5})
+	</insert>
+	
+	<update id="updateEstimateLanguage" parameterType="estimateLanguageDTO">
+		update documentMaster set
+			userName = #{userName},
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where
+			documentNum = #{documentNum};
+			
+		update estimateLanguage set
+			userNum = #{userNum},
+			userName = #{userName},
+			userDepartment = #{userDepartment},
+			userPosition = #{userPosition},
+			estimateDate = #{estimateDate},
+			supplier = #{supplier},
+			address = #{address},
+			post = #{post},
+			phoneNumber = #{phoneNumber},
+			representative = #{representative},
+			stamp = #{stamp},
+			stampFileName = #{stampFileName},
+			logoFileName = #{logoFileName},
+			receiver = #{receiver},
+			documentName = #{documentName},
+			deadline = #{deadline},
+			expirationDate = #{expirationDate},
+			payCondition = #{payCondition},
+			cautions = #{cautions},
+			sum = #{sum},
+			discountName = #{discountName},
+			discountRate = #{discountRate},
+			discount = #{discount},
+			taxRate = #{taxRate},
+			tax = #{tax},
+			sumWithTax = #{sumWithTax},
+			sumWithTax2 = #{sumWithTax2},
+			bankName = #{bankName},
+			branchName = #{branchName},
+			accountName = #{accountName},
+			hurigana = #{hurigana},
+			accountNumber = #{accountNumber},
+			depositeClassification = #{depositeClassification},	
+			comment = #{comment},
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where
+			documentNum = #{documentNum}
+	</update>
+	
+	<update id="updateEstimateLanguageItems" parameterType="estimateLanguageItemsRecieveDTO">
+		update estimateLanguageItems set
+			itemName = #{itemName1}, amount = ${amount1}, unitPrice = ${unitPrice1}, price = ${price1}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum1};
+			
+		update estimateLanguageItems set
+			itemName = #{itemName2}, amount = ${amount2}, unitPrice = ${unitPrice2}, price = ${price2}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum2};
+			
+		update estimateLanguageItems set
+			itemName = #{itemName3}, amount = ${amount3}, unitPrice = ${unitPrice3}, price = ${price3}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum3};
+			
+		update estimateLanguageItems set
+			itemName = #{itemName4}, amount = ${amount4}, unitPrice = ${unitPrice4}, price = ${price4}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum4};
+			
+		update estimateLanguageItems set
+			itemName = #{itemName5}, amount = ${amount5}, unitPrice = ${unitPrice5}, price = ${price5}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum5};
+	</update>
+
+
+
+
+<!-- estimateSi -->
+	<insert id="insertEstimateSi" parameterType="estimateSiDTO">
+		insert into documentMaster (
+			documentNum,
+			systemNum,
+			documentTypeName,
+			nextDocumentTypeName,
+			userNum, userName, userDepartment, userPosition,
+			workflowNum,
+			state,
+			updateDate,
+			updater
+		)
+		values(
+			#{documentNum},
+			#{systemNum},
+			#{documentTypeName},
+			#{nextDocumentTypeName},
+			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
+			<choose>
+				<when test="workflowNum == 0">
+					null,
+				</when>
+				<when test="workflowNum != 0">
+					#{workflowNum},
+				</when>
+			</choose>
+			#{state},
+			CURRENT_TIMESTAMP,
+			#{updater}
+		);
+		
+		insert into estimateMaster(
+			documentNum,
+			receiver,
+			documentName
+		)
+		values(
+			#{documentNum},
+			#{receiver},
+			#{documentName}
+		);
+		
+		insert into estimateSi (
+			documentNum,
+			documentTypeName,
+			userNum, userName, userDepartment, userPosition,
+			estimateDate,
+			supplier,
+			address,
+			post,
+			phoneNumber,
+			representative,
+			stamp, stampFileName, logoFileName,
+			
+			receiver,
+			documentName,
+			workTime,
+			supplyment,
+			workPeriodStart,
+			workPeriodEnd,
+			workPlace,
+			contractType,
+			expirationDate,
+			payCondition,
+			requestNum,
+			
+			sumWithTax, sumWithTax2,
+			cautions,
+			comment
+		) 
+		values(
+			#{documentNum},
+			#{documentTypeName},
+			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
+			#{estimateDate},
+			#{supplier},
+			#{address},
+			#{post},
+			#{phoneNumber},
+			#{representative},
+			#{stamp}, #{stampFileName}, #{logoFileName},
+			
+			#{receiver},
+			#{documentName},
+			#{workTime},
+			#{supplyment},
+			#{workPeriodStart},
+			#{workPeriodEnd},
+			#{workPlace},
+			#{contractType},
+			#{expirationDate},
+			#{payCondition},
+			#{requestNum},
+			
+			#{sumWithTax}, #{sumWithTax2},
+			#{cautions},
+			#{comment}
+		)
+	</insert>
+	
+	<insert id="insertEstimateSiItems" parameterType="estimateSiItemsRecieveDTO">
+		insert into estimateSiItems (
+			documentNum,rowNum,item,itemName,workStart,workEnd,unitPrice,manMonth,price
+		)
+		values
+		(#{documentNum},#{rowNum1},#{item1},#{itemName1},#{workStart1},#{workEnd1},${unitPrice1},${manMonth1},${price1}),
+		(#{documentNum},#{rowNum2},#{item2},#{itemName2},#{workStart2},#{workEnd2},${unitPrice2},${manMonth2},${price2}),
+		(#{documentNum},#{rowNum3},#{item3},#{itemName3},#{workStart3},#{workEnd3},${unitPrice3},${manMonth3},${price3}),
+		(#{documentNum},#{rowNum4},#{item4},#{itemName4},#{workStart4},#{workEnd4},${unitPrice4},${manMonth4},${price4}),
+		(#{documentNum},#{rowNum5},#{item5},#{itemName5},#{workStart5},#{workEnd5},${unitPrice5},${manMonth5},${price5})
+	</insert>
+	
+	<update id="updateEstimateSi" parameterType="estimateSiDTO">
+		update documentMaster set
+			userName = #{userName},
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where
+			documentNum = #{documentNum};
+			
+		update estimateSi set
+			userNum = #{userNum},
+			userName = #{userName},
+			userDepartment = #{userDepartment},
+			userPosition = #{userPosition},
+			estimateDate = #{estimateDate},
+			supplier = #{supplier},
+			address = #{address},
+			post = #{post},
+			phoneNumber = #{phoneNumber},
+			representative = #{representative},
+			stamp = #{stamp},
+			stampFileName = #{stampFileName},
+			logoFileName = #{logoFileName},
+			
+			receiver = #{receiver},
+			documentName = #{documentName},
+			workTime = #{workTime},
+			supplyment = #{supplyment},
+			workPeriodStart = #{workPeriodStart},
+			workPeriodEnd = #{workPeriodEnd},
+			workPlace = #{workPlace},
+			contractType = #{contractType},
+			expirationDate = #{expirationDate},
+			payCondition = #{payCondition},
+			requestNum = #{requestNum},
+			
+			cautions = #{cautions},
+			sumWithTax = #{sumWithTax},
+			sumWithTax2 = #{sumWithTax2},
+			comment = #{comment},
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where
+			documentNum = #{documentNum}
+	</update>
+	
+	<update id="updateEstimateSiItems" parameterType="estimateSiItemsRecieveDTO">
+		update estimateSiItems set
+			item = #{item1}, itemName = #{itemName1}, workStart = #{workStart1}, workEnd = #{workEnd1}, manMonth = ${manMonth1}, unitPrice = ${unitPrice1}, price = ${price1}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum1};
+			
+		update estimateSiItems set
+			item = #{item2}, itemName = #{itemName2}, workStart = #{workStart2}, workEnd = #{workEnd2}, manMonth = ${manMonth2}, unitPrice = ${unitPrice2}, price = ${price2}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum2};
+			
+		update estimateSiItems set
+			item = #{item3}, itemName = #{itemName3}, workStart = #{workStart3}, workEnd = #{workEnd3}, manMonth = ${manMonth3}, unitPrice = ${unitPrice3}, price = ${price3}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum3};
+			
+		update estimateSiItems set
+			item = #{item4}, itemName = #{itemName4}, workStart = #{workStart4}, workEnd = #{workEnd4}, manMonth = ${manMonth4}, unitPrice = ${unitPrice4}, price = ${price4}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum4};
+			
+		update estimateSiItems set
+			item = #{item5}, itemName = #{itemName5}, workStart = #{workStart5}, workEnd = #{workEnd5}, manMonth = ${manMonth5}, unitPrice = ${unitPrice5}, price = ${price5}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum5};
+	</update>
+
+	
 	
 </mapper>

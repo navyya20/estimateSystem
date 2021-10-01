@@ -65,7 +65,10 @@ if ( self !== top ) {
 	<script type="text/javascript" >
 		var companyList = '${companyList}';
 		companyList=companyList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
-
+		<c:if test="${copy != null}">
+			copy = '${copy}';
+			copy=copy.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
+		</c:if>
 		var repeat=12;
 
 		var userString = '${user}';
@@ -79,7 +82,7 @@ if ( self !== top ) {
 			oz.sendToActionScript("viewer.external_functions_path","ozp://estimateSystem/estimateSheet1/JS/estimateSheet1.js");
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
 			oz.sendToActionScript("connection.reportname","estimateSystem/estimateSheet1/writeEstimateSheet1.ozr");
-			oz.sendToActionScript("connection.inputjson",'${copy}');
+			oz.sendToActionScript("connection.inputjson",copy);
 			oz.sendToActionScript("global.language", "ja_JP");
 			oz.sendToActionScript("connection.pcount","7");
 			oz.sendToActionScript("connection.args1","repeat="+repeat);
@@ -126,7 +129,7 @@ if ( self !== top ) {
 			inputJson["sumWithTax"] = inputJson["sumWithTax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax2"] = inputJson["sumWithTax2"].replace(/,/gi, "").replace(/￥/gi, "");
 			for(i=1 ; i<=repeat ; i++){
-				inputJson["unitPrice"+i] =inputJson["unitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");
+				inputJson["unitPrice"+i] = inputJson["unitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");
 				inputJson["price"+i] = inputJson["price"+i].replace(/,/gi, "").replace(/￥/gi, "");				
 				inputJson["amount"+i] = inputJson["amount"+i].replace(/,/gi, "").replace(/￥/gi, "");
 				if(inputJson["amount"+i]==""){inputJson["amount"+i]="null"}

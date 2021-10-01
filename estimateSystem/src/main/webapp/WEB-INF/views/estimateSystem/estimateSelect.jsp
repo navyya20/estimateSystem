@@ -32,9 +32,42 @@ if ( self !== top ) {
 	<header class="mb-3">
 		<jsp:include page="../menubar.jsp"></jsp:include>
 	</header>
-	<div onclick="location.href='writeEstimateSheet1'">estimateSheet1</div>
-	<div onclick="location.href='writeEstimateSolution'">estimateSolution</div>
-	<div></div>
+	<div class="p-0 container-lg">
+		<div  class="p-0 d-flex flex-wrap justify-content-center">
+			<div class="card" style="width: 17rem;">
+				<img src="../resources/img/estimateSheet1.jpg" class="card-img-top" alt="...">
+				<div class="card-body">
+					<p class="card-text">汎用見積書・請求書セット</p>
+					<a href="writeEstimateSheet1" class="btn btn-primary">新規作成</a>
+				</div>
+			</div>
+			
+			<div class="card" style="width: 17rem;">
+				<img src="../resources/img/estimateSolution.jpg" class="card-img-top" alt="...">
+				<div class="card-body">
+					<p class="card-text">ソールショーン事業部用セット</p>
+					<a href="writeEstimateSolution" class="btn btn-primary">新規作成</a>
+				</div>
+			</div>
+			
+			<div class="card" style="width: 17rem;">
+				<img src="../resources/img/estimateLanguage.jpg" class="card-img-top" alt="...">
+				<div class="card-body">
+					<p class="card-text">語学事業部用</p>
+					<a href="writeEstimateLanguage" class="btn btn-primary">新規作成</a>
+				</div>
+			</div>
+			
+			<div class="card" style="width: 17rem;">
+				<img src="../resources/img/estimateLanguage.jpg" class="card-img-top" alt="...">
+				<div class="card-body">
+					<p class="card-text">SI事業部用</p>
+					<a href="writeEstimateSi" class="btn btn-primary">新規作成</a>
+				</div>
+			</div>
+			
+		</div>
+	</div>
 	
 </body>
 </html>

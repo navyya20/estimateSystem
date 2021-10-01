@@ -12,9 +12,13 @@ import org.springframework.ui.Model;
 import jp.co.interline.dao.EstimateDAO;
 import jp.co.interline.dao.SystemDAO;
 import jp.co.interline.dao.WorkflowDAO;
+import jp.co.interline.dto.EstimateLanguageDTO;
+import jp.co.interline.dto.EstimateLanguageItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.EstimateSheet1DTO;
 import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
+import jp.co.interline.dto.EstimateSiDTO;
+import jp.co.interline.dto.EstimateSiItemsRecieveDTO;
 import jp.co.interline.dto.EstimateSolutionDTO;
 import jp.co.interline.dto.EstimateSolutionItemsRecieveDTO;
 import jp.co.interline.dto.SystemDTO;
@@ -151,8 +155,7 @@ public class EstimateServiceImpl implements EstimateService {
 		return "";
 	}
 
-	
-	
+/////////////////////////////////EstimateSolution//////////////////////////////////////////////////
 	@Override
 	public int insertEstimateSolution(EstimateSolutionDTO estimateSolution) {
 		ArrayList<SystemDTO> system = systemDao.getFileNames();
@@ -187,7 +190,85 @@ public class EstimateServiceImpl implements EstimateService {
 		return result;
 	}
 
+//-------------------------------------------------------------------------------------------------------	
+
 	
 	
 	
+/////////////////////////////////EstimateLanguage//////////////////////////////////////////////////
+	@Override
+	public int insertEstimateLanguage(EstimateLanguageDTO estimateLanguage) {
+		ArrayList<SystemDTO> system = systemDao.getFileNames();
+		String stampFileName=returnFileName(system, "stamp");
+		String logoFileName=returnFileName(system, "logo");
+		estimateLanguage.setStampFileName(stampFileName);
+		estimateLanguage.setLogoFileName(logoFileName);
+		int result = estimateDao.insertEstimateLanguage(estimateLanguage);
+		return result;
+	}
+
+	@Override
+	public int insertEstimateLanguageItems(EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever) {
+		int result = estimateDao.insertEstimateLanguageItems(estimateLanguageItemsReciever);
+		return result;
+	}
+
+	@Override
+	public int updateEstimateLanguage(EstimateLanguageDTO estimateLanguage) {
+		ArrayList<SystemDTO> system = systemDao.getFileNames();
+		String stampFileName=returnFileName(system, "stamp");
+		String logoFileName=returnFileName(system, "logo");
+		estimateLanguage.setStampFileName(stampFileName);
+		estimateLanguage.setLogoFileName(logoFileName);
+		int result = estimateDao.updateEstimateLanguage(estimateLanguage);
+		return result;
+	}
+
+	@Override
+	public int updateEstimateLanguageItems(EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever) {
+		int result = estimateDao.updateEstimateLanguageItems(estimateLanguageItemsReciever);
+		return result;
+	}
+//-------------------------------------------------------------------------------------------------------	
+
+	
+	
+	
+	
+/////////////////////////////////EstimateSi//////////////////////////////////////////////////
+	@Override
+	public int insertEstimateSi(EstimateSiDTO estimateSi) {
+		ArrayList<SystemDTO> system = systemDao.getFileNames();
+		String stampFileName=returnFileName(system, "stamp");
+		String logoFileName=returnFileName(system, "logo");
+		estimateSi.setStampFileName(stampFileName);
+		estimateSi.setLogoFileName(logoFileName);
+		int result = estimateDao.insertEstimateSi(estimateSi);
+		return result;
+	}
+
+	@Override
+	public int insertEstimateSiItems(EstimateSiItemsRecieveDTO estimateSiItemsReciever) {
+		int result = estimateDao.insertEstimateSiItems(estimateSiItemsReciever);
+		return result;
+	}
+
+	@Override
+	public int updateEstimateSi(EstimateSiDTO estimateSi) {
+		ArrayList<SystemDTO> system = systemDao.getFileNames();
+		String stampFileName=returnFileName(system, "stamp");
+		String logoFileName=returnFileName(system, "logo");
+		estimateSi.setStampFileName(stampFileName);
+		estimateSi.setLogoFileName(logoFileName);
+		int result = estimateDao.updateEstimateSi(estimateSi);
+		return result;
+	}
+
+	@Override
+	public int updateEstimateSiItems(EstimateSiItemsRecieveDTO estimateSiItemsReciever) {
+		int result = estimateDao.updateEstimateSiItems(estimateSiItemsReciever);
+		return result;
+	}
+//-------------------------------------------------------------------------------------------------------	
+
 }

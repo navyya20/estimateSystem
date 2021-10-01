@@ -70,6 +70,7 @@ if ( self !== top ) {
 	<script type="text/javascript" >
 		var accountList = '${accountList}';
 		var companyList = '${companyList}';
+		companyList=companyList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
 		accountList=accountList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
 		var repeat=12;
 

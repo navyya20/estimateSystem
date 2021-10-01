@@ -72,11 +72,13 @@ if ( self !== top ) {
 
 <body class="body" style="height: 100%;">
 <div style="position: absolute; left: 0;top: 0;">
-	20210617.ver=1<br>
-	20210622.ver=2<br>
-	20210623.ver=3<br>
-	20210625.ver=4<br>
-	20210628.ver=5<br>
+	20210617.ver1<br>
+	20210622.ver2(DB構造変更)<br>
+	20210623.ver3<br>
+	20210625.ver4<br>
+	20210628.ver5<br>
+	20210709.ver6(ソールショーン事業部用書式追加)<br>
+	20210712.ver7(語学事業部用書式追加)<br>
 </div>
 	<div class="row align-items-center col-12 p-0 m-0" style="height: 100%;">
 		<div id="login_div" class="d-flex justify-content-center col-12 p-0">

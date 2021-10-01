@@ -65,7 +65,10 @@ if ( self !== top ) {
 	<script type="text/javascript" >
 		var companyList = '${companyList}';
 		companyList=companyList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
-
+		<c:if test="${copy != null}">
+			copy = '${copy}';
+			copy=copy.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
+		</c:if>
 		var repeat=12;
 
 		var userString = '${user}';
@@ -79,7 +82,7 @@ if ( self !== top ) {
 			oz.sendToActionScript("viewer.external_functions_path","ozp://estimateSystem/estimateSolution/JS/estimateSolution.js");
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
 			oz.sendToActionScript("connection.reportname","estimateSystem/estimateSolution/writeEstimateSolution.ozr");
-			oz.sendToActionScript("connection.inputjson",'${copy}');
+			oz.sendToActionScript("connection.inputjson",copy);
 			oz.sendToActionScript("global.language", "ja_JP");
 			oz.sendToActionScript("connection.pcount","7");
 			oz.sendToActionScript("connection.args1","repeat="+repeat);

@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 
 import jp.co.interline.dto.BillSheet1DTO;
 import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
+import jp.co.interline.dto.BillSiDTO;
+import jp.co.interline.dto.BillSiItemsRecieveDTO;
 import jp.co.interline.dto.BillSolutionDTO;
 import jp.co.interline.dto.BillSolutionItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
@@ -39,6 +41,14 @@ public interface BillService {
 	int updateBillSolution(BillSolutionDTO billSolution);
 
 	int updateBillSolutionItems(BillSolutionItemsRecieveDTO billSolutionItemsReciever);
+
+	int insertBillSi(BillSiDTO billSi);
+
+	int insertBillSiItems(BillSiItemsRecieveDTO billSiItemsReciever);
+
+	int updateBillSi(BillSiDTO billSi);
+
+	int updateBillSiItems(BillSiItemsRecieveDTO billSiItemsReciever);
 
 
 	

@@ -4,9 +4,13 @@ import java.util.ArrayList;
 
 import org.springframework.ui.Model;
 
+import jp.co.interline.dto.EstimateLanguageDTO;
+import jp.co.interline.dto.EstimateLanguageItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.EstimateSheet1DTO;
 import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
+import jp.co.interline.dto.EstimateSiDTO;
+import jp.co.interline.dto.EstimateSiItemsRecieveDTO;
 import jp.co.interline.dto.EstimateSolutionDTO;
 import jp.co.interline.dto.EstimateSolutionItemsRecieveDTO;
 import jp.co.interline.dto.SystemDTO;
@@ -41,5 +45,21 @@ public interface EstimateService {
 	int updateEstimateSolution(EstimateSolutionDTO estimateSolution);
 
 	int updateEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever);
+
+	int insertEstimateLanguage(EstimateLanguageDTO estimateLanguage);
+
+	int insertEstimateLanguageItems(EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever);
+
+	int updateEstimateLanguage(EstimateLanguageDTO estimateLanguage);
+
+	int updateEstimateLanguageItems(EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever);
+
+	int insertEstimateSi(EstimateSiDTO estimateSi);
+
+	int insertEstimateSiItems(EstimateSiItemsRecieveDTO estimateSiItemsReciever);
+
+	int updateEstimateSi(EstimateSiDTO estimateSi);
+
+	int updateEstimateSiItems(EstimateSiItemsRecieveDTO estimateSiItemsReciever);
 
 }
