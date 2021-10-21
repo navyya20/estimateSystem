@@ -52,13 +52,13 @@ if ( self !== top ) {
 	<!--buttons -->
 	<div class="p-0 d-flex col-12">
 		<div class="pl-2 pr-2 d-flex col-4">
-			<button type="button" class="col-12 btn btn-secondary" onclick="saveButton('wri')">臨時格納</button>
+			<button type="button" class="col-12 btn btn-secondary" onclick="saveButton('wri')">一時保存</button>
 		</div>
 		<div class="pl-2 pr-2 d-flex col-4">
 			<button type="button" class="col-12 btn btn-secondary" onclick="saveAndRequestButton('wri')">承認依頼</button>
 		</div>
 		<div class="pl-2 pr-2 d-flex col-4">
-			<button type="button" class="col-12 btn btn-secondary" onclick="location.href='estimateList'">戻り</button>
+			<button type="button" class="col-12 btn btn-secondary" onclick="location.href='billList'">キャンセル</button>
 		</div>
 	</div>	
 
@@ -68,6 +68,7 @@ if ( self !== top ) {
 		var companyList = '${companyList}';
 		companyList=companyList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
 		accountList=accountList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
+		var copy = "";
 		<c:if test="${copy != null}">
 			copy = '${copy}';
 			copy=copy.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
@@ -75,6 +76,8 @@ if ( self !== top ) {
 		var repeat=12;
 
 		var userString = '${user}';
+		var user=JSON.parse(userString);
+		
 		function SetOZParamters_OZViewer(){
 			
 			var oz;

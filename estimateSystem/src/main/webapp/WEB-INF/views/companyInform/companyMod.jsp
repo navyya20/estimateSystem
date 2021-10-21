@@ -85,11 +85,16 @@ function deleteCompany(){
 	<header class="mb-3">
 		<jsp:include page="../menubar.jsp"></jsp:include>
 	</header>
-	<div class="row align-items-center col-12 p-0 m-0" style="height: 80%;">
-		<div id="login_div" class="d-flex justify-content-center col-12 p-0">
-			<form class="col-12 d-flex justify-content-center" id="updateCompany" action="updateCompany" method="post" accept-charset="utf-8">
+	
+	<div class="p-0 mb-3 col-12 container-xl text-center font-weight-bold">
+		自社情報修正
+	</div>
+	
+	<div class="row align-items-center col-12 p-0 m-0">
+		<div class="d-flex justify-content-center col-12 p-0">
+			<form class="col-12 d-flex justify-content-center p-0" id="updateCompany" action="updateCompany" method="post" accept-charset="utf-8">
 				<input type="hidden" id="companyInformNum" name="companyInformNum" value="${company.companyInformNum}">
-				<div class="d-flex flex-column col-10 col-md-6">
+				<div class="d-flex flex-column col-10 col-md-6 p-0">
 					<!-- companyInformName -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
@@ -119,7 +124,7 @@ function deleteCompany(){
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="phoneNumber" id="inputGroup-sizing-default">電話番号</label>
 						</div>
-						<input type="text" class="pl-2 pr-0 col-8 form-control" id="phoneNumber" name="phoneNumber" maxlength="13" value="${company.phoneNumber}">
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="phoneNumber" name="phoneNumber" maxlength="20" value="${company.phoneNumber}">
 					</div>
 					<!-- address -->
 					<div class="input-group">
@@ -144,25 +149,24 @@ function deleteCompany(){
 						</div>
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="email" name="email" maxlength="40" value="${company.email}">
 					</div>
-					
-					
-					
-					
-					<div class="d-block" style="height: 8px;"></div>
-					
-					<!-- update button -->
-					<div class="p-0 d-flex col-12">
-						<div class="pl-2 pr-2 d-flex col-6">
-							<button type="button" class="col-12 btn btn-secondary" onclick="updateCompany()">更新</button>
-						</div>
-						<div class="pl-2 pr-2 d-flex col-6">
-							<button type="button" class="col-12 btn btn-secondary" onclick="deleteCompany()">削除</button>
-						</div>
-					</div>
+					<div class="d-block" style="height: 12px;"></div>
 				</div>
 			</form>
 		</div>
 	</div>
+	
+	<!-- update button -->
+	<div class="row d-flex justify-content-center col-12 p-0 m-0">
+		<div class="p-0 d-flex col-10 col-md-6">
+			<div class="pl-2 pr-2 d-flex col-6">
+				<button type="button" class="col-12 btn btn-secondary" onclick="updateCompany()">更新</button>
+			</div>
+			<div class="pl-2 pr-2 d-flex col-6">
+				<button type="button" class="col-12 btn btn-secondary" onclick="deleteCompany()">削除</button>
+			</div>
+		</div>
+	</div>
+	
 	<form id="deleteCompany" action="deleteCompany" method="post" accept-charset="utf-8">
 		<input type="hidden" name="companyInformNum" value="${company.companyInformNum}">
 	</form>

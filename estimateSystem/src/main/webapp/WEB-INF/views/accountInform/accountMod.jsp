@@ -83,11 +83,14 @@ function deleteAccount(){
 	<header class="mb-3">
 		<jsp:include page="../menubar.jsp"></jsp:include>
 	</header>
-	<div class="row align-items-center col-12 p-0 m-0" style="height: 80%;">
+	<div class="p-0 mb-3 col-12 container-xl text-center font-weight-bold">
+		口座情報修正
+	</div>
+	<div class="row align-items-center col-12 p-0 m-0">
 		<div id="login_div" class="d-flex justify-content-center col-12 p-0">
-			<form class="col-12 d-flex justify-content-center" id="updateAccount" action="updateAccount" method="post" accept-charset="utf-8">
+			<form class="col-12 d-flex justify-content-center p-0" id="updateAccount" action="updateAccount" method="post" accept-charset="utf-8">
 				<input type="hidden" id="accountInformNum" name="accountInformNum" value="${account.accountInformNum}">
-				<div class="d-flex flex-column col-10 col-md-6">
+				<div class="d-flex flex-column col-10 col-md-6 p-0">
 					<!-- accountInformName -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
@@ -143,21 +146,27 @@ function deleteAccount(){
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="hurigana" name="hurigana" value="${account.hurigana}" maxlength="30">
 					</div>
 					
-					<div class="d-block" style="height: 8px;"></div>
+					<div class="d-block" style="height: 12px;"></div>
 					
-					<!-- update button -->
-					<div class="p-0 d-flex col-12">
-						<div class="pl-2 pr-2 d-flex col-6">
-							<button type="button" class="col-12 btn btn-secondary" onclick="updateAccount()">更新</button>
-						</div>
-						<div class="pl-2 pr-2 d-flex col-6">
-							<button type="button" class="col-12 btn btn-secondary" onclick="deleteAccount()">削除</button>
-						</div>
-					</div>
 				</div>
 			</form>
 		</div>
 	</div>
+	
+	<!-- update button -->
+	<div class="row d-flex justify-content-center col-12 p-0 m-0">
+		<div class="p-0 d-flex col-10 col-md-6">
+			<div class="p-0 d-flex col-12">
+				<div class="pl-2 pr-2 d-flex col-6">
+					<button type="button" class="col-12 btn btn-secondary" onclick="updateAccount()">更新</button>
+				</div>
+				<div class="pl-2 pr-2 d-flex col-6">
+					<button type="button" class="col-12 btn btn-secondary" onclick="deleteAccount()">削除</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	<form id="deleteAccount" action="deleteAccount" method="post" accept-charset="utf-8">
 		<input type="hidden" name="accountInformNum" value="${account.accountInformNum}">
 	</form>

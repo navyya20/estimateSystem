@@ -12,7 +12,7 @@
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../css/common/common.css">
 <script src="../js/bootstrap.bundle.js"></script>
-	<title>Login</title>
+	<title>WorkFlow</title>
 <style type="text/css">
 </style>
 <script>
@@ -64,14 +64,19 @@ function saveApprover(){
 	<header class="mb-3">
 		<jsp:include page="../menubar.jsp"></jsp:include>
 	</header>
-	<div class="row align-items-center col-12 p-0 m-0" style="height: 80%;">
+	
+	<div class="p-0 mb-3 col-12 container-xl text-center font-weight-bold">
+		ワークフロー設定
+	</div>
+	
+	<div class="row col-12 p-0 m-0" style="height: 80%;">
 		<div id="login_div" class="d-flex justify-content-center col-12 p-0">
 			<form class="col-12 d-flex justify-content-center" id="insertUser" action="insertUser" method="post" accept-charset="utf-8">
 				<div class="d-flex flex-column col-10 col-md-6">
 				
 					<!-- estimateSystem -->
 					<!-- 3명까지 선택가능 하나 현제 요구사항이 1명지정이므로 나머지 2명에대한 항목은 d-none옵션으로 보이지 않게 했음. d-none만 풀어주면 최대 3명짜리로 작동가능 -->
-					<div class="col-12">見積書</div>
+					<div class="mt-3 pl-3">見積書</div>
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="approver1" id="inputGroup-sizing-default">承認者1</label>
@@ -95,7 +100,7 @@ function saveApprover(){
 					
 					<!-- billSystem -->
 					<!-- 3명까지 선택가능 하나 현제 요구사항이 1명지정이므로 나머지 2명에대한 항목은 d-none옵션으로 보이지 않게 했음. d-none만 풀어주면 최대 3명짜리로 작동가능 -->
-					<div class="col-12">請求書</div>
+					<div class="mt-3 pl-3">請求書</div>
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="approver1" id="inputGroup-sizing-default">承認者1</label>
@@ -124,7 +129,7 @@ function saveApprover(){
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+								<h5 class="modal-title" id="exampleModalLabel">承認者選択</h5>
 								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 									<span aria-hidden="true">&times;</span>
 								</button>

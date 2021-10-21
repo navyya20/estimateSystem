@@ -142,7 +142,7 @@ function rejectButton(){
 			</c:if>
 		</div>
 		<div class="pl-2 pr-2 d-flex col-3">
-			<button type="button" class="col-12 mr-2 ml-2 btn btn-secondary" onclick="location.href='estimateList'">戻り</button>
+			<button type="button" class="col-12 mr-2 ml-2 btn btn-secondary" onclick="location.href='estimateList'">戻る</button>
 		</div>
 	</div>	
 

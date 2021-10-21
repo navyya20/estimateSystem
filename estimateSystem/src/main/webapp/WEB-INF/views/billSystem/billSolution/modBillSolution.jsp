@@ -54,7 +54,7 @@ if ( self !== top ) {
 	<!--buttons -->
 	<div class="p-0 d-flex col-12">
 		<div class="pl-2 pr-2 d-flex col-4">
-			<button type="button" class="col-12 btn btn-secondary" onclick="saveButton('${state}')">臨時格納</button>
+			<button type="button" class="col-12 btn btn-secondary" onclick="saveButton('${state}')">一時保存</button>
 		</div>
 		<div class="pl-2 pr-2 d-flex col-4">
 			<c:if test="${state eq 'wri' and userNum eq userInform.userNum}">
@@ -62,7 +62,7 @@ if ( self !== top ) {
 			</c:if>
 		</div>
 		<div class="pl-2 pr-2 d-flex col-4">
-			<button type="button" class="col-12 btn btn-secondary" onclick="location.href='estimateList'">戻り</button>
+			<button type="button" class="col-12 btn btn-secondary" onclick="location.href='estimateList'">キャンセル</button>
 		</div>
 		
 	</div>	

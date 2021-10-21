@@ -83,6 +83,11 @@ function insertCompany(){
 	<header class="mb-3">
 		<jsp:include page="../menubar.jsp"></jsp:include>
 	</header>
+	
+	<div class="p-0 mb-3 col-12 container-xl text-center font-weight-bold">
+		自社情報登録
+	</div>
+	
 	<div class="row align-items-center col-12 p-0 m-0" style="height: 80%;">
 		<div id="login_div" class="d-flex justify-content-center col-12 p-0">
 			<form class="col-12 d-flex justify-content-center" id="insertCompany" action="insertCompany" method="post" accept-charset="utf-8">

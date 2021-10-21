@@ -147,6 +147,9 @@ function sort(option){
 	<header class="mb-3">
 		<jsp:include page="../menubar.jsp"></jsp:include>
 	</header>
+	<div class="p-0 mb-3 col-12 container-xl text-center font-weight-bold">
+		見積書リスト
+	</div>
 	<div class="p-0 container-xl">
 		※「保存日時」labelを　「クリック時→降順」　「ダブルクリック時→昇順」　整列
 	</div>
@@ -173,7 +176,7 @@ function sort(option){
 				<div class="col-12 p-0 m-0 text-center">見積書</div>
   				<div class="col-12 row p-0 m-0">
   					<div class="col-3 col-md-2 p-0 m-0">文書番号</div>
-  					<div class="col-0 col-md-2 p-0 m-0 d-none d-md-inline">客名</div>
+  					<div class="col-0 col-md-2 p-0 m-0 d-none d-md-inline">顧客名</div>
   					<div class="col-3 col-md-2 p-0 m-0">件名</div>
   					<div class="col-3 col-md-2 p-0 m-0" id="eDOTupdateDate" onclick="startClick(this);">保存日時</div>
   					<div class="col-2 col-md-1 p-0 m-0">状態</div>

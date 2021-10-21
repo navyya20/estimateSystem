@@ -34,6 +34,7 @@ if ( self !== top ) {
 	</header>
 	<div class="p-0 container-lg">
 		<div  class="p-0 d-flex flex-wrap justify-content-center">
+			<!-- 
 			<div class="card" style="width: 17rem;">
 				<img src="../resources/img/billSheet1.jpg" class="card-img-top" alt="...">
 				<div class="card-body">
@@ -41,6 +42,7 @@ if ( self !== top ) {
 					<a href="writeBillSheet1" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>
+			 -->
 			
 			<div class="card" style="width: 17rem;">
 				<img src="../resources/img/billSolution.jpg" class="card-img-top" alt="...">

@@ -718,17 +718,6 @@ ALTER TABLE workflow
 
 INSERT INTO masterSeq VALUES (0, 'estimateSeq');
 INSERT INTO masterSeq VALUES (0, 'billSeq');
-
-
-CREATE EVENT IF NOT EXISTS setSeqZero
-    ON SCHEDULE
-           EVERY 1 DAY
-           STARTS '2021-06-16 23:59:59'
-    ON COMPLETION NOT PRESERVE
-    ENABLE
-    COMMENT 'setSeqZero'
-    DO 
-	update materSeq set id = 0;
     
 
 DROP FUNCTION IF EXISTS getSeq;  /*혹시 이미 만들어져 있다면 삭제합니다.*/
@@ -1070,6 +1059,14 @@ ALTER TABLE billSiItems
 ;
 
 
-
+CREATE EVENT IF NOT EXISTS setSeqZero
+    ON SCHEDULE
+           EVERY 1 DAY
+           STARTS '2021-06-16 23:59:59'
+    ON COMPLETION NOT PRESERVE
+    ENABLE
+    COMMENT 'setSeqZero'
+    DO 
+	update masterSeq set id = 0;
 
 

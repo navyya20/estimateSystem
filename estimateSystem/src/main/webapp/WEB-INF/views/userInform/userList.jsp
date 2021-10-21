@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 
 <!DOCTYPE html>
 <html style="height: 100%;">
@@ -35,6 +36,10 @@ function goToUserMod(userNum){
 		<jsp:include page="../menubar.jsp"></jsp:include>
 	</header>
 	
+	<div class="p-0 mb-3 col-12 container-xl text-center font-weight-bold">
+		ユーザリスト
+	</div>
+	
 	<!-- 퀀한 검사로 sa만 보이도록 -->
 	<div class="p-0 container-lg">
 		<div class="p-0 d-flex">
@@ -60,7 +65,7 @@ function goToUserMod(userNum){
 				<div class="mt-2 mb-2 col-md-3 p-0 text-center d-none d-md-inline">電話番号</div>
 				<div class="mt-2 mb-2 col-md-1 p-0 text-center d-none d-md-inline">権限</div>
 				<div class="mt-2 mb-2 col-md-3 p-0 text-center d-none d-md-inline">Email</div>
-				<div class="mt-2 mb-2 col-md-2 p-0 text-center d-none d-md-inline">最近接続</div>
+				<div class="mt-2 mb-2 col-md-2 p-0 text-center d-none d-md-inline">前回ログイン</div>
 				<div class="mt-2 mb-2 col-md-2 p-0 text-center d-none d-md-inline">作成日</div>
 			</div>
 		</div>
@@ -85,8 +90,12 @@ function goToUserMod(userNum){
 						</c:choose>  
 					</div>
 					<div class="col-md-3 p-0 text-center align-self-center d-none d-md-inline">${user.email}</div>
-					<div class="col-md-2 p-0 text-center align-self-center d-none d-md-inline">${user.loginDate}</div>
-					<div class="col-md-2 p-0 text-center align-self-center d-none d-md-inline">${user.insertDate}</div>
+					<div class="col-md-2 p-0 text-center align-self-center d-none d-md-inline">
+						<fmt:parseDate value="${user.loginDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd HH:mm:ss"/>
+					</div>
+					<div class="col-md-2 p-0 text-center align-self-center d-none d-md-inline">
+						<fmt:parseDate value="${user.insertDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd HH:mm:ss"/>
+					</div>
 				</div>
 			</div>
 		</div>
