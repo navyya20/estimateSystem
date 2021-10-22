@@ -70,7 +70,7 @@ if ( self !== top ) {
 		companyList=companyList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
 		accountList=accountList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
 
-		var repeat=12;
+		var repeat=5;
 
 		var userString = '${user}';
 		var user=JSON.parse(userString);

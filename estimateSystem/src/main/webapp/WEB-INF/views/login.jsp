@@ -80,6 +80,7 @@ if ( self !== top ) {
 	20210709.ver6(ソールショーン事業部用書式追加)<br>
 	20210712.ver7(語学事業部用書式追加)<br>
 	20211021.ver8(改善点26、33、34、35、36、37、38反映)
+	20211022.ver9(改善点28反映)
 </div>
 	<div class="row align-items-center col-12 p-0 m-0" style="height: 100%;">
 		<div id="login_div" class="d-flex justify-content-center col-12 p-0">
