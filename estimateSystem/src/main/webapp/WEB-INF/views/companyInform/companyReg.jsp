@@ -55,15 +55,10 @@ function insertCompany(){
 	var address = $("#address").val();
 	var post = $("#post").val();
 	var email = $("#email").val();
-	console.log(companyInformName);
-	console.log(companyName);
-	console.log(representative);
-	console.log(phoneNumber);
-	console.log(address);
-	console.log(post);
-	console.log(email);
+	var incharge = $("#incharge").val();
+
 	if(companyInformName=""){
-		alert("会社情報名を入力してください。情報同士に区別するためです。");
+		alert("会社情報名を入力してください。");
 		$("#companyInformName").focus();
 		return;
 	}
@@ -88,7 +83,7 @@ function insertCompany(){
 		自社情報登録
 	</div>
 	
-	<div class="row align-items-center col-12 p-0 m-0" style="height: 80%;">
+	<div class="row align-items-center col-12 p-0 m-0">
 		<div id="login_div" class="d-flex justify-content-center col-12 p-0">
 			<form class="col-12 d-flex justify-content-center" id="insertCompany" action="insertCompany" method="post" accept-charset="utf-8">
 				<div class="d-flex flex-column col-10 col-md-6">
@@ -108,12 +103,20 @@ function insertCompany(){
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="companyName" name="companyName" maxlength="40">
 					</div>
 					
-					<!-- representative -->
+					<!-- post -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
-							<label class="col-12 input-group-text d-flex justify-content-center" for="representative" id="inputGroup-sizing-default">代表者</label>
+							<label class="col-12 input-group-text d-flex justify-content-center" for="post" id="inputGroup-sizing-default">post</label>
 						</div>
-						<input type="text" class="pl-2 pr-0 col-8 form-control" id="representative" name="representative" maxlength="30">
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="post" name="post" maxlength="8">
+					</div>
+					
+					<!-- address -->
+					<div class="input-group">
+						<div class="p-0 col-4 input-group-prepend">
+							<label class="col-12 input-group-text d-flex justify-content-center" for="address" id="inputGroup-sizing-default">住所</label>
+						</div>
+						<textarea class="pl-2 pr-0 col-8 form-control" id="address" name="address" maxlength="120"></textarea>
 					</div>
 					
 					<!-- phoneNumber -->
@@ -123,20 +126,21 @@ function insertCompany(){
 						</div>
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="phoneNumber" name="phoneNumber" maxlength="20">
 					</div>
-					<!-- address -->
+					
+					<!-- representative -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
-							<label class="col-12 input-group-text d-flex justify-content-center" for="address" id="inputGroup-sizing-default">住所</label>
+							<label class="col-12 input-group-text d-flex justify-content-center" for="representative" id="inputGroup-sizing-default">代表者</label>
 						</div>
-						<textarea class="pl-2 pr-0 col-8 form-control" id="address" name="address" maxlength="120"></textarea>
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="representative" name="representative" maxlength="30">
 					</div>
 					
-					<!-- post -->
+					<!-- incharge -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
-							<label class="col-12 input-group-text d-flex justify-content-center" for="post" id="inputGroup-sizing-default">post</label>
+							<label class="col-12 input-group-text d-flex justify-content-center" for="incharge" id="inputGroup-sizing-default">担当者</label>
 						</div>
-						<input type="text" class="pl-2 pr-0 col-8 form-control" id="post" name="post" maxlength="8">
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="incharge" name="incharge" maxlength="30">
 					</div>
 					
 					<!-- email -->
@@ -147,16 +151,19 @@ function insertCompany(){
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="email" name="email" maxlength="40">
 					</div>
 					
-					
-					
-					
-					<div class="d-block" style="height: 8px;"></div>
-					
-					<!-- 登録button -->
-					<button type="button" class="col-12 btn btn-secondary" onclick="insertCompany()">登録</button>
 				</div>
 			</form>
 		</div>
 	</div>
+	<div class="d-block" style="height: 8px;"></div>
+	<div class="row align-items-center col-12 p-0 m-0">
+		<div id="login_div" class="d-flex justify-content-center col-12 p-0">
+			<div class="pl-4 pr-4 d-flex flex-column col-10 col-md-6">
+				<!-- 登録button -->
+				<button type="button" class="col-12 btn btn-secondary" onclick="insertCompany()">登録</button>
+			</div>
+		</div>
+	</div>
+	
 </body>
 </html>

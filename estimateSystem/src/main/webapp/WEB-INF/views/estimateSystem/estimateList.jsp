@@ -147,13 +147,13 @@ function sort(option){
 	<header class="mb-3">
 		<jsp:include page="../menubar.jsp"></jsp:include>
 	</header>
-	<div class="p-0 mb-3 col-12 container-xl text-center font-weight-bold">
+	<div class="mb-3 col-12 container-xl text-center font-weight-bold">
 		見積書リスト
 	</div>
-	<div class="p-0 container-xl">
+	<div class="container-fluid pr-md-3 pl-md-3">
 		※「保存日時」labelを　「クリック時→降順」　「ダブルクリック時→昇順」　整列
 	</div>
-	<div class="p-0 container-xl">
+	<div class="container-fluid pr-md-3 pl-md-3">
 		<div class="p-0 d-flex">
 			<div class="p-0 d-flex col-6">
 				<div class="p-0 d-flex col-12 col-md-4">
@@ -170,17 +170,18 @@ function sort(option){
 	
 	<div class="d-block" style="height: 8px;"></div>
 	
-	<div class="container-xl p-0">
+	<div class="container-fluid pr-md-3 pl-md-3">
 		<div class="row p-0 m-0 bg-dark text-white">
 			<div class="col-8 p-0 m-0 text-center" style="border-right: 1px solid white;">
 				<div class="col-12 p-0 m-0 text-center">見積書</div>
   				<div class="col-12 row p-0 m-0">
-  					<div class="col-3 col-md-2 p-0 m-0">文書番号</div>
-  					<div class="col-0 col-md-2 p-0 m-0 d-none d-md-inline">顧客名</div>
-  					<div class="col-3 col-md-2 p-0 m-0">件名</div>
-  					<div class="col-3 col-md-2 p-0 m-0" id="eDOTupdateDate" onclick="startClick(this);">保存日時</div>
+  					<div class="col-3 col-md-1 p-0 m-0">文書番号</div>
+  					<div class="col-0 col-md-3 p-0 m-0 d-none d-md-inline">顧客</div>
+  					<div class="col-3 col-md-3 p-0 m-0">件名</div>
+  					<div class="col-3 col-md-1 p-0 m-0" id="eDOTupdateDate" onclick="startClick(this);">保存日時</div>
+  					<div class="col-md-1 p-0 m-0 d-none d-md-inline">作成者</div>
   					<div class="col-2 col-md-1 p-0 m-0">状態</div>
-  					<div class="col-md-2 p-0 m-0 d-none d-md-inline">作成者</div>
+  					<div class="col-0 col-md-1 p-0 m-0 d-none d-md-inline" id="eDOTapprovedDate" onclick="startClick(this);">承認日時</div>
   					<div class="col-1 col-md-1 p-0 m-0">コピー</div>
   				</div>
 			</div>
@@ -188,9 +189,10 @@ function sort(option){
 				<div class="col-11 p-0 m-0"  style="border-right: 1px solid white;">
 					<div class="col-12 p-0 m-0 text-center">請求書</div>
   					<div class="col-12 row p-0 m-0">
-  						<div class="col-8 col-md-4 p-0 m-0">文書番号</div>
-  						<div class="col-4 col-md-4 p-0 m-0">状態</div>
-  						<div class="col-md-4 p-0 m-0 d-none d-md-inline">作成者</div>
+  						<div class="col-8 col-md-3 p-0 m-0">文書番号</div>
+  						<div class="col-md-3 p-0 m-0 d-none d-md-inline">作成者</div>
+  						<div class="col-4 col-md-3 p-0 m-0">状態</div>
+  						<div class="col-md-3 p-0 m-0 d-none d-md-inline">承認日時</div>
   					</div>
 				</div>
 				<div class="col-1 p-0 m-0 align-self-center">削除</div>
@@ -200,29 +202,31 @@ function sort(option){
 	<c:forEach items="${estimateList}" var="estimate" varStatus="status">
 		<div class="d-block" style="height: 3px;"></div>
 		<div class="d-block d-md-none" style="height: 5px;"></div>
-		<div class="container-xl p-0 smallSize">
+		<div class="container-fluid pr-md-3 pl-md-3 smallSize">
 			<div class="row p-0 m-0 bgGray3">
 				<div class="col-8 p-0 m-0 text-center" style="border-right: 1px solid white;">
 	  				<div class="col-12 row p-0 m-0">
-	  					<div class="col-3 col-md-2 p-0 m-0 link" onclick="readEstimate('${estimate.documentNumE}','${estimate.documentTypeNameE}')">
+	  					<div class="col-3 col-md-1 p-0 m-0 link" onclick="readEstimate('${estimate.documentNumE}','${estimate.documentTypeNameE}')">
 	  						${fn:substring(estimate.documentNumE,0,4)}<br>${fn:substring(estimate.documentNumE,5,14)}
 	  					</div>
-	  					<div class="col-0 col-md-2 p-0 m-0 align-self-center d-none d-md-inline">${estimate.receiverE}</div>
-	  					<div class="col-3 col-md-2 p-0 m-0 align-self-center">${estimate.documentNameE}</div>
-	  					<div class="col-3 col-md-2 p-0 m-0"><fmt:parseDate value="${estimate.updateDateE}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/><br><fmt:formatDate value="${noticePostDate}" pattern="HH:mm"/></div>
+	  					<div class="col-0 col-md-3 p-0 m-0 align-self-center d-none d-md-inline">${estimate.receiverE}</div>
+	  					<div class="col-3 col-md-3 p-0 m-0 align-self-center">${estimate.documentNameE}</div>
+	  					<div class="col-3 col-md-1 p-0 m-0"><fmt:parseDate value="${estimate.updateDateE}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/><br><fmt:formatDate value="${noticePostDate}" pattern="HH:mm"/></div>
+	  					<div class="col-md-1 p-0 m-0 align-self-center d-none  d-md-inline">${estimate.userNameE}</div>
 	  					<div class="col-2 col-md-1 p-0 m-0 align-self-center">${estimate.stateNameE}</div>
-	  					<div class="col-md-2 p-0 m-0 align-self-center d-none  d-md-inline">${estimate.userNameE}</div>
+	  					<div class="col-0 col-md-1 p-0 m-0 d-none d-md-inline"><fmt:parseDate value="${estimate.approvedDateE}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/><br><fmt:formatDate value="${noticePostDate}" pattern="HH:mm"/></div>
 	  					<div class="col-1 col-md-1 p-0 m-0 align-self-center link" onclick="copyDocument('${estimate.documentNumE}','${estimate.documentTypeNameE}');">コピー</div>
 	  				</div>
 				</div>
 				<div class="col-4 row p-0 m-0 text-center">
 					<div class="col-11 p-0 m-0"  style="border-right: 1px solid white;">
 	  					<div class="col-12 row p-0 m-0">
-	  						<div class="col-8 col-md-4 p-0 m-0 align-self-center link" onclick="${estimate.documentNumB == null ? 'writeBill(':'readBill('}'${estimate.documentNumB == null ? estimate.documentNumE:estimate.documentNumB}','${estimate.documentNumB == null ? estimate.nextDocumentTypeNameE:estimate.documentTypeNameB}')">
+	  						<div class="col-8 col-md-3 p-0 m-0 align-self-center link" onclick="${estimate.documentNumB == null ? 'writeBill(':'readBill('}'${estimate.documentNumB == null ? estimate.documentNumE:estimate.documentNumB}','${estimate.documentNumB == null ? estimate.nextDocumentTypeNameE:estimate.documentTypeNameB}')">
 	  							${estimate.documentNumB == null ? '新規作成':''}${fn:substring(estimate.documentNumB,0,4)}${estimate.documentNumB == null ? '':'<br>'}${fn:substring(estimate.documentNumB,5,14)}
 	  						</div>
-	  						<div class="col-4 col-md-4 p-0 m-0 align-self-center">${estimate.stateNameB}</div>
-	  						<div class="col-0 col-md-4 p-0 m-0 align-self-center d-none d-md-inline">${estimate.userNameB}</div>
+	  						<div class="col-0 col-md-3 p-0 m-0 align-self-center d-none d-md-inline">${estimate.userNameB}</div>
+	  						<div class="col-4 col-md-3 p-0 m-0 align-self-center">${estimate.stateNameB}</div>
+	  						<div class="col-0 col-md-3 p-0 m-0 align-self-center d-none d-md-inline"><fmt:parseDate value="${estimate.approvedDateB}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/><br><fmt:formatDate value="${noticePostDate}" pattern="HH:mm"/></div>
 	  					</div>
 					</div>
 					<div class="col-1 p-0 m-0 align-self-center">

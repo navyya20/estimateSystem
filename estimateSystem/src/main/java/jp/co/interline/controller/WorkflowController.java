@@ -107,8 +107,8 @@ public class WorkflowController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/all/getWatingWorkflow", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
-	public String getWatingWorkflow(HttpSession session, Model model) {
+	@RequestMapping(value = "/all/getWaitingWorkflow", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
+	public String getWaitingWorkflow(HttpSession session, Model model) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		int result = workflowService.getNumberOfWorkflows(user.getUserNum());
 		return result+"";
@@ -134,7 +134,7 @@ public class WorkflowController {
 	public String approval(HttpSession session, Model model, String documentTypeName, String documentNum, int workflowNum) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		WorkflowDTO workflow = workflowService.getWorkflowByDocumentNum(documentNum);
-		//승인하려고 하는 주체가  현제승인자와 일치하지않을 경우 에러.
+		//승인하려고 하는 주체가  예정된 현제승인자와 일치하지않을 경우 에러.
 		if (user.getUserNum()!= workflow.getPresentApprover()) {
 			return "承認権限がありません。";
 		}

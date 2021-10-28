@@ -115,7 +115,11 @@
 	</update>
 	<update id="updateState" parameterType="workflowDTO">
 		update documentMaster set
-			state = #{state}
+			state = #{state},
+			updateDate = CURRENT_TIMESTAMP
+			<if test='state == "app"'>
+		    	,approvedDate = CURRENT_TIMESTAMP
+		    </if>
 		where
 			documentNum = #{documentNum}
 	</update>

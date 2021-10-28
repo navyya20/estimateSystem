@@ -17,6 +17,7 @@ public class EstimateSiDTO {
 	String stamp;
 	String stampFileName;
 	String logoFileName;
+	String incharge;
 	
 	String receiver;
 	String documentName;
@@ -262,6 +263,12 @@ public class EstimateSiDTO {
 	public void setWorkPlace(String workPlace) {
 		this.workPlace = workPlace;
 	}
+	public String getIncharge() {
+		return incharge;
+	}
+	public void setIncharge(String incharge) {
+		this.incharge = incharge;
+	}
 	@Override
 	public String toString() {
 		return "EstimateSiDTO [documentNum=" + documentNum + ", userNum=" + userNum + ", userName=" + userName
@@ -269,17 +276,14 @@ public class EstimateSiDTO {
 				+ estimateDate + ", documentTypeName=" + documentTypeName + ", nextDocumentTypeName="
 				+ nextDocumentTypeName + ", supplier=" + supplier + ", address=" + address + ", post=" + post
 				+ ", phoneNumber=" + phoneNumber + ", representative=" + representative + ", stamp=" + stamp
-				+ ", stampFileName=" + stampFileName + ", logoFileName=" + logoFileName + ", receiver=" + receiver
-				+ ", documentName=" + documentName + ", workTime=" + workTime + ", supplyment=" + supplyment
-				+ ", workPeriodStart=" + workPeriodStart + ", workPeriodEnd=" + workPeriodEnd + ", contractType="
-				+ contractType + ", payCondition=" + payCondition + ", expirationDate=" + expirationDate
-				+ ", requestNum=" + requestNum + ", cautions=" + cautions + ", sumWithTax=" + sumWithTax
-				+ ", sumWithTax2=" + sumWithTax2 + ", state=" + state + ", comment=" + comment + ", workflowNum="
-				+ workflowNum + ", insertDate=" + insertDate + ", updateDate=" + updateDate + ", updater=" + updater
-				+ ", systemNum=" + systemNum + "]";
+				+ ", stampFileName=" + stampFileName + ", logoFileName=" + logoFileName + ", incharge=" + incharge
+				+ ", receiver=" + receiver + ", documentName=" + documentName + ", workTime=" + workTime
+				+ ", supplyment=" + supplyment + ", workPeriodStart=" + workPeriodStart + ", workPeriodEnd="
+				+ workPeriodEnd + ", workPlace=" + workPlace + ", contractType=" + contractType + ", payCondition="
+				+ payCondition + ", expirationDate=" + expirationDate + ", requestNum=" + requestNum + ", cautions="
+				+ cautions + ", sumWithTax=" + sumWithTax + ", sumWithTax2=" + sumWithTax2 + ", state=" + state
+				+ ", comment=" + comment + ", workflowNum=" + workflowNum + ", insertDate=" + insertDate
+				+ ", updateDate=" + updateDate + ", updater=" + updater + ", systemNum=" + systemNum + "]";
 	}
-	
-	
-	
 	
 }

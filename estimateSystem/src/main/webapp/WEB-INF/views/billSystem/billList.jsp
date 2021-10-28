@@ -160,7 +160,7 @@ function sort(option){
 			<div class="col-11 p-0 m-0 text-center" style="border-right: 1px solid white;">
   				<div class="col-12 row p-0 m-0">
   					<div class="col-3 col-md-2 p-0 m-0">文書番号</div>
-  					<div class="col-2 col-md-2 p-0 m-0 d-none d-md-inline">顧客名</div>
+  					<div class="col-2 col-md-2 p-0 m-0 d-none d-md-inline">顧客</div>
   					<div class="col-4 col-md-2 p-0 m-0">件名</div>
   					<div class="col-3 col-md-2 p-0 m-0" id="eDOTupdateDate" onclick="startClick(this);">保存日時</div>
   					<div class="col-2 col-md-1 p-0 m-0">状態</div>

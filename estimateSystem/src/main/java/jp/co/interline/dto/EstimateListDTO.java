@@ -13,6 +13,7 @@ public class EstimateListDTO {
 	String userPositionE;
 	String stateE;
 	String stateNameE;
+	String approvedDateE;
 	
 	String documentNumB;
 	String estimateNumB;
@@ -27,6 +28,7 @@ public class EstimateListDTO {
 	String userPositionB;
 	String stateB;
 	String stateNameB;
+	String approvedDateB;
 	public String getDocumentNumE() {
 		return documentNumE;
 	}
@@ -179,18 +181,30 @@ public class EstimateListDTO {
 	public void setNextDocumentTypeNameB(String nextDocumentTypeNameB) {
 		this.nextDocumentTypeNameB = nextDocumentTypeNameB;
 	}
+	public String getApprovedDateE() {
+		return approvedDateE;
+	}
+	public void setApprovedDateE(String approvedDateE) {
+		this.approvedDateE = approvedDateE;
+	}
+	public String getApprovedDateB() {
+		return approvedDateB;
+	}
+	public void setApprovedDateB(String approvedDateB) {
+		this.approvedDateB = approvedDateB;
+	}
 	@Override
 	public String toString() {
 		return "EstimateListDTO [documentNumE=" + documentNumE + ", documentTypeNameE=" + documentTypeNameE
 				+ ", nextDocumentTypeNameE=" + nextDocumentTypeNameE + ", receiverE=" + receiverE + ", documentNameE="
 				+ documentNameE + ", updateDateE=" + updateDateE + ", userNumE=" + userNumE + ", userNameE=" + userNameE
 				+ ", userDepartmentE=" + userDepartmentE + ", userPositionE=" + userPositionE + ", stateE=" + stateE
-				+ ", stateNameE=" + stateNameE + ", documentNumB=" + documentNumB + ", estimateNumB=" + estimateNumB
-				+ ", documentTypeNameB=" + documentTypeNameB + ", nextDocumentTypeNameB=" + nextDocumentTypeNameB
-				+ ", receiverB=" + receiverB + ", documentNameB=" + documentNameB + ", updateDateB=" + updateDateB
-				+ ", userNumB=" + userNumB + ", userNameB=" + userNameB + ", userDepartmentB=" + userDepartmentB
-				+ ", userPositionB=" + userPositionB + ", stateB=" + stateB + ", stateNameB=" + stateNameB + "]";
+				+ ", stateNameE=" + stateNameE + ", approvedDateE=" + approvedDateE + ", documentNumB=" + documentNumB
+				+ ", estimateNumB=" + estimateNumB + ", documentTypeNameB=" + documentTypeNameB
+				+ ", nextDocumentTypeNameB=" + nextDocumentTypeNameB + ", receiverB=" + receiverB + ", documentNameB="
+				+ documentNameB + ", updateDateB=" + updateDateB + ", userNumB=" + userNumB + ", userNameB=" + userNameB
+				+ ", userDepartmentB=" + userDepartmentB + ", userPositionB=" + userPositionB + ", stateB=" + stateB
+				+ ", stateNameB=" + stateNameB + ", approvedDateB=" + approvedDateB + "]";
 	}
-	
 	
 }

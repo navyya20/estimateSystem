@@ -81,7 +81,7 @@ function insertAccount(){
 	<div class="p-0 mb-3 col-12 container-xl text-center font-weight-bold">
 		口座情報登録
 	</div>
-	<div class="row align-items-center col-12 p-0 m-0" style="height: 80%;">
+	<div class="row align-items-center col-12 p-0 m-0">
 		<div id="login_div" class="d-flex justify-content-center col-12 p-0">
 			<form class="col-12 d-flex justify-content-center" id="insertAccount" action="insertAccount" method="post" accept-charset="utf-8">
 				<div class="d-flex flex-column col-10 col-md-6">
@@ -140,12 +140,17 @@ function insertAccount(){
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="hurigana" name="hurigana" maxlength="30">
 					</div>
 					
-					<div class="d-block" style="height: 8px;"></div>
-					
-					<!-- 登録button -->
-					<button type="button" class="col-12 btn btn-secondary" onclick="insertAccount()">登録</button>
 				</div>
 			</form>
+		</div>
+	</div>
+	<div class="d-block" style="height: 8px;"></div>
+	<div class="row align-items-center col-12 p-0 m-0">
+		<div id="login_div" class="d-flex justify-content-center col-12 p-0">
+			<div class="pl-4 pr-4 d-flex flex-column col-10 col-md-6">
+				<!-- 登録button -->
+				<button type="button" class="col-12 btn btn-secondary" onclick="insertAccount()">登録</button>
+			</div>
 		</div>
 	</div>
 </body>

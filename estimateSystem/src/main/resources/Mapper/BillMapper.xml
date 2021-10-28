@@ -379,6 +379,7 @@
 			stamp,
 			stampFileName,
 			logoFileName,
+			incharge,
 			receiver,
 			documentName,
 			payCondition,
@@ -415,6 +416,7 @@
 			#{stamp},
 			#{stampFileName},
 			#{logoFileName},
+			#{incharge},
 			#{receiver},
 			#{documentName},
 			#{payCondition},
@@ -482,6 +484,7 @@
 			stamp = #{stamp},
 			stampFileName = #{stampFileName},
 			logoFileName = #{logoFileName},
+			incharge = #{incharge},
 			receiver = #{receiver},
 			documentName = #{documentName},
 			payCondition = #{payCondition},
@@ -628,6 +631,7 @@
 			stamp,
 			stampFileName,
 			logoFileName,
+			incharge,
 			receiver,
 			documentName,
 			payCondition,
@@ -664,6 +668,7 @@
 			#{stamp},
 			#{stampFileName},
 			#{logoFileName},
+			#{incharge},
 			#{receiver},
 			#{documentName},
 			#{payCondition},
@@ -731,6 +736,7 @@
 			stamp = #{stamp},
 			stampFileName = #{stampFileName},
 			logoFileName = #{logoFileName},
+			incharge = #{incharge},
 			receiver = #{receiver},
 			documentName = #{documentName},
 			payCondition = #{payCondition},
@@ -814,9 +820,5 @@
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum12}
 	</update>
-	
-	
-	
-	
 	
 </mapper>

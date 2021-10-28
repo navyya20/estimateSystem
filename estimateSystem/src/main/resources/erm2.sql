@@ -1067,6 +1067,13 @@ CREATE EVENT IF NOT EXISTS setSeqZero
     ENABLE
     COMMENT 'setSeqZero'
     DO 
-	update masterSeq set id = 0;
-
-
+		update masterSeq set id = 0;
+	END;
+    
+alter table companyinform add incharge varchar(30) COMMENT '文書(業務)の担当者';
+alter table estimatesolution add incharge varchar(30) COMMENT '文書(業務)の担当者';
+alter table estimatesi add incharge varchar(30) COMMENT '文書(業務)の担当者';
+alter table estimatelanguage add incharge varchar(30) COMMENT '文書(業務)の担当者';
+alter table billsi add incharge varchar(30) COMMENT '文書(業務)の担当者';
+alter table billsolution add incharge varchar(30) COMMENT '文書(業務)の担当者';
+alter table documentmaster add approvedDate datetime COMMENT '承認日';

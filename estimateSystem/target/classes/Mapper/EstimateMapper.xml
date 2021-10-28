@@ -61,6 +61,7 @@
 			e.userPosition userPositionE,
 			e.state stateE,
 			e.stateName stateNameE,
+			e.approvedDate approvedDateE,
 			
 			b.documentNum documentNumB,
 			b.estimateNum estimateNumB,
@@ -74,7 +75,8 @@
 			b.userDepartment userDepartmentB,
 			b.userPosition userPositionB,
 			b.state stateB,
-			b.stateName stateNameB
+			b.stateName stateNameB,
+			b.approvedDate approvedDateB
 		from
 			(
 				select d.*,em1.receiver,em1.documentName,ds.name stateName from
@@ -414,7 +416,7 @@
 			post,
 			phoneNumber,
 			representative,
-			stamp, stampFileName, logoFileName,
+			stamp, stampFileName, logoFileName, incharge,
 			receiver,
 			documentName,
 			deadline,
@@ -422,7 +424,7 @@
 			expirationDate,
 			payCondition,
 			cautions,
-			sum, tax, sumWithTax, sumWithTax2,	
+			sum, taxRate, tax, sumWithTax, sumWithTax2,	
 			comment
 		) 
 		values(
@@ -435,7 +437,7 @@
 			#{post},
 			#{phoneNumber},
 			#{representative},
-			#{stamp}, #{stampFileName}, #{logoFileName},
+			#{stamp}, #{stampFileName}, #{logoFileName}, #{incharge},
 			#{receiver},
 			#{documentName},
 			#{deadline},
@@ -443,7 +445,7 @@
 			#{expirationDate},
 			#{payCondition},
 			#{cautions},
-			#{sum}, #{tax}, #{sumWithTax}, #{sumWithTax2},	
+			#{sum}, #{taxRate}, #{tax}, #{sumWithTax}, #{sumWithTax2},	
 			#{comment}
 		)
 	</insert>
@@ -489,6 +491,7 @@
 			stamp = #{stamp},
 			stampFileName = #{stampFileName},
 			logoFileName = #{logoFileName},
+			incharge = #{incharge},
 			receiver = #{receiver},
 			documentName = #{documentName},
 			deadline = #{deadline},
@@ -628,13 +631,13 @@
 			post,
 			phoneNumber,
 			representative,
-			stamp, stampFileName, logoFileName,
+			stamp, stampFileName, logoFileName, incharge,
 			receiver,
 			documentName,
 			deadline,
 			expirationDate,
 			payCondition,
-			sum, discountName, discountRate, discount, tax, sumWithTax, sumWithTax2,
+			sum, discountName, discountRate, discount, taxRate, tax, sumWithTax, sumWithTax2,
 			bankName,
 			branchName,
 			accountName,
@@ -654,13 +657,13 @@
 			#{post},
 			#{phoneNumber},
 			#{representative},
-			#{stamp}, #{stampFileName}, #{logoFileName},
+			#{stamp}, #{stampFileName}, #{logoFileName}, #{incharge},
 			#{receiver},
 			#{documentName},
 			#{deadline},
 			#{expirationDate},
 			#{payCondition},
-			#{sum}, #{discountName}, #{discountRate}, #{discount}, #{tax}, #{sumWithTax}, #{sumWithTax2},
+			#{sum}, #{discountName}, #{discountRate}, #{discount}, #{taxRate}, #{tax}, #{sumWithTax}, #{sumWithTax2},
 			#{bankName},
 			#{branchName},
 			#{accountName},
@@ -706,6 +709,7 @@
 			stamp = #{stamp},
 			stampFileName = #{stampFileName},
 			logoFileName = #{logoFileName},
+			incharge = #{incharge},
 			receiver = #{receiver},
 			documentName = #{documentName},
 			deadline = #{deadline},
@@ -816,7 +820,7 @@
 			post,
 			phoneNumber,
 			representative,
-			stamp, stampFileName, logoFileName,
+			stamp, stampFileName, logoFileName, incharge,
 			
 			receiver,
 			documentName,
@@ -844,7 +848,7 @@
 			#{post},
 			#{phoneNumber},
 			#{representative},
-			#{stamp}, #{stampFileName}, #{logoFileName},
+			#{stamp}, #{stampFileName}, #{logoFileName}, #{incharge},
 			
 			#{receiver},
 			#{documentName},
@@ -898,6 +902,7 @@
 			stamp = #{stamp},
 			stampFileName = #{stampFileName},
 			logoFileName = #{logoFileName},
+			incharge = #{incharge},
 			
 			receiver = #{receiver},
 			documentName = #{documentName},

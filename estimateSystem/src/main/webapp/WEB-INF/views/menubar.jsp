@@ -88,12 +88,12 @@
 	</nav>
 	<script>
 	$(document).ready(function(){
-		getWatingWorkflow();
+		getWaitingWorkflow();
 	})
-	function getWatingWorkflow(){
+	function getWaitingWorkflow(){
 		$.ajax(
 				{
-					url: "getWatingWorkflow",
+					url: "getWaitingWorkflow",
 					type: 'get',
 					data: {},
 					dataType:"text",

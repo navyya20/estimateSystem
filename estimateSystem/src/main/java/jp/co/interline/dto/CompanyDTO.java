@@ -9,6 +9,7 @@ public class CompanyDTO {
 	String address;
 	String post;
 	String email;
+	String incharge;
 	String insertDate;
 	String updateDate;
 	int updater;
@@ -79,15 +80,18 @@ public class CompanyDTO {
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
+	public String getIncharge() {
+		return incharge;
+	}
+	public void setIncharge(String incharge) {
+		this.incharge = incharge;
+	}
 	@Override
 	public String toString() {
 		return "CompanyDTO [companyInformNum=" + companyInformNum + ", companyInformName=" + companyInformName
 				+ ", companyName=" + companyName + ", representative=" + representative + ", phoneNumber=" + phoneNumber
-				+ ", address=" + address + ", post=" + post + ", email=" + email + ", insertDate=" + insertDate
-				+ ", updateDate=" + updateDate + ", updater=" + updater + "]";
+				+ ", address=" + address + ", post=" + post + ", email=" + email + ", incharge=" + incharge
+				+ ", insertDate=" + insertDate + ", updateDate=" + updateDate + ", updater=" + updater + "]";
 	}
-	
-	
-	
 	
 }

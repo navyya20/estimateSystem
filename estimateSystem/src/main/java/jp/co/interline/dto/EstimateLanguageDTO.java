@@ -17,6 +17,8 @@ public class EstimateLanguageDTO {
 	String stamp;
 	String stampFileName;
 	String logoFileName;
+	String incharge;
+	
 	String receiver;
 	String documentName;
 	String deadline;
@@ -304,6 +306,18 @@ public class EstimateLanguageDTO {
 	public void setDiscount(String discount) {
 		this.discount = discount;
 	}
+	public String getIncharge() {
+		return incharge;
+	}
+	public void setIncharge(String incharge) {
+		this.incharge = incharge;
+	}
+	public String getDiscountName() {
+		return discountName;
+	}
+	public void setDiscountName(String discountName) {
+		this.discountName = discountName;
+	}
 	@Override
 	public String toString() {
 		return "EstimateLanguageDTO [documentNum=" + documentNum + ", userNum=" + userNum + ", userName=" + userName
@@ -311,16 +325,18 @@ public class EstimateLanguageDTO {
 				+ estimateDate + ", documentTypeName=" + documentTypeName + ", nextDocumentTypeName="
 				+ nextDocumentTypeName + ", supplier=" + supplier + ", address=" + address + ", post=" + post
 				+ ", phoneNumber=" + phoneNumber + ", representative=" + representative + ", stamp=" + stamp
-				+ ", stampFileName=" + stampFileName + ", logoFileName=" + logoFileName + ", receiver=" + receiver
-				+ ", documentName=" + documentName + ", deadline=" + deadline + ", expirationDate=" + expirationDate
-				+ ", payCondition=" + payCondition + ", bankName=" + bankName + ", branchName=" + branchName
-				+ ", accountName=" + accountName + ", hurigana=" + hurigana + ", accountNumber=" + accountNumber
-				+ ", depositeClassification=" + depositeClassification + ", cautions=" + cautions + ", sum=" + sum
-				+ ", discountRate=" + discountRate + ", discount=" + discount + ", taxRate=" + taxRate + ", tax=" + tax
-				+ ", sumWithTax=" + sumWithTax + ", sumWithTax2=" + sumWithTax2 + ", state=" + state + ", comment="
-				+ comment + ", workflowNum=" + workflowNum + ", insertDate=" + insertDate + ", updateDate=" + updateDate
+				+ ", stampFileName=" + stampFileName + ", logoFileName=" + logoFileName + ", incharge=" + incharge
+				+ ", receiver=" + receiver + ", documentName=" + documentName + ", deadline=" + deadline
+				+ ", expirationDate=" + expirationDate + ", payCondition=" + payCondition + ", bankName=" + bankName
+				+ ", branchName=" + branchName + ", accountName=" + accountName + ", hurigana=" + hurigana
+				+ ", accountNumber=" + accountNumber + ", depositeClassification=" + depositeClassification
+				+ ", cautions=" + cautions + ", sum=" + sum + ", discountName=" + discountName + ", discountRate="
+				+ discountRate + ", discount=" + discount + ", taxRate=" + taxRate + ", tax=" + tax + ", sumWithTax="
+				+ sumWithTax + ", sumWithTax2=" + sumWithTax2 + ", state=" + state + ", comment=" + comment
+				+ ", workflowNum=" + workflowNum + ", insertDate=" + insertDate + ", updateDate=" + updateDate
 				+ ", updater=" + updater + ", systemNum=" + systemNum + "]";
 	}
+	
 	
 	
 	

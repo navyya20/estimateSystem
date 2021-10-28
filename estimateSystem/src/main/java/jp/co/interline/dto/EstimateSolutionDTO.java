@@ -17,6 +17,7 @@ public class EstimateSolutionDTO {
 	String stamp;
 	String stampFileName;
 	String logoFileName;
+	String incharge;
 	String receiver;
 	String documentName;
 	String deadline;
@@ -254,6 +255,12 @@ public class EstimateSolutionDTO {
 	public void setTaxRate(String taxRate) {
 		this.taxRate = taxRate;
 	}
+	public String getIncharge() {
+		return incharge;
+	}
+	public void setIncharge(String incharge) {
+		this.incharge = incharge;
+	}
 	@Override
 	public String toString() {
 		return "EstimateSolutionDTO [documentNum=" + documentNum + ", userNum=" + userNum + ", userName=" + userName
@@ -261,14 +268,15 @@ public class EstimateSolutionDTO {
 				+ estimateDate + ", documentTypeName=" + documentTypeName + ", nextDocumentTypeName="
 				+ nextDocumentTypeName + ", supplier=" + supplier + ", address=" + address + ", post=" + post
 				+ ", phoneNumber=" + phoneNumber + ", representative=" + representative + ", stamp=" + stamp
-				+ ", stampFileName=" + stampFileName + ", logoFileName=" + logoFileName + ", receiver=" + receiver
-				+ ", documentName=" + documentName + ", deadline=" + deadline + ", supplyPoint=" + supplyPoint
-				+ ", expirationDate=" + expirationDate + ", payCondition=" + payCondition + ", cautions=" + cautions
-				+ ", sum=" + sum + ", taxRate=" + taxRate + ", tax=" + tax + ", sumWithTax=" + sumWithTax
-				+ ", sumWithTax2=" + sumWithTax2 + ", state=" + state + ", comment=" + comment + ", workflowNum="
-				+ workflowNum + ", insertDate=" + insertDate + ", updateDate=" + updateDate + ", updater=" + updater
-				+ ", systemNum=" + systemNum + "]";
+				+ ", stampFileName=" + stampFileName + ", logoFileName=" + logoFileName + ", incharge=" + incharge
+				+ ", receiver=" + receiver + ", documentName=" + documentName + ", deadline=" + deadline
+				+ ", supplyPoint=" + supplyPoint + ", expirationDate=" + expirationDate + ", payCondition="
+				+ payCondition + ", cautions=" + cautions + ", sum=" + sum + ", taxRate=" + taxRate + ", tax=" + tax
+				+ ", sumWithTax=" + sumWithTax + ", sumWithTax2=" + sumWithTax2 + ", state=" + state + ", comment="
+				+ comment + ", workflowNum=" + workflowNum + ", insertDate=" + insertDate + ", updateDate=" + updateDate
+				+ ", updater=" + updater + ", systemNum=" + systemNum + "]";
 	}
+	
 	
 	
 	

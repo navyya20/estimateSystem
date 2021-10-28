@@ -23,6 +23,7 @@ $(document).ready(function(){
 	$("#representative").on("change",function(){limitString("representative",30);})
 	$("#address").on("change",function(){limitString("address",106);})
 	$("#email").on("change",function(){limitString("email",30);})
+	$("#incharge").on("change",function(){limitString("incharge",30);})
 });
 //인터셉터로 로그인 들어왔는데 현제페이지가 아이프레임 내부일경우 부모요소를 로그인 페이지로 페이지이동
 if ( self !== top ) {
@@ -53,13 +54,8 @@ function updateCompany(){
 	var address = $("#address").val();
 	var post = $("#post").val();
 	var email = $("#email").val();
-	console.log(companyInformName);
-	console.log(companyName);
-	console.log(representative);
-	console.log(phoneNumber);
-	console.log(address);
-	console.log(post);
-	console.log(email);
+	var incharge = $("#incharge").val();
+
 	if(companyInformName=""){
 		alert("会社情報名を入力してください。情報同士に区別するためです。");
 		$("#companyInformName").focus();
@@ -111,12 +107,20 @@ function deleteCompany(){
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="companyName" name="companyName" maxlength="40" value="${company.companyName}">
 					</div>
 					
-					<!-- representative -->
+					<!-- post -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
-							<label class="col-12 input-group-text d-flex justify-content-center" for="representative" id="inputGroup-sizing-default">代表者</label>
+							<label class="col-12 input-group-text d-flex justify-content-center" for="post" id="inputGroup-sizing-default">post</label>
 						</div>
-						<input type="text" class="pl-2 pr-0 col-8 form-control" id="representative" name="representative" maxlength="30" value="${company.representative}">
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="post" name="post" maxlength="8" value="${company.post}">
+					</div>
+					
+					<!-- address -->
+					<div class="input-group">
+						<div class="p-0 col-4 input-group-prepend">
+							<label class="col-12 input-group-text d-flex justify-content-center" for="address" id="inputGroup-sizing-default">住所</label>
+						</div>
+						<textarea class="pl-2 pr-0 col-8 form-control" id="address" name="address" maxlength="120">${company.address}</textarea>
 					</div>
 					
 					<!-- phoneNumber -->
@@ -126,20 +130,21 @@ function deleteCompany(){
 						</div>
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="phoneNumber" name="phoneNumber" maxlength="20" value="${company.phoneNumber}">
 					</div>
-					<!-- address -->
+					
+					<!-- representative -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
-							<label class="col-12 input-group-text d-flex justify-content-center" for="address" id="inputGroup-sizing-default">住所</label>
+							<label class="col-12 input-group-text d-flex justify-content-center" for="representative" id="inputGroup-sizing-default">代表者</label>
 						</div>
-						<textarea class="pl-2 pr-0 col-8 form-control" id="address" name="address" maxlength="120">${company.address}</textarea>
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="representative" name="representative" maxlength="30" value="${company.representative}">
 					</div>
 					
-					<!-- post -->
+					<!-- representative -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
-							<label class="col-12 input-group-text d-flex justify-content-center" for="post" id="inputGroup-sizing-default">post</label>
+							<label class="col-12 input-group-text d-flex justify-content-center" for="incharge" id="inputGroup-sizing-default">担当者</label>
 						</div>
-						<input type="text" class="pl-2 pr-0 col-8 form-control" id="post" name="post" maxlength="8" value="${company.post}">
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="incharge" name="incharge" maxlength="30" value="${company.incharge}">
 					</div>
 					
 					<!-- email -->

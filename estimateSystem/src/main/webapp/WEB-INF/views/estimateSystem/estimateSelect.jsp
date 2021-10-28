@@ -47,7 +47,7 @@ if ( self !== top ) {
 			<div class="card" style="width: 17rem;">
 				<img src="../resources/img/estimateSolution.jpg" class="card-img-top" alt="...">
 				<div class="card-body">
-					<p class="card-text">ソールショーン事業部用セット</p>
+					<p class="card-text">ソリューション事業部用セット</p>
 					<a href="writeEstimateSolution" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>

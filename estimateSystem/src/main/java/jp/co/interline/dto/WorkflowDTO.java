@@ -128,7 +128,6 @@ public class WorkflowDTO {
 		this.updater = updater;
 	}
 	
-	
 	public String getDocumentTypeName() {
 		return documentTypeName;
 	}
@@ -152,17 +151,6 @@ public class WorkflowDTO {
 	}
 	public void setUserDepartment(String userDepartment) {
 		this.userDepartment = userDepartment;
-	}
-	@Override
-	public String toString() {
-		return "WorkflowDTO [workflowNum=" + workflowNum + ", systemNum=" + systemNum + ", userNum=" + userNum
-				+ ", documentNum=" + documentNum + ", approver1=" + approver1 + ", approver2=" + approver2
-				+ ", approver3=" + approver3 + ", approver1State=" + approver1State + ", approver2State="
-				+ approver2State + ", approver3State=" + approver3State + ", presentApproverNum=" + presentApproverNum
-				+ ", presentApprover=" + presentApprover + ", targetKey=" + targetKey + ", targetValue=" + targetValue
-				+ ", insertDate=" + insertDate + ", updateDate=" + updateDate + ", updater=" + updater
-				+ ", documentTypeName=" + documentTypeName + ", state=" + state + ", userName=" + userName
-				+ ", userDepartment=" + userDepartment + "]";
 	}
 	
 }
