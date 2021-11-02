@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 
+import jp.co.interline.dto.DocumentMasterDTO;
 import jp.co.interline.dto.EstimateLanguageDTO;
 import jp.co.interline.dto.EstimateLanguageItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
@@ -68,6 +69,12 @@ public interface EstimateMapper {
 	int updateEstimateSi(EstimateSiDTO estimateSi);
 
 	int updateEstimateSiItems(EstimateSiItemsRecieveDTO estimateSiItemsReciever);
+
+	DocumentMasterDTO getDocumentMaster(String documentNum);
+
+	HashMap<String, String> getDocumentToHashMap(DocumentMasterDTO document);
+
+	ArrayList<HashMap<String, Object>> getItemsToList(DocumentMasterDTO document);
 	
 	
 }

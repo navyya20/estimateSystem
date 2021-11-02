@@ -146,8 +146,17 @@
 			values(#{list[1].colVal}, #{list[2].colVal}, ${list[3].colVal})
 	</insert>
 	
+	<select id="getDocumentMaster" parameterType="String" resultType="documentMasterDTO">
+		select * from documentMaster where documentNum = #{value}
+	</select>
 	
+	<select id="getDocumentToHashMap" parameterType="documentMasterDTO" resultType="map">
+		select * from ${documentTypeName} where documentNum = #{documentNum}
+	</select>
 	
+	<select id="getItemsToList" parameterType="documentMasterDTO" resultType="map">
+		select * from ${documentTypeName}items where documentNum = #{documentNum}
+	</select>
 	
 	
 <!-- estimateSheet1  insert update -->
@@ -834,7 +843,7 @@
 			payCondition,
 			requestNum,
 			
-			sumWithTax, sumWithTax2,
+			sum,tax,sumWithTax, sumWithTax2,
 			cautions,
 			comment
 		) 
@@ -862,7 +871,7 @@
 			#{payCondition},
 			#{requestNum},
 			
-			#{sumWithTax}, #{sumWithTax2},
+			#{sum}, #{tax}, #{sumWithTax}, #{sumWithTax2},
 			#{cautions},
 			#{comment}
 		)
@@ -917,6 +926,8 @@
 			requestNum = #{requestNum},
 			
 			cautions = #{cautions},
+			sum = #{sum},
+			tax = #{tax},
 			sumWithTax = #{sumWithTax},
 			sumWithTax2 = #{sumWithTax2},
 			comment = #{comment},

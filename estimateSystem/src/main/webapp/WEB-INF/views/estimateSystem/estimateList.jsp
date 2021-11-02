@@ -47,6 +47,7 @@ function writeBill(estimateNum,nextDocumentTypeName){
 	location.href=url+"?estimateNum="+estimateNum;
 }
 
+//readDocument폼테그를 공유하여 사용한다.
 function readEstimate(estimateNum,documentTypeName){
 	var url="readEstimate";
 	$('#readDocument').attr("action",url);
@@ -54,6 +55,8 @@ function readEstimate(estimateNum,documentTypeName){
 	$('#documentTypeName').val(documentTypeName);
 	$('#readDocument').submit();
 }
+
+//readDocument폼테그를 공유하여 사용한다.
 function readBill(billNum,documentTypeName){
 	//read는 어차피 ozr,odi읽는 것이므로 readEstimate와 통일
 	var url="readEstimate";
@@ -62,10 +65,12 @@ function readBill(billNum,documentTypeName){
 	$('#documentTypeName').val(documentTypeName);
 	$('#readDocument').submit();
 }
+
+//readDocument폼테그를 공유하여 사용한다.
 function copyDocument(documentNum,documentTypeName){
-	var url="copy"+documentTypeName.charAt(0).toUpperCase()+documentTypeName.slice(1);
+	var url="copyDocument"
 	$('#readDocument').attr("action",url);
-	$('#documentNum').val(estimateNum);
+	$('#documentNum').val(documentNum);
 	$('#readDocument').submit();
 }
 

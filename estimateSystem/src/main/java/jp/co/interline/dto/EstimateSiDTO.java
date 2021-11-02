@@ -32,6 +32,8 @@ public class EstimateSiDTO {
 	String requestNum;
 	
 	String cautions;
+	String sum;
+	String tax;
 	String sumWithTax;
 	String sumWithTax2;	
 	String state;
@@ -269,21 +271,17 @@ public class EstimateSiDTO {
 	public void setIncharge(String incharge) {
 		this.incharge = incharge;
 	}
-	@Override
-	public String toString() {
-		return "EstimateSiDTO [documentNum=" + documentNum + ", userNum=" + userNum + ", userName=" + userName
-				+ ", userDepartment=" + userDepartment + ", userPosition=" + userPosition + ", estimateDate="
-				+ estimateDate + ", documentTypeName=" + documentTypeName + ", nextDocumentTypeName="
-				+ nextDocumentTypeName + ", supplier=" + supplier + ", address=" + address + ", post=" + post
-				+ ", phoneNumber=" + phoneNumber + ", representative=" + representative + ", stamp=" + stamp
-				+ ", stampFileName=" + stampFileName + ", logoFileName=" + logoFileName + ", incharge=" + incharge
-				+ ", receiver=" + receiver + ", documentName=" + documentName + ", workTime=" + workTime
-				+ ", supplyment=" + supplyment + ", workPeriodStart=" + workPeriodStart + ", workPeriodEnd="
-				+ workPeriodEnd + ", workPlace=" + workPlace + ", contractType=" + contractType + ", payCondition="
-				+ payCondition + ", expirationDate=" + expirationDate + ", requestNum=" + requestNum + ", cautions="
-				+ cautions + ", sumWithTax=" + sumWithTax + ", sumWithTax2=" + sumWithTax2 + ", state=" + state
-				+ ", comment=" + comment + ", workflowNum=" + workflowNum + ", insertDate=" + insertDate
-				+ ", updateDate=" + updateDate + ", updater=" + updater + ", systemNum=" + systemNum + "]";
+	public String getSum() {
+		return sum;
+	}
+	public void setSum(String sum) {
+		this.sum = sum;
+	}
+	public String getTax() {
+		return tax;
+	}
+	public void setTax(String tax) {
+		this.tax = tax;
 	}
 	
 }

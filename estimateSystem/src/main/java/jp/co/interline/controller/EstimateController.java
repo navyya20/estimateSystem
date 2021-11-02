@@ -20,12 +20,16 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import jp.co.interline.dto.AccountDTO;
 import jp.co.interline.dto.BillSheet1DTO;
 import jp.co.interline.dto.CompanyDTO;
+import jp.co.interline.dto.DocumentMasterDTO;
 import jp.co.interline.dto.EstimateLanguageDTO;
 import jp.co.interline.dto.EstimateLanguageItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
@@ -125,12 +129,33 @@ public class EstimateController {
 		return null;
 	}
 	
+	//DB상 Document를 복사하는것이 아니라. 해당 document의 내용을 그대로 해당타입(서식)의 작성화면으로 보낸다.
+	@RequestMapping(value = "/all/copyDocument", method = RequestMethod.POST)
+	public String copyDocument(HttpSession session, Model model, String documentNum, RedirectAttributes redirectAttributes) throws JsonProcessingException {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("EstimateController.copyDocument,user:{}",user.getUserNum());
+		DocumentMasterDTO document = estimateService.getDocumentMaster(documentNum);
+		HashMap<String,String> contents = estimateService.getDocumentToHashMap(document);
+		ArrayList<HashMap<String,Object>> items = estimateService.getItemsToList(document);
+		
+		//아이템list를 map화 해주고 contents에 추가해주는 작업. (작성ozr화면에서는 item항목명+index로 동작하기때문에.)
+		estimateService.makeHashMap(contents,items);
+		ObjectMapper mapper = new ObjectMapper();
+		String copy = mapper.writeValueAsString(contents);
+		redirectAttributes.addAttribute("copy", copy);
+		String documentTypeName = document.getDocumentTypeName();
+		return "redirect:write"+documentTypeName.substring(0, 1).toUpperCase()+documentTypeName.substring(1);
+	}
+	
 	
 	@RequestMapping(value = "/all/test", method = RequestMethod.GET)
 	public String test(HttpSession session, Model model, String documentNum) {
 		estimateService.test();
 		return "";
 	}
+	
+	
+	
 	
 	
 /////////////////////////////////////estimateSheet1///////////////////////////////////////////////////

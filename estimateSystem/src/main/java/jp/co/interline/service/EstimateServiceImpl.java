@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import jp.co.interline.dao.EstimateDAO;
 import jp.co.interline.dao.SystemDAO;
 import jp.co.interline.dao.WorkflowDAO;
+import jp.co.interline.dto.DocumentMasterDTO;
 import jp.co.interline.dto.EstimateLanguageDTO;
 import jp.co.interline.dto.EstimateLanguageItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
@@ -94,6 +95,49 @@ public class EstimateServiceImpl implements EstimateService {
 		
 		return estimateList;
 	}
+	
+	//문서번호로 해당하는 document마스터정보를 가져온다.
+	@Override
+	public DocumentMasterDTO getDocumentMaster(String documentNum) {
+		DocumentMasterDTO document = estimateDao.getDocumentMaster(documentNum);
+		return document;
+	}
+	
+	//문서의내용을 가져온다.
+	//서식타입이 지정되어있지않아 어떤 Table일지모르고 따라서 DTO도 지정되어있지않아 Hashmap으로 받아야하는경우 사용하는 서비스.
+	//DocumentMasterDTO에는 문서번호와 문서타입정보가 있어야한다.
+	//아이템내용은 따로 가져와야한다. 문서는 단일행, 아이템은 복수행이기때문에.
+	@Override
+	public HashMap<String, String> getDocumentToHashMap(DocumentMasterDTO document) {
+		HashMap<String, String> contents = estimateDao.getDocumentToHashMap(document);
+		return contents;
+	}
+	//아이템의 내용을 가져온다.
+	//서식타입이 지정되어있지않아 어떤 Table일지모르고 따라서 DTO도 지정되어있지않아 Hashmap으로 받아야하는경우 사용하는 서비스.
+	//DocumentMasterDTO에는 문서번호와 문서타입정보가 있어야한다.
+	@Override
+	public ArrayList<HashMap<String, Object>> getItemsToList(DocumentMasterDTO document) {
+		ArrayList<HashMap<String, Object>> items = estimateDao.getItemsToList(document);
+		return items;
+	}
+	
+	//아이템list를 map화 해주고 contents에 추가해주는 작업. (작성ozr화면에서는 key값이 item항목명+index로 동작하기때문에.)
+	//추가로 기존 유저명 유저번호 등의 고유정보를 삭제한다.
+	@Override
+	public void makeHashMap(HashMap<String, String> contents, ArrayList<HashMap<String, Object>> items) {
+		for(int i=0 ; i < items.size() ; i++) {
+			HashMap<String, Object> itemsMap = items.get(i);
+			for(String strKey : itemsMap.keySet()) {
+				contents.put(strKey+(i+1), itemsMap.get(strKey).toString());
+			}
+		}
+		contents.remove("userNum");
+		contents.remove("userName");
+		contents.remove("userDepartment");
+		contents.remove("userPosition");
+	}
+	
+	//---------------------------------------estimateSheet1-----------------------
 
 	@Override
 	public int updateEstimateSheet1(EstimateSheet1DTO estimateSheet1) {
@@ -270,5 +314,11 @@ public class EstimateServiceImpl implements EstimateService {
 		return result;
 	}
 //-------------------------------------------------------------------------------------------------------	
+
+
+	
+
+	
+	
 
 }

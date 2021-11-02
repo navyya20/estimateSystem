@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import jp.co.interline.dto.DocumentMasterDTO;
 import jp.co.interline.dto.EstimateLanguageDTO;
 import jp.co.interline.dto.EstimateLanguageItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
@@ -169,6 +170,24 @@ public class EstimateDAO {
 		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
 		int result = mapper.updateEstimateSiItems(estimateSiItemsReciever);
 		return result;
+	}
+
+	public DocumentMasterDTO getDocumentMaster(String documentNum) {
+		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
+		DocumentMasterDTO document = mapper.getDocumentMaster(documentNum);
+		return document;
+	}
+
+	public HashMap<String, String> getDocumentToHashMap(DocumentMasterDTO document) {
+		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
+		HashMap<String, String> contents = mapper.getDocumentToHashMap(document);
+		return contents;
+	}
+
+	public ArrayList<HashMap<String, Object>> getItemsToList(DocumentMasterDTO document) {
+		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
+		ArrayList<HashMap<String, Object>> items = mapper.getItemsToList(document);
+		return items;
 	}
 
 	

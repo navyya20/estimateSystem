@@ -1,9 +1,11 @@
 package jp.co.interline.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.ui.Model;
 
+import jp.co.interline.dto.DocumentMasterDTO;
 import jp.co.interline.dto.EstimateLanguageDTO;
 import jp.co.interline.dto.EstimateLanguageItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
@@ -61,5 +63,13 @@ public interface EstimateService {
 	int updateEstimateSi(EstimateSiDTO estimateSi);
 
 	int updateEstimateSiItems(EstimateSiItemsRecieveDTO estimateSiItemsReciever);
+
+	DocumentMasterDTO getDocumentMaster(String documentNum);
+
+	HashMap<String, String> getDocumentToHashMap(DocumentMasterDTO document);
+
+	ArrayList<HashMap<String, Object>> getItemsToList(DocumentMasterDTO document);
+
+	void makeHashMap(HashMap<String, String> contents, ArrayList<HashMap<String, Object>> items);
 
 }

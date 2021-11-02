@@ -1077,3 +1077,7 @@ alter table estimatelanguage add incharge varchar(30) COMMENT '文書(業務)の
 alter table billsi add incharge varchar(30) COMMENT '文書(業務)の担当者';
 alter table billsolution add incharge varchar(30) COMMENT '文書(業務)の担当者';
 alter table documentmaster add approvedDate datetime COMMENT '承認日';
+
+
+alter table estimatesi add sum BIGINT;
+alter table estimatesi add tax BIGINT;

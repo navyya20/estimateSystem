@@ -69,6 +69,7 @@ if ( self !== top ) {
 		<c:if test="${copy != null}">
 			copy = '${copy}';
 			copy=copy.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
+			console.log(copy);
 		</c:if>
 		var repeat=5;
 
@@ -123,6 +124,8 @@ if ( self !== top ) {
 		function processJson(state){
 			var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
 			var inputJson=JSON.parse(inputJsonString);
+			inputJson["sum"] = inputJson["sum"].replace(/,/gi, "").replace(/￥/gi, "");
+			inputJson["tax"] = inputJson["tax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax"] = inputJson["sumWithTax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax2"] = inputJson["sumWithTax2"].replace(/,/gi, "").replace(/￥/gi, "");
 			for(i=1 ; i<=repeat ; i++){
