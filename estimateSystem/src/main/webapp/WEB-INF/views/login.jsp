@@ -82,6 +82,7 @@ if ( self !== top ) {
 	20211021.ver8(改善点26、33、34、35、36、37、38反映)<br>
 	20211022.ver9(改善点28反映)<br>
 	20211028.ver10(改善点25,27反映)<br>
+	20211104.ver11(改善点43,44,47反映)<br>
 </div>
 	<div class="row align-items-center col-12 p-0 m-0" style="height: 100%;">
 		<div id="login_div" class="d-flex justify-content-center col-12 p-0">

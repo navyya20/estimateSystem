@@ -121,7 +121,7 @@ function doDouble(op) {
 	sort(op+" asc");
 }
 function sort(option){
-	document.location.href = "estimateList?option="+option;
+	document.location.href = "billList?option="+option;
 }
 </script>
 </head>
@@ -159,13 +159,13 @@ function sort(option){
 		<div class="row p-0 m-0 bg-dark text-white">
 			<div class="col-11 p-0 m-0 text-center" style="border-right: 1px solid white;">
   				<div class="col-12 row p-0 m-0">
-  					<div class="col-3 col-md-2 p-0 m-0">文書番号</div>
-  					<div class="col-2 col-md-2 p-0 m-0 d-none d-md-inline">顧客</div>
+  					<div class="col-3 col-md-2 p-0 m-0" id="bDOTdocumentNum" onclick="startClick(this);">文書番号</div>
+  					<div class="col-2 col-md-2 p-0 m-0 d-none d-md-inline" id="bDOTreceiver" onclick="startClick(this);">顧客</div>
   					<div class="col-4 col-md-2 p-0 m-0">件名</div>
-  					<div class="col-3 col-md-2 p-0 m-0" id="eDOTupdateDate" onclick="startClick(this);">保存日時</div>
-  					<div class="col-2 col-md-1 p-0 m-0">状態</div>
-  					<div class="col-md-2 p-0 m-0 d-none d-md-inline">作成者</div>
-  					<div class="col-md-1 p-0 m-0 d-none d-md-inline">所属</div>
+  					<div class="col-3 col-md-2 p-0 m-0" id="bDOTupdateDate" onclick="startClick(this);">保存日時</div>
+  					<div class="col-2 col-md-1 p-0 m-0" id="bDOTstateName" onclick="startClick(this);">状態</div>
+  					<div class="col-md-2 p-0 m-0 d-none d-md-inline" id="bDOTuserName" onclick="startClick(this);">作成者</div>
+  					<div class="col-md-1 p-0 m-0 d-none d-md-inline" id="bDOTuserDepartment" onclick="startClick(this);">所属</div>
   				</div>
 			</div>
 			<div class="col-1 p-0 m-0 align-self-center text-center">削除</div>

@@ -21,7 +21,7 @@ $(document).ready(function(){
 	$("#companyInformName").on("change",function(){limitString("companyInformName",30);})
 	$("#companyName").on("change",function(){limitString("companyName",30);})
 	$("#representative").on("change",function(){limitString("representative",30);})
-	$("#address").on("change",function(){limitString("address",106);})
+	$("#address").on("change",function(){limitString("address",300);})
 	$("#email").on("change",function(){limitString("email",30);})
 	$("#incharge").on("change",function(){limitString("incharge",30);})
 });
@@ -61,8 +61,8 @@ function updateCompany(){
 		$("#companyInformName").focus();
 		return;
 	}
-	if(address.split('\n').length > 3){
-		alert("住所は120文字以内、改行は3行以内にお願いします。");
+	if(address.split('\n').length > 9){
+		alert("住所は300文字以内、改行は9行以内にお願いします。");
 		return;
 	}
 	document.getElementById("updateCompany").submit();
@@ -94,11 +94,11 @@ function deleteCompany(){
 					<!-- companyInformName -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
-							<label class="col-12 input-group-text d-flex justify-content-center" for="companyInformName" id="inputGroup-sizing-default">*会社情報名</label>
+							<label class="col-12 input-group-text d-flex justify-content-center" for="companyInformName" id="inputGroup-sizing-default">*自社情報タイプ</label>
 						</div>
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="companyInformName" name="companyInformName" maxlength="40" value="${company.companyInformName}">
 					</div>
-					
+					<%-- 
 					<!-- companyName -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
@@ -114,15 +114,15 @@ function deleteCompany(){
 						</div>
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="post" name="post" maxlength="8" value="${company.post}">
 					</div>
-					
+					 --%>
 					<!-- address -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
-							<label class="col-12 input-group-text d-flex justify-content-center" for="address" id="inputGroup-sizing-default">住所</label>
+							<label class="col-12 input-group-text d-flex justify-content-center" for="address" id="inputGroup-sizing-default">表示内容</label>
 						</div>
-						<textarea class="pl-2 pr-0 col-8 form-control" id="address" name="address" maxlength="120">${company.address}</textarea>
+						<textarea class="pl-2 pr-0 col-8 form-control" id="address" name="address" maxlength="300" placeholder="社名、住所、電話番号、e-mail、代表者、担当者など" rows="9">${company.address}</textarea>
 					</div>
-					
+					<%-- 
 					<!-- phoneNumber -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
@@ -139,7 +139,7 @@ function deleteCompany(){
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="representative" name="representative" maxlength="30" value="${company.representative}">
 					</div>
 					
-					<!-- representative -->
+					<!-- incharge -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="incharge" id="inputGroup-sizing-default">担当者</label>
@@ -154,6 +154,7 @@ function deleteCompany(){
 						</div>
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="email" name="email" maxlength="40" value="${company.email}">
 					</div>
+					 --%>
 					<div class="d-block" style="height: 12px;"></div>
 				</div>
 			</form>

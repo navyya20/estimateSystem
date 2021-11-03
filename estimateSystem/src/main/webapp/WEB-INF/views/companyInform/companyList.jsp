@@ -55,13 +55,10 @@ function goToCompanyMod(companyInformNum){
 	<div class="p-0 container-lg">
 		<div class="p-0 d-flex bg-dark text-white">
 			<div class="p-0 col-4 col-md-3 d-flex">
-				<div class="mt-2 mb-2 col-12 col-md-12 p-0 text-center">会社情報名</div>
+				<div class="mt-2 mb-2 col-12 col-md-12 p-0 text-center">自社情報タイプ</div>
 			</div>
-			<div class="p-0 col-8 col-md-9 d-flex">
-				<div class="mt-2 mb-2 col-6 col-md-3 p-0 text-center">会社名</div>
-				<div class="mt-2 mb-2 col-6 col-md-3 p-0 text-center">代表者</div>
-				<div class="mt-2 mb-2 col-3 p-0 text-center d-none d-md-inline">email</div>
-				<div class="mt-2 mb-2 col-3 p-0 text-center d-none d-md-inline">電話番号</div>
+			<div class="p-0 col-8 col-md-9 d-flex　text-center">
+				<div class="mt-2 mb-2 col-12 col-md-12 p-0 text-center">表示内容</div>
 			</div>
 		</div>
 	</div>
@@ -73,10 +70,7 @@ function goToCompanyMod(companyInformNum){
 					<div class="mt-2 mb-2 col-12 col-md-12 p-0 text-center text-break"><a onclick="goToCompanyMod(${company.companyInformNum})" style="cursor: pointer; color: blue;">${company.companyInformName}</a></div>
 				</div>
 				<div class="p-0 col-8 col-md-9 d-flex">
-					<div class="mt-2 mb-2 col-6 col-md-3 p-0 text-center text-break">${company.companyName}</div>
-					<div class="mt-2 mb-2 col-6 col-md-3 p-0 text-center text-break">${company.representative}</div>
-					<div class="mt-2 mb-2 col-3 p-0 text-center d-none d-md-inline text-break">${company.email}</div>
-					<div class="mt-2 mb-2 col-3 p-0 text-center d-none d-md-inline text-break">${company.phoneNumber}</div>
+					<div class="overflow-auto mt-2 mb-2 col-12 col-md-12 p-0" style="height: 100px; word-break:break-all;"><pre><c:out value="${company.address}" /></pre></div>
 				</div>
 			</div>
 		</div>	

@@ -117,10 +117,12 @@ function deleteSheets(){
 	});
 })
  */
- var numClicks = 0;
- var timeOut;
- function startClick(o) {
-    numClicks++;
+
+//더블클릭 감지기
+var numClicks = 0;
+var timeOut;
+function startClick(o) {
+	numClicks++;
     var op = o.getAttribute('id').replace("DOT",".");
     switch(numClicks) {
         case 2:
@@ -142,6 +144,9 @@ function doDouble(op) {
 	numClicks=0;
 	sort(op+" asc");
 }
+//여기까지 더블클릭 감지
+
+//option내용대로 order by 절 내용이 들어간다.
 function sort(option){
 	document.location.href = "estimateList?option="+option;
 }
@@ -180,12 +185,12 @@ function sort(option){
 			<div class="col-8 p-0 m-0 text-center" style="border-right: 1px solid white;">
 				<div class="col-12 p-0 m-0 text-center">見積書</div>
   				<div class="col-12 row p-0 m-0">
-  					<div class="col-3 col-md-1 p-0 m-0">文書番号</div>
-  					<div class="col-0 col-md-3 p-0 m-0 d-none d-md-inline">顧客</div>
-  					<div class="col-3 col-md-3 p-0 m-0">件名</div>
+  					<div class="col-3 col-md-1 p-0 m-0" id="eDOTdocumentNum" onclick="startClick(this);">文書番号</div>
+  					<div class="col-0 col-md-3 p-0 m-0 d-none d-md-inline" id="eDOTreceiver" onclick="startClick(this);">顧客</div>
+  					<div class="col-3 col-md-3 p-0 m-0" id="eDOTdocumentName" onclick="startClick(this);">件名</div>
   					<div class="col-3 col-md-1 p-0 m-0" id="eDOTupdateDate" onclick="startClick(this);">保存日時</div>
-  					<div class="col-md-1 p-0 m-0 d-none d-md-inline">作成者</div>
-  					<div class="col-2 col-md-1 p-0 m-0">状態</div>
+  					<div class="col-md-1 p-0 m-0 d-none d-md-inline" id="eDOTuserName" onclick="startClick(this);">作成者</div>
+  					<div class="col-2 col-md-1 p-0 m-0" id="eDOTstateName" onclick="startClick(this);">状態</div>
   					<div class="col-0 col-md-1 p-0 m-0 d-none d-md-inline" id="eDOTapprovedDate" onclick="startClick(this);">承認日時</div>
   					<div class="col-1 col-md-1 p-0 m-0">コピー</div>
   				</div>
@@ -194,10 +199,10 @@ function sort(option){
 				<div class="col-11 p-0 m-0"  style="border-right: 1px solid white;">
 					<div class="col-12 p-0 m-0 text-center">請求書</div>
   					<div class="col-12 row p-0 m-0">
-  						<div class="col-8 col-md-3 p-0 m-0">文書番号</div>
-  						<div class="col-md-3 p-0 m-0 d-none d-md-inline">作成者</div>
-  						<div class="col-4 col-md-3 p-0 m-0">状態</div>
-  						<div class="col-md-3 p-0 m-0 d-none d-md-inline">承認日時</div>
+  						<div class="col-8 col-md-3 p-0 m-0" id="bDOTdocumentNum" onclick="startClick(this);">文書番号</div>
+  						<div class="col-md-3 p-0 m-0 d-none d-md-inline" id="bDOTuserName" onclick="startClick(this);">作成者</div>
+  						<div class="col-4 col-md-3 p-0 m-0" id="bDOTstateName" onclick="startClick(this);">状態</div>
+  						<div class="col-md-3 p-0 m-0 d-none d-md-inline" id="bDOTapprovedDate" onclick="startClick(this);">承認日時</div>
   					</div>
 				</div>
 				<div class="col-1 p-0 m-0 align-self-center">削除</div>

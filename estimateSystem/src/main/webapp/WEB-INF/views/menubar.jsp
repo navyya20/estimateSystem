@@ -52,7 +52,7 @@
 				</li>
 				<li class="nav-item active">
 					<c:if test="${sessionScope.userInform.auth eq 'sa'}">
-						<a class="nav-link" href="./companyList">会社情報</a>
+						<a class="nav-link" href="./companyList">自社情報</a>
 					</c:if>
 				</li>
 				<li class="nav-item active">

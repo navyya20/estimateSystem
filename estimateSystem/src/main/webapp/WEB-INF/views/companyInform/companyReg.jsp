@@ -21,7 +21,7 @@ $(document).ready(function(){
 	$("#companyInformName").on("change",function(){limitString("companyInformName",30);})
 	$("#companyName").on("change",function(){limitString("companyName",30);})
 	$("#representative").on("change",function(){limitString("representative",30);})
-	$("#address").on("change",function(){limitString("address",106);})
+	$("#address").on("change",function(){limitString("address",300);})
 	$("#email").on("change",function(){limitString("email",30);})
 });
 
@@ -63,8 +63,8 @@ function insertCompany(){
 		return;
 	}
 	
-	if(address.split('\n').length > 3){
-		alert("住所は１２０文字以内、改行は3行以内にお願いします。");
+	if(address.split('\n').length > 9){
+		alert("住所は300文字以内、改行は9行以内にお願いします。");
 		return;
 	}
 	
@@ -90,12 +90,13 @@ function insertCompany(){
 					<!-- companyInformName -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
-							<label class="col-12 input-group-text d-flex justify-content-center" for="companyInformName" id="inputGroup-sizing-default">*会社情報名</label>
+							<label class="col-12 input-group-text d-flex justify-content-center" for="companyInformName" id="inputGroup-sizing-default">*自社情報タイプ</label>
 						</div>
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="companyInformName" name="companyInformName" maxlength="40">
 					</div>
 					
-					<!-- companyName -->
+					<!-- 
+					companyName
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="companyName" id="inputGroup-sizing-default">会社名</label>
@@ -103,23 +104,23 @@ function insertCompany(){
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="companyName" name="companyName" maxlength="40">
 					</div>
 					
-					<!-- post -->
+					post
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="post" id="inputGroup-sizing-default">post</label>
 						</div>
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="post" name="post" maxlength="8">
 					</div>
-					
+					 -->
 					<!-- address -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
-							<label class="col-12 input-group-text d-flex justify-content-center" for="address" id="inputGroup-sizing-default">住所</label>
+							<label class="col-12 input-group-text d-flex justify-content-center" for="address" id="inputGroup-sizing-default">表示内容</label>
 						</div>
-						<textarea class="pl-2 pr-0 col-8 form-control" id="address" name="address" maxlength="120"></textarea>
+						<textarea class="pl-2 pr-0 col-8 form-control" id="address" name="address" maxlength="300" placeholder="社名、住所、電話番号、e-mail、代表者、担当者など" rows="9"></textarea>
 					</div>
-					
-					<!-- phoneNumber -->
+					<!-- 
+					phoneNumber
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="phoneNumber" id="inputGroup-sizing-default">電話番号</label>
@@ -127,7 +128,7 @@ function insertCompany(){
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="phoneNumber" name="phoneNumber" maxlength="20">
 					</div>
 					
-					<!-- representative -->
+					representative
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="representative" id="inputGroup-sizing-default">代表者</label>
@@ -135,7 +136,7 @@ function insertCompany(){
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="representative" name="representative" maxlength="30">
 					</div>
 					
-					<!-- incharge -->
+					incharge
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="incharge" id="inputGroup-sizing-default">担当者</label>
@@ -143,14 +144,14 @@ function insertCompany(){
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="incharge" name="incharge" maxlength="30">
 					</div>
 					
-					<!-- email -->
+					email
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
 							<label class="col-12 input-group-text d-flex justify-content-center" for="email" id="inputGroup-sizing-default">email</label>
 						</div>
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="email" name="email" maxlength="40">
 					</div>
-					
+					 -->
 				</div>
 			</form>
 		</div>

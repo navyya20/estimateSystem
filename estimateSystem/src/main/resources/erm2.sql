@@ -1081,3 +1081,18 @@ alter table documentmaster add approvedDate datetime COMMENT '承認日';
 
 alter table estimatesi add sum BIGINT;
 alter table estimatesi add tax BIGINT;
+
+ALTER TABLE `interline_estimatesystem`.`companyinform` 
+CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '住所' ;
+
+ALTER TABLE `interline_estimatesystem`.`estimatelanguage` 
+CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '供給者住所' ;
+ALTER TABLE `interline_estimatesystem`.`estimatesi` 
+CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '供給者住所' ;
+ALTER TABLE `interline_estimatesystem`.`estimatesolution` 
+CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '供給者住所' ;
+ALTER TABLE `interline_estimatesystem`.`billsi` 
+CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '供給者住所' ;
+ALTER TABLE `interline_estimatesystem`.`billsolution` 
+CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '供給者住所' ;
+
