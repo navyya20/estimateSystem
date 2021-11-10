@@ -24,7 +24,12 @@ if ( self !== top ) {
 	  // you're in an iframe
 	window.parent.location.href="login";
 }
+//이전에 sort했던 옵션. 페이지navi 이동해도 sort가 그대로 적용되도록 유지하기위해.
 var option="${option}";
+if(option=""){
+	option="e.documentNum asc";
+}
+
 function goToUserMod(userNum){
 	$("#userNum").val(userNum);
 	$("#goToUserMod").submit();
@@ -32,10 +37,14 @@ function goToUserMod(userNum){
 
 function formSubmit(page){
 	var pp = document.getElementById('page');
-	
 	pp.value=page;
-							
-	document.location.href = "estimateList?page=" + pp.value+"&option="+option;
+	document.location.href = "estimateList?page=" + pp.value+"&option="+option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj));
+	/* var form = document.getElementById('pageNavi');
+	form.action("estimateList");
+	document.getElementById('taegetPaget').value(page);
+	document.getElementById('taegetOption').value(option);
+	document.getElementById('flagObject').value(JSON.stringify(flagObj));
+	form.submit(); */
 }
 
 function writeBill(estimateNum,nextDocumentTypeName){
@@ -146,9 +155,47 @@ function doDouble(op) {
 }
 //여기까지 더블클릭 감지
 
+//클릭횟수(홀,짝)감지기
+	//flags. 처음들어오면 전부 0으로 세팅. 모델에 정보가있으면 그걸로 세팅.
+var flagObjString='${flagObj}'
+var flagObj=new Object();
+if(flagObjString!=""){
+	flagObj=JSON.parse(flagObjString);
+}else{
+	flagObj.eDOTdocumentNumFlg=0;
+	flagObj.eDOTreceiverFlg=0;
+	flagObj.eDOTdocumentNameFlg=0;
+	flagObj.eDOTupdateDateFlg=0;
+	flagObj.eDOTuserNameFlg=0;
+	flagObj.eDOTstateNameFlg=0;
+	flagObj.eDOTapprovedDateFlg=0;
+	flagObj.bDOTdocumentNumFlg=0;
+	flagObj.bDOTuserNameFlg=0;
+	flagObj.bDOTstateNameFlg=0;
+	flagObj.bDOTapprovedDateFlg=0;
+}
+	//flag가 짝수면 asc정렬  flag가 홀수면 desc정렬. 
+function countClickNum(o){
+	var targetId = o.getAttribute('id');
+	var target = o.getAttribute('id').replace("DOT",".");
+	var flg=flagObj[targetId+"Flg"]%2;
+	switch(flg) {
+	    case 0:
+			flagObj[targetId+"Flg"]=flagObj[targetId+"Flg"]+1;
+	    	sort(target+" asc");
+	        break;
+	    case 1:
+	    	flagObj[targetId+"Flg"]=flagObj[targetId+"Flg"]+1;
+	    	sort(target+" desc");
+	        break;
+	}
+}
+//여기까지클릭횟수(홀,짝)감지기
+
+
 //option내용대로 order by 절 내용이 들어간다.
 function sort(option){
-	document.location.href = "estimateList?option="+option;
+	document.location.href = "estimateList?option="+option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj));
 }
 </script>
 </head>
@@ -185,13 +232,13 @@ function sort(option){
 			<div class="col-8 p-0 m-0 text-center" style="border-right: 1px solid white;">
 				<div class="col-12 p-0 m-0 text-center">見積書</div>
   				<div class="col-12 row p-0 m-0">
-  					<div class="col-3 col-md-1 p-0 m-0" id="eDOTdocumentNum" onclick="startClick(this);">文書番号</div>
-  					<div class="col-0 col-md-3 p-0 m-0 d-none d-md-inline" id="eDOTreceiver" onclick="startClick(this);">顧客</div>
-  					<div class="col-3 col-md-3 p-0 m-0" id="eDOTdocumentName" onclick="startClick(this);">件名</div>
-  					<div class="col-3 col-md-1 p-0 m-0" id="eDOTupdateDate" onclick="startClick(this);">保存日時</div>
-  					<div class="col-md-1 p-0 m-0 d-none d-md-inline" id="eDOTuserName" onclick="startClick(this);">作成者</div>
-  					<div class="col-2 col-md-1 p-0 m-0" id="eDOTstateName" onclick="startClick(this);">状態</div>
-  					<div class="col-0 col-md-1 p-0 m-0 d-none d-md-inline" id="eDOTapprovedDate" onclick="startClick(this);">承認日時</div>
+  					<div class="col-3 col-md-1 p-0 m-0" id="eDOTdocumentNum" onclick="countClickNum(this);">文書番号</div>
+  					<div class="col-0 col-md-3 p-0 m-0 d-none d-md-inline" id="eDOTreceiver" onclick="countClickNum(this);">顧客</div>
+  					<div class="col-3 col-md-3 p-0 m-0" id="eDOTdocumentName" onclick="countClickNum(this);">件名</div>
+  					<div class="col-3 col-md-1 p-0 m-0" id="eDOTupdateDate" onclick="countClickNum(this);">保存日時</div>
+  					<div class="col-md-1 p-0 m-0 d-none d-md-inline" id="eDOTuserName" onclick="countClickNum(this);">作成者</div>
+  					<div class="col-2 col-md-1 p-0 m-0" id="eDOTstateName" onclick="countClickNum(this);">状態</div>
+  					<div class="col-0 col-md-1 p-0 m-0 d-none d-md-inline" id="eDOTapprovedDate" onclick="countClickNum(this);">承認日時</div>
   					<div class="col-1 col-md-1 p-0 m-0">コピー</div>
   				</div>
 			</div>
@@ -199,10 +246,10 @@ function sort(option){
 				<div class="col-11 p-0 m-0"  style="border-right: 1px solid white;">
 					<div class="col-12 p-0 m-0 text-center">請求書</div>
   					<div class="col-12 row p-0 m-0">
-  						<div class="col-8 col-md-3 p-0 m-0" id="bDOTdocumentNum" onclick="startClick(this);">文書番号</div>
-  						<div class="col-md-3 p-0 m-0 d-none d-md-inline" id="bDOTuserName" onclick="startClick(this);">作成者</div>
-  						<div class="col-4 col-md-3 p-0 m-0" id="bDOTstateName" onclick="startClick(this);">状態</div>
-  						<div class="col-md-3 p-0 m-0 d-none d-md-inline" id="bDOTapprovedDate" onclick="startClick(this);">承認日時</div>
+  						<div class="col-8 col-md-3 p-0 m-0" id="bDOTdocumentNum" onclick="countClickNum(this);">文書番号</div>
+  						<div class="col-md-3 p-0 m-0 d-none d-md-inline" id="bDOTuserName" onclick="countClickNum(this);">作成者</div>
+  						<div class="col-4 col-md-3 p-0 m-0" id="bDOTstateName" onclick="countClickNum(this);">状態</div>
+  						<div class="col-md-3 p-0 m-0 d-none d-md-inline" id="bDOTapprovedDate" onclick="countClickNum(this);">承認日時</div>
   					</div>
 				</div>
 				<div class="col-1 p-0 m-0 align-self-center">削除</div>
@@ -266,5 +313,12 @@ function sort(option){
 		<input type="hidden" id="documentNum" name="documentNum" value="">
 		<input type="hidden" id="documentTypeName" name="documentTypeName" value="">
 	</form>
+	
+
+	<!-- <form id="pageNavi" action="" method="post" accept-charset="utf-8">
+		<input type="hidden" id="targetPage" name="page" value="">
+		<input type="hidden" id="targetOption" name="option" value="">
+		<input type="hidden" id="flagObject" name="flagObject" value="">
+	</form> -->
 </body>
 </html>

@@ -188,7 +188,7 @@ function copyButton(){
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
 			oz.sendToActionScript("connection.reportname",reportName);
 			oz.sendToActionScript("connection.pcount","1");
-			oz.sendToActionScript("connection.args1","path=http://"+'<%out.print(properties.getWebIP());%>'+'/<%out.print(properties.getProjectRoot());%>/resources/uploaded/');
+			oz.sendToActionScript("connection.args1","path=http://"+'<%out.print(properties.getWebIP());%>'+"/files/estimateSystem/uploaded/");
 
 			oz.sendToActionScript("global.language", "ja_JP");
 			oz.sendToActionScript("odi.odinames", odiName);

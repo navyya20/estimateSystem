@@ -67,7 +67,7 @@ public class BillController {
 	 * page: pageNavigator를 위한 page수
 	 */
 	@RequestMapping(value = "/all/billList", method = RequestMethod.GET)
-	public String billList(HttpSession session, Model model, @RequestParam(value="option", defaultValue="b.updateDate desc")String option, @RequestParam(value="page", defaultValue="1") int page) {
+	public String billList(HttpSession session, Model model, String flagObj, @RequestParam(value="option", defaultValue="b.updateDate desc")String option, @RequestParam(value="page", defaultValue="1") int page) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		logger.debug("BillController.esimateList,user:{}",user.getUserNum());
 		
@@ -75,6 +75,7 @@ public class BillController {
 		
 		model.addAttribute("billList", billList);
 		model.addAttribute("option", option);
+		model.addAttribute("flagObj", flagObj);
 		//네비게이션에대한 모델은 서비스에서 넣어준다.
 		return "billSystem/billList";
 	}

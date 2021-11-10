@@ -68,3 +68,16 @@ function limitString(id,maxByte){
 		$("#"+id).val(calByte.cutByteLength(str,maxByte));//원하는 byte 만큼 글자를 잘라서 반환합니다.
 	}
 }
+
+//n줄 초과 체크
+function limitLine(id,n){
+	var str = $("#"+id).val();
+	var strArr = str.split('\n');
+	if(strArr.length>n){
+		alert(n+"行以内にお願いします。");
+		for(i=1;i<n;i++){
+			strArr[0] = strArr[0] +'\n'+ strArr[i];
+		}
+		$("#"+id).val(strArr[0]);		
+	}
+}

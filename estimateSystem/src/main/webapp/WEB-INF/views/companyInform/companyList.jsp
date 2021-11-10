@@ -1,5 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<% pageContext.setAttribute("crcn", "\r\n"); //space,enter %>
+<% pageContext.setAttribute("br", "<br/>"); %>
 
 <!DOCTYPE html>
 <html style="height: 100%;">
@@ -70,7 +73,9 @@ function goToCompanyMod(companyInformNum){
 					<div class="mt-2 mb-2 col-12 col-md-12 p-0 text-center text-break"><a onclick="goToCompanyMod(${company.companyInformNum})" style="cursor: pointer; color: blue;">${company.companyInformName}</a></div>
 				</div>
 				<div class="p-0 col-8 col-md-9 d-flex">
-					<div class="overflow-auto mt-2 mb-2 col-12 col-md-12 p-0" style="height: 100px; word-break:break-all;"><pre><c:out value="${company.address}" /></pre></div>
+					<div class="overflow-auto mt-2 mb-2 col-12 col-md-12 p-0" style="overflow:hidden; height:auto; word-break:break-all;">
+						${fn:replace(company.address ,crcn ,br)}
+					</div>
 				</div>
 			</div>
 		</div>	

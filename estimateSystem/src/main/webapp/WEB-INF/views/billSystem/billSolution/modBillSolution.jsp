@@ -90,7 +90,7 @@ if ( self !== top ) {
 			oz.sendToActionScript("connection.args3","userPosition="+(user.position==null? '':user.position));
 			oz.sendToActionScript("connection.args4","userDepartment="+(user.department==null? '':user.department));
 			oz.sendToActionScript("connection.args5","userName="+user.userName);
-			oz.sendToActionScript("connection.args6","path=http://"+'<%out.print(properties.getWebIP());%>'+'/<%out.print(properties.getProjectRoot());%>/resources/uploaded/');
+			oz.sendToActionScript("connection.args6","path=http://"+'<%out.print(properties.getWebIP());%>'+"/files/estimateSystem/uploaded/");
 			oz.sendToActionScript("connection.args7","companyList="+companyList);
 
 			oz.sendToActionScript("pdf.fontembedding","true");

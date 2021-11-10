@@ -19,7 +19,8 @@ $(document).ready(function(){
 	$('#btn_login').click(input_Check);
 	$("#login_id").keyup(function(e){if(e.keyCode == 13)  input_Check(); });
 	$("#login_pw").keyup(function(e){if(e.keyCode == 13)  input_Check(); });
-
+	ozlicenseCheck();
+	
 	function input_Check(){
 		var id=$("#login_id").val();
 		var pw=$("#login_pw").val();
@@ -58,9 +59,19 @@ $(document).ready(function(){
 
 		return false;
 	}
+
+	
 });
 
-
+function ozlicenseCheck(){
+	var expirationDate = new Date(2022,5,1) ;//라이센스받으면 만료일 경신 필요함.
+	var nowDate = new Date();
+	var startDate = new Date(nowDate.getFullYear(),nowDate.getMonth()+1,nowDate.getDate());
+	var diff = (expirationDate-startDate)/(1000*60*60*24);	
+	if(diff<=14){
+		alert("OZLicense満了まで"+diff+"日残っています。");
+	}
+}
 //인터셉터로 로그인 들어왔는데 현제페이지가 아이프레임 내부일경우 부모요소를 로그인 페이지로 페이지이동
 if ( self !== top ) {
 	  // you're in an iframe
@@ -83,6 +94,7 @@ if ( self !== top ) {
 	20211022.ver9(改善点28反映)<br>
 	20211028.ver10(改善点25,27反映)<br>
 	20211104.ver11(改善点43,44,47反映)<br>
+	20211109.ver12(改善点43再,48,49,51反映)<br>
 </div>
 	<div class="row align-items-center col-12 p-0 m-0" style="height: 100%;">
 		<div id="login_div" class="d-flex justify-content-center col-12 p-0">

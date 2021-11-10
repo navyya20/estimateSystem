@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@page import="jp.co.interline.service.GetProperties"%>
+<% GetProperties properties= new GetProperties(); %>
 <!DOCTYPE html>
 <html style="height: 100%;">
 <head>
@@ -47,6 +48,7 @@ function handleImgFileSelect(e) {
 
         var reader = new FileReader();
         reader.onload = function(e) {
+            console.log(e.target.result);
             $("#"+tagId+"Img").attr("src", e.target.result);
         }
         reader.readAsDataURL(f);
@@ -63,7 +65,7 @@ function handleImgFileSelect(e) {
 		<div class="card col-12 col-md-6">
 			<div class="card-body">
 				<h5 class="card-title">LOGO</h5>
-				<div class="p-0 mb-3 col-12 d-flex justify-content-center"><img src="../resources/uploaded/${logoFileName.fileName}" id="logoFileImg" width="300" height="100"></div>
+				<div class="p-0 mb-3 col-12 d-flex justify-content-center"><img src="http://<%out.print(properties.getWebIP());%>/files/estimateSystem/uploaded/${logoFileName.fileName}" id="logoFileImg" width="300" height="100"></div>
 				<form id="form1" action="uploadImgFile" method="post" enctype="multipart/form-data">
 					<input type="file" id="logoFile" name="imgFile" class="mb-3">
 					<input type="hidden" name="category" class="mb-3" value="logo">
@@ -76,7 +78,7 @@ function handleImgFileSelect(e) {
 		<div class="card col-12 col-md-6">
 			<div class="card-body">
 				<h5 class="card-title">印鑑</h5>
-				<div class="p-0 mb-3 col-12 d-flex justify-content-center"><img src="../resources/uploaded/${stampFileName.fileName}" id="stampFileImg" width="100" height="100"></div>
+				<div class="p-0 mb-3 col-12 d-flex justify-content-center"><img src="http://<%out.print(properties.getWebIP());%>/files/estimateSystem/uploaded/${stampFileName.fileName}" id="stampFileImg" width="100" height="100"></div>
 				<form id="form2" action="uploadImgFile" method="post" enctype="multipart/form-data">
 					<input type="file" id="stampFile" name="imgFile" class="mb-3">
 					<input type="hidden" name="category" class="mb-3" value="stamp">

@@ -21,7 +21,7 @@ $(document).ready(function(){
 	$("#companyInformName").on("change",function(){limitString("companyInformName",30);})
 	$("#companyName").on("change",function(){limitString("companyName",30);})
 	$("#representative").on("change",function(){limitString("representative",30);})
-	$("#address").on("change",function(){limitString("address",300);})
+	$("#address").on("change keyup paste",function(){limitLine("address",7);})
 	$("#email").on("change",function(){limitString("email",30);})
 	$("#incharge").on("change",function(){limitString("incharge",30);})
 });
@@ -118,7 +118,7 @@ function deleteCompany(){
 					<!-- address -->
 					<div class="input-group">
 						<div class="p-0 col-4 input-group-prepend">
-							<label class="col-12 input-group-text d-flex justify-content-center" for="address" id="inputGroup-sizing-default">表示内容</label>
+							<label class="col-12 input-group-text d-flex justify-content-center" for="address" id="inputGroup-sizing-default">表示内容<br>（最大7行）</label>
 						</div>
 						<textarea class="pl-2 pr-0 col-8 form-control" id="address" name="address" maxlength="300" placeholder="社名、住所、電話番号、e-mail、代表者、担当者など" rows="9">${company.address}</textarea>
 					</div>

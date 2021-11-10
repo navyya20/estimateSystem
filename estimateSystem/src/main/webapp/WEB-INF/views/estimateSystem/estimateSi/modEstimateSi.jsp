@@ -89,7 +89,7 @@ if ( self !== top ) {
 			oz.sendToActionScript("connection.args4","userPosition="+(user.position==null? '':user.position));
 			oz.sendToActionScript("connection.args5","userDepartment="+(user.department==null? '':user.department));
 			oz.sendToActionScript("connection.args6","userName="+user.userName);
-			oz.sendToActionScript("connection.args7","path=http://"+'<%out.print(properties.getWebIP());%>'+'/<%out.print(properties.getProjectRoot());%>/resources/uploaded/');
+			oz.sendToActionScript("connection.args7","path=http://"+'<%out.print(properties.getWebIP());%>'+"/files/estimateSystem/uploaded/");
 			
 			oz.sendToActionScript("global.language", "ja_JP");
 			oz.sendToActionScript("odi.odinames", "modEstimateSi");

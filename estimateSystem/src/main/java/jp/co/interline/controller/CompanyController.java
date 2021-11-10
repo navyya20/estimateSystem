@@ -25,6 +25,7 @@ import jp.co.interline.dto.FileNamesDTO;
 import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.service.CompanyService;
 import jp.co.interline.service.FileService;
+import jp.co.interline.service.GetProperties;
 
 /**
  * Handles requests for the application home page.
@@ -113,8 +114,11 @@ public class CompanyController {
 	@RequestMapping(value = "/all/uploadImgFile", method = RequestMethod.POST)
 	public String uploadImgFile(HttpSession session, MultipartFile imgFile, String category) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		GetProperties properties= new GetProperties();
+		String projectRoot = properties.getProjectRoot();
 		String path =  session.getServletContext().getRealPath("");
-		path = path+ "resources/uploaded";
+		path = path.replaceFirst(projectRoot, "files");
+		path = path+ "estimateSystem/uploaded";
 		path = path.replace('/', File.separatorChar);
 		logger.info("save path : {}",path);
 		

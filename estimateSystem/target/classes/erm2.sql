@@ -1089,3 +1089,10 @@ ALTER TABLE `interline_estimatesystem`.`estimatelanguage`
 CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '供給者住所' ;
 ALTER TABLE `interline_estimatesystem`.`estimatesi` 
 CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '供給者住所' ;
+ALTER TABLE `interline_estimatesystem`.`estimatesolution` 
+CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '供給者住所' ;
+ALTER TABLE `interline_estimatesystem`.`billsi` 
+CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '供給者住所' ;
+ALTER TABLE `interline_estimatesystem`.`billsolution` 
+CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '供給者住所' ;
+

@@ -35,7 +35,7 @@ function formSubmit(page){
 	
 	pp.value=page;
 							
-	document.location.href = "estimateList?page=" + pp.value+"&option="+option;
+	document.location.href = "estimateList?page=" + pp.value+"&option=" + option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj));
 }
 function writeBill(estimateNum,nextDocumentTypeName){
 	if(nextDocumentTypeName==""){
@@ -81,48 +81,45 @@ function deleteSheets(){
 	);
 }
 
-/* $(document).ready(function(){
-	$("#eDOTupdateDate,#bDOTupdateDate").click(function(e){
-		var object = $(e.target);
-		var option = object.attr('id').replace("DOT",".")+" desc";
-		sort(option);
-	});
-	$("#eDOTupdateDate,#bDOTupdateDate").dblclick(function(e){
-		alert("db");
-		var object = $(e.target);
-		var option = object.attr('id').replace("DOT",".")+" asc";
-		sort(option);
-	});
-})
- */
- var numClicks = 0;
- var timeOut;
- function startClick(o) {
-    numClicks++;
-    var op = o.getAttribute('id').replace("DOT",".");
-    switch(numClicks) {
-        case 2:
-            doDouble(op);
-            break;
-        case 1:
-            timeOut = setTimeout("doSingle('"+op+"')", 500);
-            break;
-    }
+//클릭횟수(홀,짝)감지기
+//flags. 처음들어오면 전부 0으로 세팅. 모델에 정보가있으면 그걸로 세팅.
+var flagObjString='${flagObj}'
+var flagObj=new Object();
+if(flagObjString!=""){
+	flagObj=JSON.parse(flagObjString);
+}else{
+	flagObj.bDOTdocumentNumFlg=0;
+	flagObj.bDOTreceiverFlg=0;
+	flagObj.bDOTdocumentNameFlg=0;
+	flagObj.bDOTupdateDateFlg=0;
+	flagObj.bDOTstateNameFlg=0;
+	flagObj.bDOTuserNameFlg=0;
+	flagObj.bDOTuserDepartmentFlg=0;
 }
+//flag가 짝수면 asc정렬  flag가 홀수면 desc정렬. 
+function countClickNum(o){
+	var targetId = o.getAttribute('id');
+	var target = o.getAttribute('id').replace("DOT",".");
+	var flg=flagObj[targetId+"Flg"]%2;
+	switch(flg) {
+	    case 0:
+			flagObj[targetId+"Flg"]=flagObj[targetId+"Flg"]+1;
+	    	sort(target+" asc");
+	        break;
+	    case 1:
+	    	flagObj[targetId+"Flg"]=flagObj[targetId+"Flg"]+1;
+	    	sort(target+" desc");
+	        break;
+	}
+}
+//여기까지클릭횟수(홀,짝)감지기
 
-function doSingle(op) {
-	numClicks=0;
-	sort(op+" desc");
-}
 
-function doDouble(op) {
-	clearTimeout(timeOut);
-	numClicks=0;
-	sort(op+" asc");
-}
+//option내용대로 order by 절 내용이 들어간다.
 function sort(option){
-	document.location.href = "billList?option="+option;
+	document.location.href = "billList?option="+option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj));
 }
+
 </script>
 </head>
 
@@ -159,13 +156,13 @@ function sort(option){
 		<div class="row p-0 m-0 bg-dark text-white">
 			<div class="col-11 p-0 m-0 text-center" style="border-right: 1px solid white;">
   				<div class="col-12 row p-0 m-0">
-  					<div class="col-3 col-md-2 p-0 m-0" id="bDOTdocumentNum" onclick="startClick(this);">文書番号</div>
-  					<div class="col-2 col-md-2 p-0 m-0 d-none d-md-inline" id="bDOTreceiver" onclick="startClick(this);">顧客</div>
-  					<div class="col-4 col-md-2 p-0 m-0">件名</div>
-  					<div class="col-3 col-md-2 p-0 m-0" id="bDOTupdateDate" onclick="startClick(this);">保存日時</div>
-  					<div class="col-2 col-md-1 p-0 m-0" id="bDOTstateName" onclick="startClick(this);">状態</div>
-  					<div class="col-md-2 p-0 m-0 d-none d-md-inline" id="bDOTuserName" onclick="startClick(this);">作成者</div>
-  					<div class="col-md-1 p-0 m-0 d-none d-md-inline" id="bDOTuserDepartment" onclick="startClick(this);">所属</div>
+  					<div class="col-3 col-md-2 p-0 m-0" id="bDOTdocumentNum" onclick="countClickNum(this);">文書番号</div>
+  					<div class="col-2 col-md-2 p-0 m-0 d-none d-md-inline" id="bDOTreceiver" onclick="countClickNum(this);">顧客</div>
+  					<div class="col-4 col-md-2 p-0 m-0" id="bDOTdocumentName" onclick="countClickNum(this);">件名</div>
+  					<div class="col-3 col-md-2 p-0 m-0" id="bDOTupdateDate" onclick="countClickNum(this);">保存日時</div>
+  					<div class="col-2 col-md-1 p-0 m-0" id="bDOTstateName" onclick="countClickNum(this);">状態</div>
+  					<div class="col-md-2 p-0 m-0 d-none d-md-inline" id="bDOTuserName" onclick="countClickNum(this);">作成者</div>
+  					<div class="col-md-1 p-0 m-0 d-none d-md-inline" id="bDOTuserDepartment" onclick="countClickNum(this);">所属</div>
   				</div>
 			</div>
 			<div class="col-1 p-0 m-0 align-self-center text-center">削除</div>

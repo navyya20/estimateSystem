@@ -71,14 +71,14 @@ public class EstimateController {
 	 * page: pageNavigator를 위한 page수
 	 */
 	@RequestMapping(value = "/all/estimateList", method = RequestMethod.GET)
-	public String estimateList(HttpSession session, Model model, @RequestParam(value="option", defaultValue="e.updateDate desc")String option, @RequestParam(value="page", defaultValue="1") int page) {
+	public String estimateList(HttpSession session, Model model,String flagObj, @RequestParam(value="option", defaultValue="e.updateDate desc")String option, @RequestParam(value="page", defaultValue="1") int page) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		logger.debug("EstimateController.esimateList,user:{}",user.getUserNum());
 		
 		ArrayList<EstimateListDTO> estimateList = estimateService.getEstimateList(model, user,option,page);
-		
 		model.addAttribute("estimateList", estimateList);
 		model.addAttribute("option", option);
+		model.addAttribute("flagObj", flagObj);
 		//네비게이션에대한 모델은 서비스에서 넣어준다.
 		return "estimateSystem/estimateList";
 	}
