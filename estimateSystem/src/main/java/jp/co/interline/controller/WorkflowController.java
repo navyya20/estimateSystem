@@ -119,7 +119,7 @@ public class WorkflowController {
 	public String workflowWaitingList(HttpSession session, Model model) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		ArrayList<WorkflowDTO> workflowList = workflowService.getWorkflowWaitingList(user.getUserNum());
-		System.out.println(workflowList);
+		//System.out.println(workflowList);
 		model.addAttribute("workflowList", workflowList);
 		return "approval/workflowWaitingList";
 	}

@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import jp.co.interline.dto.CompanyDTO;
+import jp.co.interline.dto.DepartmentDTO;
 import jp.co.interline.dto.FileNamesDTO;
+import jp.co.interline.dto.PositionDTO;
 import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.service.CompanyService;
 import jp.co.interline.service.FileService;
@@ -131,5 +133,90 @@ public class CompanyController {
 			
 		}
 		return "redirect:/all/imgList";
+	}
+	
+	//역직,부서등을 설정하는 페이지 로드
+	@RequestMapping(value = "/all/groupList", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
+	public String groupList(HttpSession session, Model model) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("CompanyController.groupList,user:{}",user.getUserNum());
+		return "companyInform/groupList";
+	}
+	
+	//역직을 로드, 삭제, 갱신, 삽입. groupList페이지에 position에 해당하는 html내용물을 로드함.
+	@RequestMapping(value = "/all/positionListHtml", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public String positionListHtml(HttpSession session, Model model) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("CompanyController.positionListHTML,user:{}",user.getUserNum());
+		
+		ArrayList<PositionDTO> positionList = companyService.getPositionList();
+		model.addAttribute("positionList", positionList);
+		return "companyInform/positionListHtml";
+	}
+	@RequestMapping(value = "/all/insertPosition", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public String insertPosition(HttpSession session, Model model, PositionDTO position) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("CompanyController.insertPosition,user:{}",user.getUserNum());
+		int result = companyService.insertPosition(position);
+		ArrayList<PositionDTO> positionList = companyService.getPositionList();
+		model.addAttribute("positionList", positionList);
+		return "companyInform/positionListHtml";
+	}
+	@RequestMapping(value = "/all/deletePosition", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public String deletePosition(HttpSession session, Model model, PositionDTO position) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("CompanyController.deletePosition,user:{}",user.getUserNum());
+		int result = companyService.deletePosition(position);
+		ArrayList<PositionDTO> positionList = companyService.getPositionList();
+		model.addAttribute("positionList", positionList);
+		return "companyInform/positionListHtml";
+	}
+	@RequestMapping(value = "/all/updatePosition", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public String updatePosition(HttpSession session, Model model, PositionDTO position) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("CompanyController.updatePosition,user:{}",user.getUserNum());
+		int result = companyService.updatePosition(position);
+		ArrayList<PositionDTO> positionList = companyService.getPositionList();
+		model.addAttribute("positionList", positionList);
+		return "companyInform/positionListHtml";
+	}
+	
+	
+	//부서를 로드, 삭제, 갱신, 삽입. groupList페이지에 department에 해당하는 html내용물을 로드함.
+	@RequestMapping(value = "/all/departmentListHtml", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public String departmentListHtml(HttpSession session, Model model) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("CompanyController.departmentListHTML,user:{}",user.getUserNum());
+		
+		ArrayList<DepartmentDTO> departmentList = companyService.getDepartmentList();
+		model.addAttribute("departmentList", departmentList);
+		return "companyInform/departmentListHtml";
+	}
+	@RequestMapping(value = "/all/insertDepartment", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public String insertDepartment(HttpSession session, Model model, DepartmentDTO department) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("CompanyController.insertDepartment,user:{}",user.getUserNum());
+		int result = companyService.insertDepartment(department);
+		ArrayList<DepartmentDTO> departmentList = companyService.getDepartmentList();
+		model.addAttribute("departmentList", departmentList);
+		return "companyInform/departmentListHtml";
+	}
+	@RequestMapping(value = "/all/deleteDepartment", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public String deleteDepartment(HttpSession session, Model model, DepartmentDTO department) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("CompanyController.departmentListHTML,user:{}",user.getUserNum());
+		int result = companyService.deleteDepartment(department);
+		ArrayList<DepartmentDTO> departmentList = companyService.getDepartmentList();
+		model.addAttribute("departmentList", departmentList);
+		return "companyInform/departmentListHtml";
+	}
+	@RequestMapping(value = "/all/updateDepartment", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public String updateDepartment(HttpSession session, Model model, DepartmentDTO department) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("CompanyController.updateDepartment,user:{}",user.getUserNum());
+		int result = companyService.updateDepartment(department);
+		ArrayList<DepartmentDTO> departmentList = companyService.getDepartmentList();
+		model.addAttribute("departmentList", departmentList);
+		return "companyInform/departmentListHtml";
 	}
 }

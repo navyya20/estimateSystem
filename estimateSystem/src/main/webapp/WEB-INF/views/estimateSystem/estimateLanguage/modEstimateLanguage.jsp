@@ -48,20 +48,14 @@ if ( self !== top ) {
 	</header>
 	
 	<div id="OZViewer" style="width:99%;height:97.6%"></div>
-	
+	<div class="d-block" style="height: 8px;"></div>
 	<!--buttons -->
-	<div class="p-0 d-flex col-12">
-		<div class="pl-2 pr-2 d-flex col-4">
-			<button type="button" class="col-12 btn btn-secondary" onclick="saveButton('${state}')">一時保存</button>
-		</div>
-		<div class="pl-2 pr-2 d-flex col-4">
-			<c:if test="${state eq 'wri' and userNum eq userInform.userNum}">
-				<button type="button" class="col-12 btn btn-secondary" onclick="saveAndRequestButton('${state}')">承認依頼</button>
-			</c:if>
-		</div>
-		<div class="pl-2 pr-2 d-flex col-4">
-			<button type="button" class="col-12 btn btn-secondary" onclick="location.href='estimateList'">戻る</button>
-		</div>
+	<div class="p-0 d-flex col-12 justify-content-center">
+		<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="saveButton('${state}')">一時保存</button>
+		<c:if test="${state eq 'wri' and userNum eq userInform.userNum}">
+			<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="saveAndRequestButton('${state}')">承認依頼</button>
+		</c:if>
+		<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="location.href='estimateList'">戻る</button>
 	</div>	
 
 	<script type="text/javascript" >

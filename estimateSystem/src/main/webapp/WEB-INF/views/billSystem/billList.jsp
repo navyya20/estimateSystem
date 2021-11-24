@@ -159,7 +159,7 @@ function sort(option){
   					<div class="col-3 col-md-2 p-0 m-0" id="bDOTdocumentNum" onclick="countClickNum(this);">文書番号</div>
   					<div class="col-2 col-md-2 p-0 m-0 d-none d-md-inline" id="bDOTreceiver" onclick="countClickNum(this);">顧客</div>
   					<div class="col-4 col-md-2 p-0 m-0" id="bDOTdocumentName" onclick="countClickNum(this);">件名</div>
-  					<div class="col-3 col-md-2 p-0 m-0" id="bDOTupdateDate" onclick="countClickNum(this);">保存日時</div>
+  					<div class="col-3 col-md-2 p-0 m-0" id="bDOTupdateDate" onclick="countClickNum(this);">更新日時</div>
   					<div class="col-2 col-md-1 p-0 m-0" id="bDOTstateName" onclick="countClickNum(this);">状態</div>
   					<div class="col-md-2 p-0 m-0 d-none d-md-inline" id="bDOTuserName" onclick="countClickNum(this);">作成者</div>
   					<div class="col-md-1 p-0 m-0 d-none d-md-inline" id="bDOTuserDepartment" onclick="countClickNum(this);">所属</div>

@@ -49,12 +49,12 @@ function readDocument(system,documentTypeName,documentNum){
 	<div class="p-0 container-lg">
 		<div class="p-0 d-flex bg-dark text-white">
 			<div class="p-0 col-12 d-flex">
-				<div class="mt-2 mb-2 col-2 p-0 text-center">カテゴリー</div>
-				<div class="mt-2 mb-2 col-2 p-0 text-center">タイプ</div>
+				<div class="mt-2 mb-2 col-3 p-0 text-center">種類</div>
 				<div class="mt-2 mb-2 col-2 p-0 text-center">文書番号</div>
-				<div class="mt-2 mb-2 col-2 p-0 text-center">起案元</div>
-				<div class="mt-2 mb-2 col-2 p-0 text-center">起案日時</div>
-				<div class="mt-2 mb-2 col-2 p-0 text-center">更新日時</div>
+				<div class="mt-2 mb-2 col-2 p-0 text-center">部署</div>
+				<div class="mt-2 mb-2 col-2 p-0 text-center">作成者</div>
+				<div class="mt-2 mb-2 col-2 p-0 text-center">承認依頼日時</div>
+				<!--지금은 어차피 승인경로가1명이라 필요없는 정보 <div class="mt-2 mb-2 col-2 p-0 text-center">更新日時</div> -->
 			</div>
 		</div>
 	</div>
@@ -64,12 +64,12 @@ function readDocument(system,documentTypeName,documentNum){
 		<div class="p-0 container-lg">
 			<div class="p-0 d-flex ">
 				<div class="p-0 col-12 d-flex">
-					<div class="mt-2 mb-2 col-2 p-0 text-center">${ arr[w.systemNum] }</div>
-					<div class="mt-2 mb-2 col-2 p-0 text-center">${w.documentTypeName}</div>
+					<div class="mt-2 mb-2 col-3 p-0 text-center">${w.explanation}</div>
 					<div class="mt-2 mb-2 col-2 p-0 text-center link" onclick="readDocument('${sysArr[w.systemNum]}','${w.documentTypeName}','${w.documentNum}')">${w.documentNum}</div>
-					<div class="mt-2 mb-2 col-2 p-0 text-center">${w.userDepartment}(${w.userName})</div>
-					<div class="mt-2 mb-2 col-2 p-0 text-center"><fmt:parseDate value="${w.insertDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/></div>
-					<div class="mt-2 mb-2 col-2 p-0 text-center"><fmt:parseDate value="${w.updateDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/></div>
+					<div class="mt-2 mb-2 col-2 p-0 text-center">${w.userDepartment}</div>
+					<div class="mt-2 mb-2 col-2 p-0 text-center">${w.userName}</div>
+					<div class="mt-2 mb-2 col-2 p-0 text-center"><fmt:parseDate value="${w.insertDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/><br><fmt:formatDate value="${noticePostDate}" pattern="HH:mm"/></div>
+					<!--지금은 어차피 승인경로가1명이라 필요없는 정보 <div class="mt-2 mb-2 col-2 p-0 text-center"><fmt:parseDate value="${w.updateDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/><br><fmt:formatDate value="${noticePostDate}" pattern="HH:mm"/></div> -->
 				</div>
 			</div>
 		</div>

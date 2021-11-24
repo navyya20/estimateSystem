@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import jp.co.interline.dao.CompanyDAO;
 import jp.co.interline.dto.CompanyDTO;
+import jp.co.interline.dto.DepartmentDTO;
 import jp.co.interline.dto.FileNamesDTO;
+import jp.co.interline.dto.PositionDTO;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {
@@ -57,6 +59,48 @@ public class CompanyServiceImpl implements CompanyService {
 	public FileNamesDTO getfileName(String category) {
 		FileNamesDTO fileName = companyDao.getfileName(category);
 		return fileName;
+	}
+
+	@Override
+	public ArrayList<PositionDTO> getPositionList() {
+		ArrayList<PositionDTO> positionList = companyDao.getPositionList();
+		return positionList;
+	}
+	@Override
+	public int insertPosition(PositionDTO position) {
+		int result = companyDao.insertPosition(position);
+		return result;
+	}
+	@Override
+	public int deletePosition(PositionDTO position) {
+		int result = companyDao.deletePosition(position);
+		return result;
+	}
+	@Override
+	public int updatePosition(PositionDTO position) {
+		int result = companyDao.updatePosition(position);
+		return result;
+	}
+	
+	@Override
+	public ArrayList<DepartmentDTO> getDepartmentList() {
+		ArrayList<DepartmentDTO> departmentList = companyDao.getDepartmentList();
+		return departmentList;
+	}
+	@Override
+	public int insertDepartment(DepartmentDTO department) {
+		int result = companyDao.insertDepartment(department);
+		return result;
+	}
+	@Override
+	public int deleteDepartment(DepartmentDTO department) {
+		int result = companyDao.deleteDepartment(department);
+		return result;
+	}
+	@Override
+	public int updateDepartment(DepartmentDTO department) {
+		int result = companyDao.updateDepartment(department);
+		return result;
 	}
 	
 }

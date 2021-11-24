@@ -128,13 +128,15 @@
 		select count(workflowNum) from workflow where presentApprover = #{value} and targetValue != 'aaa'
 	</select>
 	<select id="getWorkflowWaitingList" parameterType="int" resultType="workflowDTO">
-		select w.*, u1.userName ,d1.department userDepartment
+		select w.*, u1.userName ,d1.department userDepartment, dt.explanation explanation
 			from
 				workflow w
 			left outer join 
 				userInform u1 on (w.userNum = u1.userNum)
 			left outer join 
 				department d1 on (u1.departmentNum = d1.departmentNum)
+			left outer join
+				documentType dt on (w.documentTypeName = dt.documentTypeName)
 		where
 			presentApprover = #{value} and targetValue != 'aaa'
 	</select>

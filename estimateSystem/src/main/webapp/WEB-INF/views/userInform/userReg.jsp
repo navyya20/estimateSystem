@@ -18,7 +18,6 @@
 <script>
 $(document).ready(function(){
 	$("#userName").on("change",function(){limitString("userName",30);})
-	$("#email").on("change",function(){limitString("email",30);})
 });
 //인터셉터로 로그인 들어왔는데 현제페이지가 아이프레임 내부일경우 부모요소를 로그인 페이지로 페이지이동
 if ( self !== top ) {
@@ -48,16 +47,12 @@ function insertUser(){
 	var departmentNum = $("#departmentNum").val();
 	var positionNum = $("#positionNum").val();
 	var auth = $("#auth").val();
-	var phoneNumber = $("#phoneNumber").val();
-	var email = $("#email").val();
 	console.log(userId);
 	console.log(password);
 	console.log(userName);
 	console.log(departmentNum);
 	console.log(positionNum);
 	console.log(auth);
-	console.log(phoneNumber);
-	console.log(email);
 	if(!isPassword(userId)){
 		alert("ID又passwordは英数字３～２０文字でお願いします。");
 		$("#userId").focus();
@@ -155,23 +150,6 @@ function insertUser(){
 							</c:forEach>
 						</select>
 					</div>
-					
-					<!-- phoneNumber -->
-					<div class="input-group">
-						<div class="p-0 col-4 input-group-prepend">
-							<label class="col-12 input-group-text d-flex justify-content-center" for="phoneNumber" id="inputGroup-sizing-default">電話番号</label>
-						</div>
-						<input type="text" class="pl-2 pr-0 col-8 form-control" id="phoneNumber" name="phoneNumber" maxlength="20">
-					</div>
-					
-					<!-- email -->
-					<div class="input-group">
-						<div class="p-0 col-4 input-group-prepend">
-							<label class="col-12 input-group-text d-flex justify-content-center" for="email" id="inputGroup-sizing-default">E-mail</label>
-						</div>
-						<input type="text" class="pl-2 pr-0 col-8 form-control" id="email" name="email" maxlength="30">
-					</div>
-					
 				</div>
 			</form>
 		</div>

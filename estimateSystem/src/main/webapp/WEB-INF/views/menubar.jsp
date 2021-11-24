@@ -63,7 +63,11 @@
 				<li class="nav-item active">
 						<a class="nav-link" href="./userList">ユーザ情報</a>
 				</li>
-				
+				<li class="nav-item active">
+					<c:if test="${sessionScope.userInform.auth eq 'sa'}">
+						<a class="nav-link" href="./groupList">役職・組織設定</a>
+					</c:if>
+				</li>
 				<%-- <li class="nav-item dropdown active">
 					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 						設定

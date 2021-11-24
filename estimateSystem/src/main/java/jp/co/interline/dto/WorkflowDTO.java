@@ -21,6 +21,7 @@ public class WorkflowDTO {
 	int updater;
 	
 	String documentTypeName;
+	String explanation;
 	String state;
 	String userName;
 	String userDepartment;
@@ -151,6 +152,12 @@ public class WorkflowDTO {
 	}
 	public void setUserDepartment(String userDepartment) {
 		this.userDepartment = userDepartment;
+	}
+	public String getExplanation() {
+		return explanation;
+	}
+	public void setExplanation(String explanation) {
+		this.explanation = explanation;
 	}
 	
 }

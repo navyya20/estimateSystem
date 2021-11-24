@@ -72,5 +72,44 @@
 	<select id="getfileName" parameterType="String" resultType="fileNamesDTO">
 		select * from fileNames where category=#{category}
 	</select>
+
+
+
+
 	
+	<select id="getPositionList" resultType="positionDTO">
+		select * from position2
+	</select>
+
+	<insert id="insertPosition" parameterType="positionDTO">
+		insert into position2(positionNum,position) values (getSeq("positionSeq"),#{position})
+	</insert>
+	<delete id="deletePosition" parameterType="positionDTO">
+		delete from position2 where positionNum = #{positionNum}
+	</delete>
+	<update id="updatePosition" parameterType="positionDTO">
+		update position2 set
+			position = #{position}
+		where
+			positionNum = #{positionNum}
+	</update>
+
+
+
+	
+	<select id="getDepartmentList" resultType="departmentDTO">
+		select * from department
+	</select>
+	<insert id="insertDepartment" parameterType="departmentDTO">
+		insert into department(departmentNum,department) values (getSeq("departmentSeq"),#{department})
+	</insert>
+	<delete id="deleteDepartment" parameterType="departmentDTO">
+		delete from department where departmentNum = #{departmentNum}
+	</delete>
+	<update id="updateDepartment" parameterType="departmentDTO">
+		update department set
+			department = #{department}
+		where
+			departmentNum = #{departmentNum}
+	</update>
 </mapper>

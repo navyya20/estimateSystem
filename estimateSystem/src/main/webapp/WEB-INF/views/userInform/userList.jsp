@@ -55,18 +55,16 @@ function goToUserMod(userNum){
 	
 	<div class="p-0 container-lg">
 		<div class="p-0 d-flex bg-dark text-white">
-			<div class="p-0 col-9 col-md-3 d-flex">
-				<div class="mt-2 mb-2 col-4 col-md-4 p-0 text-center">ID</div>
-				<div class="mt-2 mb-2 col-4 col-md-4 p-0 text-center">名前</div>
-				<div class="mt-2 mb-2 col-4 col-md-4 p-0 text-center">所属</div>
+			<div class="p-0 col-12 col-md-6 d-flex">
+				<div class="mt-2 mb-2 col-3 col-md-3 p-0 text-center">ID</div>
+				<div class="mt-2 mb-2 col-3 col-md-3 p-0 text-center">名前</div>
+				<div class="mt-2 mb-2 col-3 col-md-3 p-0 text-center">所属</div>
+				<div class="mt-2 mb-2 col-3 col-md-3 p-0 text-center">役職</div>
 			</div>
-			<div class="p-0 col-3 col-md-9 d-flex">
-				<div class="mt-2 mb-2 col-12 col-md-1 p-0 text-center">役職</div>
-				<div class="mt-2 mb-2 col-md-3 p-0 text-center d-none d-md-inline">電話番号</div>
-				<div class="mt-2 mb-2 col-md-1 p-0 text-center d-none d-md-inline">権限</div>
-				<div class="mt-2 mb-2 col-md-3 p-0 text-center d-none d-md-inline">Email</div>
-				<div class="mt-2 mb-2 col-md-2 p-0 text-center d-none d-md-inline">前回ログイン</div>
-				<div class="mt-2 mb-2 col-md-2 p-0 text-center d-none d-md-inline">作成日</div>
+			<div class="p-0 col-0 col-md-6 d-flex">
+				<div class="mt-2 mb-2 col-md-2 p-0 text-center d-none d-md-inline">権限</div>
+				<div class="mt-2 mb-2 col-md-5 p-0 text-center d-none d-md-inline">前回ログイン</div>
+				<div class="mt-2 mb-2 col-md-5 p-0 text-center d-none d-md-inline">作成日</div>
 			</div>
 		</div>
 	</div>
@@ -74,26 +72,24 @@ function goToUserMod(userNum){
 	<c:forEach items="${userList}" var="user" varStatus="status">
 		<div class="p-0 container-lg">
 			<div class="p-0 d-flex">
-				<div class="p-0 col-9 col-md-3 d-flex">
-					<div class="col-4 col-md-4 p-0 text-center align-self-center"><a onclick="goToUserMod(${user.userNum})" style="cursor: pointer; color: blue;">${user.userId}</a></div>
-					<div class="col-4 col-md-4 p-0 text-center align-self-center">${user.userName}</div>
-					<div class="col-4 col-md-4 p-0 text-center align-self-center">${user.department}</div>
+				<div class="p-0 col-12 col-md-6 d-flex">
+					<div class="col-3 col-md-3 p-0 text-center align-self-center"><a onclick="goToUserMod(${user.userNum})" style="cursor: pointer; color: blue;">${user.userId}</a></div>
+					<div class="col-3 col-md-3 p-0 text-center align-self-center">${user.userName}</div>
+					<div class="col-3 col-md-3 p-0 text-center align-self-center">${user.department}</div>
+					<div class="col-3 col-md-3 p-0 text-center align-self-center">${user.position}</div>
 				</div>
-				<div class="p-0 col-3 col-md-9 d-flex">
-					<div class="col-12 col-md-1 p-0 text-center align-self-center">${user.position}</div>
-					<div class="col-md-3 p-0 text-center align-self-center d-none d-md-inline">${user.phoneNumber}</div>
-					<div class="col-md-1 p-0 text-center align-self-center d-none d-md-inline">
+				<div class="p-0 col-0 col-md-6 d-flex">
+					<div class="col-md-2 p-0 text-center align-self-center d-none d-md-inline">
 						<c:choose>
 							<c:when test="${user.auth == 'u'}">ユーザ</c:when>
 							<c:when test="${user.auth == 'a'}">管理者</c:when>
 							<c:when test="${user.auth == 'sa'}">システム</c:when>
 						</c:choose>  
 					</div>
-					<div class="col-md-3 p-0 text-center align-self-center d-none d-md-inline">${user.email}</div>
-					<div class="col-md-2 p-0 text-center align-self-center d-none d-md-inline">
+					<div class="col-md-5 p-0 text-center align-self-center d-none d-md-inline">
 						<fmt:parseDate value="${user.loginDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd HH:mm:ss"/>
 					</div>
-					<div class="col-md-2 p-0 text-center align-self-center d-none d-md-inline">
+					<div class="col-md-5 p-0 text-center align-self-center d-none d-md-inline">
 						<fmt:parseDate value="${user.insertDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd HH:mm:ss"/>
 					</div>
 				</div>

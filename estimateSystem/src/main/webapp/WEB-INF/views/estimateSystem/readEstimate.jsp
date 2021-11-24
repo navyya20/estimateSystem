@@ -147,7 +147,7 @@ function copyButton(){
 	<div id="OZViewer" style="width:99%;height:97.6%"></div>
 	
 	<!--buttons -->
-	<div class="p-0 d-flex col-12">
+	<%-- <div class="p-0 d-flex col-12">
 		<div class="pl-2 pr-2 d-flex col-3">
 			<!-- (유져&작성중)  or 관리자-->
 			<c:if test="${(userInform.auth eq 'u' and state eq 'wri') or userInform.auth eq 'a'}">
@@ -174,8 +174,32 @@ function copyButton(){
 		<div class="pl-2 pr-2 d-flex col-3">
 			<button type="button" class="col-12 mr-2 ml-2 btn btn-secondary" onclick="location.href='estimateList'">戻る</button>
 		</div>
-	</div>	
+	</div>	 --%>
+	<div class="d-block" style="height: 8px;"></div>
+	<!--buttons -->
+	<div class="p-0 d-flex col-12 justify-content-center">
+			<!-- (유져&작성중)  or 관리자-->
+			<c:if test="${(userInform.auth eq 'u' and state eq 'wri') or userInform.auth eq 'a'}">
+				<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="modButton()">修正モード</button>
+			</c:if>
+			
+			<!-- (유져&작성중)  or 관리자-->
+			<c:if test="${state eq 'wri' and userNum eq userInform.userNum}">
+				<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="requestButton()">承認依頼</button>
+			</c:if>
+			<c:if test="${approveMode eq 'on'}">
+				<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="approveButton()">承認</button>
+			</c:if>
 
+			<c:if test="${approveMode eq 'on'}">
+				<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="rejectButton()">差し戻し</button>
+			</c:if>
+			<c:if test="${approveMode eq null}">
+				<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="copyButton()">コピーする</button>
+			</c:if>
+
+			<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="location.href='estimateList'">戻る</button>
+	</div>
 	<script type="text/javascript" >
 		function SetOZParamters_OZViewer(){			
 			var oz;

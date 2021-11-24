@@ -38,7 +38,7 @@
 			(e.documentNum = b.estimateNum)
 			<choose>
 				<when test='auth == "u"'>
-					where e.userNum=#{userNum} or b.userNum=#{userNum} or e.state='app' or b.state='app'
+					where e.userNum=#{userNum} or b.userNum=#{userNum}
 				</when>
 				<when test='auth == "a"'>
 					
@@ -107,7 +107,7 @@
 			(e.documentNum = b.estimateNum)
 			<choose>
 				<when test='auth == "u"'>
-					where e.userNum=#{userNum} or b.userNum=#{userNum} or e.state='app' or b.state='app'
+					where e.userNum=#{userNum} or b.userNum=#{userNum}
 				</when>
 				<when test='auth == "a"'>
 					

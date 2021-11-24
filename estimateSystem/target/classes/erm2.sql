@@ -29,7 +29,7 @@ DROP TABLE IF EXISTS documentState;
 DROP TABLE IF EXISTS documentType;
 DROP TABLE IF EXISTS fileNames;
 DROP TABLE IF EXISTS masterSeq;
-DROP TABLE IF EXISTS position;
+DROP TABLE IF EXISTS position2;
 DROP TABLE IF EXISTS workflow;
 DROP TABLE IF EXISTS workflowInform;
 DROP TABLE IF EXISTS systemType;
@@ -383,7 +383,7 @@ CREATE TABLE masterSeq
 
 
 -- 役職定義
-CREATE TABLE position
+CREATE TABLE position2
 (
 	positionNum int NOT NULL AUTO_INCREMENT COMMENT '役職の固有番号',
 	position varchar(10) NOT NULL COMMENT '役職名',
@@ -578,7 +578,7 @@ ALTER TABLE estimateSheet1Items
 
 ALTER TABLE userInform
 	ADD FOREIGN KEY (positionNum)
-	REFERENCES position (positionNum)
+	REFERENCES position2 (positionNum)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
@@ -649,11 +649,11 @@ ALTER TABLE estimateSolutionItems
 
 
 -- 役職
-INSERT INTO `interline_estimatesystem`.`position` (`position`) VALUES ('社員');
-INSERT INTO `interline_estimatesystem`.`position` (`position`) VALUES ('主任');
-INSERT INTO `interline_estimatesystem`.`position` (`position`) VALUES ('代理');
-INSERT INTO `interline_estimatesystem`.`position` (`position`) VALUES ('課長');
-INSERT INTO `interline_estimatesystem`.`position` (`position`) VALUES ('社長');
+INSERT INTO `interline_estimatesystem`.`position2` (`position`) VALUES ('社員');
+INSERT INTO `interline_estimatesystem`.`position2` (`position`) VALUES ('主任');
+INSERT INTO `interline_estimatesystem`.`position2` (`position`) VALUES ('代理');
+INSERT INTO `interline_estimatesystem`.`position2` (`position`) VALUES ('課長');
+INSERT INTO `interline_estimatesystem`.`position2` (`position`) VALUES ('社長');
 
 
 -- 部署
@@ -1058,7 +1058,8 @@ ALTER TABLE billSiItems
 	ON DELETE CASCADE
 ;
 
-
+-- 매 0시마다 인덱스를 0으로 세팅
+DROP EVENT IF EXISTS setSeqZero;
 CREATE EVENT IF NOT EXISTS setSeqZero
     ON SCHEDULE
            EVERY 1 DAY
@@ -1067,8 +1068,9 @@ CREATE EVENT IF NOT EXISTS setSeqZero
     ENABLE
     COMMENT 'setSeqZero'
     DO 
-		update masterSeq set id = 0;
-	END;
+		update masterSeq set id = 0 where seqName in ('estimateSeq','billSeq');
+
+
     
 alter table companyinform add incharge varchar(30) COMMENT '文書(業務)の担当者';
 alter table estimatesolution add incharge varchar(30) COMMENT '文書(業務)の担当者';
@@ -1078,21 +1080,63 @@ alter table billsi add incharge varchar(30) COMMENT '文書(業務)の担当者'
 alter table billsolution add incharge varchar(30) COMMENT '文書(業務)の担当者';
 alter table documentmaster add approvedDate datetime COMMENT '承認日';
 
-
+-- 누락사항 적용.
 alter table estimatesi add sum BIGINT;
 alter table estimatesi add tax BIGINT;
 
+
+-- 현 회사정보 최대 입력 300자를 꽉체워 넣으면 오류가 남. 400으로 늘림.
 ALTER TABLE `interline_estimatesystem`.`companyinform` 
-CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '住所' ;
+CHANGE COLUMN `address` `address` VARCHAR(400) NULL DEFAULT NULL COMMENT '住所' ;
 
 ALTER TABLE `interline_estimatesystem`.`estimatelanguage` 
-CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '供給者住所' ;
+CHANGE COLUMN `address` `address` VARCHAR(400) NULL DEFAULT NULL COMMENT '供給者住所' ;
 ALTER TABLE `interline_estimatesystem`.`estimatesi` 
-CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '供給者住所' ;
+CHANGE COLUMN `address` `address` VARCHAR(400) NULL DEFAULT NULL COMMENT '供給者住所' ;
 ALTER TABLE `interline_estimatesystem`.`estimatesolution` 
-CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '供給者住所' ;
+CHANGE COLUMN `address` `address` VARCHAR(400) NULL DEFAULT NULL COMMENT '供給者住所' ;
 ALTER TABLE `interline_estimatesystem`.`billsi` 
-CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '供給者住所' ;
+CHANGE COLUMN `address` `address` VARCHAR(400) NULL DEFAULT NULL COMMENT '供給者住所' ;
 ALTER TABLE `interline_estimatesystem`.`billsolution` 
-CHANGE COLUMN `address` `address` VARCHAR(300) NULL DEFAULT NULL COMMENT '供給者住所' ;
+CHANGE COLUMN `address` `address` VARCHAR(400) NULL DEFAULT NULL COMMENT '供給者住所' ;
 
+-- 직위 소속을 생성, 변경, 삭제가 가능해짐에따라 인덱스 추가. 10번부터.
+insert into masterSeq (id,seqName)values(10,"departmentSeq");
+insert into masterSeq (id,seqName)values(10,"positionSeq");
+
+-- 유저정보의 이메일 연락처 삭제
+ALTER TABLE `interline_estimatesystem`.`userinform` 
+DROP COLUMN `email`,
+DROP COLUMN `phoneNumber`;
+
+-- 직위, 소속을 삭제할경우를위해  삭제시 restrict -> set null 설정.
+ALTER TABLE `interline_estimatesystem`.`userinform` 
+DROP FOREIGN KEY `userinform_ibfk_1`,
+DROP FOREIGN KEY `userinform_ibfk_2`,
+DROP FOREIGN KEY `userinform_ibfk_3`;
+ALTER TABLE `interline_estimatesystem`.`userinform` 
+ADD CONSTRAINT `userinform_ibfk_1`
+  FOREIGN KEY (`auth`)
+  REFERENCES `interline_estimatesystem`.`auth` (`auth`)
+  ON DELETE RESTRICT
+  ON UPDATE RESTRICT,
+ADD CONSTRAINT `userinform_ibfk_2`
+  FOREIGN KEY (`departmentNum`)
+  REFERENCES `interline_estimatesystem`.`department` (`departmentNum`)
+  ON DELETE SET NULL
+  ON UPDATE RESTRICT,
+ADD CONSTRAINT `userinform_ibfk_3`
+  FOREIGN KEY (`positionNum`)
+  REFERENCES `interline_estimatesystem`.`position2` (`positionNum`)
+  ON DELETE SET NULL
+  ON UPDATE RESTRICT;
+  
+
+  
+UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = 'ソリューション事業部見積書' WHERE (`documentTypeName` = 'estimateSolution');
+UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = 'ソリューション事業部請求書' WHERE (`documentTypeName` = 'billSolution');
+UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '語学事業部見積書' WHERE (`documentTypeName` = 'estimateLanguage');
+UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = 'SI事業部見積書' WHERE (`documentTypeName` = 'estimateSi');
+UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = 'SI事業部請求書' WHERE (`documentTypeName` = 'billSi');
+
+  

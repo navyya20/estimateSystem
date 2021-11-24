@@ -29,6 +29,8 @@ if ( self !== top ) {
 	  // you're in an iframe
 	window.parent.location.href="login";
 }
+var logoFileFlg=true;
+var stampFileFlg=true;
 //이미지 미리보기
 var sel_file;
 function handleImgFileSelect(e) {
@@ -36,14 +38,25 @@ function handleImgFileSelect(e) {
     var files = e.target.files;
     var filesArr = Array.prototype.slice.call(files);
 
-    var reg = /(.*?)\/(jpg|jpeg|png|bmp|JPG|JPEG|PNG|BMP)$/;
+    var reg = /(.*?)\/(jpg|jpeg|png|bmp|gif|JPG|JPEG|PNG|BMP|GIF)$/;
 	
     filesArr.forEach(function(f) {
         if (!f.type.match(reg)) {
             alert("拡張子はjpg,jpeg,png,bmpでお願いします。");
-            return;
-        }
 
+			//INPUT초기화
+            var agent = navigator.userAgent.toLowerCase();
+            if ( (navigator.appName == 'Netscape' && navigator.userAgent.search('Trident') != -1) || (agent.indexOf("msie") != -1) ){
+                // ie 일때 input[type=file] init.
+                $("#"+tagId).replaceWith( $("#"+tagId).clone(true) );
+            } else {
+                //other browser 일때 input[type=file] init.
+                $("#"+tagId).val("");
+            }
+
+            return false;
+        }
+		
         sel_file = f;
 
         var reader = new FileReader();
@@ -67,7 +80,7 @@ function handleImgFileSelect(e) {
 				<h5 class="card-title">LOGO</h5>
 				<div class="p-0 mb-3 col-12 d-flex justify-content-center"><img src="http://<%out.print(properties.getWebIP());%>/files/estimateSystem/uploaded/${logoFileName.fileName}" id="logoFileImg" width="300" height="100"></div>
 				<form id="form1" action="uploadImgFile" method="post" enctype="multipart/form-data">
-					<input type="file" id="logoFile" name="imgFile" class="mb-3">
+					<input type="file" id="logoFile" name="imgFile" class="mb-3" required>
 					<input type="hidden" name="category" class="mb-3" value="logo">
 					<button type="submit" class="btn btn-secondary">image登録</button>
 				</form>
@@ -80,7 +93,7 @@ function handleImgFileSelect(e) {
 				<h5 class="card-title">印鑑</h5>
 				<div class="p-0 mb-3 col-12 d-flex justify-content-center"><img src="http://<%out.print(properties.getWebIP());%>/files/estimateSystem/uploaded/${stampFileName.fileName}" id="stampFileImg" width="100" height="100"></div>
 				<form id="form2" action="uploadImgFile" method="post" enctype="multipart/form-data">
-					<input type="file" id="stampFile" name="imgFile" class="mb-3">
+					<input type="file" id="stampFile" name="imgFile" class="mb-3" required>
 					<input type="hidden" name="category" class="mb-3" value="stamp">
 					<button type="submit" class="btn btn-secondary">image登録</button>
 				</form>

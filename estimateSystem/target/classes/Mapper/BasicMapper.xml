@@ -9,7 +9,7 @@
 	</select>
 	
 	<select id="getPositions" resultType="positionDTO">
-		select * from position order by positionNum asc
+		select * from position2 order by positionNum asc
 	</select>
 	
 	<select id="getAuths" resultType="authDTO">

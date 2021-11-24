@@ -3,7 +3,9 @@ package jp.co.interline.service;
 import java.util.ArrayList;
 
 import jp.co.interline.dto.CompanyDTO;
+import jp.co.interline.dto.DepartmentDTO;
 import jp.co.interline.dto.FileNamesDTO;
+import jp.co.interline.dto.PositionDTO;
 
 
 public interface CompanyService {
@@ -21,6 +23,22 @@ public interface CompanyService {
 	int setFileName(String category, String savedfile);
 
 	FileNamesDTO getfileName(String string);
+
+	ArrayList<PositionDTO> getPositionList();
+
+	ArrayList<DepartmentDTO> getDepartmentList();
+
+	int insertPosition(PositionDTO position);
+	
+	int insertDepartment(DepartmentDTO department);
+
+	int deletePosition(PositionDTO position);
+
+	int updatePosition(PositionDTO position);
+
+	int deleteDepartment(DepartmentDTO department);
+
+	int updateDepartment(DepartmentDTO department);
 	
 	
 }

@@ -8,14 +8,14 @@
 	<select id="getUserInformByIdPw" parameterType="userInformDTO" resultType="userInformDTO">
 		select u.*, d.department department, p.position position from 
 		userInform u left outer join department d on (u.departmentNum=d.departmentNum) 
-		left outer join position p on (u.positionNum=p.positionNum) 
+		left outer join position2 p on (u.positionNum=p.positionNum) 
 		where u.userId=#{userId} and u.password=#{password}
 	</select>
 	
 	<select id="getUserInformByUserNum" parameterType="int" resultType="userInformDTO">
 		select u.*, d.department department, p.position position from 
 		userInform u left outer join department d on (u.departmentNum=d.departmentNum) 
-		left outer join position p on (u.positionNum=p.positionNum) 
+		left outer join position2 p on (u.positionNum=p.positionNum) 
 		where u.userNum=#{userNum}
 	</select>
 	
@@ -29,7 +29,7 @@
 	<select id="getUserList" parameterType="userInformDTO" resultType="userInformDTO">
 		select u.*, d.department, p.position from 
 		userInform u left outer join department d on (u.departmentNum=d.departmentNum) 
-		left outer join position p on (u.positionNum=p.positionNum)
+		left outer join position2 p on (u.positionNum=p.positionNum)
 		<choose>
 			<when test='auth == "sa"'></when>
 			<when test='auth == "a"'>
@@ -45,7 +45,7 @@
 	<select id="getUserListOrderd" parameterType="String" resultType="userInformDTO">
 		select u.*, d.department, p.position from 
 		userInform u left outer join department d on (u.departmentNum=d.departmentNum) 
-		left outer join position p on (u.positionNum=p.positionNum)
+		left outer join position2 p on (u.positionNum=p.positionNum)
 		${value}
 	</select>
 	
@@ -53,7 +53,7 @@
 	<select id="getUserListOrderdOnlyAdmin" parameterType="String" resultType="userInformDTO">
 		select u.*, d.department, p.position from 
 		userInform u left outer join department d on (u.departmentNum=d.departmentNum) 
-		left outer join position p on (u.positionNum=p.positionNum)
+		left outer join position2 p on (u.positionNum=p.positionNum)
 		where u.auth = 'a'
 		${value}
 	</select>
@@ -67,8 +67,6 @@
 			departmentNum,
 			positionNum,
 			auth,
-			phoneNumber,
-			email,
 			state,
 			insertDate,
 			updateDate,
@@ -96,8 +94,6 @@
 				</otherwise>
 			</choose>
 			#{auth},
-			#{phoneNumber},
-			#{email},
 			#{state},
 			CURRENT_TIMESTAMP,
 			CURRENT_TIMESTAMP,
@@ -126,8 +122,6 @@
 								</otherwise>
 							</choose>
 			auth = #{auth},
-			phoneNumber = #{phoneNumber},
-			email = #{email},
 			state = #{state},
 			updateDate = CURRENT_TIMESTAMP,
 			updater = #{updater}
