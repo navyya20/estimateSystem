@@ -33,6 +33,7 @@ public class EstimateSiDTO {
 	
 	String cautions;
 	String sum;
+	String taxRate;
 	String tax;
 	String sumWithTax;
 	String sumWithTax2;	
@@ -282,6 +283,12 @@ public class EstimateSiDTO {
 	}
 	public void setTax(String tax) {
 		this.tax = tax;
+	}
+	public String getTaxRate() {
+		return taxRate;
+	}
+	public void setTaxRate(String taxRate) {
+		this.taxRate = taxRate;
 	}
 	
 }

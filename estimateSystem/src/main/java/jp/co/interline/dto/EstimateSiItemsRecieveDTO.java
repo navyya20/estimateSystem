@@ -48,6 +48,50 @@ public class EstimateSiItemsRecieveDTO {
 	String manMonth5;
 	String price5;
 	
+	int rowNum6;
+	String item6;
+	String itemName6;
+	String workStart6;
+	String workEnd6;
+	String unitPrice6;
+	String manMonth6;
+	String price6;
+	
+	int rowNum7;
+	String item7;
+	String itemName7;
+	String workStart7;
+	String workEnd7;
+	String unitPrice7;
+	String manMonth7;
+	String price7;
+	
+	int rowNum8;
+	String item8;
+	String itemName8;
+	String workStart8;
+	String workEnd8;
+	String unitPrice8;
+	String manMonth8;
+	String price8;
+	
+	int rowNum9;
+	String item9;
+	String itemName9;
+	String workStart9;
+	String workEnd9;
+	String unitPrice9;
+	String manMonth9;
+	String price9;
+	
+	int rowNum10;
+	String item10;
+	String itemName10;
+	String workStart10;
+	String workEnd10;
+	String unitPrice10;
+	String manMonth10;
+	String price10;
 	
 	public String getDocumentNum() {
 		return documentNum;
@@ -295,20 +339,246 @@ public class EstimateSiItemsRecieveDTO {
 	public void setPrice5(String price5) {
 		this.price5 = price5;
 	}
-	@Override
-	public String toString() {
-		return "EstimateSiItemsRecieveDTO [documentNum=" + documentNum + ", rowNum1=" + rowNum1 + ", item1=" + item1
-				+ ", itemName1=" + itemName1 + ", workStart1=" + workStart1 + ", workEnd1=" + workEnd1 + ", unitPrice1="
-				+ unitPrice1 + ", manMonth1=" + manMonth1 + ", price1=" + price1 + ", rowNum2=" + rowNum2 + ", item2="
-				+ item2 + ", itemName2=" + itemName2 + ", workStart2=" + workStart2 + ", workEnd2=" + workEnd2
-				+ ", unitPrice2=" + unitPrice2 + ", manMonth2=" + manMonth2 + ", price2=" + price2 + ", rowNum3="
-				+ rowNum3 + ", item3=" + item3 + ", itemName3=" + itemName3 + ", workStart3=" + workStart3
-				+ ", workEnd3=" + workEnd3 + ", unitPrice3=" + unitPrice3 + ", manMonth3=" + manMonth3 + ", price3="
-				+ price3 + ", rowNum4=" + rowNum4 + ", item4=" + item4 + ", itemName4=" + itemName4 + ", workStart4="
-				+ workStart4 + ", workEnd4=" + workEnd4 + ", unitPrice4=" + unitPrice4 + ", manMonth4=" + manMonth4
-				+ ", price4=" + price4 + ", rowNum5=" + rowNum5 + ", item5=" + item5 + ", itemName5=" + itemName5
-				+ ", workStart5=" + workStart5 + ", workEnd5=" + workEnd5 + ", unitPrice5=" + unitPrice5
-				+ ", manMonth5=" + manMonth5 + ", price5=" + price5 + "]";
+	public int getRowNum6() {
+		return rowNum6;
 	}
+	public void setRowNum6(int rowNum6) {
+		this.rowNum6 = rowNum6;
+	}
+	public String getItem6() {
+		return item6;
+	}
+	public void setItem6(String item6) {
+		this.item6 = item6;
+	}
+	public String getItemName6() {
+		return itemName6;
+	}
+	public void setItemName6(String itemName6) {
+		this.itemName6 = itemName6;
+	}
+	public String getWorkStart6() {
+		return workStart6;
+	}
+	public void setWorkStart6(String workStart6) {
+		this.workStart6 = workStart6;
+	}
+	public String getWorkEnd6() {
+		return workEnd6;
+	}
+	public void setWorkEnd6(String workEnd6) {
+		this.workEnd6 = workEnd6;
+	}
+	public String getUnitPrice6() {
+		return unitPrice6;
+	}
+	public void setUnitPrice6(String unitPrice6) {
+		this.unitPrice6 = unitPrice6;
+	}
+	public String getManMonth6() {
+		return manMonth6;
+	}
+	public void setManMonth6(String manMonth6) {
+		this.manMonth6 = manMonth6;
+	}
+	public String getPrice6() {
+		return price6;
+	}
+	public void setPrice6(String price6) {
+		this.price6 = price6;
+	}
+	public int getRowNum7() {
+		return rowNum7;
+	}
+	public void setRowNum7(int rowNum7) {
+		this.rowNum7 = rowNum7;
+	}
+	public String getItem7() {
+		return item7;
+	}
+	public void setItem7(String item7) {
+		this.item7 = item7;
+	}
+	public String getItemName7() {
+		return itemName7;
+	}
+	public void setItemName7(String itemName7) {
+		this.itemName7 = itemName7;
+	}
+	public String getWorkStart7() {
+		return workStart7;
+	}
+	public void setWorkStart7(String workStart7) {
+		this.workStart7 = workStart7;
+	}
+	public String getWorkEnd7() {
+		return workEnd7;
+	}
+	public void setWorkEnd7(String workEnd7) {
+		this.workEnd7 = workEnd7;
+	}
+	public String getUnitPrice7() {
+		return unitPrice7;
+	}
+	public void setUnitPrice7(String unitPrice7) {
+		this.unitPrice7 = unitPrice7;
+	}
+	public String getManMonth7() {
+		return manMonth7;
+	}
+	public void setManMonth7(String manMonth7) {
+		this.manMonth7 = manMonth7;
+	}
+	public String getPrice7() {
+		return price7;
+	}
+	public void setPrice7(String price7) {
+		this.price7 = price7;
+	}
+	public int getRowNum8() {
+		return rowNum8;
+	}
+	public void setRowNum8(int rowNum8) {
+		this.rowNum8 = rowNum8;
+	}
+	public String getItem8() {
+		return item8;
+	}
+	public void setItem8(String item8) {
+		this.item8 = item8;
+	}
+	public String getItemName8() {
+		return itemName8;
+	}
+	public void setItemName8(String itemName8) {
+		this.itemName8 = itemName8;
+	}
+	public String getWorkStart8() {
+		return workStart8;
+	}
+	public void setWorkStart8(String workStart8) {
+		this.workStart8 = workStart8;
+	}
+	public String getWorkEnd8() {
+		return workEnd8;
+	}
+	public void setWorkEnd8(String workEnd8) {
+		this.workEnd8 = workEnd8;
+	}
+	public String getUnitPrice8() {
+		return unitPrice8;
+	}
+	public void setUnitPrice8(String unitPrice8) {
+		this.unitPrice8 = unitPrice8;
+	}
+	public String getManMonth8() {
+		return manMonth8;
+	}
+	public void setManMonth8(String manMonth8) {
+		this.manMonth8 = manMonth8;
+	}
+	public String getPrice8() {
+		return price8;
+	}
+	public void setPrice8(String price8) {
+		this.price8 = price8;
+	}
+	public int getRowNum9() {
+		return rowNum9;
+	}
+	public void setRowNum9(int rowNum9) {
+		this.rowNum9 = rowNum9;
+	}
+	public String getItem9() {
+		return item9;
+	}
+	public void setItem9(String item9) {
+		this.item9 = item9;
+	}
+	public String getItemName9() {
+		return itemName9;
+	}
+	public void setItemName9(String itemName9) {
+		this.itemName9 = itemName9;
+	}
+	public String getWorkStart9() {
+		return workStart9;
+	}
+	public void setWorkStart9(String workStart9) {
+		this.workStart9 = workStart9;
+	}
+	public String getWorkEnd9() {
+		return workEnd9;
+	}
+	public void setWorkEnd9(String workEnd9) {
+		this.workEnd9 = workEnd9;
+	}
+	public String getUnitPrice9() {
+		return unitPrice9;
+	}
+	public void setUnitPrice9(String unitPrice9) {
+		this.unitPrice9 = unitPrice9;
+	}
+	public String getManMonth9() {
+		return manMonth9;
+	}
+	public void setManMonth9(String manMonth9) {
+		this.manMonth9 = manMonth9;
+	}
+	public String getPrice9() {
+		return price9;
+	}
+	public void setPrice9(String price9) {
+		this.price9 = price9;
+	}
+	public int getRowNum10() {
+		return rowNum10;
+	}
+	public void setRowNum10(int rowNum10) {
+		this.rowNum10 = rowNum10;
+	}
+	public String getItem10() {
+		return item10;
+	}
+	public void setItem10(String item10) {
+		this.item10 = item10;
+	}
+	public String getItemName10() {
+		return itemName10;
+	}
+	public void setItemName10(String itemName10) {
+		this.itemName10 = itemName10;
+	}
+	public String getWorkStart10() {
+		return workStart10;
+	}
+	public void setWorkStart10(String workStart10) {
+		this.workStart10 = workStart10;
+	}
+	public String getWorkEnd10() {
+		return workEnd10;
+	}
+	public void setWorkEnd10(String workEnd10) {
+		this.workEnd10 = workEnd10;
+	}
+	public String getUnitPrice10() {
+		return unitPrice10;
+	}
+	public void setUnitPrice10(String unitPrice10) {
+		this.unitPrice10 = unitPrice10;
+	}
+	public String getManMonth10() {
+		return manMonth10;
+	}
+	public void setManMonth10(String manMonth10) {
+		this.manMonth10 = manMonth10;
+	}
+	public String getPrice10() {
+		return price10;
+	}
+	public void setPrice10(String price10) {
+		this.price10 = price10;
+	}
+	
 	
 }

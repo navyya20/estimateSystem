@@ -1,13 +1,3 @@
-SET GLOBAL validate_password.policy=low;
-SET GLOBAL validate_password.length=4;
-SET GLOBAL validate_password.mixed_case_count=0;
-SET GLOBAL validate_password.number_count=0;
-SET GLOBAL validate_password.special_char_count=0;
-create database interline_EstimateSystem default character set utf8;
-create user 'hrhr6'@'%' identified by "hrhr";
-GRANT ALL privileges ON interline_EstimateSystem.* TO 'hrhr6'@'%';
-SET GLOBAL log_bin_trust_function_creators = 1;
-
 
 use interline_EstimateSystem;
 SET SESSION FOREIGN_KEY_CHECKS=0;

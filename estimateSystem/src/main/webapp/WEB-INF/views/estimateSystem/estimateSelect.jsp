@@ -44,27 +44,27 @@ if ( self !== top ) {
 			</div>
 			-->
 			
-			<div class="card" style="width: 17rem;">
+			<div class="card" style="width: 20rem;">
+				<img src="../resources/img/estimateLanguage.jpg" class="card-img-top" alt="...">
+				<div class="card-body">
+					<p class="card-text">見積書Ａ（SI事業部）</p>
+					<a href="writeEstimateSi" class="btn btn-primary">新規作成</a>
+				</div>
+			</div>
+			
+			<div class="card" style="width: 20rem;">
 				<img src="../resources/img/estimateSolution.jpg" class="card-img-top" alt="...">
 				<div class="card-body">
-					<p class="card-text">ソリューション事業部用セット</p>
+					<p class="card-text">見積書Ｂ（ソリューション事業部）</p>
 					<a href="writeEstimateSolution" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>
 			
-			<div class="card" style="width: 17rem;">
+			<div class="card" style="width: 20rem;">
 				<img src="../resources/img/estimateLanguage.jpg" class="card-img-top" alt="...">
 				<div class="card-body">
-					<p class="card-text">語学事業部用</p>
+					<p class="card-text">見積書Ｃ（語学事業部）</p>
 					<a href="writeEstimateLanguage" class="btn btn-primary">新規作成</a>
-				</div>
-			</div>
-			
-			<div class="card" style="width: 17rem;">
-				<img src="../resources/img/estimateLanguage.jpg" class="card-img-top" alt="...">
-				<div class="card-body">
-					<p class="card-text">SI事業部用</p>
-					<a href="writeEstimateSi" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>
 			

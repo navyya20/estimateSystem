@@ -843,7 +843,7 @@
 			payCondition,
 			requestNum,
 			
-			sum,tax,sumWithTax, sumWithTax2,
+			sum,taxRate,tax,sumWithTax, sumWithTax2,
 			cautions,
 			comment
 		) 
@@ -871,7 +871,7 @@
 			#{payCondition},
 			#{requestNum},
 			
-			#{sum}, #{tax}, #{sumWithTax}, #{sumWithTax2},
+			#{sum}, #{taxRate}, #{tax}, #{sumWithTax}, #{sumWithTax2},
 			#{cautions},
 			#{comment}
 		)
@@ -886,7 +886,12 @@
 		(#{documentNum},#{rowNum2},#{item2},#{itemName2},#{workStart2},#{workEnd2},${unitPrice2},${manMonth2},${price2}),
 		(#{documentNum},#{rowNum3},#{item3},#{itemName3},#{workStart3},#{workEnd3},${unitPrice3},${manMonth3},${price3}),
 		(#{documentNum},#{rowNum4},#{item4},#{itemName4},#{workStart4},#{workEnd4},${unitPrice4},${manMonth4},${price4}),
-		(#{documentNum},#{rowNum5},#{item5},#{itemName5},#{workStart5},#{workEnd5},${unitPrice5},${manMonth5},${price5})
+		(#{documentNum},#{rowNum5},#{item5},#{itemName5},#{workStart5},#{workEnd5},${unitPrice5},${manMonth5},${price5}),
+		(#{documentNum},#{rowNum6},#{item6},#{itemName6},#{workStart6},#{workEnd6},${unitPrice6},${manMonth6},${price6}),
+		(#{documentNum},#{rowNum7},#{item7},#{itemName7},#{workStart7},#{workEnd7},${unitPrice7},${manMonth7},${price7}),
+		(#{documentNum},#{rowNum8},#{item8},#{itemName8},#{workStart8},#{workEnd8},${unitPrice8},${manMonth8},${price8}),
+		(#{documentNum},#{rowNum9},#{item9},#{itemName9},#{workStart9},#{workEnd9},${unitPrice9},${manMonth9},${price9}),
+		(#{documentNum},#{rowNum10},#{item10},#{itemName10},#{workStart10},#{workEnd10},${unitPrice10},${manMonth10},${price10})
 	</insert>
 	
 	<update id="updateEstimateSi" parameterType="estimateSiDTO">
@@ -927,6 +932,7 @@
 			
 			cautions = #{cautions},
 			sum = #{sum},
+			taxRate = #{taxRate},
 			tax = #{tax},
 			sumWithTax = #{sumWithTax},
 			sumWithTax2 = #{sumWithTax2},
@@ -962,6 +968,31 @@
 			item = #{item5}, itemName = #{itemName5}, workStart = #{workStart5}, workEnd = #{workEnd5}, manMonth = ${manMonth5}, unitPrice = ${unitPrice5}, price = ${price5}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum5};
+				
+		update estimateSiItems set
+			item = #{item6}, itemName = #{itemName6}, workStart = #{workStart6}, workEnd = #{workEnd6}, manMonth = ${manMonth6}, unitPrice = ${unitPrice6}, price = ${price6}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum6};
+				
+		update estimateSiItems set
+			item = #{item7}, itemName = #{itemName7}, workStart = #{workStart7}, workEnd = #{workEnd7}, manMonth = ${manMonth7}, unitPrice = ${unitPrice7}, price = ${price7}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum7};
+				
+		update estimateSiItems set
+			item = #{item8}, itemName = #{itemName8}, workStart = #{workStart8}, workEnd = #{workEnd8}, manMonth = ${manMonth8}, unitPrice = ${unitPrice8}, price = ${price8}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum8};
+				
+		update estimateSiItems set
+			item = #{item9}, itemName = #{itemName9}, workStart = #{workStart9}, workEnd = #{workEnd9}, manMonth = ${manMonth9}, unitPrice = ${unitPrice9}, price = ${price9}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum9};
+				
+		update estimateSiItems set
+			item = #{item10}, itemName = #{itemName10}, workStart = #{workStart10}, workEnd = #{workEnd10}, manMonth = ${manMonth10}, unitPrice = ${unitPrice10}, price = ${price10}
+		where
+			documentNum=#{documentNum} and rowNum = #{rowNum10};
 	</update>
 
 	

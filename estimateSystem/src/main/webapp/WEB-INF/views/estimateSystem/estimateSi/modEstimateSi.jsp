@@ -64,7 +64,7 @@ if ( self !== top ) {
 		companyList=companyList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
 		accountList=accountList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
 
-		var repeat=5;
+		var repeat=10;
 
 		var userString = '${user}';
 		var user=JSON.parse(userString);
@@ -122,6 +122,7 @@ if ( self !== top ) {
 			var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
 			var inputJson=JSON.parse(inputJsonString);
 			inputJson["sum"] = inputJson["sum"].replace(/,/gi, "").replace(/￥/gi, "");
+			inputJson["taxRate"] = inputJson["taxRate"].replace(/,/gi, "").replace(/%/gi, "");
 			inputJson["tax"] = inputJson["tax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax"] = inputJson["sumWithTax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax2"] = inputJson["sumWithTax2"].replace(/,/gi, "").replace(/￥/gi, "");

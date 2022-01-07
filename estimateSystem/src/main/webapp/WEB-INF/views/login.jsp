@@ -83,20 +83,7 @@ if ( self !== top ) {
 
 <body class="body" style="height: 100%;">
 <div style="position: absolute; left: 0;top: 0;">
-	<!-- 20210617.ver1<br>
-	20210622.ver2(DB構造変更)<br>
-	20210623.ver3<br>
-	20210625.ver4<br>
-	20210628.ver5<br>
-	20210709.ver6(ソールショーン事業部用書式追加)<br>
-	20210712.ver7(語学事業部用書式追加)<br>
-	20211021.ver8(改善点26、33、34、35、36、37、38反映)<br>
-	20211022.ver9(改善点28反映)<br>
-	20211028.ver10(改善点25,27反映)<br>
-	20211104.ver11(改善点43,44,47反映)<br>-->
-	20211109.ver12(改善点43再,48,49,51反映)<br>
-	20211118.ver13(改善点52,53,55,56,57,58,59,60反映)<br>
-	20211124.ver14(改善点61,62,63,64,65反映)<br>
+VER 1.00	
 </div>
 	<div class="row align-items-center col-12 p-0 m-0" style="height: 100%;">
 		<div id="login_div" class="d-flex justify-content-center col-12 p-0">
