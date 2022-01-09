@@ -69,7 +69,8 @@ function ozlicenseCheck(){
 	var startDate = new Date(nowDate.getFullYear(),nowDate.getMonth()+1,nowDate.getDate());
 	var diff = (expirationDate-startDate)/(1000*60*60*24);	
 	if(diff<=14){
-		alert("OZLicense満了まで"+diff+"日残っています。");
+		var text = $("#notice").html();
+		$("#notice").html(text+"\n"+"教育用OZLicense満了まで"+diff+"日残っています。");
 	}
 }
 //인터셉터로 로그인 들어왔는데 현제페이지가 아이프레임 내부일경우 부모요소를 로그인 페이지로 페이지이동
@@ -82,7 +83,7 @@ if ( self !== top ) {
 </head>
 
 <body class="body" style="height: 100%;">
-<div style="position: absolute; left: 0;top: 0;">
+<div id="notice" style="position: absolute; left: 0;top: 0;">
 VER 1.00	
 </div>
 	<div class="row align-items-center col-12 p-0 m-0" style="height: 100%;">

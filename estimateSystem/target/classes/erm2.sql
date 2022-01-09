@@ -1129,4 +1129,6 @@ UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '語学事�
 UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = 'SI事業部見積書' WHERE (`documentTypeName` = 'estimateSi');
 UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = 'SI事業部請求書' WHERE (`documentTypeName` = 'billSi');
 
-  
+  ##ver1.00
+ALTER TABLE `interline_estimatesystem`.`estimatesi` 
+ADD COLUMN `taxRate` INT NULL DEFAULT NULL AFTER `tax`;
