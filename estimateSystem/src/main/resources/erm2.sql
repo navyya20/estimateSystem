@@ -735,7 +735,7 @@ CREATE TABLE billSolution
 	billDate varchar(20) COMMENT '作成日表示用',
 	-- これがOZRが参照するデータテーブル名になる。
 	-- 例）estimateSheet1 , BillSheet1
-	documentTypeName varchar(20) DEFAULT 'billSheet1' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
+	documentTypeName varchar(20) DEFAULT 'billSolution' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
 例）estimateSheet1 , BillSheet1',
 	supplier varchar(40) COMMENT '供給者',
 	address varchar(120) COMMENT '供給者住所',
@@ -814,7 +814,7 @@ CREATE TABLE estimateLanguage
 	estimateDate varchar(20) COMMENT '作成日表示用',
 	-- これがOZRが参照するデータテーブル名になる。
 	-- 例）estimateSolution , BillSolution
-	documentTypeName varchar(20) DEFAULT 'estimateSolution' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
+	documentTypeName varchar(20) DEFAULT 'estimateLanguage' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
 例）estimateSolution , BillSolution',
 	supplier varchar(40) COMMENT '供給者',
 	address varchar(180) COMMENT '供給者住所',
@@ -974,7 +974,7 @@ CREATE TABLE billSi
 	billDate varchar(20) COMMENT '作成日表示用',
 	-- これがOZRが参照するデータテーブル名になる。
 	-- 例）estimateSolution , BillSolution
-	documentTypeName varchar(20) DEFAULT 'estimateSi' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
+	documentTypeName varchar(20) DEFAULT 'billSi' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
 例）estimateSolution , BillSolution',
 	supplier varchar(40) COMMENT '供給者',
 	address varchar(180) COMMENT '供給者住所',
@@ -1153,7 +1153,7 @@ CREATE TABLE billC
 	billDate varchar(20) COMMENT '作成日表示用',
 	-- これがOZRが参照するデータテーブル名になる。
 	-- 例）estimateSolution , BillSolution
-	documentTypeName varchar(20) DEFAULT 'estimateSi' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。 例）estimateSolution , BillSolution',
+	documentTypeName varchar(20) DEFAULT 'billC' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。 例）estimateSolution , BillSolution',
 	address varchar(400) COMMENT '供給者住所',
 	stamp varchar(25) COMMENT '印鑑',
 	stampFileName varchar(25) COMMENT '印鑑ファイル名',
