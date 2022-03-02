@@ -47,8 +47,22 @@ if ( self !== top ) {
 			<div class="card" style="width: 17rem;">
 				<img src="../resources/img/billSolution.jpg" class="card-img-top" alt="...">
 				<div class="card-body">
-					<p class="card-text">ソリューション事業部用セット</p>
+					<p class="card-text">請求書A</p>
 					<a href="writeBillSolution" class="btn btn-primary">新規作成</a>
+				</div>
+			</div>
+			<div class="card" style="width: 17rem;">
+				<img src="../resources/img/billSi.jpg" class="card-img-top" alt="...">
+				<div class="card-body">
+					<p class="card-text">請求書B</p>
+					<a href="writeBillSi" class="btn btn-primary">新規作成</a>
+				</div>
+			</div>
+			<div class="card" style="width: 17rem;">
+				<img src="../resources/img/billC.jpg" class="card-img-top" alt="...">
+				<div class="card-body">
+					<p class="card-text">請求書C</p>
+					<a href="writeBillC" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>
 		</div>

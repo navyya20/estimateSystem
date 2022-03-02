@@ -61,25 +61,11 @@
 			e.userPosition userPositionE,
 			e.state stateE,
 			e.stateName stateNameE,
-			e.approvedDate approvedDateE,
-			
-			b.documentNum documentNumB,
-			b.estimateNum estimateNumB,
-			b.documentTypeName documentTypeNameB,
-			b.nextDocumentTypeName nextDocumentTypeNameB,
-			b.receiver receiverB,
-			b.documentName documentNameB,
-			b.updateDate updateDateB,
-			b.userNum userNumB,
-			b.userName userNameB,
-			b.userDepartment userDepartmentB,
-			b.userPosition userPositionB,
-			b.state stateB,
-			b.stateName stateNameB,
-			b.approvedDate approvedDateB
+			e.approvedDate approvedDateE
 		from
 			(
-				select d.*,em1.receiver,em1.documentName,ds.name stateName from
+				select d.*,em1.receiver,em1.documentName,ds.name stateName 
+					from
 						(select * from documentMaster where systemNum=1) d 
 					join 
 						estimateMaster em1 
@@ -90,24 +76,9 @@
 					on
 						(d.state = ds.state)
 			) e
-		left outer join
-			(
-				select d.*,em1.receiver,em1.documentName,em1.estimateNum,ds.name stateName from
-						(select * from documentMaster where systemNum=2) d 
-					join 
-						estimateMaster em1 
-					on 
-						(d.documentNum = em1.documentNum)
-					join
-						documentState ds
-					on
-						(d.state = ds.state)
-			) b
-		on
-			(e.documentNum = b.estimateNum)
 			<choose>
 				<when test='auth == "u"'>
-					where e.userNum=#{userNum} or b.userNum=#{userNum}
+					where e.userNum=#{userNum}
 				</when>
 				<when test='auth == "a"'>
 					
@@ -139,12 +110,6 @@
 	<delete id="deleteSheet" parameterType="systemDTO">
 		delete from documentMaster where documentNum = #{documentNum};
 	</delete>
-	
-	<insert id="testTest" parameterType="List">
-		insert into ${list[0].dbName}
-			(${list[1].colName}, ${list[2].colName}, ${list[3].colName} )
-			values(#{list[1].colVal}, #{list[2].colVal}, ${list[3].colVal})
-	</insert>
 	
 	<select id="getDocumentMaster" parameterType="String" resultType="documentMasterDTO">
 		select * from documentMaster where documentNum = #{value}
@@ -996,5 +961,12 @@
 	</update>
 
 	
+		
+	<insert id="testTest" parameterType="String">
+		insert into test (col1,col2) values ("aaa",CURRENT_TIMESTAMP)
+	</insert>
 	
+	<insert id="testTest2" parameterType="String">
+		insert into test (col1,col2) values ("bbb",CURRENT_TIMESTAMP)
+	</insert>
 </mapper>

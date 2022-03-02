@@ -1,5 +1,6 @@
 package jp.co.interline.dao;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -7,6 +8,8 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import jp.co.interline.dto.DocumentMasterDTO;
 import jp.co.interline.dto.EstimateLanguageDTO;
@@ -84,14 +87,6 @@ public class EstimateDAO {
 		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
 		String billNum = mapper.getBillNum(documentNum);
 		return billNum;
-	}
-
-
-	public void test(ArrayList<HashMap<String, String>> arr) {
-		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
-		mapper.testTest(arr);
-
-		
 	}
 
 	public int insertEstimateSolution(EstimateSolutionDTO estimateSolution) {
@@ -190,6 +185,16 @@ public class EstimateDAO {
 		return items;
 	}
 
-	
+
+	public void test(String s) {
+		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
+		mapper.testTest(s);
+	}
+
+	public void test2(String s) {
+		//"".substring(-2);
+		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
+		mapper.testTest2(s);
+	}
 	
 }

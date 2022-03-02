@@ -13,7 +13,10 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -71,18 +74,21 @@ public class EstimateController {
 	 * page: pageNavigator를 위한 page수
 	 */
 	@RequestMapping(value = "/all/estimateList", method = RequestMethod.GET)
-	public String estimateList(HttpSession session, Model model,String flagObj, @RequestParam(value="option", defaultValue="e.updateDate desc")String option, @RequestParam(value="page", defaultValue="1") int page) {
+	public String estimateList(HttpSession session, Model model,String flagObj, 
+			@RequestParam(value="option", defaultValue="e.updateDate desc")String option,
+			@RequestParam(value="page", defaultValue="1") int page,
+			@RequestParam(value="countPerPage", defaultValue="20") int countPerPage) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		logger.debug("EstimateController.esimateList,user:{}",user.getUserNum());
 		
-		ArrayList<EstimateListDTO> estimateList = estimateService.getEstimateList(model, user,option,page);
+		ArrayList<EstimateListDTO> estimateList = estimateService.getEstimateList(model, user,option,page,countPerPage);
 		model.addAttribute("estimateList", estimateList);
 		model.addAttribute("option", option);
 		model.addAttribute("flagObj", flagObj);
+		model.addAttribute("countPerPage", countPerPage);
 		//네비게이션에대한 모델은 서비스에서 넣어준다.
 		return "estimateSystem/estimateList";
 	}
-	
 	
 	@RequestMapping(value = "/all/selectEstimate", method = RequestMethod.GET)
 	public String selectEstimate(HttpSession session, Model model) {
@@ -91,7 +97,6 @@ public class EstimateController {
 		
 		return "estimateSystem/estimateSelect";
 	}
-	
 	
 	@RequestMapping(value = "/all/readEstimate", method = RequestMethod.POST)
 	public String readEstimate(HttpSession session, Model model, String documentNum, String documentTypeName, String approveMode) {
@@ -118,6 +123,7 @@ public class EstimateController {
 	 * estiamteMaster에서 딸린 청구서가 있는지 확인한다.
 	 * 있으면 documentMaster에서 청구서 먼져 지우고 본 문서를 지운다. 
 	 */
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/deleteSheets", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> updateEstimateSheet1(HttpSession session, Model model, String[] documentArr) {
@@ -143,23 +149,14 @@ public class EstimateController {
 		ObjectMapper mapper = new ObjectMapper();
 		String copy = mapper.writeValueAsString(contents);
 		redirectAttributes.addAttribute("copy", copy);
+		redirectAttributes.addAttribute("aaa", "bbbbb");
 		String documentTypeName = document.getDocumentTypeName();
 		return "redirect:write"+documentTypeName.substring(0, 1).toUpperCase()+documentTypeName.substring(1);
 	}
 	
-	
-	@RequestMapping(value = "/all/test", method = RequestMethod.GET)
-	public String test(HttpSession session, Model model, String documentNum) {
-		estimateService.test();
-		return "";
-	}
-	
-	
-	
-	
-	
 /////////////////////////////////////estimateSheet1///////////////////////////////////////////////////
 //write,write copy,insert,mod,update,
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/writeEstimateSheet1", method = RequestMethod.GET)
 	public String writeEstimateSheet1(HttpSession session, Model model, String copy) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -172,6 +169,7 @@ public class EstimateController {
 		model.addAttribute("copy", copy);
 		return "estimateSystem/estimateSheet1/writeEstimateSheet1";
 	}
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/writeEstimateSheet1", method = RequestMethod.POST)
 	public String writeEstimateSheet12(HttpSession session, Model model, String copy) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -185,6 +183,7 @@ public class EstimateController {
 		return "estimateSystem/estimateSheet1/writeEstimateSheet1";
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/insertEstimateSheet1", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertEstimateSheet1(HttpSession session, Model model, EstimateSheet1DTO estimateSheet1, EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever) {
@@ -219,7 +218,7 @@ public class EstimateController {
 		return result;
 	}
 	
-	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/modEstimateSheet1", method = RequestMethod.POST)
 	public String modEstimateSheet1(HttpSession session, Model model, String documentNum, String documentTypeName) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -242,7 +241,7 @@ public class EstimateController {
 		return "estimateSystem/estimateSheet1/modEstimateSheet1";
 	}
 	
-	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/copyEstimateSheet1", method = RequestMethod.POST)
 	public String copyEstimateSheet1(HttpSession session, Model model, String documentNum, String documentTypeName) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -261,7 +260,7 @@ public class EstimateController {
 		return "redirect:/all/estimateList";
 	}
 	
-	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/updateEstimateSheet1", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> updateEstimateSheet1(HttpSession session, Model model, EstimateSheet1DTO estimateSheet1, EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever) {
@@ -294,6 +293,7 @@ public class EstimateController {
 	
 /////////////////////////////////////estimateSolution///////////////////////////////////////////////////
 //write, write copy, insert, mod, update
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/writeEstimateSolution", method = RequestMethod.GET)
 	public String writeEstimateSolution(HttpSession session, Model model, String copy) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -306,6 +306,8 @@ public class EstimateController {
 		model.addAttribute("copy", copy);
 		return "estimateSystem/estimateSolution/writeEstimateSolution";
 	}
+	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/writeEstimateSolution", method = RequestMethod.POST)
 	public String writeEstimateSolution2(HttpSession session, Model model, String copy) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -319,7 +321,7 @@ public class EstimateController {
 		return "estimateSystem/estimateSolution/writeEstimateSolution";
 	}
 	
-	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/insertEstimateSolution", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertEstimateSolution(HttpSession session, Model model, EstimateSolutionDTO estimateSolution, EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever) {
@@ -354,6 +356,7 @@ public class EstimateController {
 		return result;
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/modEstimateSolution", method = RequestMethod.POST)
 	public String modEstimateSolution(HttpSession session, Model model, String documentNum, String documentTypeName) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -376,6 +379,7 @@ public class EstimateController {
 		return "estimateSystem/estimateSolution/modEstimateSolution";
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/updateEstimateSolution", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> updateEstimateSolution(HttpSession session, Model model, EstimateSolutionDTO estimateSolution, EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever) {
@@ -413,6 +417,8 @@ public class EstimateController {
 	
 /////////////////////////////////////estimateLanguage///////////////////////////////////////////////////
 //write, write copy, insert, mod, update
+	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/writeEstimateLanguage", method = RequestMethod.GET)
 	public String writeEstimateLanguage(HttpSession session, Model model, String copy) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -428,6 +434,8 @@ public class EstimateController {
 		model.addAttribute("copy", copy);
 		return "estimateSystem/estimateLanguage/writeEstimateLanguage";
 	}
+	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/writeEstimateLanguage", method = RequestMethod.POST)
 	public String writeEstimateLanguage2(HttpSession session, Model model, String copy) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -444,7 +452,7 @@ public class EstimateController {
 		return "estimateSystem/estimateLanguage/writeEstimateLanguage";
 	}
 	
-	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/insertEstimateLanguage", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertEstimateLanguage(HttpSession session, Model model, EstimateLanguageDTO estimateLanguage, EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever) {
@@ -479,6 +487,7 @@ public class EstimateController {
 		return result;
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/modEstimateLanguage", method = RequestMethod.POST)
 	public String modEstimateLanguage(HttpSession session, Model model, String documentNum, String documentTypeName) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -504,6 +513,7 @@ public class EstimateController {
 		return "estimateSystem/estimateLanguage/modEstimateLanguage";
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/updateEstimateLanguage", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> updateEstimateLanguage(HttpSession session, Model model, EstimateLanguageDTO estimateLanguage, EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever) {
@@ -537,6 +547,7 @@ public class EstimateController {
 	
 /////////////////////////////////////estimateSi///////////////////////////////////////////////////
 //write, write copy, insert, mod, update	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/writeEstimateSi", method = RequestMethod.GET)
 	public String writeEstimateSi(HttpSession session, Model model, String copy) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -552,6 +563,8 @@ public class EstimateController {
 		model.addAttribute("copy", copy);
 		return "estimateSystem/estimateSi/writeEstimateSi";
 	}
+	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/writeEstimateSi", method = RequestMethod.POST)
 	public String writeEstimateSi2(HttpSession session, Model model, String copy) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -568,7 +581,7 @@ public class EstimateController {
 		return "estimateSystem/estimateSi/writeEstimateSi";
 	}
 	
-	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/insertEstimateSi", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertEstimateSi(HttpSession session, Model model, EstimateSiDTO estimateSi, EstimateSiItemsRecieveDTO estimateSiItemsReciever) {
@@ -603,6 +616,7 @@ public class EstimateController {
 		return result;
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/modEstimateSi", method = RequestMethod.POST)
 	public String modEstimateSi(HttpSession session, Model model, String documentNum, String documentTypeName) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -628,6 +642,7 @@ public class EstimateController {
 		return "estimateSystem/estimateSi/modEstimateSi";
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/updateEstimateSi", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> updateEstimateSi(HttpSession session, Model model, EstimateSiDTO estimateSi, EstimateSiItemsRecieveDTO estimateSiItemsReciever) {
@@ -656,5 +671,14 @@ public class EstimateController {
 		return result;
 	}
 //-----------------------------------------------------------------------------------------------------------------------------------	
-
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
+	@RequestMapping(value = "/all/test", method = RequestMethod.GET)
+	public String test(HttpSession session, Model model, String documentNum) throws Exception {
+		System.out.println(TransactionSynchronizationManager.getCurrentTransactionName());
+		estimateService.test("1");
+		estimateService.test2("1");
+		return "";
+	}
+	
+	
 }

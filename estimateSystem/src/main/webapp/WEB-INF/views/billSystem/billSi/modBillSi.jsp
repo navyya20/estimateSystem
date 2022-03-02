@@ -1,6 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ page import="jp.co.interline.service.GetProperties" %>
+<%@page import="jp.co.interline.service.GetProperties"%>
 <% GetProperties properties= new GetProperties(); %>
 <!DOCTYPE html>
 <html style="height: 100%;">
@@ -28,7 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../css/common/common.css">
 <script src="../js/bootstrap.bundle.js"></script>
-<title>writeBillSolution</title>
+<title>modBillSi</title>
 <style type="text/css">
 </style>
 <script>
@@ -47,57 +47,51 @@ if ( self !== top ) {
 		<jsp:include page="../../menubar.jsp"></jsp:include>
 	</header>
 	
+
+	
 	<div id="OZViewer" style="width:99%;height:97.6%"></div>
 	<div class="d-block" style="height: 8px;"></div>
 	<!--buttons -->
 	<div class="p-0 d-flex col-12 justify-content-center">
-		<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="saveButton('wri')">一時保存</button>
-		<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="saveAndRequestButton('wri')">承認依頼</button>
-		<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="location.href='billList'">キャンセル</button>
+		<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="saveButton('${state}')">一時保存</button>
+		<c:if test="${state eq 'wri' and userNum eq userInform.userNum}">
+			<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="saveAndRequestButton('${state}')">承認依頼</button>
+		</c:if>
+		<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="location.href='estimateList'">キャンセル</button>
 	</div>	
 
 	<script type="text/javascript" >
-		var estimateNum = '${estimateNum}';
 		var accountList = '${accountList}';
 		var companyList = '${companyList}';
 		companyList=companyList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
 		accountList=accountList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
-		var copy = "";
-		<c:if test="${copy != null}">
-			copy = '${copy}';
-			copy=copy.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
-		</c:if>
-		
-		var repeat=12;
+		var repeat=10;
 
 		var userString = '${user}';
 		var user=JSON.parse(userString);
-		
 		function SetOZParamters_OZViewer(){
 			
 			var oz;
 			oz = document.getElementById("OZViewer");
 			oz.sendToActionScript("viewer.ignore_disable_color_inputcomponent","true");
-			oz.sendToActionScript("viewer.external_functions_path","ozp://billSystem/billSolution/JS/billSolution.js");
+			oz.sendToActionScript("viewer.external_functions_path","ozp://billSystem/billSi/JS/billSi.js");
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
-			oz.sendToActionScript("connection.reportname","billSystem/billSolution/writeBillSolution.ozr");
-			oz.sendToActionScript("connection.inputjson",copy);
-			oz.sendToActionScript("connection.pcount","9");
-			oz.sendToActionScript("connection.args1","repeat="+repeat);
-			oz.sendToActionScript("connection.args2","accountList="+accountList);
-			oz.sendToActionScript("connection.args3","userNum="+user.userNum);
-			oz.sendToActionScript("connection.args4","userPosition="+(user.position==null? '':user.position));
-			oz.sendToActionScript("connection.args5","userDepartment="+(user.department==null? '':user.department));
-			oz.sendToActionScript("connection.args6","userName="+user.userName);
-			oz.sendToActionScript("connection.args7","path=http://"+'<%out.print(properties.getWebIP());%>'+"/files/estimateSystem/uploaded/");
-			oz.sendToActionScript("connection.args8","estimateNum="+estimateNum);
-			oz.sendToActionScript("connection.args9","companyList="+companyList);
+			oz.sendToActionScript("connection.reportname","billSystem/billSi/modBillSi.ozr");
+			oz.sendToActionScript("connection.pcount","7");
+			oz.sendToActionScript("connection.args1","accountList="+accountList);
+			oz.sendToActionScript("connection.args2","userNum="+user.userNum);
+			oz.sendToActionScript("connection.args3","userPosition="+(user.position==null? '':user.position));
+			oz.sendToActionScript("connection.args4","userDepartment="+(user.department==null? '':user.department));
+			oz.sendToActionScript("connection.args5","userName="+user.userName);
+			oz.sendToActionScript("connection.args6","path=http://"+'<%out.print(properties.getWebIP());%>'+"/files/estimateSystem/uploaded/");
+			oz.sendToActionScript("connection.args7","companyList="+companyList);
+
+			oz.sendToActionScript("pdf.fontembedding","true");
 
 			oz.sendToActionScript("global.language", "ja_JP");
-			oz.sendToActionScript("odi.odinames", "writeBillSolution");
-	 		oz.sendToActionScript("odi.writeBillSolution.pcount", "1");
-			oz.sendToActionScript("odi.writeBillSolution.args1", "documentNum="+estimateNum);
-			
+			oz.sendToActionScript("odi.odinames", "modBillSi");
+	 		oz.sendToActionScript("odi.modBillSi.pcount", "1");
+			oz.sendToActionScript("odi.modBillSi.args1", "documentNum="+'${billNum}');
 			oz.sendToActionScript("pdf.fontembedding","true");
 			return true;
 		}
@@ -134,13 +128,28 @@ if ( self !== top ) {
 			inputJson["tax"] = inputJson["tax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax"] = inputJson["sumWithTax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax2"] = inputJson["sumWithTax2"].replace(/,/gi, "").replace(/￥/gi, "");
+			inputJson["expenseTotal"] = inputJson["expenseTotal"].replace(/,/gi, "").replace(/￥/gi, "");
+			inputJson["benefitTotal"] = inputJson["benefitTotal"].replace(/,/gi, "").replace(/￥/gi, "");
+			inputJson["total"] = inputJson["total"].replace(/,/gi, "").replace(/￥/gi, "");
 			for(i=1 ; i<=repeat ; i++){
-				inputJson["unitPrice"+i] =inputJson["unitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");
+				inputJson["monthlyUnitPrice"+i] =inputJson["monthlyUnitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");
+				inputJson["overTimeUnitPrice"+i] = inputJson["overTimeUnitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");				
+				inputJson["underTimeUnitPrice"+i] = inputJson["underTimeUnitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");				
 				inputJson["price"+i] = inputJson["price"+i].replace(/,/gi, "").replace(/￥/gi, "");				
-				inputJson["amount"+i] = inputJson["amount"+i].replace(/,/gi, "").replace(/￥/gi, "");
-				if(inputJson["amount"+i]==""){inputJson["amount"+i]="null"}
-				if(inputJson["unitPrice"+i]==""){inputJson["unitPrice"+i]="null"}
+				inputJson["expense"+i] = inputJson["expense"+i].replace(/,/gi, "").replace(/￥/gi, "");				
+				inputJson["benefit"+i] = inputJson["benefit"+i].replace(/,/gi, "").replace(/￥/gi, "");
+				inputJson["subtotal"+i] = inputJson["subtotal"+i].replace(/,/gi, "").replace(/￥/gi, "");
+				if(inputJson["monthlyUnitPrice"+i]==""){inputJson["monthlyUnitPrice"+i]="null"}
+				if(inputJson["standardMin"+i]==""){inputJson["standardMin"+i]="null"}
+				if(inputJson["standardMax"+i]==""){inputJson["standardMax"+i]="null"}
+				if(inputJson["workTime"+i]==""){inputJson["workTime"+i]="null"}
+				if(inputJson["extraTime"+i]==""){inputJson["extraTime"+i]="null"}
+				if(inputJson["overTimeUnitPrice"+i]==""){inputJson["overTimeUnitPrice"+i]="null"}
+				if(inputJson["underTimeUnitPrice"+i]==""){inputJson["underTimeUnitPrice"+i]="null"}
 				if(inputJson["price"+i]==""){inputJson["price"+i]="null"}
+				if(inputJson["expense"+i]==""){inputJson["expense"+i]="null"}
+				if(inputJson["benefit"+i]==""){inputJson["benefit"+i]="null"}
+				if(inputJson["subtotal"+i]==""){inputJson["subtotal"+i]="null"}
 			}
 			inputJson.state=state;
 			if(inputJson["workflowNum"]==""){inputJson.workflowNum=0};
@@ -148,48 +157,40 @@ if ( self !== top ) {
 			console.log("제이슨:"+JSON.stringify(inputJson));
 			return inputJson;
 		}
-		
+
       	//보존버튼을 누루면 작동. 
 		//뷰어의 모든 값을 제이슨스트링으로 가져옴.
 		function saveButton(state){
 			var inputJson = processJson(state);
 			$.ajax(
 					{
-						url: "insertBillSolution",
+						url: "updateBillSi",
 						type: 'POST',
 						data: inputJson,
-						dataType:"json",
 						success: function(r){
-							if(r["errorFlag"]==0){
-								alert("請求書を作成しました。");
-							}else{
-								alert(r["error"]);
-							}
-							if(estimateNum ==''){
-								location.href="billList";
-							}else{
-								location.href="estimateList";
-							}
+							alert("請求書を修正しました。");
+							location.href="billList";
 						},
 						error: function(e){
 							console.log(JSON.stringify(e));
-							alert('ajaxエラー！');
+							alert('エラー！');
 						}
 					}		
 			);
 			
 		}
+
 		function saveAndRequestButton(state){
 			var inputJson = processJson(state);
 			$.ajax(
 					{
-						url: "insertBillSolution",
+						url: "updateBillSi",
 						type: 'POST',
 						data: inputJson,
 						dataType:"json",
 						success: function(r){
 							if(r["errorFlag"]==0){
-								alert("請求書を作成しました。");
+								alert("請求書を修正しました。");
 							}else{
 								alert(r["error"]);
 							}
@@ -215,11 +216,7 @@ if ( self !== top ) {
 						dataType:"text",
 						success: function(r){
 							alert(r);
-							if(estimateNum ==''){
-								location.href="billList";
-							}else{
-								location.href="estimateList";
-							}
+							location.href="estimateList";
 						},
 						error: function(e){
 							console.log(JSON.stringify(e));

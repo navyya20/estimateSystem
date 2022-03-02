@@ -53,10 +53,10 @@ public class AccountController {
 		logger.debug("account : {}", account);
 		int result = accountService.insertAccount(account);
 		if (result != 1) {
-			logger.info("failed for deleting userInform");
+			logger.info("failed for inserting Account");
+		}else {
+			logger.info("Account inserted");			
 		}
-		logger.info("userInform deleted");
-		
 		return "redirect:/all/accountList";
 	}
 	
@@ -76,9 +76,10 @@ public class AccountController {
 		logger.debug("accountInform : {}", account);
 		int result = accountService.updateAccount(account);
 		if (result != 1) {
-			System.out.println("failed for inserting userInform");
+			System.out.println("failed for updating Account");
+		}else {
+			logger.info("Account updated");
 		}
-		logger.info("userInform updated");
 		return "redirect:/all/accountList";
 	}
 	
@@ -90,8 +91,9 @@ public class AccountController {
 		int result = accountService.deleteAccount(accountInformNum);
 		if (result != 1) {
 			logger.info("failed for deleting accountInform");
+		}else {
+			logger.info("accountInform deleted");
 		}
-		logger.info("accountInform deleted");
 		return "redirect:/all/accountList";
 	}
 	

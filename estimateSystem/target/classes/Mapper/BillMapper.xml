@@ -62,7 +62,7 @@
 			) b
 		<choose>
 			<when test='auth == "u"'>
-				where b.userNum=#{userNum} or b.state='app'
+				where b.userNum=#{userNum}
 			</when>
 			<when test='auth == "a"'>
 				
@@ -371,6 +371,7 @@
 			userDepartment,
 			userPosition,
 			billDate,
+			documentTypeName,
 			supplier,
 			address,
 			post,
@@ -408,6 +409,7 @@
 			#{userDepartment},
 			#{userPosition},
 			#{billDate},
+			#{documentTypeName},
 			#{supplier},
 			#{address},
 			#{post},
@@ -631,10 +633,11 @@
 			stamp,
 			stampFileName,
 			logoFileName,
-			incharge,
+			
 			receiver,
 			documentName,
-			payCondition,
+			workPeriodStart,
+			workPeriodEnd,
 			deadline,
 			bankName,
 			branchName,
@@ -643,12 +646,14 @@
 			accountNumber,
 			depositeClassification,
 			note,
+			expenseTotal,
+			benefitTotal,
+			total,
 			sum,
 			taxRate,
 			tax,
 			sumWithTax,
 			sumWithTax2,	
-			comment,
 			updateDate,
 			updater
 		) 
@@ -668,10 +673,11 @@
 			#{stamp},
 			#{stampFileName},
 			#{logoFileName},
-			#{incharge},
+			
 			#{receiver},
 			#{documentName},
-			#{payCondition},
+			#{workPeriodStart},
+			#{workPeriodEnd},			
 			#{deadline},
 			#{bankName},
 			#{branchName},
@@ -680,33 +686,34 @@
 			#{accountNumber},
 			#{depositeClassification},
 			#{note},
+			${expenseTotal},
+			${benefitTotal},
+			${total},
 			#{sum},
 			#{taxRate},
 			#{tax},
 			#{sumWithTax},
 			#{sumWithTax2},	
-			#{comment},
 			CURRENT_TIMESTAMP,
 			#{updater}
 		)
 	</insert>
 	<insert id="insertBillSiItems" parameterType="billSiItemsRecieveDTO">
 		insert into billSiItems (
-			documentNum,rowNum,item,itemName,amount,unit,unitPrice,price
+			documentNum,rowNum,
+			monthlyUnitPrice,standardMin,standardMax,workTime,extraTime,overTimeUnitPrice,underTimeUnitPrice,price,expense,benefit,subtotal
 		)
 		values
-		(#{documentNum},#{rowNum1},#{item1},#{itemName1},${amount1},#{unit1},${unitPrice1},${price1}),
-		(#{documentNum},#{rowNum2},#{item2},#{itemName2},${amount2},#{unit2},${unitPrice2},${price2}),
-		(#{documentNum},#{rowNum3},#{item3},#{itemName3},${amount3},#{unit3},${unitPrice3},${price3}),
-		(#{documentNum},#{rowNum4},#{item4},#{itemName4},${amount4},#{unit4},${unitPrice4},${price4}),
-		(#{documentNum},#{rowNum5},#{item5},#{itemName5},${amount5},#{unit5},${unitPrice5},${price5}),
-		(#{documentNum},#{rowNum6},#{item6},#{itemName6},${amount6},#{unit6},${unitPrice6},${price6}),
-		(#{documentNum},#{rowNum7},#{item7},#{itemName7},${amount7},#{unit7},${unitPrice7},${price7}),
-		(#{documentNum},#{rowNum8},#{item8},#{itemName8},${amount8},#{unit8},${unitPrice8},${price8}),
-		(#{documentNum},#{rowNum9},#{item9},#{itemName9},${amount9},#{unit9},${unitPrice9},${price9}),
-		(#{documentNum},#{rowNum10},#{item10},#{itemName10},${amount10},#{unit10},${unitPrice10},${price10}),
-		(#{documentNum},#{rowNum11},#{item11},#{itemName11},${amount11},#{unit11},${unitPrice11},${price11}),
-		(#{documentNum},#{rowNum12},#{item12},#{itemName12},${amount12},#{unit12},${unitPrice12},${price12})
+		(#{documentNum},${rowNum1},${monthlyUnitPrice1},${standardMin1},${standardMax1},${workTime1},${extraTime1},${overTimeUnitPrice1},${underTimeUnitPrice1},${price1},${expense1},${benefit1},${subtotal1}),
+		(#{documentNum},${rowNum2},${monthlyUnitPrice2},${standardMin2},${standardMax2},${workTime2},${extraTime2},${overTimeUnitPrice2},${underTimeUnitPrice2},${price2},${expense2},${benefit2},${subtotal2}),
+		(#{documentNum},${rowNum3},${monthlyUnitPrice3},${standardMin3},${standardMax3},${workTime3},${extraTime3},${overTimeUnitPrice3},${underTimeUnitPrice3},${price3},${expense3},${benefit3},${subtotal3}),
+		(#{documentNum},${rowNum4},${monthlyUnitPrice4},${standardMin4},${standardMax4},${workTime4},${extraTime4},${overTimeUnitPrice4},${underTimeUnitPrice4},${price4},${expense4},${benefit4},${subtotal4}),
+		(#{documentNum},${rowNum5},${monthlyUnitPrice5},${standardMin5},${standardMax5},${workTime5},${extraTime5},${overTimeUnitPrice5},${underTimeUnitPrice5},${price5},${expense5},${benefit5},${subtotal5}),
+		(#{documentNum},${rowNum6},${monthlyUnitPrice6},${standardMin6},${standardMax6},${workTime6},${extraTime6},${overTimeUnitPrice6},${underTimeUnitPrice6},${price6},${expense6},${benefit6},${subtotal6}),
+		(#{documentNum},${rowNum7},${monthlyUnitPrice7},${standardMin7},${standardMax7},${workTime7},${extraTime7},${overTimeUnitPrice7},${underTimeUnitPrice7},${price7},${expense7},${benefit7},${subtotal7}),
+		(#{documentNum},${rowNum8},${monthlyUnitPrice8},${standardMin8},${standardMax8},${workTime8},${extraTime8},${overTimeUnitPrice8},${underTimeUnitPrice8},${price8},${expense8},${benefit8},${subtotal8}),
+		(#{documentNum},${rowNum9},${monthlyUnitPrice9},${standardMin9},${standardMax9},${workTime9},${extraTime9},${overTimeUnitPrice9},${underTimeUnitPrice9},${price9},${expense9},${benefit9},${subtotal9}),
+		(#{documentNum},${rowNum10},${monthlyUnitPrice10},${standardMin10},${standardMax10},${workTime10},${extraTime10},${overTimeUnitPrice10},${underTimeUnitPrice10},${price10},${expense10},${benefit10},${subtotal10})
 	</insert>
 	
 	<update id="updateBillSi" parameterType="billSiDTO">
@@ -736,11 +743,239 @@
 			stamp = #{stamp},
 			stampFileName = #{stampFileName},
 			logoFileName = #{logoFileName},
-			incharge = #{incharge},
 			receiver = #{receiver},
 			documentName = #{documentName},
+			workPeriodStart = #{workPeriodStart},
+			workPeriodEnd = #{workPeriodEnd},
+			deadline = #{deadline},
+			bankName = #{bankName},
+			branchName = #{branchName},
+			accountName = #{accountName},
+			hurigana = #{hurigana},
+			accountNumber = #{accountNumber},
+			depositeClassification = #{depositeClassification},
+			note = #{note},
+			expenseTotal = #{expenseTotal},
+			benefitTotal = #{benefitTotal},
+			total = #{total},
+			sum = #{sum},
+			taxRate = #{taxRate},
+			tax = #{tax},
+			sumWithTax = #{sumWithTax},
+			sumWithTax2 = #{sumWithTax2},	
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where
+			documentNum = #{documentNum}
+	</update>
+	<update id="updateBillSiItems" parameterType="billSiItemsRecieveDTO">
+		update billSiItems set
+			monthlyUnitPrice = ${monthlyUnitPrice1}, standardMin = ${standardMin1}, standardMax = ${standardMax1}, workTime = ${workTime1}, extraTime = ${extraTime1}, overTimeUnitPrice = ${overTimeUnitPrice1}, underTimeUnitPrice = ${underTimeUnitPrice1}, price = ${price1}, expense = ${expense1}, benefit = ${benefit1}, subtotal = ${subtotal1}
+		where
+			documentNum=#{documentNum} and rowNum = ${rowNum1};
+			
+		update billSiItems set
+			monthlyUnitPrice = ${monthlyUnitPrice2}, standardMin = ${standardMin2}, standardMax = ${standardMax2}, workTime = ${workTime2}, extraTime = ${extraTime2}, overTimeUnitPrice = ${overTimeUnitPrice2}, underTimeUnitPrice = ${underTimeUnitPrice2}, price = ${price2}, expense = ${expense2}, benefit = ${benefit2}, subtotal = ${subtotal2}
+		where
+			documentNum=#{documentNum} and rowNum = ${rowNum2};
+			
+		update billSiItems set
+			monthlyUnitPrice = ${monthlyUnitPrice3}, standardMin = ${standardMin3}, standardMax = ${standardMax3}, workTime = ${workTime3}, extraTime = ${extraTime3}, overTimeUnitPrice = ${overTimeUnitPrice3}, underTimeUnitPrice = ${underTimeUnitPrice3}, price = ${price3}, expense = ${expense3}, benefit = ${benefit3}, subtotal = ${subtotal3}
+		where
+			documentNum=#{documentNum} and rowNum = ${rowNum3};
+			
+		update billSiItems set
+			monthlyUnitPrice = ${monthlyUnitPrice4}, standardMin = ${standardMin4}, standardMax = ${standardMax4}, workTime = ${workTime4}, extraTime = ${extraTime4}, overTimeUnitPrice = ${overTimeUnitPrice4}, underTimeUnitPrice = ${underTimeUnitPrice4}, price = ${price4}, expense = ${expense4}, benefit = ${benefit4}, subtotal = ${subtotal4}
+		where
+			documentNum=#{documentNum} and rowNum = ${rowNum4};
+			
+		update billSiItems set
+			monthlyUnitPrice = ${monthlyUnitPrice5}, standardMin = ${standardMin5}, standardMax = ${standardMax5}, workTime = ${workTime5}, extraTime = ${extraTime5}, overTimeUnitPrice = ${overTimeUnitPrice5}, underTimeUnitPrice = ${underTimeUnitPrice5}, price = ${price5}, expense = ${expense5}, benefit = ${benefit5}, subtotal = ${subtotal5}
+		where
+			documentNum=#{documentNum} and rowNum = ${rowNum5};
+			
+		update billSiItems set
+			monthlyUnitPrice = ${monthlyUnitPrice6}, standardMin = ${standardMin6}, standardMax = ${standardMax6}, workTime = ${workTime6}, extraTime = ${extraTime6}, overTimeUnitPrice = ${overTimeUnitPrice6}, underTimeUnitPrice = ${underTimeUnitPrice6}, price = ${price6}, expense = ${expense6}, benefit = ${benefit6}, subtotal = ${subtotal6}
+		where
+			documentNum=#{documentNum} and rowNum = ${rowNum6};
+			
+		update billSiItems set
+			monthlyUnitPrice = ${monthlyUnitPrice7}, standardMin = ${standardMin7}, standardMax = ${standardMax7}, workTime = ${workTime7}, extraTime = ${extraTime7}, overTimeUnitPrice = ${overTimeUnitPrice7}, underTimeUnitPrice = ${underTimeUnitPrice7}, price = ${price7}, expense = ${expense7}, benefit = ${benefit7}, subtotal = ${subtotal7}
+		where
+			documentNum=#{documentNum} and rowNum = ${rowNum7};
+			
+		update billSiItems set
+			monthlyUnitPrice = ${monthlyUnitPrice8}, standardMin = ${standardMin8}, standardMax = ${standardMax8}, workTime = ${workTime8}, extraTime = ${extraTime8}, overTimeUnitPrice = ${overTimeUnitPrice8}, underTimeUnitPrice = ${underTimeUnitPrice8}, price = ${price8}, expense = ${expense8}, benefit = ${benefit8}, subtotal = ${subtotal8}
+		where
+			documentNum=#{documentNum} and rowNum = ${rowNum8};
+			
+		update billSiItems set
+			monthlyUnitPrice = ${monthlyUnitPrice9}, standardMin = ${standardMin9}, standardMax = ${standardMax9}, workTime = ${workTime9}, extraTime = ${extraTime9}, overTimeUnitPrice = ${overTimeUnitPrice9}, underTimeUnitPrice = ${underTimeUnitPrice9}, price = ${price9}, expense = ${expense9}, benefit = ${benefit9}, subtotal = ${subtotal9}
+		where
+			documentNum=#{documentNum} and rowNum = ${rowNum9};
+			
+		update billSiItems set
+			monthlyUnitPrice = ${monthlyUnitPrice10}, standardMin = ${standardMin10}, standardMax = ${standardMax10}, workTime = ${workTime10}, extraTime = ${extraTime10}, overTimeUnitPrice = ${overTimeUnitPrice10}, underTimeUnitPrice = ${underTimeUnitPrice10}, price = ${price10}, expense = ${expense10}, benefit = ${benefit10}, subtotal = ${subtotal10}
+		where
+			documentNum=#{documentNum} and rowNum = ${rowNum10};
+	</update>
+	
+<!-- /////////////////////////billC////////////////////////// -->	
+	<insert id="insertBillC" parameterType="billCDTO">
+		insert into documentMaster (
+			documentNum,
+			systemNum,
+			documentTypeName,
+			nextDocumentTypeName,
+			userNum, userName, userDepartment, userPosition,
+			workflowNum,
+			state,
+			updateDate,
+			updater
+		)
+		values(
+			#{documentNum},
+			#{systemNum},
+			#{documentTypeName},
+			#{nextDocumentTypeName},
+			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
+			<choose>
+				<when test="workflowNum == 0">
+					null,
+				</when>
+				<when test="workflowNum != 0">
+					#{workflowNum},
+				</when>
+			</choose>
+			#{state},
+			CURRENT_TIMESTAMP,
+			#{updater}
+		);
+		
+		insert into estimateMaster(
+			documentNum,
+			receiver,
+			documentName,
+			estimateNum
+		)values(
+			#{documentNum},
+			#{receiver},
+			#{receiver},     <!-- billC에 한해서 documentName에 고객명(receiver)를 넣는다. billC는 documentName이 없음...-->	
+			#{estimateNum}
+		);
+		
+		insert into billC (
+			documentNum,
+			userNum,
+			userName,
+			userDepartment,
+			userPosition,
+			billDate,
+			address,
+			stamp,
+			stampFileName,
+			logoFileName,
+			
+			receiver,
+			documentName,
+			payCondition,
+			deadline,
+			itemTitle,
+			bankName,
+			branchName,
+			accountName,
+			hurigana,
+			accountNumber,
+			depositeClassification,
+			note,
+			sum,
+			taxRate,
+			tax,
+			sumWithTax,
+			sumWithTax2,	
+			updateDate,
+			updater
+		) 
+		values
+		(
+			#{documentNum},
+			#{userNum},
+			#{userName},
+			#{userDepartment},
+			#{userPosition},
+			#{billDate},
+			#{address},
+			#{stamp},
+			#{stampFileName},
+			#{logoFileName},
+			
+			#{receiver},
+			#{receiver},    <!-- billC에 한해서 documentName에 고객명(receiver)를 넣는다. billC는 documentName이 없음...-->	
+			#{payCondition},
+			#{deadline},
+			#{itemTitle},
+			#{bankName},
+			#{branchName},
+			#{accountName},
+			#{hurigana},
+			#{accountNumber},
+			#{depositeClassification},
+			#{note},
+			#{sum},
+			#{taxRate},
+			#{tax},
+			#{sumWithTax},
+			#{sumWithTax2},	
+			CURRENT_TIMESTAMP,
+			#{updater}
+		)
+	</insert>
+	<insert id="insertBillCItems" parameterType="billCItemsRecieveDTO">
+		insert into billCItems (
+			documentNum,rowNum,itemName,amount,unitPrice,price
+		)
+		values
+		(#{documentNum},#{rowNum1},#{itemName1},${amount1},${unitPrice1},${price1}),
+		(#{documentNum},#{rowNum2},#{itemName2},${amount2},${unitPrice2},${price2}),
+		(#{documentNum},#{rowNum3},#{itemName3},${amount3},${unitPrice3},${price3}),
+		(#{documentNum},#{rowNum4},#{itemName4},${amount4},${unitPrice4},${price4}),
+		(#{documentNum},#{rowNum5},#{itemName5},${amount5},${unitPrice5},${price5}),
+		(#{documentNum},#{rowNum6},#{itemName6},${amount6},${unitPrice6},${price6}),
+		(#{documentNum},#{rowNum7},#{itemName7},${amount7},${unitPrice7},${price7}),
+		(#{documentNum},#{rowNum8},#{itemName8},${amount8},${unitPrice8},${price8}),
+		(#{documentNum},#{rowNum9},#{itemName9},${amount9},${unitPrice9},${price9}),
+		(#{documentNum},#{rowNum10},#{itemName10},${amount10},${unitPrice10},${price10})
+	</insert>
+	
+	<update id="updateBillC" parameterType="billCDTO">
+		update documentMaster set
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where 
+			documentNum = #{documentNum};
+		
+		update estimateMaster set
+			receiver = #{receiver},
+			documentName = #{receiver}     <!-- billC에 한해서 documentName에 고객명(receiver)를 넣는다. billC는 documentName이 없음...-->
+		where
+			documentNum = #{documentNum};
+		
+		update billC set
+			userNum = #{userNum},
+			userName = #{userName},
+			userDepartment = #{userDepartment},
+			userPosition = #{userPosition},
+			billDate = #{billDate},
+			address = #{address},
+			stamp = #{stamp},
+			stampFileName = #{stampFileName},
+			logoFileName = #{logoFileName},
+			
+			receiver = #{receiver},
+			documentName = #{receiver},     <!-- billC에 한해서 documentName에 고객명(receiver)를 넣는다. billC는 documentName이 없음...-->	
 			payCondition = #{payCondition},
 			deadline = #{deadline},
+			itemTitle = #{itemTitle},
 			bankName = #{bankName},
 			branchName = #{branchName},
 			accountName = #{accountName},
@@ -753,72 +988,60 @@
 			tax = #{tax},
 			sumWithTax = #{sumWithTax},
 			sumWithTax2 = #{sumWithTax2},	
-			comment = #{comment},
 			updateDate = CURRENT_TIMESTAMP,
 			updater = #{updater}
 		where
 			documentNum = #{documentNum}
 	</update>
-	<update id="updateBillSiItems" parameterType="billSiItemsRecieveDTO">
-		update billSiItems set
-			item = #{item1}, itemName = #{itemName1}, amount = ${amount1}, unit = #{unit1}, unitPrice = ${unitPrice1}, price = ${price1}
+	<update id="updateBillCItems" parameterType="billCItemsRecieveDTO">
+		update billCItems set
+			itemName = #{itemName1}, amount = ${amount1}, unitPrice = ${unitPrice1}, price = ${price1}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum1};
 			
-		update billSiItems set
-			item = #{item2}, itemName = #{itemName2}, amount = ${amount2}, unit = #{unit2}, unitPrice = ${unitPrice2}, price = ${price2}
+		update billCItems set
+			itemName = #{itemName2}, amount = ${amount2}, unitPrice = ${unitPrice2}, price = ${price2}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum2};
 			
-		update billSiItems set
-			item = #{item3}, itemName = #{itemName3}, amount = ${amount3}, unit = #{unit3}, unitPrice = ${unitPrice3}, price = ${price3}
+		update billCItems set
+			itemName = #{itemName3}, amount = ${amount3}, unitPrice = ${unitPrice3}, price = ${price3}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum3};
 			
-		update billSiItems set
-			item = #{item4}, itemName = #{itemName4}, amount = ${amount4}, unit = #{unit4}, unitPrice = ${unitPrice4}, price = ${price4}
+		update billCItems set
+			itemName = #{itemName4}, amount = ${amount4}, unitPrice = ${unitPrice4}, price = ${price4}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum4};
 			
-		update billSiItems set
-			item = #{item5}, itemName = #{itemName5}, amount = ${amount5}, unit = #{unit5}, unitPrice = ${unitPrice5}, price = ${price5}
+		update billCItems set
+			itemName = #{itemName5}, amount = ${amount5}, unitPrice = ${unitPrice5}, price = ${price5}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum5};
 			
-		update billSiItems set
-			item = #{item6}, itemName = #{itemName6}, amount = ${amount6}, unit = #{unit6}, unitPrice = ${unitPrice6}, price = ${price6}
+		update billCItems set
+			itemName = #{itemName6}, amount = ${amount6}, unitPrice = ${unitPrice6}, price = ${price6}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum6};
 			
-		update billSiItems set
-			item = #{item7}, itemName = #{itemName7}, amount = ${amount7}, unit = #{unit7}, unitPrice = ${unitPrice7}, price = ${price7}
+		update billCItems set
+			itemName = #{itemName7}, amount = ${amount7}, unitPrice = ${unitPrice7}, price = ${price7}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum7};
 			
-		update billSiItems set
-			item = #{item8}, itemName = #{itemName8}, amount = ${amount8}, unit = #{unit8}, unitPrice = ${unitPrice8}, price = ${price8}
+		update billCItems set
+			itemName = #{itemName8}, amount = ${amount8}, unitPrice = ${unitPrice8}, price = ${price8}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum8};
 			
-		update billSiItems set
-			item = #{item9}, itemName = #{itemName9}, amount = ${amount9}, unit = #{unit9}, unitPrice = ${unitPrice9}, price = ${price9}
+		update billCItems set
+			itemName = #{itemName9}, amount = ${amount9}, unitPrice = ${unitPrice9}, price = ${price9}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum9};
 			
-		update billSiItems set
-			item = #{item10}, itemName = #{itemName10}, amount = ${amount10}, unit = #{unit10}, unitPrice = ${unitPrice10}, price = ${price10}
+		update billCItems set
+			itemName = #{itemName10}, amount = ${amount10}, unitPrice = ${unitPrice10}, price = ${price10}
 		where
 			documentNum=#{documentNum} and rowNum = #{rowNum10};
-			
-		update billSiItems set
-			item = #{item11}, itemName = #{itemName11}, amount = ${amount11}, unit = #{unit11}, unitPrice = ${unitPrice11}, price = ${price11}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum11};
-		
-		update billSiItems set
-			item = #{item12}, itemName = #{itemName12}, amount = ${amount12}, unit = #{unit12}, unitPrice = ${unitPrice12}, price = ${price12}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum12}
 	</update>
-	
 </mapper>

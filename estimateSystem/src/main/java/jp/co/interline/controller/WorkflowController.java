@@ -13,7 +13,9 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -78,6 +80,7 @@ public class WorkflowController {
 		return result;
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/requestApproval", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public String requestApproval(HttpSession session, Model model, String documentTypeName, String documentNum, int systemNum) {
@@ -106,6 +109,8 @@ public class WorkflowController {
 		return "承認依頼完了";
 	}
 	
+	
+	//내 앞으로 승인대기중인 문서들 리스트가 몇건인지 불러온다.
 	@ResponseBody
 	@RequestMapping(value = "/all/getWaitingWorkflow", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
 	public String getWaitingWorkflow(HttpSession session, Model model) {
@@ -114,7 +119,7 @@ public class WorkflowController {
 		return result+"";
 	}
 	
-	
+	//내 앞으로 승인대기중인 문서들 리스트를 불러온다.
 	@RequestMapping(value = "/all/workflowWaitingList", method = RequestMethod.GET)
 	public String workflowWaitingList(HttpSession session, Model model) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -126,9 +131,10 @@ public class WorkflowController {
 	
 	/*
 	 * 1.workflow의 presentApproverNum번째의 approveState#를 a로 바꾼다.
-	 * 2.바뀐 approveState#로 새롭게 presentApprover와 presentApproverNum을 설정한다.
+	 * 2.바뀐 approve#State로 새롭게 presentApprover와 presentApproverNum을 설정한다.
 	 * 3.만약 approveState1~3가 모두 a 즉 targetValue가 aaa라면 승인완료 처리를 한다.
 	 */
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/approval", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public String approval(HttpSession session, Model model, String documentTypeName, String documentNum, int workflowNum) {
@@ -152,12 +158,13 @@ public class WorkflowController {
 		return "承認完了";
 	}
 	
+	//승인거절한다.
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/reject", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public String reject(HttpSession session, Model model, String documentTypeName, String documentNum, int workflowNum) {
-		//workflow삭제 문서의 workflowNum은 자동으로 null
+		//workflow삭제 문서에 저장됬던 workflowNum은 자동으로 null
 		int result1 = workflowService.deleteWorkflow(workflowNum);
-		
 		
 		//문서상태 wri로
 		int result2 =  workflowService.updateStateWRI(documentNum);

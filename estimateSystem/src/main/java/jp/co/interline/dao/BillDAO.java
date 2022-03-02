@@ -7,6 +7,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import jp.co.interline.dto.BillCDTO;
+import jp.co.interline.dto.BillCItemsRecieveDTO;
 import jp.co.interline.dto.BillSheet1DTO;
 import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
 import jp.co.interline.dto.BillSiDTO;
@@ -128,7 +130,33 @@ public class BillDAO {
 	}
 	
 	
+///////////////////////////////////////////billC//////////////////////////////////////////	
+		
+	public int insertBillC(BillCDTO billC) {
+		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
+		int result = mapper.insertBillC(billC);
+		return result;
+	}
 	
+	public int insertBillCItems(BillCItemsRecieveDTO billCItemsReciever) {
+		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
+		int result = mapper.insertBillCItems(billCItemsReciever);
+		return result;
+	}
+	
+	public int updateBillC(BillCDTO billC) {
+		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
+		int result = mapper.updateBillC(billC);
+		return result;
+	}
+	
+	public int updateBillCItems(BillCItemsRecieveDTO billCItemsReciever) {
+		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
+		int result = mapper.updateBillCItems(billCItemsReciever);
+		return result;
+	}
+	
+
 
 	
 }

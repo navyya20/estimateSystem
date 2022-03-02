@@ -28,7 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../css/common/common.css">
 <script src="../js/bootstrap.bundle.js"></script>
-<title>writeBillSolution</title>
+<title>writeBillC</title>
 <style type="text/css">
 </style>
 <script>
@@ -68,7 +68,7 @@ if ( self !== top ) {
 			copy=copy.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
 		</c:if>
 		
-		var repeat=12;
+		var repeat=10;
 
 		var userString = '${user}';
 		var user=JSON.parse(userString);
@@ -78,9 +78,9 @@ if ( self !== top ) {
 			var oz;
 			oz = document.getElementById("OZViewer");
 			oz.sendToActionScript("viewer.ignore_disable_color_inputcomponent","true");
-			oz.sendToActionScript("viewer.external_functions_path","ozp://billSystem/billSolution/JS/billSolution.js");
+			oz.sendToActionScript("viewer.external_functions_path","ozp://billSystem/billC/JS/billC.js");
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
-			oz.sendToActionScript("connection.reportname","billSystem/billSolution/writeBillSolution.ozr");
+			oz.sendToActionScript("connection.reportname","billSystem/billC/writeBillC.ozr");
 			oz.sendToActionScript("connection.inputjson",copy);
 			oz.sendToActionScript("connection.pcount","9");
 			oz.sendToActionScript("connection.args1","repeat="+repeat);
@@ -94,9 +94,9 @@ if ( self !== top ) {
 			oz.sendToActionScript("connection.args9","companyList="+companyList);
 
 			oz.sendToActionScript("global.language", "ja_JP");
-			oz.sendToActionScript("odi.odinames", "writeBillSolution");
-	 		oz.sendToActionScript("odi.writeBillSolution.pcount", "1");
-			oz.sendToActionScript("odi.writeBillSolution.args1", "documentNum="+estimateNum);
+			oz.sendToActionScript("odi.odinames", "writeBillC");
+	 		oz.sendToActionScript("odi.writeBillC.pcount", "1");
+			oz.sendToActionScript("odi.writeBillC.args1", "documentNum="+estimateNum);
 			
 			oz.sendToActionScript("pdf.fontembedding","true");
 			return true;
@@ -155,7 +155,7 @@ if ( self !== top ) {
 			var inputJson = processJson(state);
 			$.ajax(
 					{
-						url: "insertBillSolution",
+						url: "insertBillC",
 						type: 'POST',
 						data: inputJson,
 						dataType:"json",
@@ -183,7 +183,7 @@ if ( self !== top ) {
 			var inputJson = processJson(state);
 			$.ajax(
 					{
-						url: "insertBillSolution",
+						url: "insertBillC",
 						type: 'POST',
 						data: inputJson,
 						dataType:"json",

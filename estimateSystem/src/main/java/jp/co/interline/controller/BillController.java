@@ -13,19 +13,27 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import jp.co.interline.dto.CompanyDTO;
+import jp.co.interline.dto.DocumentMasterDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.AccountDTO;
+import jp.co.interline.dto.BillCDTO;
+import jp.co.interline.dto.BillCItemsRecieveDTO;
 import jp.co.interline.dto.BillSheet1DTO;
 import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
 import jp.co.interline.dto.BillSiDTO;
@@ -67,15 +75,19 @@ public class BillController {
 	 * page: pageNavigator를 위한 page수
 	 */
 	@RequestMapping(value = "/all/billList", method = RequestMethod.GET)
-	public String billList(HttpSession session, Model model, String flagObj, @RequestParam(value="option", defaultValue="b.updateDate desc")String option, @RequestParam(value="page", defaultValue="1") int page) {
+	public String billList(HttpSession session, Model model, String flagObj, 
+			@RequestParam(value="option", defaultValue="b.updateDate desc")String option, 
+			@RequestParam(value="page", defaultValue="1") int page,
+			@RequestParam(value="countPerPage", defaultValue="20") int countPerPage) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		logger.debug("BillController.esimateList,user:{}",user.getUserNum());
 		
-		ArrayList<EstimateListDTO> billList = billService.getBillList(model, user,option,page);
+		ArrayList<EstimateListDTO> billList = billService.getBillList(model, user,option,page,countPerPage);
 		
 		model.addAttribute("billList", billList);
 		model.addAttribute("option", option);
 		model.addAttribute("flagObj", flagObj);
+		model.addAttribute("countPerPage", countPerPage);
 		//네비게이션에대한 모델은 서비스에서 넣어준다.
 		return "billSystem/billList";
 	}
@@ -87,6 +99,9 @@ public class BillController {
 		
 		return "billSystem/billSelect";
 	}
+	
+	//bill의 copy기능은 estimate의 copy기능을 공유한다.
+	
 
 	
 ///////////////////////////billSheet1//////////////////////////////////////////////////
@@ -124,6 +139,7 @@ public class BillController {
 		return "billSystem/billSheet1/writeBillSheet1";
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/insertBillSheet1", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertBillSheet1(HttpSession session, Model model, BillSheet1DTO billSheet1, BillSheet1ItemsRecieveDTO billSheet1ItemsReciever) {
@@ -156,6 +172,7 @@ public class BillController {
 		return result;
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/modBillSheet1", method = RequestMethod.POST)
 	public String modBillSheet1(HttpSession session, Model model, String documentNum, String documentTypeName) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -183,6 +200,7 @@ public class BillController {
 		return "billSystem/billSheet1/modBillSheet1";
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/updateBillSheet1", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> updateBillSheet1(HttpSession session, Model model, BillSheet1DTO billSheet1, BillSheet1ItemsRecieveDTO billSheet1ItemsReciever) {
@@ -217,9 +235,8 @@ public class BillController {
 	
 /////////////////////////////billSolution//////////////////////////////////////////////////
 //write,insert,mod,update	
-	
 	@RequestMapping(value = "/all/writeBillSolution", method = RequestMethod.GET)
-	public String writeBillSolution(HttpSession session, Model model, String estimateNum) {
+	public String writeBillSolution(HttpSession session, Model model, String estimateNum, String copy) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		ArrayList<AccountDTO> accountList = accountService.getAccountList();
 		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
@@ -231,6 +248,7 @@ public class BillController {
 		String userString = gson.toJson(user);
 		model.addAttribute("user", userString);
 		model.addAttribute("estimateNum", estimateNum);
+		model.addAttribute("copy", copy);
 		return "billSystem/billSolution/writeBillSolution";
 	}
 	
@@ -251,6 +269,7 @@ public class BillController {
 		return "billSystem/billSolution/writeBillSolution";
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/insertBillSolution", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertBillSolution(HttpSession session, Model model, BillSolutionDTO billSolution, BillSolutionItemsRecieveDTO billSolutionItemsReciever) {
@@ -283,6 +302,7 @@ public class BillController {
 		return result;
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/modBillSolution", method = RequestMethod.POST)
 	public String modBillSolution(HttpSession session, Model model, String documentNum, String documentTypeName) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -310,6 +330,7 @@ public class BillController {
 		return "billSystem/billSolution/modBillSolution";
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/updateBillSolution", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> updateBillSolution(HttpSession session, Model model, BillSolutionDTO billSolution, BillSolutionItemsRecieveDTO billSolutionItemsReciever) {
@@ -345,7 +366,7 @@ public class BillController {
 //write,insert,mod,update	
 	
 	@RequestMapping(value = "/all/writeBillSi", method = RequestMethod.GET)
-	public String writeBillSi(HttpSession session, Model model, String estimateNum) {
+	public String writeBillSi(HttpSession session, Model model, String estimateNum, String copy) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		ArrayList<AccountDTO> accountList = accountService.getAccountList();
 		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
@@ -357,6 +378,7 @@ public class BillController {
 		String userString = gson.toJson(user);
 		model.addAttribute("user", userString);
 		model.addAttribute("estimateNum", estimateNum);
+		model.addAttribute("copy", copy);
 		return "billSystem/billSi/writeBillSi";
 	}
 	
@@ -377,6 +399,7 @@ public class BillController {
 		return "billSystem/billSi/writeBillSi";
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/insertBillSi", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertBillSi(HttpSession session, Model model, BillSiDTO billSi, BillSiItemsRecieveDTO billSiItemsReciever) {
@@ -409,6 +432,7 @@ public class BillController {
 		return result;
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/modBillSi", method = RequestMethod.POST)
 	public String modBillSi(HttpSession session, Model model, String documentNum, String documentTypeName) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
@@ -435,7 +459,8 @@ public class BillController {
 		model.addAttribute("user", userString);
 		return "billSystem/billSi/modBillSi";
 	}
-	
+
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/updateBillSi", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> updateBillSi(HttpSession session, Model model, BillSiDTO billSi, BillSiItemsRecieveDTO billSiItemsReciever) {
@@ -462,15 +487,133 @@ public class BillController {
 		result.put("documentNum", billSi.getDocumentNum());
 		return result;
 	}
+
 	
+/////////////////////////////billC//////////////////////////////////////////////////
+	//write,insert,mod,update	
 	
+	@RequestMapping(value = "/all/writeBillC", method = RequestMethod.GET)
+	public String writeBillC(HttpSession session, Model model, String estimateNum, String copy) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		ArrayList<AccountDTO> accountList = accountService.getAccountList();
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
+		Gson gson = new Gson();
+		String accountListString = gson.toJson(accountList);
+		String companyListString = gson.toJson(companyList);
+		model.addAttribute("accountList", accountListString);
+		model.addAttribute("companyList", companyListString);
+		String userString = gson.toJson(user);
+		model.addAttribute("user", userString);
+		model.addAttribute("estimateNum", estimateNum);
+		model.addAttribute("copy", copy);
+		return "billSystem/billC/writeBillC";
+	}
 	
+	@RequestMapping(value = "/all/writeBillC", method = RequestMethod.POST)
+	public String writeBillCCopy(HttpSession session, Model model, String estimateNum, String copy) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		ArrayList<AccountDTO> accountList = accountService.getAccountList();
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
+		Gson gson = new Gson();
+		String accountListString = gson.toJson(accountList);
+		String companyListString = gson.toJson(companyList);
+		model.addAttribute("accountList", accountListString);
+		model.addAttribute("companyList", companyListString);
+		String userString = gson.toJson(user);
+		model.addAttribute("user", userString);
+		model.addAttribute("estimateNum", estimateNum);
+		model.addAttribute("copy", copy);
+		return "billSystem/billC/writeBillC";
+	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
+	@ResponseBody
+	@RequestMapping(value = "/all/insertBillC", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public HashMap<String, String> insertBillC(HttpSession session, Model model, BillCDTO billC, BillCItemsRecieveDTO billCItemsReciever) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("BillController.insertBillC,user:{}",user.getUserNum());
+		//채번
+		String documentNum = billService.getDocoumentNum();
+		//기본정보등록
+		billC.setDocumentNum(documentNum);
+		billC.setUpdater(user.getUserNum());
+		
+		HashMap<String, String> result = new HashMap<String, String>();
+		
+		int result1 = billService.insertBillC(billC);
+		if(result1 != 1) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求基本情報格納エラー");
+			return result;
+		}
+		//아이템등록
+		billCItemsReciever.setDocumentNum(documentNum);
+		int result2 = billService.insertBillCItems(billCItemsReciever);
+		if (result2 ==0) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求ITEM情報格納エラー");
+			return result;
+		}
+		result.put("errorFlag", "0");
+		result.put("documentNum", documentNum);
+		return result;
+	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
+	@RequestMapping(value = "/all/modBillC", method = RequestMethod.POST)
+	public String modBillC(HttpSession session, Model model, String documentNum, String documentTypeName) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		
+		//state를 가져옴.
+		//documentTypeName에따라 조인되는 DB가 다르니 주의!
+		SystemDTO system = new SystemDTO();
+		system.setDocumentNum(documentNum);
+		system.setDocumentTypeName(documentTypeName);
+		SystemDTO sys = estimateService.getEstimate(system);
+		model.addAttribute("state", sys.getState());
+		model.addAttribute("userNum", sys.getUserNum());
+		model.addAttribute("billNum", documentNum);
+		
+		ArrayList<AccountDTO> accountList = accountService.getAccountList();
+		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
+		Gson gson = new Gson();
+		String accountListString = gson.toJson(accountList);
+		String companyListString = gson.toJson(companyList);
+		model.addAttribute("accountList", accountListString);
+		model.addAttribute("companyList", companyListString);
+		
+		String userString = gson.toJson(user);
+		model.addAttribute("user", userString);
+		return "billSystem/billC/modBillC";
+	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
+	@ResponseBody
+	@RequestMapping(value = "/all/updateBillC", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public HashMap<String, String> updateBillC(HttpSession session, Model model, BillCDTO billC, BillCItemsRecieveDTO billCItemsReciever) {
+	UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 	
+	HashMap<String, String> result = new HashMap<String, String>();
+	//기본정보등록
+	int result1 = billService.updateBillC(billC);
+	if(result1 != 1) {
+		result.put("errorFlag", "1");
+		result.put("error", "請求基本情報格納エラー");
+		return result;
+	}
+	//아이템등록
+	billCItemsReciever.setDocumentNum(billC.getDocumentNum());
+	int result2 = billService.updateBillCItems(billCItemsReciever);
+	if (result2 ==0) {
+		result.put("errorFlag", "1");
+		result.put("error", "請求ITEM情報格納エラー");
+		return result;
+	}
 	
-	
+	result.put("errorFlag", "0");
+	result.put("documentNum", billC.getDocumentNum());
+	return result;
+	}
 	
 	
 	

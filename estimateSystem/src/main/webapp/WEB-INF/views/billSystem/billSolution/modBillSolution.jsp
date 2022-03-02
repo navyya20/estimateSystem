@@ -154,7 +154,7 @@ if ( self !== top ) {
 						data: inputJson,
 						success: function(r){
 							alert("請求書を修正しました。");
-							location.href="estimateList";
+							location.href="billList";
 						},
 						error: function(e){
 							console.log(JSON.stringify(e));

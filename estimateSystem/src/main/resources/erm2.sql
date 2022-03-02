@@ -1048,6 +1048,10 @@ ALTER TABLE billSiItems
 	ON DELETE CASCADE
 ;
 
+
+
+
+
 -- 매 0시마다 인덱스를 0으로 세팅
 DROP EVENT IF EXISTS setSeqZero;
 CREATE EVENT IF NOT EXISTS setSeqZero
@@ -1090,7 +1094,7 @@ CHANGE COLUMN `address` `address` VARCHAR(400) NULL DEFAULT NULL COMMENT '供給
 ALTER TABLE `interline_estimatesystem`.`billsolution` 
 CHANGE COLUMN `address` `address` VARCHAR(400) NULL DEFAULT NULL COMMENT '供給者住所' ;
 
--- 직위 소속을 생성, 변경, 삭제가 가능해짐에따라 인덱스 추가. 10번부터.
+-- 직위 소속을 생성, 변경, 삭제가 가능해짐에따라 인덱스종류 추가. 10번부터.
 insert into masterSeq (id,seqName)values(10,"departmentSeq");
 insert into masterSeq (id,seqName)values(10,"positionSeq");
 
@@ -1129,6 +1133,70 @@ UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '語学事�
 UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = 'SI事業部見積書' WHERE (`documentTypeName` = 'estimateSi');
 UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = 'SI事業部請求書' WHERE (`documentTypeName` = 'billSi');
 
+
   ##ver1.00
 ALTER TABLE `interline_estimatesystem`.`estimatesi` 
 ADD COLUMN `taxRate` INT NULL DEFAULT NULL AFTER `tax`;
+
+  ##ver1.01
+INSERT INTO `interline_estimatesystem`.`documenttype` (`documentTypeName`,`explanation`,`systemNum`) VALUES ('billC','請求書C','2');
+
+-- 請求書C[???]
+CREATE TABLE billC
+(
+	documentNum varchar(20) NOT NULL COMMENT 'documentNum',
+	-- ユーザ情報の固有ナンバー
+	userNum int NOT NULL COMMENT '作成者 : ユーザ情報の固有ナンバー',
+	userName varchar(30) COMMENT '作成者名前',
+	userDepartment varchar(10) COMMENT '依頼部署',
+	userPosition varchar(10) COMMENT '作成者役職',
+	billDate varchar(20) COMMENT '作成日表示用',
+	-- これがOZRが参照するデータテーブル名になる。
+	-- 例）estimateSolution , BillSolution
+	documentTypeName varchar(20) DEFAULT 'estimateSi' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。 例）estimateSolution , BillSolution',
+	address varchar(400) COMMENT '供給者住所',
+	stamp varchar(25) COMMENT '印鑑',
+	stampFileName varchar(25) COMMENT '印鑑ファイル名',
+	logoFileName varchar(25) COMMENT 'logoFileName : logoイメージのファイル名',
+	
+    receiver varchar(100) COMMENT '顧客名',
+	documentName varchar(100) COMMENT '件名',
+    payCondition varchar(40) COMMENT '支払い条件',
+    deadline varchar(20),
+    itemTitle varchar(80) COMMENT '項目TITLE自由指定',
+    
+    bankName varchar(30) COMMENT '銀行名',
+	branchName varchar(20) COMMENT '支店名',
+	accountName varchar(30) COMMENT '口座名',
+	hurigana varchar(60) COMMENT '口座名フリカナ',
+	accountNumber varchar(20) COMMENT '口座番号',
+	depositeClassification varchar(10) COMMENT '預金区分',
+    
+    note varchar(300) COMMENT '注意事項・備考',
+    sum bigint COMMENT '総計',
+    taxRate int ,
+	tax bigint COMMENT '税金',
+	sumWithTax bigint COMMENT '総計税金込み',
+	sumWithTax2 bigint COMMENT '総計税金込み２',
+    
+	insertDate datetime DEFAULT CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
+	updateDate datetime COMMENT 'updateDate : 更新日時',
+	updater int COMMENT '更新者 : データの更新者のuserNum',
+	PRIMARY KEY (documentNum)
+) COMMENT = '請求書C';
+
+
+-- 請求書Cのアイテム[???]
+CREATE TABLE billCItems
+(
+	rowNum int COMMENT '行数',
+    itemName varchar(80),
+    unitPrice bigint COMMENT '単価',
+    amount int COMMENT '数量', 
+	price bigint COMMENT '値段',
+	documentNum varchar(20) NOT NULL COMMENT 'documentNum'
+) COMMENT = '見積書Cのアイテム';
+
+ALTER TABLE billC ADD FOREIGN KEY (documentNum) REFERENCES estimateMaster (documentNum) ON UPDATE RESTRICT ON DELETE CASCADE;
+ALTER TABLE billCItems ADD FOREIGN KEY (documentNum) REFERENCES billC (documentNum) ON UPDATE RESTRICT ON DELETE CASCADE;
+ALTER TABLE billC ADD FOREIGN KEY (documentTypeName) REFERENCES documentType (documentTypeName) ON UPDATE CASCADE ON DELETE CASCADE;

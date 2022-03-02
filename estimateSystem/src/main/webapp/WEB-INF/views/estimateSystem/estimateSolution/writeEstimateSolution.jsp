@@ -28,7 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../css/common/common.css">
 <script src="../js/bootstrap.bundle.js"></script>
-<title>writeEstimateSheet1</title>
+<title>writeEstimateSolution</title>
 <style type="text/css">
 </style>
 <script>
@@ -65,7 +65,7 @@ if ( self !== top ) {
 			copy=copy.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
 		</c:if>
 		var repeat=12;
-
+		
 		var userString = '${user}';
 		var user=JSON.parse(userString);
 		console.log(JSON.stringify(user));

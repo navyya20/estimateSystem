@@ -28,7 +28,7 @@
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../css/common/common.css">
 <script src="../js/bootstrap.bundle.js"></script>
-<title>writeBillSolution</title>
+<title>writeBillSi</title>
 <style type="text/css">
 </style>
 <script>
@@ -68,7 +68,7 @@ if ( self !== top ) {
 			copy=copy.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
 		</c:if>
 		
-		var repeat=12;
+		var repeat=10;
 
 		var userString = '${user}';
 		var user=JSON.parse(userString);
@@ -78,9 +78,9 @@ if ( self !== top ) {
 			var oz;
 			oz = document.getElementById("OZViewer");
 			oz.sendToActionScript("viewer.ignore_disable_color_inputcomponent","true");
-			oz.sendToActionScript("viewer.external_functions_path","ozp://billSystem/billSolution/JS/billSolution.js");
+			oz.sendToActionScript("viewer.external_functions_path","ozp://billSystem/billSi/JS/billSi.js");
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
-			oz.sendToActionScript("connection.reportname","billSystem/billSolution/writeBillSolution.ozr");
+			oz.sendToActionScript("connection.reportname","billSystem/billSi/writeBillSi.ozr");
 			oz.sendToActionScript("connection.inputjson",copy);
 			oz.sendToActionScript("connection.pcount","9");
 			oz.sendToActionScript("connection.args1","repeat="+repeat);
@@ -94,9 +94,9 @@ if ( self !== top ) {
 			oz.sendToActionScript("connection.args9","companyList="+companyList);
 
 			oz.sendToActionScript("global.language", "ja_JP");
-			oz.sendToActionScript("odi.odinames", "writeBillSolution");
-	 		oz.sendToActionScript("odi.writeBillSolution.pcount", "1");
-			oz.sendToActionScript("odi.writeBillSolution.args1", "documentNum="+estimateNum);
+			oz.sendToActionScript("odi.odinames", "writeBillSi");
+	 		oz.sendToActionScript("odi.writeBillSi.pcount", "1");
+			oz.sendToActionScript("odi.writeBillSi.args1", "documentNum="+estimateNum);
 			
 			oz.sendToActionScript("pdf.fontembedding","true");
 			return true;
@@ -134,18 +134,32 @@ if ( self !== top ) {
 			inputJson["tax"] = inputJson["tax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax"] = inputJson["sumWithTax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax2"] = inputJson["sumWithTax2"].replace(/,/gi, "").replace(/￥/gi, "");
+			inputJson["expenseTotal"] = inputJson["expenseTotal"].replace(/,/gi, "").replace(/￥/gi, "");
+			inputJson["benefitTotal"] = inputJson["benefitTotal"].replace(/,/gi, "").replace(/￥/gi, "");
+			inputJson["total"] = inputJson["total"].replace(/,/gi, "").replace(/￥/gi, "");
 			for(i=1 ; i<=repeat ; i++){
-				inputJson["unitPrice"+i] =inputJson["unitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");
+				inputJson["monthlyUnitPrice"+i] =inputJson["monthlyUnitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");
+				inputJson["overTimeUnitPrice"+i] = inputJson["overTimeUnitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");				
+				inputJson["underTimeUnitPrice"+i] = inputJson["underTimeUnitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");				
 				inputJson["price"+i] = inputJson["price"+i].replace(/,/gi, "").replace(/￥/gi, "");				
-				inputJson["amount"+i] = inputJson["amount"+i].replace(/,/gi, "").replace(/￥/gi, "");
-				if(inputJson["amount"+i]==""){inputJson["amount"+i]="null"}
-				if(inputJson["unitPrice"+i]==""){inputJson["unitPrice"+i]="null"}
+				inputJson["expense"+i] = inputJson["expense"+i].replace(/,/gi, "").replace(/￥/gi, "");				
+				inputJson["benefit"+i] = inputJson["benefit"+i].replace(/,/gi, "").replace(/￥/gi, "");
+				inputJson["subtotal"+i] = inputJson["subtotal"+i].replace(/,/gi, "").replace(/￥/gi, "");
+				if(inputJson["monthlyUnitPrice"+i]==""){inputJson["monthlyUnitPrice"+i]="null"}
+				if(inputJson["standardMin"+i]==""){inputJson["standardMin"+i]="null"}
+				if(inputJson["standardMax"+i]==""){inputJson["standardMax"+i]="null"}
+				if(inputJson["workTime"+i]==""){inputJson["workTime"+i]="null"}
+				if(inputJson["extraTime"+i]==""){inputJson["extraTime"+i]="null"}
+				if(inputJson["overTimeUnitPrice"+i]==""){inputJson["overTimeUnitPrice"+i]="null"}
+				if(inputJson["underTimeUnitPrice"+i]==""){inputJson["underTimeUnitPrice"+i]="null"}
 				if(inputJson["price"+i]==""){inputJson["price"+i]="null"}
+				if(inputJson["expense"+i]==""){inputJson["expense"+i]="null"}
+				if(inputJson["benefit"+i]==""){inputJson["benefit"+i]="null"}
+				if(inputJson["subtotal"+i]==""){inputJson["subtotal"+i]="null"}
 			}
 			inputJson.state=state;
 			if(inputJson["workflowNum"]==""){inputJson.workflowNum=0};
 			if(inputJson["taxRate"]==""){inputJson.taxRate=0};
-			console.log("제이슨:"+JSON.stringify(inputJson));
 			return inputJson;
 		}
 		
@@ -155,7 +169,7 @@ if ( self !== top ) {
 			var inputJson = processJson(state);
 			$.ajax(
 					{
-						url: "insertBillSolution",
+						url: "insertBillSi",
 						type: 'POST',
 						data: inputJson,
 						dataType:"json",
@@ -183,7 +197,7 @@ if ( self !== top ) {
 			var inputJson = processJson(state);
 			$.ajax(
 					{
-						url: "insertBillSolution",
+						url: "insertBillSi",
 						type: 'POST',
 						data: inputJson,
 						dataType:"json",

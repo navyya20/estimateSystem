@@ -32,6 +32,8 @@
 		<typeAlias type="jp.co.interline.dto.BillSolutionItemsRecieveDTO" alias="billSolutionItemsRecieveDTO"/>
 		<typeAlias type="jp.co.interline.dto.BillSiDTO" alias="billSiDTO"/>
 		<typeAlias type="jp.co.interline.dto.BillSiItemsRecieveDTO" alias="billSiItemsRecieveDTO"/>
+		<typeAlias type="jp.co.interline.dto.BillCDTO" alias="billCDTO"/>
+		<typeAlias type="jp.co.interline.dto.BillCItemsRecieveDTO" alias="billCItemsRecieveDTO"/>
 		
 		<typeAlias type="jp.co.interline.dto.EstimateListDTO" alias="estimateListDTO"/>
 		<typeAlias type="jp.co.interline.dto.testDTO" alias="testDTO"/>

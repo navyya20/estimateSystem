@@ -123,6 +123,7 @@ public class WorkflowServiceImpl implements WorkflowService {
 		System.out.println("workflowNum:"+workflowNum);
 		WorkflowDTO w = workflowDao.getWorkflowByWorkflowNum(workflowNum);
 		System.out.println(w);
+		//승인자가 지정되어있지않을경우(approver가-1) approved되었다(approver#Starte가 a)고 친다.
 		int a1 = w.getApprover1();
 		int a2 = w.getApprover2();
 		int a3 = w.getApprover3();
@@ -136,6 +137,8 @@ public class WorkflowServiceImpl implements WorkflowService {
 			w.setApprover3State("a");
 		}
 		
+		//승인이 안된단계 approverState = "n"일 경우. 
+		//현제 승인대기자(presentApprover)와 현제단계(approverNum)에 해당 approver와 단계n을 넣는다.
 		String as1 = w.getApprover1State();
 		String as2 = w.getApprover2State();
 		String as3 = w.getApprover3State();
@@ -149,10 +152,12 @@ public class WorkflowServiceImpl implements WorkflowService {
 			w.setPresentApprover(w.getApprover3());
 			w.setPresentApproverNum(3);
 		}else {
+			//1,2,3단계 모두 승인상태인경우 현제 승인대기자(presentApprover)와 현제단계(approverNum)에 false를 의미하는  -1을 설정.
 			w.setPresentApprover(-1);
 			w.setPresentApproverNum(-1);
 		}
 		
+		//각단계의 승인상태를 합쳐서 저장한다. ex) ana, nnn, aaa등등. confirmation에서 aaa가 확인되면 최종승인이된다.
 		String targetValue = as1+as2+as3;
 		w.setTargetValue(targetValue);
 		w.setWorkflowNum(workflowNum);
@@ -165,9 +170,10 @@ public class WorkflowServiceImpl implements WorkflowService {
 	@Override
 	public Boolean confirmation(int workflowNum, String documentNum, String documentTypeName) {
 		WorkflowDTO w = workflowDao.getWorkflowByWorkflowNum(workflowNum);
+		//TargetKey는 aaa고정이다. workflowInform을 만들때 승인자가 없을경우를 대비해 aaa이외의 상태도 고려하였지만, 승인자가 없을경우 renew메서드에서 n->a로 바꿔주기때문에  aaa로 통일하면된다.
 		boolean state = w.getTargetKey().equals(w.getTargetValue());
 		if (state == true) {
-			//문서 상태를 app로
+			//문서 상태를 승인완료로
 			WorkflowDTO workflow = new WorkflowDTO();
 			workflow.setDocumentNum(documentNum);
 			workflow.setState("app");
@@ -193,6 +199,7 @@ public class WorkflowServiceImpl implements WorkflowService {
 		}
 		return true;
 	}
+	
 	@Override
 	public int updateStateWRI(String documentNum) {
 		//문서상태 wri로

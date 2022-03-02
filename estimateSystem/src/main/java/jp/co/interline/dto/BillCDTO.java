@@ -1,6 +1,6 @@
 package jp.co.interline.dto;
 
-public class BillSiDTO {
+public class BillCDTO {
 	String documentNum;
 	String estimateNum;
 	int userNum;
@@ -22,9 +22,9 @@ public class BillSiDTO {
 	
 	String receiver;
 	String documentName;
-	String workPeriodStart;
-	String workPeriodEnd;
+	String payCondition;
 	String deadline;
+	String itemTitle;
 	String bankName;
 	String branchName;
 	String accountName;
@@ -32,16 +32,12 @@ public class BillSiDTO {
 	String accountNumber;
 	String depositeClassification;	
 	String note;
-	String expenseTotal;
-	String benefitTotal;
-	String total;
 	String sum;
 	String taxRate;
 	String tax;
 	String sumWithTax;
 	String sumWithTax2;	
 	String state;
-	String comment;
 	int workflowNum;
 	String insertDate;
 	String updateDate;
@@ -161,17 +157,11 @@ public class BillSiDTO {
 	public void setDocumentName(String documentName) {
 		this.documentName = documentName;
 	}
-	public String getWorkPeriodStart() {
-		return workPeriodStart;
+	public String getPayCondition() {
+		return payCondition;
 	}
-	public void setWorkPeriodStart(String workPeriodStart) {
-		this.workPeriodStart = workPeriodStart;
-	}
-	public String getWorkPeriodEnd() {
-		return workPeriodEnd;
-	}
-	public void setWorkPeriodEnd(String workPeriodEnd) {
-		this.workPeriodEnd = workPeriodEnd;
+	public void setPayCondition(String payCondition) {
+		this.payCondition = payCondition;
 	}
 	public String getDeadline() {
 		return deadline;
@@ -221,24 +211,6 @@ public class BillSiDTO {
 	public void setNote(String note) {
 		this.note = note;
 	}
-	public String getExpenseTotal() {
-		return expenseTotal;
-	}
-	public void setExpenseTotal(String expenseTotal) {
-		this.expenseTotal = expenseTotal;
-	}
-	public String getBenefitTotal() {
-		return benefitTotal;
-	}
-	public void setBenefitTotal(String benefitTotal) {
-		this.benefitTotal = benefitTotal;
-	}
-	public String getTotal() {
-		return total;
-	}
-	public void setTotal(String total) {
-		this.total = total;
-	}
 	public String getSum() {
 		return sum;
 	}
@@ -275,12 +247,6 @@ public class BillSiDTO {
 	public void setState(String state) {
 		this.state = state;
 	}
-	public String getComment() {
-		return comment;
-	}
-	public void setComment(String comment) {
-		this.comment = comment;
-	}
 	public int getWorkflowNum() {
 		return workflowNum;
 	}
@@ -311,21 +277,26 @@ public class BillSiDTO {
 	public void setSystemNum(int systemNum) {
 		this.systemNum = systemNum;
 	}
+	public String getItemTitle() {
+		return itemTitle;
+	}
+	public void setItemTitle(String itemTitle) {
+		this.itemTitle = itemTitle;
+	}
 	@Override
 	public String toString() {
-		return "BillSiDTO [documentNum=" + documentNum + ", estimateNum=" + estimateNum + ", userNum=" + userNum
+		return "BillCDTO [documentNum=" + documentNum + ", estimateNum=" + estimateNum + ", userNum=" + userNum
 				+ ", userName=" + userName + ", userDepartment=" + userDepartment + ", userPosition=" + userPosition
 				+ ", billDate=" + billDate + ", documentTypeName=" + documentTypeName + ", nextDocumentTypeName="
 				+ nextDocumentTypeName + ", supplier=" + supplier + ", address=" + address + ", post=" + post
 				+ ", phoneNumber=" + phoneNumber + ", representative=" + representative + ", stamp=" + stamp
 				+ ", stampFileName=" + stampFileName + ", logoFileName=" + logoFileName + ", receiver=" + receiver
-				+ ", documentName=" + documentName + ", workPeriodStart=" + workPeriodStart + ", workPeriodEnd="
-				+ workPeriodEnd + ", deadline=" + deadline + ", bankName=" + bankName + ", branchName=" + branchName
+				+ ", documentName=" + documentName + ", payCondition=" + payCondition + ", deadline=" + deadline
+				+ ", itemTitle=" + itemTitle + ", bankName=" + bankName + ", branchName=" + branchName
 				+ ", accountName=" + accountName + ", hurigana=" + hurigana + ", accountNumber=" + accountNumber
-				+ ", depositeClassification=" + depositeClassification + ", note=" + note + ", expenseTotal="
-				+ expenseTotal + ", benefitTotal=" + benefitTotal + ", total=" + total + ", sum=" + sum + ", taxRate="
-				+ taxRate + ", tax=" + tax + ", sumWithTax=" + sumWithTax + ", sumWithTax2=" + sumWithTax2 + ", state="
-				+ state + ", comment=" + comment + ", workflowNum=" + workflowNum + ", insertDate=" + insertDate
+				+ ", depositeClassification=" + depositeClassification + ", note=" + note + ", sum=" + sum
+				+ ", taxRate=" + taxRate + ", tax=" + tax + ", sumWithTax=" + sumWithTax + ", sumWithTax2="
+				+ sumWithTax2 + ", state=" + state + ", workflowNum=" + workflowNum + ", insertDate=" + insertDate
 				+ ", updateDate=" + updateDate + ", updater=" + updater + ", systemNum=" + systemNum + "]";
 	}
 	

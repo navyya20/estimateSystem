@@ -3,6 +3,8 @@ package jp.co.interline.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.springframework.dao.DataAccessException;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import jp.co.interline.dto.DocumentMasterDTO;
@@ -26,15 +28,13 @@ public interface EstimateService {
 
 	int insertEstimateSheet1Items(EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever);
 
-	ArrayList<EstimateListDTO> getEstimateList(Model model, UserInformDTO user, String option, int page);
+	ArrayList<EstimateListDTO> getEstimateList(Model model, UserInformDTO user, String option, int page, int countPerPage);
 
 	int updateEstimateSheet1(EstimateSheet1DTO estimateSheet1);
 
 	int updateEstimateSheet1Items(EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever);
 
 	int deleteSheet(String documentNum);
-
-	void test();
 	
 	String returnFileName(ArrayList<SystemDTO> systems, String category);
 
@@ -71,5 +71,9 @@ public interface EstimateService {
 	ArrayList<HashMap<String, Object>> getItemsToList(DocumentMasterDTO document);
 
 	void makeHashMap(HashMap<String, String> contents, ArrayList<HashMap<String, Object>> items);
+	
+	void test(String string);
+
+	void test2(String string);
 
 }

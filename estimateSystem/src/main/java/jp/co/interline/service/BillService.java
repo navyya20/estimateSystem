@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.springframework.ui.Model;
 
+import jp.co.interline.dto.BillCDTO;
+import jp.co.interline.dto.BillCItemsRecieveDTO;
 import jp.co.interline.dto.BillSheet1DTO;
 import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
 import jp.co.interline.dto.BillSiDTO;
@@ -30,7 +32,7 @@ public interface BillService {
 
 	int updateBillSheet1Items(BillSheet1ItemsRecieveDTO billSheet1ItemsReciever);
 
-	ArrayList<EstimateListDTO> getBillList(Model model, UserInformDTO user, String option, int page);
+	ArrayList<EstimateListDTO> getBillList(Model model, UserInformDTO user, String option, int page, int countPerPage);
 
 	String returnFileName(ArrayList<SystemDTO> systems, String category);
 
@@ -50,7 +52,13 @@ public interface BillService {
 
 	int updateBillSiItems(BillSiItemsRecieveDTO billSiItemsReciever);
 
+	int insertBillC(BillCDTO billC);
 
+	int insertBillCItems(BillCItemsRecieveDTO billCItemsReciever);
+
+	int updateBillC(BillCDTO billC);
+
+	int updateBillCItems(BillCItemsRecieveDTO billCItemsReciever);
 	
 
 

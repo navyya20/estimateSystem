@@ -201,7 +201,7 @@ function copyButton(){
 			<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="location.href='estimateList'">戻る</button>
 	</div>
 	<script type="text/javascript" >
-		function SetOZParamters_OZViewer(){			
+		function SetOZParamters_OZViewer(){	
 			var oz;
 			var systemName='${systemName}';
 			var documentTypeName = '${documentTypeName}';

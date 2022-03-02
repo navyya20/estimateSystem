@@ -13,7 +13,9 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -61,10 +63,10 @@ public class CompanyController {
 		logger.debug("company : {}", company);
 		int result = companyService.insertCompany(company);
 		if (result != 1) {
-			logger.info("failed for deleting userInform");
+			logger.info("failed for inserting companyInform");
+		}else {
+			logger.info("companyInform inserted");
 		}
-		logger.info("userInform deleted");
-		
 		return "redirect:/all/companyList";
 	}
 	
@@ -84,9 +86,10 @@ public class CompanyController {
 		logger.debug("companyInform : {}", company);
 		int result = companyService.updateCompany(company);
 		if (result != 1) {
-			System.out.println("failed for inserting userInform");
+			System.out.println("failed for updating companyInform");
+		}else {
+			logger.info("companyInform updated");
 		}
-		logger.info("userInform updated");
 		return "redirect:/all/companyList";
 	}
 	
@@ -113,6 +116,7 @@ public class CompanyController {
 		return "companyInform/imgList";
 	}
 	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/uploadImgFile", method = RequestMethod.POST)
 	public String uploadImgFile(HttpSession session, MultipartFile imgFile, String category) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");

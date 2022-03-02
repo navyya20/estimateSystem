@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import jp.co.interline.dao.BillDAO;
 import jp.co.interline.dao.SystemDAO;
 import jp.co.interline.dao.WorkflowDAO;
+import jp.co.interline.dto.BillCDTO;
+import jp.co.interline.dto.BillCItemsRecieveDTO;
 import jp.co.interline.dto.BillSheet1DTO;
 import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
 import jp.co.interline.dto.BillSiDTO;
@@ -35,7 +37,7 @@ public class BillServiceImpl implements BillService {
 	@Autowired
 	SystemDAO systemDao;
 	
-	private static final int countPerPage=20;	
+	//private static final int countPerPage=20;	
 	private static final int pagePerGroup=10;
 	
 	@Override
@@ -59,7 +61,7 @@ public class BillServiceImpl implements BillService {
 	 * estimateList: 견적청구서 목록
 	 */
 	@Override
-	public ArrayList<EstimateListDTO> getBillList(Model model, UserInformDTO user, String option, int page) {
+	public ArrayList<EstimateListDTO> getBillList(Model model, UserInformDTO user, String option, int page, int countPerPage) {
 		UserInformWithOptionDTO userInformWithOption = new UserInformWithOptionDTO();
 		userInformWithOption.setAuth(user.getAuth());
 		userInformWithOption.setUserNum(user.getUserNum());
@@ -233,6 +235,50 @@ public class BillServiceImpl implements BillService {
 	@Override
 	public int updateBillSiItems(BillSiItemsRecieveDTO billSiItemsReciever) {
 		int result = billDao.updateBillSiItems(billSiItemsReciever);
+		return result;
+	}
+
+////////////////////////////billC///////////////////////////////////////////////
+	@Override
+	public int insertBillC(BillCDTO billC) {
+		//청구서 단독 작성시 estimateNum이 ""로 들어옴. 그대로 넣으면 유니크 속성에 걸림.
+		if (billC.getEstimateNum().equals("")) {
+			billC.setEstimateNum(null);
+		}
+		
+		ArrayList<SystemDTO> system = systemDao.getFileNames();
+		String stampFileName=returnFileName(system, "stamp");
+		String logoFileName=returnFileName(system, "logo");
+		billC.setStampFileName(stampFileName);
+		billC.setLogoFileName(logoFileName);
+		int result = billDao.insertBillC(billC);
+		return result;
+	}
+	
+	@Override
+	public int insertBillCItems(BillCItemsRecieveDTO billCItemsReciever) {
+		int result = billDao.insertBillCItems(billCItemsReciever);
+		return result;
+	}
+	
+	@Override
+	public int updateBillC(BillCDTO billC) {
+		//청구서 단독 작성시 estimateNum이 ""로 들어옴. 그대로 넣으면 유니크 속성에 걸림.
+		if (billC.getEstimateNum().equals("")) {
+			billC.setEstimateNum(null);
+		}
+		ArrayList<SystemDTO> system = systemDao.getFileNames();
+		String stampFileName=returnFileName(system, "stamp");
+		String logoFileName=returnFileName(system, "logo");
+		billC.setStampFileName(stampFileName);
+		billC.setLogoFileName(logoFileName);
+		int result = billDao.updateBillC(billC);
+		return result;
+	}
+	
+	@Override
+	public int updateBillCItems(BillCItemsRecieveDTO billCItemsReciever) {
+		int result = billDao.updateBillCItems(billCItemsReciever);
 		return result;
 	}
 	

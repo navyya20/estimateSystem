@@ -31,11 +31,8 @@ function goToUserMod(userNum){
 }
 
 function formSubmit(page){
-	var pp = document.getElementById('page');
-	
-	pp.value=page;
-							
-	document.location.href = "estimateList?page=" + pp.value+"&option=" + option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj));
+	var countPerPage = $("#countPerPage").val();
+	document.location.href = "billList?page=" + page+"&option=" + option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj))+"&countPerPage="+countPerPage;
 }
 function writeBill(estimateNum,nextDocumentTypeName){
 	if(nextDocumentTypeName==""){
@@ -50,6 +47,14 @@ function readBill(billNum,documentTypeName){
 	$('#readDocument').attr("action",url);
 	$('#documentNum').val(billNum);
 	$('#documentTypeName').val(documentTypeName);
+	$('#readDocument').submit();
+}
+
+//readDocument폼테그를 공유하여 사용한다.
+function copyDocument(documentNum,documentTypeName){
+	var url="copyDocument"
+	$('#readDocument').attr("action",url);
+	$('#documentNum').val(documentNum);
 	$('#readDocument').submit();
 }
 
@@ -71,7 +76,7 @@ function deleteSheets(){
 				traditional : true,
 				data: {"documentArr":documentArr},
 				success: function(data){
-					document.location.href = "estimateList";
+					document.location.href = "billList";
 				},
 				error: function(e){
 					console.log(JSON.stringify(e));
@@ -117,7 +122,9 @@ function countClickNum(o){
 
 //option내용대로 order by 절 내용이 들어간다.
 function sort(option){
-	document.location.href = "billList?option="+option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj));
+	var page = $("#page").val();
+	var countPerPage = $("#countPerPage").val();
+	document.location.href = "billList?page=" + page+"&option="+option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj))+"&countPerPage="+countPerPage;
 }
 
 </script>
@@ -132,10 +139,7 @@ function sort(option){
 		請求書リスト
 	</div>
 	
-	<div class="p-0 container-xl">
-		複数設定可能。
-	</div>
-	<div class="p-0 container-xl">
+	<div class="container-fluid pr-md-3 pl-md-3">
 		<div class="p-0 d-flex">
 			<div class="p-0 d-flex col-6">
 				<div class="p-0 d-flex col-12 col-md-4">
@@ -143,7 +147,14 @@ function sort(option){
 				</div>
 			</div>
 			<div class="p-0 d-flex col-6 justify-content-end">
-				<div class="p-0 d-flex col-6 col-md-2">
+				<div class="pr-2 d-flex col-4 col-md-2">
+					<select class="custom-select" id="countPerPage" onchange="formSubmit(1)">
+					    <option value="20" <c:if test="${countPerPage eq 20 }">selected</c:if>>20</option>
+					    <option value="50" <c:if test="${countPerPage eq 50 }">selected</c:if>>50</option>
+					    <option value="100" <c:if test="${countPerPage eq 100 }">selected</c:if>>100</option>
+					</select>
+				</div>
+				<div class="p-0 d-flex col-4 col-md-2">
 					<button type="button" class="col-12 btn btn-secondary" onclick="deleteSheets()">削除</button>
 				</div>
 			</div>
@@ -151,23 +162,53 @@ function sort(option){
 	</div>
 	
 	<div class="d-block" style="height: 8px;"></div>
-	
-	<div class="container-xl p-0">
+	<div class="container-fluid pr-md-3 pl-md-3">
 		<div class="row p-0 m-0 bg-dark text-white">
-			<div class="col-11 p-0 m-0 text-center" style="border-right: 1px solid white;">
-  				<div class="col-12 row p-0 m-0">
-  					<div class="col-3 col-md-2 p-0 m-0" id="bDOTdocumentNum" onclick="countClickNum(this);">文書番号</div>
-  					<div class="col-2 col-md-2 p-0 m-0 d-none d-md-inline" id="bDOTreceiver" onclick="countClickNum(this);">顧客</div>
-  					<div class="col-4 col-md-2 p-0 m-0" id="bDOTdocumentName" onclick="countClickNum(this);">件名</div>
-  					<div class="col-3 col-md-2 p-0 m-0" id="bDOTupdateDate" onclick="countClickNum(this);">更新日時</div>
+			<div class="col-12 row p-0 m-0 text-center" style="border-right: 1px solid white;">
+  				<div class="col-11 row p-0 m-0">
+  					<div class="col-3 col-md-1 p-0 m-0" id="bDOTdocumentNum" onclick="countClickNum(this);">文書番号</div>
+  					<div class="col-0 col-md-3 p-0 m-0 d-none d-md-inline" id="bDOTreceiver" onclick="countClickNum(this);">顧客</div>
+  					<div class="col-3 col-md-3 p-0 m-0" id="bDOTdocumentName" onclick="countClickNum(this);">件名</div>
+  					<div class="col-3 col-md-1 p-0 m-0" id="bDOTupdateDate" onclick="countClickNum(this);">更新日時</div>
+  					<div class="col-md-1 p-0 m-0 d-none d-md-inline" id="bDOTuserName" onclick="countClickNum(this);">作成者</div>
   					<div class="col-2 col-md-1 p-0 m-0" id="bDOTstateName" onclick="countClickNum(this);">状態</div>
-  					<div class="col-md-2 p-0 m-0 d-none d-md-inline" id="bDOTuserName" onclick="countClickNum(this);">作成者</div>
-  					<div class="col-md-1 p-0 m-0 d-none d-md-inline" id="bDOTuserDepartment" onclick="countClickNum(this);">所属</div>
+  					<div class="col-0 col-md-1 p-0 m-0 d-none d-md-inline" id="bDOTapprovedDate" onclick="countClickNum(this);">承認日時</div>
+  					<div class="col-1 col-md-1 p-0 m-0">コピー</div>
+  				</div>
+  				<div class="col-1 p-0 m-0">
+  					<div class="col-12 p-0 m-0 align-self-center">削除</div>
   				</div>
 			</div>
-			<div class="col-1 p-0 m-0 align-self-center text-center">削除</div>
 		</div>
 	</div>
+	<c:forEach items="${billList}" var="bill" varStatus="status">
+		<div class="d-block" style="height: 3px;"></div>
+		<div class="d-block d-md-none" style="height: 5px;"></div>
+		<div class="container-fluid pr-md-3 pl-md-3 smallSize">
+			<div class="row p-0 m-0 bgGray3">
+				<div class="col-12 row p-0 m-0 text-center" style="border-right: 1px solid white;">
+	  				<div class="col-11 row p-0 m-0">
+	  					<div class="col-3 col-md-1 p-0 m-0 link" onclick="readBill('${bill.documentNumB}','${bill.documentTypeNameB}')">
+	  						${fn:substring(bill.documentNumB,0,4)}<br>${fn:substring(bill.documentNumB,5,14)}
+	  					</div>
+	  					<div class="col-0 col-md-3 p-0 m-0 align-self-center d-none d-md-inline">${bill.receiverB}</div>
+	  					<div class="col-3 col-md-3 p-0 m-0 align-self-center">${bill.documentNameB}</div>
+	  					<div class="col-3 col-md-1 p-0 m-0"><fmt:parseDate value="${bill.updateDateB}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/><br><fmt:formatDate value="${noticePostDate}" pattern="HH:mm"/></div>
+	  					<div class="col-md-1 p-0 m-0 align-self-center d-none  d-md-inline">${bill.userNameB}</div>
+	  					<div class="col-2 col-md-1 p-0 m-0 align-self-center">${bill.stateNameB}</div>
+	  					<div class="col-0 col-md-1 p-0 m-0 d-none d-md-inline"><fmt:parseDate value="${bill.approvedDateB}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/><br><fmt:formatDate value="${noticePostDate}" pattern="HH:mm"/></div>
+	  					<div class="col-1 col-md-1 p-0 m-0 align-self-center link" onclick="copyDocument('${bill.documentNumB}','${bill.documentTypeNameB}');">コピー</div>
+	  				</div>
+	  				<div class="col-1 row p-0 m-0 text-center">
+		  				<div class="col-12 p-0 m-0 align-self-center">
+							<input id='row${status.count}' type='checkbox' name='selectedRow' value='${bill.documentNumB}'>
+						</div>
+	  				</div>
+				</div>
+			</div>
+		</div>
+	</c:forEach>
+	<!-- 
 	<c:forEach items="${billList}" var="bill" varStatus="status">
 		<div class="d-block" style="height: 3px;"></div>
 		<div class="d-block d-md-none" style="height: 5px;"></div>
@@ -192,7 +233,7 @@ function sort(option){
 			</div>
 		</div>
 	</c:forEach>
-
+	 -->
 	<div id = "navigator" style="text-align: center;">
 		<a href="javascript:formSubmit(${pn.currentPage - pn.pagePerGroup})">◁◁</a>&nbsp;
 		<a href="javascript:formSubmit(${pn.currentPage-1})">◀</a> &nbsp;&nbsp;
@@ -205,7 +246,7 @@ function sort(option){
 		&nbsp;&nbsp;
 		<a href="javascript:formSubmit(${pn.currentPage + 1})">▶</a> &nbsp;&nbsp;
 		<a href="javascript:formSubmit(${pn.currentPage + pn.pagePerGroup})">▷▷</a>
-		<input type="hidden" id="page">
+		<input type="hidden" id="page" value="${pn.currentPage}">
 	</div>
 	
 	<form id="readDocument" action="" method="post" accept-charset="utf-8">

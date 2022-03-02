@@ -41,8 +41,6 @@ public interface EstimateMapper {
 
 	String getBillNum(String documentNum);
 
-	void testTest(ArrayList<HashMap<String, String>> arr);
-
 	int insertEstimateSolution(EstimateSolutionDTO estimateSolution);
 
 	int insertEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever);
@@ -75,6 +73,11 @@ public interface EstimateMapper {
 	HashMap<String, String> getDocumentToHashMap(DocumentMasterDTO document);
 
 	ArrayList<HashMap<String, Object>> getItemsToList(DocumentMasterDTO document);
+	
+
+	void testTest(String s);
+
+	void testTest2(String s);
 	
 	
 }

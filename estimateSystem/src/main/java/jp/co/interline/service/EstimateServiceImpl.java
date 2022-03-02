@@ -6,7 +6,9 @@ import java.util.Date;
 import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import jp.co.interline.dao.EstimateDAO;
@@ -38,7 +40,7 @@ public class EstimateServiceImpl implements EstimateService {
 	@Autowired
 	SystemDAO systemDao;
 	
-	private static final int countPerPage=20;	
+	//private static final int countPerPage=20;	
 	private static final int pagePerGroup=10;
 	
 	@Override
@@ -81,7 +83,7 @@ public class EstimateServiceImpl implements EstimateService {
 	 * estimateList: 견적청구서 목록
 	 */
 	@Override
-	public ArrayList<EstimateListDTO> getEstimateList(Model model, UserInformDTO user, String option, int page) {
+	public ArrayList<EstimateListDTO> getEstimateList(Model model, UserInformDTO user, String option, int page, int countPerPage) {
 		UserInformWithOptionDTO userInformWithOption = new UserInformWithOptionDTO();
 		userInformWithOption.setAuth(user.getAuth());
 		userInformWithOption.setUserNum(user.getUserNum());
@@ -131,6 +133,7 @@ public class EstimateServiceImpl implements EstimateService {
 				contents.put(strKey+(i+1), itemsMap.get(strKey).toString());
 			}
 		}
+		
 		contents.remove("userNum");
 		contents.remove("userName");
 		contents.remove("userDepartment");
@@ -179,13 +182,7 @@ public class EstimateServiceImpl implements EstimateService {
 	}
 	
 
-	@Override
-	public void test() {
-		testDTO test = new testDTO();
-		ArrayList<HashMap<String, String>> h = test.getHashMapList();
-		estimateDao.test(h);
-		
-	}
+	
 
 	@Override
 	public String returnFileName(ArrayList<SystemDTO> systems, String category) {
@@ -320,5 +317,13 @@ public class EstimateServiceImpl implements EstimateService {
 
 	
 	
-
+	@Override
+	public void test(String s) {
+		estimateDao.test(s);
+		//estimateDao.test2(s);
+	}
+	@Override
+	public void test2(String s) {
+		estimateDao.test2(s);
+	}
 }

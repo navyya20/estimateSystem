@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import org.apache.ibatis.session.RowBounds;
 
+import jp.co.interline.dto.BillCDTO;
+import jp.co.interline.dto.BillCItemsRecieveDTO;
 import jp.co.interline.dto.BillSheet1DTO;
 import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
 import jp.co.interline.dto.BillSiDTO;
@@ -51,6 +53,14 @@ public interface BillMapper {
 	int updateBillSi(BillSiDTO billSi);
 
 	int updateBillSiItems(BillSiItemsRecieveDTO billSiItemsReciever);
+	
+	int insertBillC(BillCDTO billC);
+
+	int insertBillCItems(BillCItemsRecieveDTO billCItemsReciever);
+
+	int updateBillC(BillCDTO billC);
+
+	int updateBillCItems(BillCItemsRecieveDTO billCItemsReciever);
 
 
 }

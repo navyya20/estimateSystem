@@ -36,15 +36,8 @@ function goToUserMod(userNum){
 }
 
 function formSubmit(page){
-	var pp = document.getElementById('page');
-	pp.value=page;
-	document.location.href = "estimateList?page=" + pp.value+"&option="+option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj));
-	/* var form = document.getElementById('pageNavi');
-	form.action("estimateList");
-	document.getElementById('taegetPaget').value(page);
-	document.getElementById('taegetOption').value(option);
-	document.getElementById('flagObject').value(JSON.stringify(flagObj));
-	form.submit(); */
+	var countPerPage = $("#countPerPage").val();
+	document.location.href = "estimateList?page=" + page +"&option="+option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj))+"&countPerPage="+countPerPage;
 }
 
 function writeBill(estimateNum,nextDocumentTypeName){
@@ -155,7 +148,7 @@ function doDouble(op) {
 }
 //여기까지 더블클릭 감지
 
-//클릭횟수(홀,짝)감지기
+//클릭횟수(홀,짝)감지기. 홀,짝에의해 해당 컬럼의 정렬이 오름일지 내림일지 결정된다.
 	//flags. 처음들어오면 전부 0으로 세팅. 모델에 정보가있으면 그걸로 세팅.
 var flagObjString='${flagObj}'
 var flagObj=new Object();
@@ -195,7 +188,9 @@ function countClickNum(o){
 
 //option내용대로 order by 절 내용이 들어간다.
 function sort(option){
-	document.location.href = "estimateList?option="+option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj));
+	var page = $("#page").val();
+	var countPerPage = $("#countPerPage").val();
+	document.location.href ="estimateList?page="+page+"&option="+option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj))+"&countPerPage="+countPerPage;
 }
 </script>
 </head>
@@ -208,7 +203,7 @@ function sort(option){
 		見積書リスト
 	</div>
 	<div class="container-fluid pr-md-3 pl-md-3">
-		※「保存日時」labelを　「クリック時→降順」　「ダブルクリック時→昇順」　整列
+		
 	</div>
 	<div class="container-fluid pr-md-3 pl-md-3">
 		<div class="p-0 d-flex">
@@ -218,7 +213,14 @@ function sort(option){
 				</div>
 			</div>
 			<div class="p-0 d-flex col-6 justify-content-end">
-				<div class="p-0 d-flex col-6 col-md-2">
+				<div class="pr-2 d-flex col-4 col-md-2">
+					<select class="custom-select" id="countPerPage" onchange="formSubmit(1)">
+					    <option value="20" <c:if test="${countPerPage eq 20 }">selected</c:if>>20</option>
+					    <option value="50" <c:if test="${countPerPage eq 50 }">selected</c:if>>50</option>
+					    <option value="100" <c:if test="${countPerPage eq 100 }">selected</c:if>>100</option>
+					</select>
+				</div>
+				<div class="p-0 d-flex col-4 col-md-2">
 					<button type="button" class="col-12 btn btn-secondary" onclick="deleteSheets()">削除</button>
 				</div>
 			</div>
@@ -229,9 +231,8 @@ function sort(option){
 	
 	<div class="container-fluid pr-md-3 pl-md-3">
 		<div class="row p-0 m-0 bg-dark text-white">
-			<div class="col-8 p-0 m-0 text-center" style="border-right: 1px solid white;">
-				<div class="col-12 p-0 m-0 text-center">見積書</div>
-  				<div class="col-12 row p-0 m-0">
+			<div class="col-12 row p-0 m-0 text-center" style="border-right: 1px solid white;">
+  				<div class="col-11 row p-0 m-0">
   					<div class="col-3 col-md-1 p-0 m-0" id="eDOTdocumentNum" onclick="countClickNum(this);">文書番号</div>
   					<div class="col-0 col-md-3 p-0 m-0 d-none d-md-inline" id="eDOTreceiver" onclick="countClickNum(this);">顧客</div>
   					<div class="col-3 col-md-3 p-0 m-0" id="eDOTdocumentName" onclick="countClickNum(this);">件名</div>
@@ -241,18 +242,9 @@ function sort(option){
   					<div class="col-0 col-md-1 p-0 m-0 d-none d-md-inline" id="eDOTapprovedDate" onclick="countClickNum(this);">承認日時</div>
   					<div class="col-1 col-md-1 p-0 m-0">コピー</div>
   				</div>
-			</div>
-			<div class="col-4 row p-0 m-0 text-center">
-				<div class="col-11 p-0 m-0"  style="border-right: 1px solid white;">
-					<div class="col-12 p-0 m-0 text-center">請求書</div>
-  					<div class="col-12 row p-0 m-0">
-  						<div class="col-8 col-md-3 p-0 m-0" id="bDOTdocumentNum" onclick="countClickNum(this);">文書番号</div>
-  						<div class="col-md-3 p-0 m-0 d-none d-md-inline" id="bDOTuserName" onclick="countClickNum(this);">作成者</div>
-  						<div class="col-4 col-md-3 p-0 m-0" id="bDOTstateName" onclick="countClickNum(this);">状態</div>
-  						<div class="col-md-3 p-0 m-0 d-none d-md-inline" id="bDOTapprovedDate" onclick="countClickNum(this);">承認日時</div>
-  					</div>
-				</div>
-				<div class="col-1 p-0 m-0 align-self-center">削除</div>
+  				<div class="col-1 p-0 m-0">
+  					<div class="col-12 p-0 m-0 align-self-center">削除</div>
+  				</div>
 			</div>
 		</div>
 	</div>
@@ -261,8 +253,8 @@ function sort(option){
 		<div class="d-block d-md-none" style="height: 5px;"></div>
 		<div class="container-fluid pr-md-3 pl-md-3 smallSize">
 			<div class="row p-0 m-0 bgGray3">
-				<div class="col-8 p-0 m-0 text-center" style="border-right: 1px solid white;">
-	  				<div class="col-12 row p-0 m-0">
+				<div class="col-12 row p-0 m-0 text-center" style="border-right: 1px solid white;">
+	  				<div class="col-11 row p-0 m-0">
 	  					<div class="col-3 col-md-1 p-0 m-0 link" onclick="readEstimate('${estimate.documentNumE}','${estimate.documentTypeNameE}')">
 	  						${fn:substring(estimate.documentNumE,0,4)}<br>${fn:substring(estimate.documentNumE,5,14)}
 	  					</div>
@@ -274,21 +266,11 @@ function sort(option){
 	  					<div class="col-0 col-md-1 p-0 m-0 d-none d-md-inline"><fmt:parseDate value="${estimate.approvedDateE}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/><br><fmt:formatDate value="${noticePostDate}" pattern="HH:mm"/></div>
 	  					<div class="col-1 col-md-1 p-0 m-0 align-self-center link" onclick="copyDocument('${estimate.documentNumE}','${estimate.documentTypeNameE}');">コピー</div>
 	  				</div>
-				</div>
-				<div class="col-4 row p-0 m-0 text-center">
-					<div class="col-11 p-0 m-0"  style="border-right: 1px solid white;">
-	  					<div class="col-12 row p-0 m-0">
-	  						<div class="col-8 col-md-3 p-0 m-0 align-self-center link" onclick="${estimate.documentNumB == null ? 'writeBill(':'readBill('}'${estimate.documentNumB == null ? estimate.documentNumE:estimate.documentNumB}','${estimate.documentNumB == null ? estimate.nextDocumentTypeNameE:estimate.documentTypeNameB}')">
-	  							${estimate.documentNumB == null ? '新規作成':''}${fn:substring(estimate.documentNumB,0,4)}${estimate.documentNumB == null ? '':'<br>'}${fn:substring(estimate.documentNumB,5,14)}
-	  						</div>
-	  						<div class="col-0 col-md-3 p-0 m-0 align-self-center d-none d-md-inline">${estimate.userNameB}</div>
-	  						<div class="col-4 col-md-3 p-0 m-0 align-self-center">${estimate.stateNameB}</div>
-	  						<div class="col-0 col-md-3 p-0 m-0 align-self-center d-none d-md-inline"><fmt:parseDate value="${estimate.approvedDateB}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/><br><fmt:formatDate value="${noticePostDate}" pattern="HH:mm"/></div>
-	  					</div>
-					</div>
-					<div class="col-1 p-0 m-0 align-self-center">
-						<input id='row${status.count}' type='checkbox' name='selectedRow' value='${estimate.documentNumE}' ${userInform.auth == 'u' and ((estimate.userNumE != userInform.userNum or estimate.stateE != 'wri') or ((estimate.userNumB != '0' and estimate.userNumB != userInform.userNum) or (estimate.stateB != null and estimate.stateB != 'wri'))) ? 'disabled':''}>
-					</div>
+	  				<div class="col-1 row p-0 m-0 text-center">
+		  				<div class="col-12 p-0 m-0 align-self-center">
+							<input id='row${status.count}' type='checkbox' name='selectedRow' value='${estimate.documentNumE}'>
+						</div>
+	  				</div>
 				</div>
 			</div>
 		</div>
@@ -306,7 +288,7 @@ function sort(option){
 		&nbsp;&nbsp;
 		<a href="javascript:formSubmit(${pn.currentPage + 1})">▶</a> &nbsp;&nbsp;
 		<a href="javascript:formSubmit(${pn.currentPage + pn.pagePerGroup})">▷▷</a>
-		<input type="hidden" id="page">
+		<input type="hidden" id="page" value="${pn.currentPage}">
 	</div>
 	
 	<form id="readDocument" action="" method="post" accept-charset="utf-8">
