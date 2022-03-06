@@ -13,6 +13,8 @@ import jp.co.interline.dao.SystemDAO;
 import jp.co.interline.dao.WorkflowDAO;
 import jp.co.interline.dto.BillCDTO;
 import jp.co.interline.dto.BillCItemsRecieveDTO;
+import jp.co.interline.dto.BillDDTO;
+import jp.co.interline.dto.BillDItemDTO;
 import jp.co.interline.dto.BillSheet1DTO;
 import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
 import jp.co.interline.dto.BillSiDTO;
@@ -97,65 +99,9 @@ public class BillServiceImpl implements BillService {
 	 */
 	
 	
-	
-	
-/////////////////////////////////////BillSheet1////////////////////////////////////////////////	
-	@Override
-	public int insertBillSheet1(BillSheet1DTO billSheet1) {
-		//청구서 단독 작성시 estimateNum이 ""로 들어옴. 그대로 넣으면 유니크 속성에 걸림.
-		if (billSheet1.getEstimateNum().equals("")) {
-			billSheet1.setEstimateNum(null);
-		}
-		
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		billSheet1.setStampFileName(stampFileName);
-		billSheet1.setLogoFileName(logoFileName);
-		int result = billDao.insertBillSheet1(billSheet1);
-		return result;
-	}
-
-	@Override
-	public int insertBillSheet1Items(BillSheet1ItemsRecieveDTO billSheet1ItemsReciever) {
-		int result = billDao.insertBillSheet1Items(billSheet1ItemsReciever);
-		return result;
-	}
-
-	@Override
-	public int updateBillSheet1(BillSheet1DTO billSheet1) {
-		//청구서 단독 작성시 estimateNum이 ""로 들어옴. 그대로 넣으면 유니크 속성에 걸림.
-		if (billSheet1.getEstimateNum().equals("")) {
-			billSheet1.setEstimateNum(null);
-		}
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		billSheet1.setStampFileName(stampFileName);
-		billSheet1.setLogoFileName(logoFileName);
-		int result = billDao.updateBillSheet1(billSheet1);
-		return result;
-	}
-
-	@Override
-	public int updateBillSheet1Items(BillSheet1ItemsRecieveDTO billSheet1ItemsReciever) {
-		int result = billDao.updateBillSheet1Items(billSheet1ItemsReciever);
-		return result;
-	}
-
-	
-	
-	
-	
-	
 ////////////////////////////billSolution///////////////////////////////////////////////
 	@Override
 	public int insertBillSolution(BillSolutionDTO billSolution) {
-		//청구서 단독 작성시 estimateNum이 ""로 들어옴. 그대로 넣으면 유니크 속성에 걸림.
-		if (billSolution.getEstimateNum().equals("")) {
-			billSolution.setEstimateNum(null);
-		}
-		
 		ArrayList<SystemDTO> system = systemDao.getFileNames();
 		String stampFileName=returnFileName(system, "stamp");
 		String logoFileName=returnFileName(system, "logo");
@@ -173,10 +119,6 @@ public class BillServiceImpl implements BillService {
 
 	@Override
 	public int updateBillSolution(BillSolutionDTO billSolution) {
-		//청구서 단독 작성시 estimateNum이 ""로 들어옴. 그대로 넣으면 유니크 속성에 걸림.
-		if (billSolution.getEstimateNum().equals("")) {
-			billSolution.setEstimateNum(null);
-		}
 		ArrayList<SystemDTO> system = systemDao.getFileNames();
 		String stampFileName=returnFileName(system, "stamp");
 		String logoFileName=returnFileName(system, "logo");
@@ -197,11 +139,6 @@ public class BillServiceImpl implements BillService {
 ////////////////////////////billSi///////////////////////////////////////////////
 	@Override
 	public int insertBillSi(BillSiDTO billSi) {
-		//청구서 단독 작성시 estimateNum이 ""로 들어옴. 그대로 넣으면 유니크 속성에 걸림.
-		if (billSi.getEstimateNum().equals("")) {
-			billSi.setEstimateNum(null);
-		}
-		
 		ArrayList<SystemDTO> system = systemDao.getFileNames();
 		String stampFileName=returnFileName(system, "stamp");
 		String logoFileName=returnFileName(system, "logo");
@@ -219,10 +156,6 @@ public class BillServiceImpl implements BillService {
 	
 	@Override
 	public int updateBillSi(BillSiDTO billSi) {
-		//청구서 단독 작성시 estimateNum이 ""로 들어옴. 그대로 넣으면 유니크 속성에 걸림.
-		if (billSi.getEstimateNum().equals("")) {
-			billSi.setEstimateNum(null);
-		}
 		ArrayList<SystemDTO> system = systemDao.getFileNames();
 		String stampFileName=returnFileName(system, "stamp");
 		String logoFileName=returnFileName(system, "logo");
@@ -241,11 +174,6 @@ public class BillServiceImpl implements BillService {
 ////////////////////////////billC///////////////////////////////////////////////
 	@Override
 	public int insertBillC(BillCDTO billC) {
-		//청구서 단독 작성시 estimateNum이 ""로 들어옴. 그대로 넣으면 유니크 속성에 걸림.
-		if (billC.getEstimateNum().equals("")) {
-			billC.setEstimateNum(null);
-		}
-		
 		ArrayList<SystemDTO> system = systemDao.getFileNames();
 		String stampFileName=returnFileName(system, "stamp");
 		String logoFileName=returnFileName(system, "logo");
@@ -263,10 +191,6 @@ public class BillServiceImpl implements BillService {
 	
 	@Override
 	public int updateBillC(BillCDTO billC) {
-		//청구서 단독 작성시 estimateNum이 ""로 들어옴. 그대로 넣으면 유니크 속성에 걸림.
-		if (billC.getEstimateNum().equals("")) {
-			billC.setEstimateNum(null);
-		}
 		ArrayList<SystemDTO> system = systemDao.getFileNames();
 		String stampFileName=returnFileName(system, "stamp");
 		String logoFileName=returnFileName(system, "logo");
@@ -283,5 +207,31 @@ public class BillServiceImpl implements BillService {
 	}
 	
 	
+	
+	
+	
+	
+////////////////////////////billD///////////////////////////////////////////////	
+	@Override
+	public int insertBillD(BillDDTO billD) {
+		ArrayList<SystemDTO> system = systemDao.getFileNames();
+		String stampFileName=returnFileName(system, "stamp");
+		String logoFileName=returnFileName(system, "logo");
+		billD.setStampFileName(stampFileName);
+		billD.setLogoFileName(logoFileName);
+		int result = billDao.insertBillD(billD);
+		return result;
+	}
+	
+	@Override
+	public int updateBillD(BillDDTO billD) {
+		ArrayList<SystemDTO> system = systemDao.getFileNames();
+		String stampFileName=returnFileName(system, "stamp");
+		String logoFileName=returnFileName(system, "logo");
+		billD.setStampFileName(stampFileName);
+		billD.setLogoFileName(logoFileName);
+		int result = billDao.updateBillD(billD);
+		return result;
+	}
 	
 }

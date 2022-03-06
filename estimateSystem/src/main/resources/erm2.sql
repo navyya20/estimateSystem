@@ -26,7 +26,6 @@ DROP TABLE IF EXISTS systemType;
 
 
 
-
 /* Create Tables */
 
 -- 口座情報
@@ -1176,6 +1175,8 @@ CREATE TABLE billC
     sum bigint COMMENT '総計',
     taxRate int ,
 	tax bigint COMMENT '税金',
+    commissionRate int ,
+	commission bigint COMMENT '手数料',
 	sumWithTax bigint COMMENT '総計税金込み',
 	sumWithTax2 bigint COMMENT '総計税金込み２',
     
@@ -1200,3 +1201,84 @@ CREATE TABLE billCItems
 ALTER TABLE billC ADD FOREIGN KEY (documentNum) REFERENCES estimateMaster (documentNum) ON UPDATE RESTRICT ON DELETE CASCADE;
 ALTER TABLE billCItems ADD FOREIGN KEY (documentNum) REFERENCES billC (documentNum) ON UPDATE RESTRICT ON DELETE CASCADE;
 ALTER TABLE billC ADD FOREIGN KEY (documentTypeName) REFERENCES documentType (documentTypeName) ON UPDATE CASCADE ON DELETE CASCADE;
+
+CREATE TABLE accountInformAbroad
+(
+	accountInformNum int AUTO_INCREMENT COMMENT 'PKID' primary key,
+    accountInformName varchar(40),
+    bnSwiftCode varchar(40),
+    bnBankName varchar(40),
+    bnBranchName varchar(40),
+    bnBankAddress varchar(40),
+    bnName varchar(40),
+    bnAddress varchar(40),
+    bnAccountNumber varchar(40),
+    bnAccountName varchar(40),
+    imSwiftCode varchar(40),
+    imBankName varchar(40)
+) COMMENT = 'accountInform for abroad';
+
+
+INSERT INTO `interline_estimatesystem`.`documenttype` (`documentTypeName`,`explanation`,`systemNum`) VALUES ('billD','請求書D','2');
+-- 請求書D[???]
+CREATE TABLE billD
+(
+	documentNum varchar(20) NOT NULL COMMENT 'documentNum',
+	-- ユーザ情報の固有ナンバー
+	userNum int NOT NULL COMMENT '作成者 : ユーザ情報の固有ナンバー',
+	userName varchar(30) COMMENT '作成者名前',
+	userDepartment varchar(10) COMMENT '依頼部署',
+	userPosition varchar(10) COMMENT '作成者役職',
+	billDate varchar(20) COMMENT '作成日表示用',
+	-- これがOZRが参照するデータテーブル名になる。
+	-- 例）estimateSolution , BillSolution
+	documentTypeName varchar(20) DEFAULT 'billC' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。 例）estimateSolution , BillSolution',
+	address varchar(400) COMMENT '供給者住所',
+	stamp varchar(25) COMMENT '印鑑',
+	stampFileName varchar(25) COMMENT '印鑑ファイル名',
+	logoFileName varchar(25) COMMENT 'logoFileName : logoイメージのファイル名',
+    receiver varchar(100) COMMENT '顧客名',
+	documentName varchar(100) COMMENT '件名',
+    
+    sum bigint COMMENT '総計',
+    taxRate int ,
+	tax bigint COMMENT '税金',
+    discountRate int ,
+	discount bigint ,
+	sumWithTax bigint COMMENT '総計税金込み',
+	sumWithTax2 bigint COMMENT '総計税金込み２',
+    
+    note varchar(300) COMMENT '注意事項・備考',
+    
+    bnSwiftCode varchar(40),
+	bnBankName varchar(40),
+	bnBranchName varchar(40),
+	bnBankAddress varchar(40),
+	bnName varchar(40),
+	bnAddress varchar(40),
+	bnAccountNumber varchar(40),
+	bnAccountName varchar(40),
+	imSwiftCode	varchar(40),
+	imBankName varchar(40),
+    
+	insertDate datetime DEFAULT CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
+	updateDate datetime COMMENT 'updateDate : 更新日時',
+	updater int COMMENT '更新者 : データの更新者のuserNum',
+	PRIMARY KEY (documentNum)
+) COMMENT = '請求書D';
+
+-- 請求書Cのアイテム[???]
+CREATE TABLE billDItems
+(
+	rowNum int COMMENT '行数',
+    itemName varchar(80),
+    unitPrice bigint COMMENT '単価',
+    amount int COMMENT '数量', 
+	price bigint COMMENT '値段',
+	documentNum varchar(20) NOT NULL COMMENT 'documentNum'
+) COMMENT = '見積書Dのアイテム';
+
+
+ALTER TABLE billD ADD FOREIGN KEY (documentNum) REFERENCES estimateMaster (documentNum) ON UPDATE RESTRICT ON DELETE CASCADE;
+ALTER TABLE billDItems ADD FOREIGN KEY (documentNum) REFERENCES billD (documentNum) ON UPDATE RESTRICT ON DELETE CASCADE;
+ALTER TABLE billD ADD FOREIGN KEY (documentTypeName) REFERENCES documentType (documentTypeName) ON UPDATE CASCADE ON DELETE CASCADE;

@@ -72,254 +72,6 @@
 	</select>
 	
 	
-	
-
-<!-- ////////////////////////////billSheet1///////////////////////////////////// -->
-	<insert id="insertBillSheet1" parameterType="billSheet1DTO">
-		insert into documentMaster (
-			documentNum,
-			systemNum,
-			documentTypeName,
-			nextDocumentTypeName,
-			userNum, userName, userDepartment, userPosition,
-			workflowNum,
-			state,
-			updateDate,
-			updater
-		)
-		values(
-			#{documentNum},
-			#{systemNum},
-			#{documentTypeName},
-			#{nextDocumentTypeName},
-			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
-			<choose>
-				<when test="workflowNum == 0">
-					null,
-				</when>
-				<when test="workflowNum != 0">
-					#{workflowNum},
-				</when>
-			</choose>
-			#{state},
-			CURRENT_TIMESTAMP,
-			#{updater}
-		);
-		
-		insert into estimateMaster(
-			documentNum,
-			receiver,
-			documentName,
-			estimateNum
-		)values(
-			#{documentNum},
-			#{receiver},
-			#{documentName},
-			#{estimateNum}
-		);
-		
-		insert into billSheet1 (
-			documentNum,
-			userNum,
-			userName,
-			userDepartment,
-			userPosition,
-			billDate,
-			supplier,
-			address,
-			post,
-			phoneNumber,
-			representative,
-			stamp,
-			stampFileName,
-			logoFileName,
-			receiver,
-			documentName,
-			payCondition,
-			deadline,
-			bankName,
-			branchName,
-			accountName,
-			hurigana,
-			accountNumber,
-			depositeClassification,
-			note,
-			sum,
-			tax,
-			sumWithTax,
-			sumWithTax2,	
-			comment,
-			updateDate,
-			updater
-		) 
-		values
-		(
-			#{documentNum},
-			#{userNum},
-			#{userName},
-			#{userDepartment},
-			#{userPosition},
-			#{billDate},
-			#{supplier},
-			#{address},
-			#{post},
-			#{phoneNumber},
-			#{representative},
-			#{stamp},
-			#{stampFileName},
-			#{logoFileName},
-			#{receiver},
-			#{documentName},
-			#{payCondition},
-			#{deadline},
-			#{bankName},
-			#{branchName},
-			#{accountName},
-			#{hurigana},
-			#{accountNumber},
-			#{depositeClassification},
-			#{note},
-			#{sum},
-			#{tax},
-			#{sumWithTax},
-			#{sumWithTax2},	
-			#{comment},
-			CURRENT_TIMESTAMP,
-			#{updater}
-		)
-	</insert>
-	<insert id="insertBillSheet1Items" parameterType="billSheet1ItemsRecieveDTO">
-		insert into billSheet1Items (
-			documentNum,rowNum,item,itemName,amount,unit,unitPrice,price
-		)
-		values
-		(#{documentNum},#{rowNum1},#{item1},#{itemName1},${amount1},#{unit1},${unitPrice1},${price1}),
-		(#{documentNum},#{rowNum2},#{item2},#{itemName2},${amount2},#{unit2},${unitPrice2},${price2}),
-		(#{documentNum},#{rowNum3},#{item3},#{itemName3},${amount3},#{unit3},${unitPrice3},${price3}),
-		(#{documentNum},#{rowNum4},#{item4},#{itemName4},${amount4},#{unit4},${unitPrice4},${price4}),
-		(#{documentNum},#{rowNum5},#{item5},#{itemName5},${amount5},#{unit5},${unitPrice5},${price5}),
-		(#{documentNum},#{rowNum6},#{item6},#{itemName6},${amount6},#{unit6},${unitPrice6},${price6}),
-		(#{documentNum},#{rowNum7},#{item7},#{itemName7},${amount7},#{unit7},${unitPrice7},${price7}),
-		(#{documentNum},#{rowNum8},#{item8},#{itemName8},${amount8},#{unit8},${unitPrice8},${price8}),
-		(#{documentNum},#{rowNum9},#{item9},#{itemName9},${amount9},#{unit9},${unitPrice9},${price9}),
-		(#{documentNum},#{rowNum10},#{item10},#{itemName10},${amount10},#{unit10},${unitPrice10},${price10}),
-		(#{documentNum},#{rowNum11},#{item11},#{itemName11},${amount11},#{unit11},${unitPrice11},${price11}),
-		(#{documentNum},#{rowNum12},#{item12},#{itemName12},${amount12},#{unit12},${unitPrice12},${price12})
-	</insert>
-	
-	<update id="updateBillSheet1" parameterType="billSheet1DTO">
-		update documentMaster set
-			updateDate = CURRENT_TIMESTAMP,
-			updater = #{updater}
-		where 
-			documentNum = #{documentNum};
-		
-		update estimateMaster set
-			receiver = #{receiver},
-			documentName = #{documentName}
-		where
-			documentNum = #{documentNum};
-		
-		update billSheet1 set
-			userNum = #{userNum},
-			userName = #{userName},
-			userDepartment = #{userDepartment},
-			userPosition = #{userPosition},
-			billDate = #{billDate},
-			supplier = #{supplier},
-			address = #{address},
-			post = #{post},
-			phoneNumber = #{phoneNumber},
-			representative = #{representative},
-			stamp = #{stamp},
-			stampFileName = #{stampFileName},
-			logoFileName = #{logoFileName},
-			receiver = #{receiver},
-			documentName = #{documentName},
-			payCondition = #{payCondition},
-			deadline = #{deadline},
-			bankName = #{bankName},
-			branchName = #{branchName},
-			accountName = #{accountName},
-			hurigana = #{hurigana},
-			accountNumber = #{accountNumber},
-			depositeClassification = #{depositeClassification},
-			note = #{note},
-			sum = #{sum},
-			tax = #{tax},
-			sumWithTax = #{sumWithTax},
-			sumWithTax2 = #{sumWithTax2},	
-			comment = #{comment},
-			updateDate = CURRENT_TIMESTAMP,
-			updater = #{updater}
-		where
-			documentNum = #{documentNum}
-	</update>
-	<update id="updateBillSheet1Items" parameterType="billSheet1ItemsRecieveDTO">
-		update billSheet1Items set
-			item = #{item1}, itemName = #{itemName1}, amount = ${amount1}, unit = #{unit1}, unitPrice = ${unitPrice1}, price = ${price1}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum1};
-			
-		update billSheet1Items set
-			item = #{item2}, itemName = #{itemName2}, amount = ${amount2}, unit = #{unit2}, unitPrice = ${unitPrice2}, price = ${price2}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum2};
-			
-		update billSheet1Items set
-			item = #{item3}, itemName = #{itemName3}, amount = ${amount3}, unit = #{unit3}, unitPrice = ${unitPrice3}, price = ${price3}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum3};
-			
-		update billSheet1Items set
-			item = #{item4}, itemName = #{itemName4}, amount = ${amount4}, unit = #{unit4}, unitPrice = ${unitPrice4}, price = ${price4}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum4};
-			
-		update billSheet1Items set
-			item = #{item5}, itemName = #{itemName5}, amount = ${amount5}, unit = #{unit5}, unitPrice = ${unitPrice5}, price = ${price5}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum5};
-			
-		update billSheet1Items set
-			item = #{item6}, itemName = #{itemName6}, amount = ${amount6}, unit = #{unit6}, unitPrice = ${unitPrice6}, price = ${price6}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum6};
-			
-		update billSheet1Items set
-			item = #{item7}, itemName = #{itemName7}, amount = ${amount7}, unit = #{unit7}, unitPrice = ${unitPrice7}, price = ${price7}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum7};
-			
-		update billSheet1Items set
-			item = #{item8}, itemName = #{itemName8}, amount = ${amount8}, unit = #{unit8}, unitPrice = ${unitPrice8}, price = ${price8}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum8};
-			
-		update billSheet1Items set
-			item = #{item9}, itemName = #{itemName9}, amount = ${amount9}, unit = #{unit9}, unitPrice = ${unitPrice9}, price = ${price9}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum9};
-			
-		update billSheet1Items set
-			item = #{item10}, itemName = #{itemName10}, amount = ${amount10}, unit = #{unit10}, unitPrice = ${unitPrice10}, price = ${price10}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum10};
-			
-		update billSheet1Items set
-			item = #{item11}, itemName = #{itemName11}, amount = ${amount11}, unit = #{unit11}, unitPrice = ${unitPrice11}, price = ${price11}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum11};
-		
-		update billSheet1Items set
-			item = #{item12}, itemName = #{itemName12}, amount = ${amount12}, unit = #{unit12}, unitPrice = ${unitPrice12}, price = ${price12}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum12}
-	</update>
-	
-	
-	
-	
 <!-- /////////////////////////billSolution////////////////////////// -->
 	<insert id="insertBillSolution" parameterType="billSolutionDTO">
 		insert into documentMaster (
@@ -361,7 +113,7 @@
 			#{documentNum},
 			#{receiver},
 			#{documentName},
-			#{estimateNum}
+			<choose><when test='estimateNum == ""'>null</when><otherwise>#{estimateNum}</otherwise></choose><!-- 유니크속성때문에 ""는 안됨. -->
 		);
 		
 		insert into billSolution (
@@ -615,7 +367,7 @@
 			#{documentNum},
 			#{receiver},
 			#{documentName},
-			#{estimateNum}
+			<choose><when test='estimateNum == ""'>null</when><otherwise>#{estimateNum}</otherwise></choose><!-- 유니크속성때문에 ""는 안됨. -->
 		);
 		
 		insert into billSi (
@@ -863,7 +615,7 @@
 			#{documentNum},
 			#{receiver},
 			#{receiver},     <!-- billC에 한해서 documentName에 고객명(receiver)를 넣는다. billC는 documentName이 없음...-->	
-			#{estimateNum}
+			<choose><when test='estimateNum == ""'>null</when><otherwise>#{estimateNum}</otherwise></choose><!-- 유니크속성때문에 ""는 안됨. -->
 		);
 		
 		insert into billC (
@@ -894,6 +646,8 @@
 			sum,
 			taxRate,
 			tax,
+			commissionRate,
+			commission,
 			sumWithTax,
 			sumWithTax2,	
 			updateDate,
@@ -928,6 +682,8 @@
 			#{sum},
 			#{taxRate},
 			#{tax},
+			#{commissionRate},
+			#{commission},
 			#{sumWithTax},
 			#{sumWithTax2},	
 			CURRENT_TIMESTAMP,
@@ -990,6 +746,8 @@
 			sum = #{sum},
 			taxRate = #{taxRate},
 			tax = #{tax},
+			commissionRate = #{commissionRate},
+			commission = #{commission},
 			sumWithTax = #{sumWithTax},
 			sumWithTax2 = #{sumWithTax2},	
 			updateDate = CURRENT_TIMESTAMP,
@@ -1000,52 +758,223 @@
 	<update id="updateBillCItems" parameterType="billCItemsRecieveDTO">
 		update billCItems set
 			itemName = #{itemName1}, amount = ${amount1}, unitPrice = ${unitPrice1}, price = ${price1}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum1};
+		where documentNum=#{documentNum} and rowNum = #{rowNum1};
 			
 		update billCItems set
 			itemName = #{itemName2}, amount = ${amount2}, unitPrice = ${unitPrice2}, price = ${price2}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum2};
+		where documentNum=#{documentNum} and rowNum = #{rowNum2};
 			
 		update billCItems set
 			itemName = #{itemName3}, amount = ${amount3}, unitPrice = ${unitPrice3}, price = ${price3}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum3};
+		where documentNum=#{documentNum} and rowNum = #{rowNum3};
 			
 		update billCItems set
 			itemName = #{itemName4}, amount = ${amount4}, unitPrice = ${unitPrice4}, price = ${price4}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum4};
+		where documentNum=#{documentNum} and rowNum = #{rowNum4};
 			
 		update billCItems set
 			itemName = #{itemName5}, amount = ${amount5}, unitPrice = ${unitPrice5}, price = ${price5}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum5};
+		where documentNum=#{documentNum} and rowNum = #{rowNum5};
 			
 		update billCItems set
 			itemName = #{itemName6}, amount = ${amount6}, unitPrice = ${unitPrice6}, price = ${price6}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum6};
+		where documentNum=#{documentNum} and rowNum = #{rowNum6};
 			
 		update billCItems set
 			itemName = #{itemName7}, amount = ${amount7}, unitPrice = ${unitPrice7}, price = ${price7}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum7};
+		where documentNum=#{documentNum} and rowNum = #{rowNum7};
 			
 		update billCItems set
 			itemName = #{itemName8}, amount = ${amount8}, unitPrice = ${unitPrice8}, price = ${price8}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum8};
+		where documentNum=#{documentNum} and rowNum = #{rowNum8};
 			
 		update billCItems set
 			itemName = #{itemName9}, amount = ${amount9}, unitPrice = ${unitPrice9}, price = ${price9}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum9};
+		where documentNum=#{documentNum} and rowNum = #{rowNum9};
 			
 		update billCItems set
 			itemName = #{itemName10}, amount = ${amount10}, unitPrice = ${unitPrice10}, price = ${price10}
+		where documentNum=#{documentNum} and rowNum = #{rowNum10};
+	</update>
+	
+	
+	
+<!-- /////////////////////////billD////////////////////////// -->
+	<insert id="insertBillD" parameterType="billDDTO">
+		insert into documentMaster (
+			documentNum,
+			systemNum,
+			documentTypeName,
+			nextDocumentTypeName,
+			userNum, userName, userDepartment, userPosition,
+			workflowNum,
+			state,
+			updateDate,
+			updater
+		)
+		values(
+			#{documentNum},
+			#{systemNum},
+			#{documentTypeName},
+			#{nextDocumentTypeName},
+			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
+			<choose>
+				<when test="workflowNum == 0">null,</when>
+				<when test="workflowNum != 0">#{workflowNum},</when>
+			</choose>
+			#{state},
+			CURRENT_TIMESTAMP,
+			#{updater}
+		);
+		
+		insert into estimateMaster(
+			documentNum,
+			receiver,
+			documentName,
+			estimateNum
+		)values(
+			#{documentNum},
+			#{receiver},
+			#{receiver},     <!-- billD에 한해서 documentName에 고객명(receiver)를 넣는다. billD는 documentName이 없음...-->	
+			<choose><when test='estimateNum == ""'>null</when><otherwise>#{estimateNum}</otherwise></choose><!-- 유니크속성때문에 ""는 안됨. -->
+		);
+		
+		insert into billD (
+			documentNum,userNum,userName,userDepartment,userPosition,billDate,documentTypeName,address,stamp,stampFileName,logoFileName,
+			
+			receiver,
+			documentName,
+			
+			sum,
+			taxRate,
+			tax,
+			discountRate,
+			discount,
+			sumWithTax,
+			sumWithTax2,	
+			
+			note,
+			
+			bnSwiftCode,
+			bnBankName,
+			bnBranchName,
+			bnBankAddress,
+			bnName,
+			bnAddress,
+			bnAccountNumber,
+			bnAccountName,
+			imSwiftCode,
+			imBankName,
+			
+			updateDate,
+			updater
+		) 
+		values
+		(
+			#{documentNum},#{userNum},#{userName},#{userDepartment},#{userPosition},#{billDate},#{documentTypeName},#{address},#{stamp},#{stampFileName},#{logoFileName},
+			
+			#{receiver},
+			#{receiver},    <!-- billD에 한해서 documentName에 고객명(receiver)를 넣는다. billD는 documentName이 없음...-->	
+			
+			#{sum},
+			#{taxRate},
+			#{tax},
+			#{discountRate},
+			#{discount},
+			#{sumWithTax},
+			#{sumWithTax2},	
+			
+			#{note},
+			
+			#{bnSwiftCode},
+			#{bnBankName},
+			#{bnBranchName},
+			#{bnBankAddress},
+			#{bnName},
+			#{bnAddress},
+			#{bnAccountNumber},
+			#{bnAccountName},
+			#{imSwiftCode},
+			#{imBankName},
+			
+			CURRENT_TIMESTAMP,
+			#{updater}
+		);
+		
+		insert into billDItems (
+			documentNum,rowNum,itemName,unitPrice,amount,price
+		)
+		values
+			<foreach collection="items" item="item" separator=",">
+				(#{documentNum},#{item.rowNum},#{item.itemName},
+				<choose><when test='item.unitPrice == ""'>null</when><otherwise>${item.unitPrice}</otherwise></choose>,
+				<choose><when test='item.amount == ""'>null</when><otherwise>${item.amount}</otherwise></choose>,
+				<choose><when test='item.price == ""'>null</when><otherwise>${item.price}</otherwise></choose>)
+			</foreach>
+	</insert>
+	
+	
+	<update id="updateBillD" parameterType="billDDTO">
+		update documentMaster set
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where 
+			documentNum = #{documentNum};
+		
+		update estimateMaster set
+			receiver = #{receiver},
+			documentName = #{receiver}     <!-- billD에 한해서 documentName에 고객명(receiver)를 넣는다. billD는 documentName이 없음...-->
 		where
-			documentNum=#{documentNum} and rowNum = #{rowNum10};
+			documentNum = #{documentNum};
+		
+		update billD set
+			userNum = #{userNum},
+			userName = #{userName},
+			userDepartment = #{userDepartment},
+			userPosition = #{userPosition},
+			billDate = #{billDate},
+			address = #{address},
+			stamp = #{stamp},
+			stampFileName = #{stampFileName},
+			logoFileName = #{logoFileName},
+			
+			receiver = #{receiver},
+			documentName = #{receiver},     <!-- billD에 한해서 documentName에 고객명(receiver)를 넣는다. billD는 documentName이 없음...-->	
+			
+			sum = #{sum},
+			taxRate = #{taxRate},
+			tax = #{tax},
+			discountRate = #{discountRate},
+			discount = #{discount},
+			sumWithTax = #{sumWithTax},
+			sumWithTax2 = #{sumWithTax2},
+			
+			note = #{note},
+			
+			bnSwiftCode = #{bnSwiftCode},
+			bnBankName = #{bnBankName},
+			bnBranchName = #{bnBranchName},
+			bnBankAddress = #{bnBankAddress},
+			bnName = #{bnName},
+			bnAddress = #{bnAddress},
+			bnAccountNumber = #{bnAccountNumber},
+			bnAccountName = #{bnAccountName},
+			imSwiftCode = #{imSwiftCode},
+			imBankName = #{imBankName},
+				
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where
+			documentNum = #{documentNum};
+	
+		<foreach collection="items" item="item">
+			update billDItems set
+				itemName = #{item.itemName}, 
+				unitPrice = <choose><when test='item.unitPrice == ""'>null</when><otherwise>${item.unitPrice}</otherwise></choose>,
+				amount = <choose><when test='item.amount == ""'>null</when><otherwise>${item.amount}</otherwise></choose>,
+				price = <choose><when test='item.price == ""'>null</when><otherwise>${item.price}</otherwise></choose>
+			where documentNum=#{documentNum} and rowNum = #{item.rowNum};
+		</foreach>
+		
 	</update>
 </mapper>

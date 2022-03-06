@@ -55,25 +55,6 @@ public class EstimateServiceImpl implements EstimateService {
 		return documentNum;
 	}
 
-	@Override
-	public int insertEstimateSheet1(EstimateSheet1DTO estimateSheet1) {
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		estimateSheet1.setStampFileName(stampFileName);
-		estimateSheet1.setLogoFileName(logoFileName);
-		int result = estimateDao.insertEstimateSheet1(estimateSheet1);
-		return result;
-	}
-
-	@Override
-	public int insertEstimateSheet1Items(EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever) {
-		
-		int result = estimateDao.insertEstimateSheet1Items(estimateSheet1ItemsReciever);
-		return result;
-	}
-	
-	
 	/*
 	 * option: order by절에 들어갈 스트링
 	 * page: pageNavigator를 위한 page수
@@ -140,25 +121,6 @@ public class EstimateServiceImpl implements EstimateService {
 		contents.remove("userPosition");
 	}
 	
-	//---------------------------------------estimateSheet1-----------------------
-
-	@Override
-	public int updateEstimateSheet1(EstimateSheet1DTO estimateSheet1) {
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		estimateSheet1.setStampFileName(stampFileName);
-		estimateSheet1.setLogoFileName(logoFileName);
-		int result = estimateDao.updateEstimateSheet1(estimateSheet1);
-		return result;
-	}
-
-	@Override
-	public int updateEstimateSheet1Items(EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever) {
-		int result = estimateDao.updateEstimateSheet1Items(estimateSheet1ItemsReciever);
-		return result;
-	}
-
 	@Override
 	public int deleteSheet(String documentNum) {
 		SystemDTO system = new SystemDTO();

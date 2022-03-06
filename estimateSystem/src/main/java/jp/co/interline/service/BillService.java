@@ -6,6 +6,8 @@ import org.springframework.ui.Model;
 
 import jp.co.interline.dto.BillCDTO;
 import jp.co.interline.dto.BillCItemsRecieveDTO;
+import jp.co.interline.dto.BillDDTO;
+import jp.co.interline.dto.BillDItemDTO;
 import jp.co.interline.dto.BillSheet1DTO;
 import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
 import jp.co.interline.dto.BillSiDTO;
@@ -19,18 +21,6 @@ import jp.co.interline.dto.UserInformDTO;
 public interface BillService {
 
 	String getDocoumentNum();
-
-	int insertBillSheet1(BillSheet1DTO billSheet1);
-
-	int insertBillSheet1Items(BillSheet1ItemsRecieveDTO billSheet1ItemsReciever);
-
-	//SystemDTO getBillType(int documentTypeNum);
-
-	//SystemDTO getBillTypeName(int documentTypeNum);
-
-	int updateBillSheet1(BillSheet1DTO billSheet1);
-
-	int updateBillSheet1Items(BillSheet1ItemsRecieveDTO billSheet1ItemsReciever);
 
 	ArrayList<EstimateListDTO> getBillList(Model model, UserInformDTO user, String option, int page, int countPerPage);
 
@@ -59,7 +49,10 @@ public interface BillService {
 	int updateBillC(BillCDTO billC);
 
 	int updateBillCItems(BillCItemsRecieveDTO billCItemsReciever);
-	
+
+	int insertBillD(BillDDTO billD);
+
+	int updateBillD(BillDDTO billD);
 
 
 }

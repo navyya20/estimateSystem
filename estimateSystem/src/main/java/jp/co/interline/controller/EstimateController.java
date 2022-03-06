@@ -60,11 +60,6 @@ public class EstimateController {
 	WorkflowService workflowService;
 	@Autowired
 	EstimateService estimateService;
-	@Autowired
-	CompanyService companyService;
-	@Autowired
-	AccountService accountService;
-	
 	
 	private static final Logger logger = LoggerFactory.getLogger(EstimateController.class);
 	
@@ -149,145 +144,10 @@ public class EstimateController {
 		ObjectMapper mapper = new ObjectMapper();
 		String copy = mapper.writeValueAsString(contents);
 		redirectAttributes.addAttribute("copy", copy);
-		redirectAttributes.addAttribute("aaa", "bbbbb");
 		String documentTypeName = document.getDocumentTypeName();
 		return "redirect:write"+documentTypeName.substring(0, 1).toUpperCase()+documentTypeName.substring(1);
 	}
 	
-/////////////////////////////////////estimateSheet1///////////////////////////////////////////////////
-//write,write copy,insert,mod,update,
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
-	@RequestMapping(value = "/all/writeEstimateSheet1", method = RequestMethod.GET)
-	public String writeEstimateSheet1(HttpSession session, Model model, String copy) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
-		Gson gson = new Gson();
-		String companyListString = gson.toJson(companyList);
-		model.addAttribute("companyList", companyListString);
-		String userString = gson.toJson(user);
-		model.addAttribute("user", userString);
-		model.addAttribute("copy", copy);
-		return "estimateSystem/estimateSheet1/writeEstimateSheet1";
-	}
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
-	@RequestMapping(value = "/all/writeEstimateSheet1", method = RequestMethod.POST)
-	public String writeEstimateSheet12(HttpSession session, Model model, String copy) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
-		Gson gson = new Gson();
-		String companyListString = gson.toJson(companyList);
-		model.addAttribute("companyList", companyListString);
-		String userString = gson.toJson(user);
-		model.addAttribute("user", userString);
-		model.addAttribute("copy", copy);
-		return "estimateSystem/estimateSheet1/writeEstimateSheet1";
-	}
-	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
-	@ResponseBody
-	@RequestMapping(value = "/all/insertEstimateSheet1", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-	public HashMap<String, String> insertEstimateSheet1(HttpSession session, Model model, EstimateSheet1DTO estimateSheet1, EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		logger.debug("EstimateController.insertEstimateSheet1,user:{}",user.getUserNum());
-		
-		//채번
-		String documentNum = estimateService.getDocoumentNum();
-		//기본정보등록
-		estimateSheet1.setDocumentNum(documentNum);
-		estimateSheet1.setUpdater(user.getUserNum());
-		
-		HashMap<String, String> result = new HashMap<String, String>();
-		
-		int result1 = estimateService.insertEstimateSheet1(estimateSheet1);
-		if(result1 != 1) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積基本情報格納エラー");
-			return result;
-		}
-		//아이템등록
-		estimateSheet1ItemsReciever.setDocumentNum(documentNum);
-		int result2 = estimateService.insertEstimateSheet1Items(estimateSheet1ItemsReciever);
-		if (result2 ==0) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積ITEM情報格納エラー");
-			return result;
-		}
-		result.put("errorFlag", "0");
-		result.put("documentNum", documentNum);
-		
-		return result;
-	}
-	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
-	@RequestMapping(value = "/all/modEstimateSheet1", method = RequestMethod.POST)
-	public String modEstimateSheet1(HttpSession session, Model model, String documentNum, String documentTypeName) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		//state를 가져옴.
-		//documentTypeName에따라 조인되는 DB가 다르니 주의!
-		SystemDTO system = new SystemDTO();
-		system.setDocumentNum(documentNum);
-		system.setDocumentTypeName(documentTypeName);
-		SystemDTO sys = estimateService.getEstimate(system);
-		model.addAttribute("state", sys.getState());
-		model.addAttribute("userNum", sys.getUserNum());
-		model.addAttribute("documentNum", documentNum);
-		
-		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
-		Gson gson = new Gson();
-		String companyListString = gson.toJson(companyList);
-		model.addAttribute("companyList", companyListString);
-		String userString = gson.toJson(user);
-		model.addAttribute("user", userString);
-		return "estimateSystem/estimateSheet1/modEstimateSheet1";
-	}
-	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
-	@RequestMapping(value = "/all/copyEstimateSheet1", method = RequestMethod.POST)
-	public String copyEstimateSheet1(HttpSession session, Model model, String documentNum, String documentTypeName) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		logger.debug("EstimateController.copyEstimateSheet1,user:{}",user.getUserNum());
-		
-		//아이템도 가져오기 DTO만들어야함.
-		
-		//서비스로 불러서 꾸민다음에 인서트
-		//채번
-		//String newDocumentNum = estimateService.getDocoumentNum();
-		//기본정보등록
-		//estimateSheet1.setDocumentNum(newDocumentNum);
-		//estimateSheet1.setUpdater(user.getUserNum());
-		
-		
-		return "redirect:/all/estimateList";
-	}
-	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
-	@ResponseBody
-	@RequestMapping(value = "/all/updateEstimateSheet1", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-	public HashMap<String, String> updateEstimateSheet1(HttpSession session, Model model, EstimateSheet1DTO estimateSheet1, EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		System.out.println(estimateSheet1);
-		System.out.println(estimateSheet1ItemsReciever);
-		
-		HashMap<String, String> result = new HashMap<String, String>();
-		//기본정보등록
-		int result1 = estimateService.updateEstimateSheet1(estimateSheet1);
-		if(result1 != 1) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積基本情報格納エラー");
-			return result;
-		}
-		//아이템등록
-		estimateSheet1ItemsReciever.setDocumentNum(estimateSheet1.getDocumentNum());
-		int result2 = estimateService.updateEstimateSheet1Items(estimateSheet1ItemsReciever);
-		if (result2 ==0) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積ITEM情報格納エラー");
-			return result;
-		}
-		result.put("errorFlag", "0");
-		result.put("documentNum", estimateSheet1.getDocumentNum());
-		return result;
-	}
 //-----------------------------------------------------------------------------------------------------------------------------------
 	
 	
@@ -297,24 +157,7 @@ public class EstimateController {
 	@RequestMapping(value = "/all/writeEstimateSolution", method = RequestMethod.GET)
 	public String writeEstimateSolution(HttpSession session, Model model, String copy) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
 		Gson gson = new Gson();
-		String companyListString = gson.toJson(companyList);
-		model.addAttribute("companyList", companyListString);
-		String userString = gson.toJson(user);
-		model.addAttribute("user", userString);
-		model.addAttribute("copy", copy);
-		return "estimateSystem/estimateSolution/writeEstimateSolution";
-	}
-	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
-	@RequestMapping(value = "/all/writeEstimateSolution", method = RequestMethod.POST)
-	public String writeEstimateSolution2(HttpSession session, Model model, String copy) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
-		Gson gson = new Gson();
-		String companyListString = gson.toJson(companyList);
-		model.addAttribute("companyList", companyListString);
 		String userString = gson.toJson(user);
 		model.addAttribute("user", userString);
 		model.addAttribute("copy", copy);
@@ -370,10 +213,7 @@ public class EstimateController {
 		model.addAttribute("userNum", sys.getUserNum());
 		model.addAttribute("documentNum", documentNum);
 		
-		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
 		Gson gson = new Gson();
-		String companyListString = gson.toJson(companyList);
-		model.addAttribute("companyList", companyListString);
 		String userString = gson.toJson(user);
 		model.addAttribute("user", userString);
 		return "estimateSystem/estimateSolution/modEstimateSolution";
@@ -422,30 +262,7 @@ public class EstimateController {
 	@RequestMapping(value = "/all/writeEstimateLanguage", method = RequestMethod.GET)
 	public String writeEstimateLanguage(HttpSession session, Model model, String copy) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		ArrayList<AccountDTO> accountList = accountService.getAccountList();
-		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
 		Gson gson = new Gson();
-		String accountListString = gson.toJson(accountList);
-		String companyListString = gson.toJson(companyList);
-		model.addAttribute("accountList", accountListString);
-		model.addAttribute("companyList", companyListString);
-		String userString = gson.toJson(user);
-		model.addAttribute("user", userString);
-		model.addAttribute("copy", copy);
-		return "estimateSystem/estimateLanguage/writeEstimateLanguage";
-	}
-	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
-	@RequestMapping(value = "/all/writeEstimateLanguage", method = RequestMethod.POST)
-	public String writeEstimateLanguage2(HttpSession session, Model model, String copy) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		ArrayList<AccountDTO> accountList = accountService.getAccountList();
-		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
-		Gson gson = new Gson();
-		String accountListString = gson.toJson(accountList);
-		String companyListString = gson.toJson(companyList);
-		model.addAttribute("accountList", accountListString);
-		model.addAttribute("companyList", companyListString);
 		String userString = gson.toJson(user);
 		model.addAttribute("user", userString);
 		model.addAttribute("copy", copy);
@@ -501,13 +318,7 @@ public class EstimateController {
 		model.addAttribute("userNum", sys.getUserNum());
 		model.addAttribute("documentNum", documentNum);
 		
-		ArrayList<AccountDTO> accountList = accountService.getAccountList();
-		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
 		Gson gson = new Gson();
-		String accountListString = gson.toJson(accountList);
-		String companyListString = gson.toJson(companyList);
-		model.addAttribute("accountList", accountListString);
-		model.addAttribute("companyList", companyListString);
 		String userString = gson.toJson(user);
 		model.addAttribute("user", userString);
 		return "estimateSystem/estimateLanguage/modEstimateLanguage";
@@ -551,30 +362,7 @@ public class EstimateController {
 	@RequestMapping(value = "/all/writeEstimateSi", method = RequestMethod.GET)
 	public String writeEstimateSi(HttpSession session, Model model, String copy) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		ArrayList<AccountDTO> accountList = accountService.getAccountList();
-		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
 		Gson gson = new Gson();
-		String accountListString = gson.toJson(accountList);
-		String companyListString = gson.toJson(companyList);
-		model.addAttribute("accountList", accountListString);
-		model.addAttribute("companyList", companyListString);
-		String userString = gson.toJson(user);
-		model.addAttribute("user", userString);
-		model.addAttribute("copy", copy);
-		return "estimateSystem/estimateSi/writeEstimateSi";
-	}
-	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
-	@RequestMapping(value = "/all/writeEstimateSi", method = RequestMethod.POST)
-	public String writeEstimateSi2(HttpSession session, Model model, String copy) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		ArrayList<AccountDTO> accountList = accountService.getAccountList();
-		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
-		Gson gson = new Gson();
-		String accountListString = gson.toJson(accountList);
-		String companyListString = gson.toJson(companyList);
-		model.addAttribute("accountList", accountListString);
-		model.addAttribute("companyList", companyListString);
 		String userString = gson.toJson(user);
 		model.addAttribute("user", userString);
 		model.addAttribute("copy", copy);
@@ -630,13 +418,7 @@ public class EstimateController {
 		model.addAttribute("userNum", sys.getUserNum());
 		model.addAttribute("documentNum", documentNum);
 		
-		ArrayList<AccountDTO> accountList = accountService.getAccountList();
-		ArrayList<CompanyDTO> companyList = companyService.getCompanyList();
 		Gson gson = new Gson();
-		String accountListString = gson.toJson(accountList);
-		String companyListString = gson.toJson(companyList);
-		model.addAttribute("accountList", accountListString);
-		model.addAttribute("companyList", companyListString);
 		String userString = gson.toJson(user);
 		model.addAttribute("user", userString);
 		return "estimateSystem/estimateSi/modEstimateSi";

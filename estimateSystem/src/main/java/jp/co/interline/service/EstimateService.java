@@ -24,15 +24,7 @@ public interface EstimateService {
 
 	String getDocoumentNum();
 
-	int insertEstimateSheet1(EstimateSheet1DTO estimateSheet1);
-
-	int insertEstimateSheet1Items(EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever);
-
 	ArrayList<EstimateListDTO> getEstimateList(Model model, UserInformDTO user, String option, int page, int countPerPage);
-
-	int updateEstimateSheet1(EstimateSheet1DTO estimateSheet1);
-
-	int updateEstimateSheet1Items(EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever);
 
 	int deleteSheet(String documentNum);
 	

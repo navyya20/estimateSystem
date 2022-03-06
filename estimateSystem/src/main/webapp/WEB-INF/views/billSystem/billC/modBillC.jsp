@@ -77,14 +77,12 @@ if ( self !== top ) {
 			oz.sendToActionScript("viewer.external_functions_path","ozp://billSystem/billC/JS/billC.js");
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
 			oz.sendToActionScript("connection.reportname","billSystem/billC/modBillC.ozr");
-			oz.sendToActionScript("connection.pcount","7");
-			oz.sendToActionScript("connection.args1","accountList="+accountList);
-			oz.sendToActionScript("connection.args2","userNum="+user.userNum);
-			oz.sendToActionScript("connection.args3","userPosition="+(user.position==null? '':user.position));
-			oz.sendToActionScript("connection.args4","userDepartment="+(user.department==null? '':user.department));
-			oz.sendToActionScript("connection.args5","userName="+user.userName);
-			oz.sendToActionScript("connection.args6","path=http://"+'<%out.print(properties.getWebIP());%>'+"/files/estimateSystem/uploaded/");
-			oz.sendToActionScript("connection.args7","companyList="+companyList);
+			oz.sendToActionScript("connection.pcount","5");
+			oz.sendToActionScript("connection.args1","userNum="+user.userNum);
+			oz.sendToActionScript("connection.args2","userPosition="+(user.position==null? '':user.position));
+			oz.sendToActionScript("connection.args3","userDepartment="+(user.department==null? '':user.department));
+			oz.sendToActionScript("connection.args4","userName="+user.userName);
+			oz.sendToActionScript("connection.args5","path=http://"+'<%out.print(properties.getWebIP());%>'+"/files/estimateSystem/uploaded/");
 
 			oz.sendToActionScript("pdf.fontembedding","true");
 
@@ -126,6 +124,8 @@ if ( self !== top ) {
 			inputJson["sum"] = inputJson["sum"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["taxRate"] = inputJson["taxRate"].replace(/,/gi, "").replace(/%/gi, "");
 			inputJson["tax"] = inputJson["tax"].replace(/,/gi, "").replace(/￥/gi, "");
+			inputJson["commissionRate"] = inputJson["commissionRate"].replace(/,/gi, "").replace(/%/gi, "");
+			inputJson["commission"] = inputJson["commission"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax"] = inputJson["sumWithTax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax2"] = inputJson["sumWithTax2"].replace(/,/gi, "").replace(/￥/gi, "");
 			for(i=1 ; i<=repeat ; i++){
@@ -139,6 +139,7 @@ if ( self !== top ) {
 			inputJson.state=state;
 			if(inputJson["workflowNum"]==""){inputJson.workflowNum=0};
 			if(inputJson["taxRate"]==""){inputJson.taxRate=0};
+			if(inputJson["commissionRate"]==""){inputJson.taxRate=0};
 			console.log("제이슨:"+JSON.stringify(inputJson));
 			return inputJson;
 		}

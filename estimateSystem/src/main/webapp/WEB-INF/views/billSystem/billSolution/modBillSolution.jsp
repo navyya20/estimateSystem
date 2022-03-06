@@ -77,14 +77,12 @@ if ( self !== top ) {
 			oz.sendToActionScript("viewer.external_functions_path","ozp://billSystem/billSolution/JS/billSolution.js");
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
 			oz.sendToActionScript("connection.reportname","billSystem/billSolution/modBillSolution.ozr");
-			oz.sendToActionScript("connection.pcount","7");
-			oz.sendToActionScript("connection.args1","accountList="+accountList);
-			oz.sendToActionScript("connection.args2","userNum="+user.userNum);
-			oz.sendToActionScript("connection.args3","userPosition="+(user.position==null? '':user.position));
-			oz.sendToActionScript("connection.args4","userDepartment="+(user.department==null? '':user.department));
-			oz.sendToActionScript("connection.args5","userName="+user.userName);
-			oz.sendToActionScript("connection.args6","path=http://"+'<%out.print(properties.getWebIP());%>'+"/files/estimateSystem/uploaded/");
-			oz.sendToActionScript("connection.args7","companyList="+companyList);
+			oz.sendToActionScript("connection.pcount","5");
+			oz.sendToActionScript("connection.args1","userNum="+user.userNum);
+			oz.sendToActionScript("connection.args2","userPosition="+(user.position==null? '':user.position));
+			oz.sendToActionScript("connection.args3","userDepartment="+(user.department==null? '':user.department));
+			oz.sendToActionScript("connection.args4","userName="+user.userName);
+			oz.sendToActionScript("connection.args5","path=http://"+'<%out.print(properties.getWebIP());%>'+"/files/estimateSystem/uploaded/");
 
 			oz.sendToActionScript("pdf.fontembedding","true");
 

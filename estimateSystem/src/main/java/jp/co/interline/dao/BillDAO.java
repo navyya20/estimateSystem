@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import jp.co.interline.dto.BillCDTO;
 import jp.co.interline.dto.BillCItemsRecieveDTO;
+import jp.co.interline.dto.BillDDTO;
+import jp.co.interline.dto.BillDItemDTO;
 import jp.co.interline.dto.BillSheet1DTO;
 import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
 import jp.co.interline.dto.BillSiDTO;
@@ -155,8 +157,21 @@ public class BillDAO {
 		int result = mapper.updateBillCItems(billCItemsReciever);
 		return result;
 	}
+
 	
-
-
+///////////////////////////////////////////billD//////////////////////////////////////////		
+	public int insertBillD(BillDDTO billD) {
+		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
+		int result = mapper.insertBillD(billD);
+		return result;
+	}
+	
+	
+	public int updateBillD(BillDDTO billD) {
+		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
+		int result = mapper.updateBillD(billD);
+		return result;
+	}
+	
 	
 }

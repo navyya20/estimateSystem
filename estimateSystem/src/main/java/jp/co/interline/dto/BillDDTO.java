@@ -1,6 +1,15 @@
 package jp.co.interline.dto;
 
-public class BillCDTO {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class BillDDTO {
+	int systemNum;
 	String documentNum;
 	String estimateNum;
 	int userNum;
@@ -11,40 +20,47 @@ public class BillCDTO {
 	String documentTypeName;
 	String nextDocumentTypeName;
 	
-	String supplier;
 	String address;
-	String post;
-	String phoneNumber;
-	String representative;
 	String stamp;
 	String stampFileName;
 	String logoFileName;
-	
 	String receiver;
-	String documentName;
-	String payCondition;
-	String deadline;
-	String itemTitle;
-	String bankName;
-	String branchName;
-	String accountName;
-	String hurigana;
-	String accountNumber;
-	String depositeClassification;	
-	String note;
+	
+	@JsonProperty("items")
+	ArrayList<BillDItemDTO> items;
+	
 	String sum;
 	String taxRate;
 	String tax;
-	String commissionRate;
-	String commission;
+	String discountRate;
+	String discount;
 	String sumWithTax;
 	String sumWithTax2;	
+	
+	String note;
+	
+	String bnSwiftCode;
+	String bnBankName;
+	String bnBranchName;
+	String bnBankAddress;
+	String bnName;
+	String bnAddress;	
+	String bnAccountNumber;	
+	String bnAccountName;	
+	String imSwiftCode;	
+	String imBankName;	
+	
 	String state;
 	int workflowNum;
 	String insertDate;
 	String updateDate;
 	int updater;
-	int systemNum;
+	public int getSystemNum() {
+		return systemNum;
+	}
+	public void setSystemNum(int systemNum) {
+		this.systemNum = systemNum;
+	}
 	public String getDocumentNum() {
 		return documentNum;
 	}
@@ -99,35 +115,11 @@ public class BillCDTO {
 	public void setNextDocumentTypeName(String nextDocumentTypeName) {
 		this.nextDocumentTypeName = nextDocumentTypeName;
 	}
-	public String getSupplier() {
-		return supplier;
-	}
-	public void setSupplier(String supplier) {
-		this.supplier = supplier;
-	}
 	public String getAddress() {
 		return address;
 	}
 	public void setAddress(String address) {
 		this.address = address;
-	}
-	public String getPost() {
-		return post;
-	}
-	public void setPost(String post) {
-		this.post = post;
-	}
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-	public String getRepresentative() {
-		return representative;
-	}
-	public void setRepresentative(String representative) {
-		this.representative = representative;
 	}
 	public String getStamp() {
 		return stamp;
@@ -153,66 +145,6 @@ public class BillCDTO {
 	public void setReceiver(String receiver) {
 		this.receiver = receiver;
 	}
-	public String getDocumentName() {
-		return documentName;
-	}
-	public void setDocumentName(String documentName) {
-		this.documentName = documentName;
-	}
-	public String getPayCondition() {
-		return payCondition;
-	}
-	public void setPayCondition(String payCondition) {
-		this.payCondition = payCondition;
-	}
-	public String getDeadline() {
-		return deadline;
-	}
-	public void setDeadline(String deadline) {
-		this.deadline = deadline;
-	}
-	public String getBankName() {
-		return bankName;
-	}
-	public void setBankName(String bankName) {
-		this.bankName = bankName;
-	}
-	public String getBranchName() {
-		return branchName;
-	}
-	public void setBranchName(String branchName) {
-		this.branchName = branchName;
-	}
-	public String getAccountName() {
-		return accountName;
-	}
-	public void setAccountName(String accountName) {
-		this.accountName = accountName;
-	}
-	public String getHurigana() {
-		return hurigana;
-	}
-	public void setHurigana(String hurigana) {
-		this.hurigana = hurigana;
-	}
-	public String getAccountNumber() {
-		return accountNumber;
-	}
-	public void setAccountNumber(String accountNumber) {
-		this.accountNumber = accountNumber;
-	}
-	public String getDepositeClassification() {
-		return depositeClassification;
-	}
-	public void setDepositeClassification(String depositeClassification) {
-		this.depositeClassification = depositeClassification;
-	}
-	public String getNote() {
-		return note;
-	}
-	public void setNote(String note) {
-		this.note = note;
-	}
 	public String getSum() {
 		return sum;
 	}
@@ -231,6 +163,18 @@ public class BillCDTO {
 	public void setTax(String tax) {
 		this.tax = tax;
 	}
+	public String getDiscountRate() {
+		return discountRate;
+	}
+	public void setDiscountRate(String discountRate) {
+		this.discountRate = discountRate;
+	}
+	public String getDiscount() {
+		return discount;
+	}
+	public void setDiscount(String discount) {
+		this.discount = discount;
+	}
 	public String getSumWithTax() {
 		return sumWithTax;
 	}
@@ -242,6 +186,72 @@ public class BillCDTO {
 	}
 	public void setSumWithTax2(String sumWithTax2) {
 		this.sumWithTax2 = sumWithTax2;
+	}
+	public String getNote() {
+		return note;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
+	public String getBnSwiftCode() {
+		return bnSwiftCode;
+	}
+	public void setBnSwiftCode(String bnSwiftCode) {
+		this.bnSwiftCode = bnSwiftCode;
+	}
+	public String getBnBankName() {
+		return bnBankName;
+	}
+	public void setBnBankName(String bnBankName) {
+		this.bnBankName = bnBankName;
+	}
+	public String getBnBranchName() {
+		return bnBranchName;
+	}
+	public void setBnBranchName(String bnBranchName) {
+		this.bnBranchName = bnBranchName;
+	}
+	public String getBnBankAddress() {
+		return bnBankAddress;
+	}
+	public void setBnBankAddress(String bnBankAddress) {
+		this.bnBankAddress = bnBankAddress;
+	}
+	public String getBnName() {
+		return bnName;
+	}
+	public void setBnName(String bnName) {
+		this.bnName = bnName;
+	}
+	public String getBnAddress() {
+		return bnAddress;
+	}
+	public void setBnAddress(String bnAddress) {
+		this.bnAddress = bnAddress;
+	}
+	public String getBnAccountNumber() {
+		return bnAccountNumber;
+	}
+	public void setBnAccountNumber(String bnAccountNumber) {
+		this.bnAccountNumber = bnAccountNumber;
+	}
+	public String getBnAccountName() {
+		return bnAccountName;
+	}
+	public void setBnAccountName(String bnAccountName) {
+		this.bnAccountName = bnAccountName;
+	}
+	public String getImSwiftCode() {
+		return imSwiftCode;
+	}
+	public void setImSwiftCode(String imSwiftCode) {
+		this.imSwiftCode = imSwiftCode;
+	}
+	public String getImBankName() {
+		return imBankName;
+	}
+	public void setImBankName(String imBankName) {
+		this.imBankName = imBankName;
 	}
 	public String getState() {
 		return state;
@@ -273,34 +283,27 @@ public class BillCDTO {
 	public void setUpdater(int updater) {
 		this.updater = updater;
 	}
-	public int getSystemNum() {
-		return systemNum;
+	public void setItems(ArrayList<BillDItemDTO> items) {
+		this.items = items;
 	}
-	public void setSystemNum(int systemNum) {
-		this.systemNum = systemNum;
-	}
-	public String getItemTitle() {
-		return itemTitle;
-	}
-	public void setItemTitle(String itemTitle) {
-		this.itemTitle = itemTitle;
-	}
-	@Override
-	public String toString() {
-		return "BillCDTO [documentNum=" + documentNum + ", estimateNum=" + estimateNum + ", userNum=" + userNum
-				+ ", userName=" + userName + ", userDepartment=" + userDepartment + ", userPosition=" + userPosition
-				+ ", billDate=" + billDate + ", documentTypeName=" + documentTypeName + ", nextDocumentTypeName="
-				+ nextDocumentTypeName + ", supplier=" + supplier + ", address=" + address + ", post=" + post
-				+ ", phoneNumber=" + phoneNumber + ", representative=" + representative + ", stamp=" + stamp
-				+ ", stampFileName=" + stampFileName + ", logoFileName=" + logoFileName + ", receiver=" + receiver
-				+ ", documentName=" + documentName + ", payCondition=" + payCondition + ", deadline=" + deadline
-				+ ", itemTitle=" + itemTitle + ", bankName=" + bankName + ", branchName=" + branchName
-				+ ", accountName=" + accountName + ", hurigana=" + hurigana + ", accountNumber=" + accountNumber
-				+ ", depositeClassification=" + depositeClassification + ", note=" + note + ", sum=" + sum
-				+ ", taxRate=" + taxRate + ", tax=" + tax + ", sumWithTax=" + sumWithTax + ", sumWithTax2="
-				+ sumWithTax2 + ", state=" + state + ", workflowNum=" + workflowNum + ", insertDate=" + insertDate
-				+ ", updateDate=" + updateDate + ", updater=" + updater + ", systemNum=" + systemNum + "]";
+	public ArrayList<BillDItemDTO> getItems() {
+		return items;
 	}
 	
+	@Override
+	public String toString() {
+		return "BillDDTO [systemNum=" + systemNum + ", documentNum=" + documentNum + ", estimateNum=" + estimateNum
+				+ ", userNum=" + userNum + ", userName=" + userName + ", userDepartment=" + userDepartment
+				+ ", userPosition=" + userPosition + ", billDate=" + billDate + ", documentTypeName=" + documentTypeName
+				+ ", nextDocumentTypeName=" + nextDocumentTypeName + ", address=" + address + ", stamp=" + stamp
+				+ ", stampFileName=" + stampFileName + ", logoFileName=" + logoFileName + ", receiver=" + receiver
+				+ ", sum=" + sum + ", taxRate=" + taxRate + ", tax=" + tax + ", discountRate=" + discountRate
+				+ ", discount=" + discount + ", sumWithTax=" + sumWithTax + ", sumWithTax2=" + sumWithTax2 + ", note="
+				+ note + ", bnSwiftCode=" + bnSwiftCode + ", bnBankName=" + bnBankName + ", bnBranchName="
+				+ bnBranchName + ", bnBankAddress=" + bnBankAddress + ", bnName=" + bnName + ", bnAddress=" + bnAddress
+				+ ", bnAccountNumber=" + bnAccountNumber + ", bnAccountName=" + bnAccountName + ", imSwiftCode="
+				+ imSwiftCode + ", imBankName=" + imBankName + ", state=" + state + ", workflowNum=" + workflowNum
+				+ ", insertDate=" + insertDate + ", updateDate=" + updateDate + ", updater=" + updater + "]";
+	}
 	
 }

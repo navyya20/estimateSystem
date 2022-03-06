@@ -58,10 +58,6 @@ if ( self !== top ) {
 
 	<script type="text/javascript" >
 		var estimateNum = '${estimateNum}';
-		var accountList = '${accountList}';
-		var companyList = '${companyList}';
-		companyList=companyList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
-		accountList=accountList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
 		var copy = "";
 		<c:if test="${copy != null}">
 			copy = '${copy}';
@@ -82,16 +78,14 @@ if ( self !== top ) {
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
 			oz.sendToActionScript("connection.reportname","billSystem/billC/writeBillC.ozr");
 			oz.sendToActionScript("connection.inputjson",copy);
-			oz.sendToActionScript("connection.pcount","9");
+			oz.sendToActionScript("connection.pcount","7");
 			oz.sendToActionScript("connection.args1","repeat="+repeat);
-			oz.sendToActionScript("connection.args2","accountList="+accountList);
-			oz.sendToActionScript("connection.args3","userNum="+user.userNum);
-			oz.sendToActionScript("connection.args4","userPosition="+(user.position==null? '':user.position));
-			oz.sendToActionScript("connection.args5","userDepartment="+(user.department==null? '':user.department));
-			oz.sendToActionScript("connection.args6","userName="+user.userName);
-			oz.sendToActionScript("connection.args7","path=http://"+'<%out.print(properties.getWebIP());%>'+"/files/estimateSystem/uploaded/");
-			oz.sendToActionScript("connection.args8","estimateNum="+estimateNum);
-			oz.sendToActionScript("connection.args9","companyList="+companyList);
+			oz.sendToActionScript("connection.args2","userNum="+user.userNum);
+			oz.sendToActionScript("connection.args3","userPosition="+(user.position==null? '':user.position));
+			oz.sendToActionScript("connection.args4","userDepartment="+(user.department==null? '':user.department));
+			oz.sendToActionScript("connection.args5","userName="+user.userName);
+			oz.sendToActionScript("connection.args6","path=http://"+'<%out.print(properties.getWebIP());%>'+"/files/estimateSystem/uploaded/");
+			oz.sendToActionScript("connection.args7","estimateNum="+estimateNum);
 
 			oz.sendToActionScript("global.language", "ja_JP");
 			oz.sendToActionScript("odi.odinames", "writeBillC");
@@ -132,6 +126,8 @@ if ( self !== top ) {
 			inputJson["sum"] = inputJson["sum"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["taxRate"] = inputJson["taxRate"].replace(/,/gi, "").replace(/%/gi, "");
 			inputJson["tax"] = inputJson["tax"].replace(/,/gi, "").replace(/￥/gi, "");
+			inputJson["commissionRate"] = inputJson["commissionRate"].replace(/,/gi, "").replace(/%/gi, "");
+			inputJson["commission"] = inputJson["commission"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax"] = inputJson["sumWithTax"].replace(/,/gi, "").replace(/￥/gi, "");
 			inputJson["sumWithTax2"] = inputJson["sumWithTax2"].replace(/,/gi, "").replace(/￥/gi, "");
 			for(i=1 ; i<=repeat ; i++){
@@ -145,6 +141,7 @@ if ( self !== top ) {
 			inputJson.state=state;
 			if(inputJson["workflowNum"]==""){inputJson.workflowNum=0};
 			if(inputJson["taxRate"]==""){inputJson.taxRate=0};
+			if(inputJson["commissionRate"]==""){inputJson.taxRate=0};
 			console.log("제이슨:"+JSON.stringify(inputJson));
 			return inputJson;
 		}

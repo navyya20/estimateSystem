@@ -59,11 +59,6 @@ if ( self !== top ) {
 	</div>	
 
 	<script type="text/javascript" >
-		var accountList = '${accountList}';
-		var companyList = '${companyList}';
-		companyList=companyList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
-		accountList=accountList.replace(/\r/gi, '\\r').replace(/\n/gi, '\\n');
-
 		var repeat=10;
 
 		var userString = '${user}';
@@ -76,14 +71,13 @@ if ( self !== top ) {
 			oz.sendToActionScript("viewer.external_functions_path","ozp://estimateSystem/estimateSi/JS/estimateSi.js");
 			oz.sendToActionScript("connection.servlet","http://<%out.print(properties.getOzIP());%>/oz80/server");
 			oz.sendToActionScript("connection.reportname","estimateSystem/estimateSi/modEstimateSi.ozr");
-			oz.sendToActionScript("connection.pcount","7");
+			oz.sendToActionScript("connection.pcount","6");
 			oz.sendToActionScript("connection.args1","repeat="+repeat);
-			oz.sendToActionScript("connection.args2","companyList="+companyList);
-			oz.sendToActionScript("connection.args3","userNum="+user.userNum);
-			oz.sendToActionScript("connection.args4","userPosition="+(user.position==null? '':user.position));
-			oz.sendToActionScript("connection.args5","userDepartment="+(user.department==null? '':user.department));
-			oz.sendToActionScript("connection.args6","userName="+user.userName);
-			oz.sendToActionScript("connection.args7","path=http://"+'<%out.print(properties.getWebIP());%>'+"/files/estimateSystem/uploaded/");
+			oz.sendToActionScript("connection.args2","userNum="+user.userNum);
+			oz.sendToActionScript("connection.args3","userPosition="+(user.position==null? '':user.position));
+			oz.sendToActionScript("connection.args4","userDepartment="+(user.department==null? '':user.department));
+			oz.sendToActionScript("connection.args5","userName="+user.userName);
+			oz.sendToActionScript("connection.args6","path=http://"+'<%out.print(properties.getWebIP());%>'+"/files/estimateSystem/uploaded/");
 			
 			oz.sendToActionScript("global.language", "ja_JP");
 			oz.sendToActionScript("odi.odinames", "modEstimateSi");
