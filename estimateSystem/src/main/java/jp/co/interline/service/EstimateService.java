@@ -3,22 +3,21 @@ package jp.co.interline.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.springframework.dao.DataAccessException;
-import org.springframework.transaction.annotation.Transactional;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.ui.Model;
 
 import jp.co.interline.dto.DocumentMasterDTO;
-import jp.co.interline.dto.EstimateLanguageDTO;
-import jp.co.interline.dto.EstimateLanguageItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
-import jp.co.interline.dto.EstimateSheet1DTO;
-import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
-import jp.co.interline.dto.EstimateSiDTO;
-import jp.co.interline.dto.EstimateSiItemsRecieveDTO;
-import jp.co.interline.dto.EstimateSolutionDTO;
-import jp.co.interline.dto.EstimateSolutionItemsRecieveDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
+import jp.co.interline.dto.estimateSystem.EstimateCommonDTO;
+import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageDTO;
+import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageItemDTO;
+import jp.co.interline.dto.estimateSystem.estimateSi.EstimateSiDTO;
+import jp.co.interline.dto.estimateSystem.estimateSi.EstimateSiItemDTO;
+import jp.co.interline.dto.estimateSystem.estimateSolution.EstimateSolutionDTO;
+import jp.co.interline.dto.estimateSystem.estimateSolution.EstimateSolutionItemDTO;
 
 public interface EstimateService {
 
@@ -32,29 +31,29 @@ public interface EstimateService {
 
 	int insertEstimateSolution(EstimateSolutionDTO estimateSolution);
 
-	int insertEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever);
+	int insertEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItemsReciever);
 
 	SystemDTO getEstimate(SystemDTO system);
 
 	int updateEstimateSolution(EstimateSolutionDTO estimateSolution);
 
-	int updateEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever);
+	int updateEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItemsReciever);
 
 	int insertEstimateLanguage(EstimateLanguageDTO estimateLanguage);
 
-	int insertEstimateLanguageItems(EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever);
+	int insertEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItemsReciever);
 
 	int updateEstimateLanguage(EstimateLanguageDTO estimateLanguage);
 
-	int updateEstimateLanguageItems(EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever);
+	int updateEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItemsReciever);
 
 	int insertEstimateSi(EstimateSiDTO estimateSi);
 
-	int insertEstimateSiItems(EstimateSiItemsRecieveDTO estimateSiItemsReciever);
+	int insertEstimateSiItems(EstimateSiItemDTO estimateSiItemsReciever);
 
 	int updateEstimateSi(EstimateSiDTO estimateSi);
 
-	int updateEstimateSiItems(EstimateSiItemsRecieveDTO estimateSiItemsReciever);
+	int updateEstimateSiItems(EstimateSiItemDTO estimateSiItemsReciever);
 
 	DocumentMasterDTO getDocumentMaster(String documentNum);
 
@@ -63,6 +62,10 @@ public interface EstimateService {
 	ArrayList<HashMap<String, Object>> getItemsToList(DocumentMasterDTO document);
 
 	void makeHashMap(HashMap<String, String> contents, ArrayList<HashMap<String, Object>> items);
+	
+	<T extends EstimateCommonDTO> HashMap<String, String> insertDocument(UserInformDTO user, HttpSession session, Model model, String jsonStr, Class<T> type);
+
+	<T extends EstimateCommonDTO> HashMap<String, String> updateDocument(UserInformDTO user, HttpSession session, Model model, String jsonStr, Class<T> type);
 	
 	void test(String string);
 

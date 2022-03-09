@@ -1,15 +1,10 @@
 package jp.co.interline.controller;
 
-import java.io.File;
-import java.lang.reflect.Array;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +15,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
-import jp.co.interline.dto.CompanyDTO;
-import jp.co.interline.dto.FileNamesDTO;
-import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.dto.WorkflowDTO;
 import jp.co.interline.dto.WorkflowInformDTO;
 import jp.co.interline.service.CompanyService;
-import jp.co.interline.service.FileService;
 import jp.co.interline.service.UserService;
 import jp.co.interline.service.WorkflowService;
 
@@ -49,8 +39,6 @@ public class WorkflowController {
 	
 	@RequestMapping(value = "/all/workflowList", method = RequestMethod.GET)
 	public String workflowList(HttpSession session, Model model) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		
 		String where = "order by department asc, position asc";
 		ArrayList<UserInformDTO> userList =  userServive.getUserListOrderd(where);
 		userList = userServive.getUserListOrderdOnlyAdmin(where);

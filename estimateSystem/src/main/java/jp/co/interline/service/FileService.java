@@ -1,8 +1,6 @@
 package jp.co.interline.service;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.springframework.web.multipart.MultipartFile;
 

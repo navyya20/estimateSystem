@@ -23,6 +23,7 @@
 -->
 
 <script type="text/javascript" src="../js/jQuery-FontSpy.js" charset="utf-8"></script>
+<script type="text/javascript" src="../js/dataCompensation/dataCompensation.js" charset="utf-8"></script>
 
 
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
@@ -116,22 +117,16 @@ if ( self !== top ) {
 		function processJson(state){
 			var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
 			var inputJson=JSON.parse(inputJsonString);
-			inputJson["sum"] = inputJson["sum"].replace(/,/gi, "").replace(/￥/gi, "");
-			inputJson["taxRate"] = inputJson["taxRate"].replace(/,/gi, "").replace(/%/gi, "");
-			inputJson["tax"] = inputJson["tax"].replace(/,/gi, "").replace(/￥/gi, "");
-			inputJson["sumWithTax"] = inputJson["sumWithTax"].replace(/,/gi, "").replace(/￥/gi, "");
-			inputJson["sumWithTax2"] = inputJson["sumWithTax2"].replace(/,/gi, "").replace(/￥/gi, "");
-			for(i=1 ; i<=repeat ; i++){
-				inputJson["unitPrice"+i] =inputJson["unitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");
-				inputJson["price"+i] = inputJson["price"+i].replace(/,/gi, "").replace(/￥/gi, "");				
-				inputJson["amount"+i] = inputJson["amount"+i].replace(/,/gi, "").replace(/￥/gi, "");
-				if(inputJson["amount"+i]==""){inputJson["amount"+i]="null"}
-				if(inputJson["unitPrice"+i]==""){inputJson["unitPrice"+i]="null"}
-				if(inputJson["price"+i]==""){inputJson["price"+i]="null"}
-			}
+			var numberFieldArr = ["sum", "taxRate", "tax", "sumWithTax", "sumWithTax2"];
+			numberFieldArr.forEach(function(field){
+				inputJson[field] = getPureNumber(inputJson[field]);
+			})
+			var emptyToZeroFieldArr=["workflowNum", "taxRate"];
+			emptyToZeroFieldArr.forEach(function(field){
+				if(inputJson[field]==""){inputJson[field]=0};
+			})
+			inputJson["items"] = getItems(inputJson,["rowNum","item","itemName","unit"],["unitPrice","amount","price"],repeat);
 			inputJson.state=state;
-			if(inputJson["workflowNum"]==""){inputJson.workflowNum=0};
-			if(inputJson["taxRate"]==""){inputJson.taxRate=0};
 			console.log("제이슨:"+JSON.stringify(inputJson));
 			return inputJson;
 		}
@@ -143,7 +138,7 @@ if ( self !== top ) {
 					{
 						url: "insertEstimateSolution",
 						type: 'POST',
-						data: inputJson,
+						data: {"jsonStr":JSON.stringify(inputJson)},
 						success: function(r){
 							if(r["errorFlag"]==0){
 								alert("見積書を作成しました。");
@@ -169,7 +164,7 @@ if ( self !== top ) {
 					{
 						url: "insertEstimateSolution",
 						type: 'POST',
-						data: inputJson,
+						data: {"jsonStr":JSON.stringify(inputJson)},
 						success: function(r){
 							if(r["errorFlag"]==0){
 								alert("見積書を作成しました。");

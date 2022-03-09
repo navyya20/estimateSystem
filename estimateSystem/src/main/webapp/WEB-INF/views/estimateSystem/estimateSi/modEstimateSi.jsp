@@ -23,6 +23,7 @@
 -->
 
 <script type="text/javascript" src="../js/jQuery-FontSpy.js" charset="utf-8"></script>
+<script type="text/javascript" src="../js/dataCompensation/dataCompensation.js?ver=2" charset="utf-8"></script>
 
 
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
@@ -113,36 +114,30 @@ if ( self !== top ) {
 		//자바의 int형같은경우 null은 안되고
 		//DB의 숫자형(금액)같은경우 쉼표와 ￥표시는 없어야함.
         function processJson(state){
-			var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
+        	var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
 			var inputJson=JSON.parse(inputJsonString);
-			inputJson["sum"] = inputJson["sum"].replace(/,/gi, "").replace(/￥/gi, "");
-			inputJson["taxRate"] = inputJson["taxRate"].replace(/,/gi, "").replace(/%/gi, "");
-			inputJson["tax"] = inputJson["tax"].replace(/,/gi, "").replace(/￥/gi, "");
-			inputJson["sumWithTax"] = inputJson["sumWithTax"].replace(/,/gi, "").replace(/￥/gi, "");
-			inputJson["sumWithTax2"] = inputJson["sumWithTax2"].replace(/,/gi, "").replace(/￥/gi, "");
-			for(i=1 ; i<=repeat ; i++){
-				inputJson["unitPrice"+i] = inputJson["unitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");
-				inputJson["price"+i] = inputJson["price"+i].replace(/,/gi, "").replace(/￥/gi, "");				
-				inputJson["manMonth"+i] = inputJson["manMonth"+i].replace(/月/gi, "").replace(/人/gi, "");
-				if(inputJson["manMonth"+i]==""){inputJson["manMonth"+i]="null"}
-				if(inputJson["unitPrice"+i]==""){inputJson["unitPrice"+i]="null"}
-				if(inputJson["price"+i]==""){inputJson["price"+i]="null"}
-			}
+			var numberFieldArr = ["sum", "taxRate", "tax", "sumWithTax", "sumWithTax2"];
+			numberFieldArr.forEach(function(field){
+				inputJson[field] = getPureNumber(inputJson[field]);
+			})
+			var emptyToZeroFieldArr=["workflowNum", "taxRate"];
+			emptyToZeroFieldArr.forEach(function(field){
+				if(inputJson[field]==""){inputJson[field]=0};
+			})
+			inputJson["items"] = getItems(inputJson,["rowNum","item","itemName","workStart","workEnd"],["unitPrice","manMonth","price"],repeat);
 			inputJson.state=state;
-			if(inputJson["workflowNum"]==""){inputJson.workflowNum=0};
 			console.log("제이슨:"+JSON.stringify(inputJson));
 			return inputJson;
 		}
 
       //보존버튼을 누루면 작동. 
-		//뷰어의 모든 값을 제이슨스트링으로 가져옴.
 		function saveButton(state){
 			var inputJson = processJson(state);
 			$.ajax(
 					{
 						url: "updateEstimateSi",
 						type: 'POST',
-						data: inputJson,
+						data: {"jsonStr":JSON.stringify(inputJson)},
 						success: function(r){
 							alert("見積書を修正しました。");
 							location.href="estimateList";
@@ -161,7 +156,7 @@ if ( self !== top ) {
 					{
 						url: "updateEstimateSi",
 						type: 'POST',
-						data: inputJson,
+						data: {"jsonStr":JSON.stringify(inputJson)},
 						success: function(r){
 							if(r["errorFlag"]==0){
 								alert("見積書を作成しました。");

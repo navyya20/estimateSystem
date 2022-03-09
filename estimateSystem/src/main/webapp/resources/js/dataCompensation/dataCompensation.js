@@ -1,7 +1,7 @@
 ﻿//순수 숫자 스트링으로 만들어주는 함수
 //숫자형데이터, 예를들어 "1,500￥"가 인수로오면 "1500"만 남기고 잘라냄.
 function getPureNumber(numberStr){
-	return numberStr.replace(/%/gi, "").replace(/,/gi, "").replace(/￥/gi, "").replace("JPY ", "");
+	return numberStr.replace(/%/gi, "").replace(/,/gi, "").replace(/￥/gi, "").replace("JPY ", "").replace("人月", "");
 }
 
 //1차원 아이템들을  배열로 만들어줌.
@@ -12,12 +12,19 @@ function getItems(inputJson,strFieldList,numFieldList,repeat){
 	var itemArr = [];
 	for(i=1 ; i<=repeat ; i++){
 		var itemObj = new Object();
+		
 		for(j=0 ; j < strFieldList.length ; j++){
 			itemObj[strFieldList[j]] = inputJson[strFieldList[j]+i];
 			delete inputJson[strFieldList[j]+i];
 		}
+		
 		for(j=0 ; j < numFieldList.length ; j++){
-			itemObj[numFieldList[j]] = getPureNumber(inputJson[numFieldList[j]+i]);
+			if(inputJson[numFieldList[j]+i] != ""){
+				itemObj[numFieldList[j]] = getPureNumber(inputJson[numFieldList[j]+i]);				
+			}else{
+				itemObj[numFieldList[j]] = "null";
+			}
+			
 			delete inputJson[numFieldList[j]+i];
 		}
 		itemArr.push(itemObj);

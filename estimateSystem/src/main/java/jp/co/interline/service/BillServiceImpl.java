@@ -3,33 +3,27 @@ package jp.co.interline.service;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 
 import jp.co.interline.dao.BillDAO;
 import jp.co.interline.dao.SystemDAO;
 import jp.co.interline.dao.WorkflowDAO;
-import jp.co.interline.dto.BillCDTO;
-import jp.co.interline.dto.BillCItemsRecieveDTO;
-import jp.co.interline.dto.BillDDTO;
-import jp.co.interline.dto.BillDItemDTO;
-import jp.co.interline.dto.BillSheet1DTO;
-import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
-import jp.co.interline.dto.BillSiDTO;
-import jp.co.interline.dto.BillSiItemsRecieveDTO;
-import jp.co.interline.dto.BillSolutionDTO;
-import jp.co.interline.dto.BillSolutionItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
-import jp.co.interline.dto.EstimateSheet1DTO;
-import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
+import jp.co.interline.dto.billSystem.BillCommonDTO;
 
 @Service
-public class BillServiceImpl implements BillService {
+public class BillServiceImpl<T> implements BillService {
 	@Autowired
 	WorkflowDAO workflowDao;
 	
@@ -90,148 +84,48 @@ public class BillServiceImpl implements BillService {
 		return "";
 	}
 	
-	/*
-	 * @Override public SystemDTO getBillType(int documentTypeNum) { SystemDTO
-	 * system = billDao.getBillType(documentTypeNum); return system; }
-	 * 
-	 * @Override public SystemDTO getBillTypeName(int documentTypeNum) { SystemDTO
-	 * system = billDao.getBillTypeName(documentTypeNum); return system; }
-	 */
-	
-	
-////////////////////////////billSolution///////////////////////////////////////////////
-	@Override
-	public int insertBillSolution(BillSolutionDTO billSolution) {
+////////////////////////////////////////////////
+	@SuppressWarnings("hiding")
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
+	public <T extends BillCommonDTO> HashMap<String, String> insertDocument(UserInformDTO user, HttpSession session, Model model, String jsonStr,Class<T> type) {
+		T documentDTO = jacksonUtility.readValue(jsonStr, type);
+		//채번
+		String documentNum = this.getDocoumentNum();
+		//기본정보등록
+		documentDTO.setDocumentNum(documentNum);
+		documentDTO.setUpdater(user.getUserNum());
 		ArrayList<SystemDTO> system = systemDao.getFileNames();
 		String stampFileName=returnFileName(system, "stamp");
 		String logoFileName=returnFileName(system, "logo");
-		billSolution.setStampFileName(stampFileName);
-		billSolution.setLogoFileName(logoFileName);
-		int result = billDao.insertBillSolution(billSolution);
-		return result;
-	}
+		documentDTO.setStampFileName(stampFileName);
+		documentDTO.setLogoFileName(logoFileName);
 
-	@Override
-	public int insertBillSolutionItems(BillSolutionItemsRecieveDTO billSolutionItemsReciever) {
-		int result = billDao.insertBillSolutionItems(billSolutionItemsReciever);
+		HashMap<String, String> result = new HashMap<String, String>();
+		int result1 = billDao.insertDocument(documentDTO);
+		if(result1 != 1) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求情報格納エラー");
+			return result;
+		}
+		result.put("errorFlag", "0");
+		result.put("documentNum", documentNum);
+		return result;
+	} 
+	
+	@SuppressWarnings("hiding")
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
+	public <T extends BillCommonDTO> HashMap<String, String> updateDocument(UserInformDTO user, HttpSession session, Model model, String jsonStr,Class<T> type) {
+		T documentDTO = jacksonUtility.readValue(jsonStr, type);
+		documentDTO.setUpdater(user.getUserNum());
+		HashMap<String, String> result = new HashMap<String, String>();
+		int result1 = billDao.updateDocument(documentDTO);
+		if(result1 != 1) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求情報格納エラー");
+			return result;
+		}
+		result.put("errorFlag", "0");
+		result.put("documentNum", documentDTO.getDocumentNum()+"更新エラー");
 		return result;
 	}
-
-	@Override
-	public int updateBillSolution(BillSolutionDTO billSolution) {
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		billSolution.setStampFileName(stampFileName);
-		billSolution.setLogoFileName(logoFileName);
-		int result = billDao.updateBillSolution(billSolution);
-		return result;
-	}
-
-	@Override
-	public int updateBillSolutionItems(BillSolutionItemsRecieveDTO billSolutionItemsReciever) {
-		int result = billDao.updateBillSolutionItems(billSolutionItemsReciever);
-		return result;
-	}
-
-	
-	
-////////////////////////////billSi///////////////////////////////////////////////
-	@Override
-	public int insertBillSi(BillSiDTO billSi) {
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		billSi.setStampFileName(stampFileName);
-		billSi.setLogoFileName(logoFileName);
-		int result = billDao.insertBillSi(billSi);
-		return result;
-	}
-	
-	@Override
-	public int insertBillSiItems(BillSiItemsRecieveDTO billSiItemsReciever) {
-		int result = billDao.insertBillSiItems(billSiItemsReciever);
-		return result;
-	}
-	
-	@Override
-	public int updateBillSi(BillSiDTO billSi) {
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		billSi.setStampFileName(stampFileName);
-		billSi.setLogoFileName(logoFileName);
-		int result = billDao.updateBillSi(billSi);
-		return result;
-	}
-	
-	@Override
-	public int updateBillSiItems(BillSiItemsRecieveDTO billSiItemsReciever) {
-		int result = billDao.updateBillSiItems(billSiItemsReciever);
-		return result;
-	}
-
-////////////////////////////billC///////////////////////////////////////////////
-	@Override
-	public int insertBillC(BillCDTO billC) {
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		billC.setStampFileName(stampFileName);
-		billC.setLogoFileName(logoFileName);
-		int result = billDao.insertBillC(billC);
-		return result;
-	}
-	
-	@Override
-	public int insertBillCItems(BillCItemsRecieveDTO billCItemsReciever) {
-		int result = billDao.insertBillCItems(billCItemsReciever);
-		return result;
-	}
-	
-	@Override
-	public int updateBillC(BillCDTO billC) {
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		billC.setStampFileName(stampFileName);
-		billC.setLogoFileName(logoFileName);
-		int result = billDao.updateBillC(billC);
-		return result;
-	}
-	
-	@Override
-	public int updateBillCItems(BillCItemsRecieveDTO billCItemsReciever) {
-		int result = billDao.updateBillCItems(billCItemsReciever);
-		return result;
-	}
-	
-	
-	
-	
-	
-	
-////////////////////////////billD///////////////////////////////////////////////	
-	@Override
-	public int insertBillD(BillDDTO billD) {
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		billD.setStampFileName(stampFileName);
-		billD.setLogoFileName(logoFileName);
-		int result = billDao.insertBillD(billD);
-		return result;
-	}
-	
-	@Override
-	public int updateBillD(BillDDTO billD) {
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		billD.setStampFileName(stampFileName);
-		billD.setLogoFileName(logoFileName);
-		int result = billDao.updateBillD(billD);
-		return result;
-	}
-	
 }

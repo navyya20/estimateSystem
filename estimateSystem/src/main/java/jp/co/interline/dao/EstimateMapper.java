@@ -6,36 +6,24 @@ import java.util.HashMap;
 import org.apache.ibatis.session.RowBounds;
 
 import jp.co.interline.dto.DocumentMasterDTO;
-import jp.co.interline.dto.EstimateLanguageDTO;
-import jp.co.interline.dto.EstimateLanguageItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
-import jp.co.interline.dto.EstimateSheet1DTO;
-import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
-import jp.co.interline.dto.EstimateSiDTO;
-import jp.co.interline.dto.EstimateSiItemsRecieveDTO;
-import jp.co.interline.dto.EstimateSolutionDTO;
-import jp.co.interline.dto.EstimateSolutionItemsRecieveDTO;
 import jp.co.interline.dto.SystemDTO;
-import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
-import jp.co.interline.dto.WorkflowInformDTO;
+import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageDTO;
+import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageItemDTO;
+import jp.co.interline.dto.estimateSystem.estimateSi.EstimateSiDTO;
+import jp.co.interline.dto.estimateSystem.estimateSi.EstimateSiItemDTO;
+import jp.co.interline.dto.estimateSystem.estimateSolution.EstimateSolutionDTO;
+import jp.co.interline.dto.estimateSystem.estimateSolution.EstimateSolutionItemDTO;
 
 
 
 
 public interface EstimateMapper {
 
-	int insertEstimateSheet1(EstimateSheet1DTO estimateSheet1);
-
-	int insertEstimateSheet1Items(EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever);
-
 	int getTotalEstimateSheet(UserInformWithOptionDTO userInformWithOption);
 
 	ArrayList<EstimateListDTO> getEstimateList(RowBounds rbs, UserInformWithOptionDTO userInformWithOption);
-
-	int updateEstimateSheet1(EstimateSheet1DTO estimateSheet1);
-
-	int updateEstimateSheet1Items(EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever);
 
 	int deleteSheet(SystemDTO system);
 
@@ -43,30 +31,30 @@ public interface EstimateMapper {
 
 	int insertEstimateSolution(EstimateSolutionDTO estimateSolution);
 
-	int insertEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever);
+	int insertEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItemsReciever);
 
 	SystemDTO getEstimate(SystemDTO system);
 
 	int updateEstimateSolution(EstimateSolutionDTO estimateSolution);
 
-	int updateEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever);
+	int updateEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItemsReciever);
 
 	int insertEstimateLanguage(EstimateLanguageDTO estimateLanguage);
 
-	int insertEstimateLanguageItems(EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever);
+	int insertEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItemsReciever);
 
 	int updateEstimateLanguage(EstimateLanguageDTO estimateLanguage);
 
-	int updateEstimateLanguageItems(EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever);
+	int updateEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItemsReciever);
 	
 
 	int insertEstimateSi(EstimateSiDTO estimateSi);
 
-	int insertEstimateSiItems(EstimateSiItemsRecieveDTO estimateSiItemsReciever);
+	int insertEstimateSiItems(EstimateSiItemDTO estimateSiItemsReciever);
 
 	int updateEstimateSi(EstimateSiDTO estimateSi);
 
-	int updateEstimateSiItems(EstimateSiItemsRecieveDTO estimateSiItemsReciever);
+	int updateEstimateSiItems(EstimateSiItemDTO estimateSiItemsReciever);
 
 	DocumentMasterDTO getDocumentMaster(String documentNum);
 

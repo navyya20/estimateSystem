@@ -5,10 +5,6 @@ SET SESSION FOREIGN_KEY_CHECKS=0;
 /* Drop Tables  erm2 */
 
 DROP TABLE IF EXISTS accountInform;
-DROP TABLE IF EXISTS billSheet1Items;
-DROP TABLE IF EXISTS billSheet1;
-DROP TABLE IF EXISTS estimateSheet1Items;
-DROP TABLE IF EXISTS estimateSheet1;
 DROP TABLE IF EXISTS userInform;
 DROP TABLE IF EXISTS auth;
 DROP TABLE IF EXISTS companyInform;
@@ -60,69 +56,6 @@ CREATE TABLE auth
 ) COMMENT = '権限定義';
 
 
--- 請求書１
-CREATE TABLE billSheet1
-(
-	documentNum varchar(20) NOT NULL COMMENT 'documentNum',
-	-- ユーザ情報の固有ナンバー
-	userNum int NOT NULL COMMENT '作成者 : ユーザ情報の固有ナンバー',
-	userName varchar(30) COMMENT '作成者名前',
-	userDepartment varchar(10) COMMENT '依頼部署',
-	userPosition varchar(10) COMMENT '作成者役職',
-	billDate varchar(20) COMMENT '作成日表示用',
-	-- これがOZRが参照するデータテーブル名になる。
-	-- 例）estimateSheet1 , BillSheet1
-	documentTypeName varchar(20) DEFAULT 'billSheet1' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
-例）estimateSheet1 , BillSheet1',
-	supplier varchar(40) COMMENT '供給者',
-	address varchar(120) COMMENT '供給者住所',
-	post varchar(10) COMMENT '供給者郵便番号',
-	phoneNumber varchar(20) COMMENT '供給者電話番号',
-	representative varchar(30) COMMENT '代表者',
-	stamp varchar(25) COMMENT '印鑑ファイル名',
-	stampFileName varchar(25) COMMENT '印鑑ファイル名',
-	-- logoイメージのファイル名
-	logoFileName varchar(25) COMMENT 'logoFileName : logoイメージのファイル名',
-	receiver varchar(40) COMMENT '顧客名',
-	documentName varchar(40) COMMENT '件名',
-	payCondition varchar(40) COMMENT 'お支払い条件',
-	deadline varchar(20) COMMENT '支払期限',
-	bankName varchar(30) COMMENT '銀行名',
-	branchName varchar(20) COMMENT '支店名',
-	accountName varchar(30) COMMENT '口座名',
-	hurigana varchar(60) COMMENT '口座名フリカナ',
-	accountNumber varchar(20) COMMENT '口座番号',
-	depositeClassification varchar(10) COMMENT '預金区分',
-	note varchar(400) COMMENT '備考',
-	sum bigint COMMENT '総計',
-	tax bigint COMMENT '税金',
-	sumWithTax bigint COMMENT '総計税金込み',
-	sumWithTax2 bigint COMMENT '総計税金込み２',
-	comment varchar(300) COMMENT 'コメント',
-	-- このデータが挿入された日時。又はこのデータが有効になった日時。
-	insertDate datetime DEFAULT CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
-	-- 更新日時
-	updateDate datetime COMMENT 'updateDate : 更新日時',
-	-- データの更新者のuserNum
-	updater int COMMENT '更新者 : データの更新者のuserNum',
-	PRIMARY KEY (documentNum)
-) COMMENT = '請求書１';
-
-
--- 請求書１のアイテム
-CREATE TABLE billSheet1Items
-(
-	rowNum int COMMENT '行数',
-	item varchar(2) COMMENT '項目',
-	itemName varchar(60) COMMENT '項目名',
-	amount int COMMENT '数量',
-	unit varchar(5) COMMENT '単位',
-	unitPrice int COMMENT '単価',
-	price bigint COMMENT '値段',
-	documentNum varchar(20) NOT NULL COMMENT 'documentNum'
-) COMMENT = '請求書１のアイテム';
-
-
 -- 会社情報
 CREATE TABLE companyInform
 (
@@ -162,13 +95,9 @@ CREATE TABLE documentMaster
 	documentNum varchar(20) NOT NULL COMMENT 'documentNum',
 	systemNum int NOT NULL COMMENT 'systemNum',
 	-- これがOZRが参照するデータテーブル名になる。
-	-- 例）estimateSheet1 , BillSheet1
-	documentTypeName varchar(20) NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
-例）estimateSheet1 , BillSheet1',
+	documentTypeName varchar(20) NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。',
 	-- これがOZRが参照するデータテーブル名になる。
-	-- 例）estimateSheet1 , BillSheet1
-	nextDocumentTypeName varchar(20) COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
-例）estimateSheet1 , BillSheet1',
+	nextDocumentTypeName varchar(20) COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。',
 	userNum int NOT NULL COMMENT '作成者',
 	userName varchar(30) COMMENT '作成者名前',
 	userDepartment varchar(10) COMMENT '依頼部署',
@@ -202,9 +131,7 @@ CREATE TABLE documentState
 CREATE TABLE documentType
 (
 	-- これがOZRが参照するデータテーブル名になる。
-	-- 例）estimateSheet1 , BillSheet1
-	documentTypeName varchar(20) NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
-例）estimateSheet1 , BillSheet1',
+	documentTypeName varchar(20) NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。',
 	-- 例）製品用見積書の書式
 	explanation varchar(40) COMMENT '文書種類の説明 : 例）製品用見積書の書式',
 	systemNum int NOT NULL COMMENT 'システムの固有番号',
@@ -223,66 +150,6 @@ CREATE TABLE estimateMaster
 	PRIMARY KEY (documentNum),
     UNIQUE (estimateNum)
 ) COMMENT = '新規テーブル';
-
-
--- 見積書１
-CREATE TABLE estimateSheet1
-(
-	documentNum varchar(20) NOT NULL COMMENT 'documentNum',
-	-- ユーザ情報の固有ナンバー
-	userNum int NOT NULL COMMENT '作成者 : ユーザ情報の固有ナンバー',
-	userName varchar(30) COMMENT '作成者名前',
-	userDepartment varchar(10) COMMENT '依頼部署',
-	userPosition varchar(10) COMMENT '作成者役職',
-	estimateDate varchar(20) COMMENT '作成日表示用',
-	-- これがOZRが参照するデータテーブル名になる。
-	-- 例）estimateSheet1 , BillSheet1
-	documentTypeName varchar(20) DEFAULT 'estimateSheet1' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
-例）estimateSheet1 , BillSheet1',
-	supplier varchar(40) COMMENT '供給者',
-	address varchar(180) COMMENT '供給者住所',
-	post varchar(10) COMMENT '供給者郵便番号',
-	phoneNumber varchar(20) COMMENT '供給者電話番号',
-	representative varchar(30) COMMENT '代表者',
-	stamp varchar(25) COMMENT '印鑑',
-	stampFileName varchar(25) COMMENT '印鑑ファイル名',
-	-- logoイメージのファイル名
-	logoFileName varchar(25) COMMENT 'logoFileName : logoイメージのファイル名',
-	receiver varchar(40) COMMENT '顧客名',
-	documentName varchar(40) COMMENT '件名',
-	deadline varchar(20) COMMENT '納入期限',
-	supplyPoint varchar(120) COMMENT '納入場所',
-	expirationDate varchar(40) COMMENT '見積書の有効期限',
-	payCondition varchar(40) COMMENT '支払い条件',
-	cautions varchar(400) COMMENT '注意事項',
-	sum bigint COMMENT '総計',
-	tax bigint COMMENT '税金',
-	sumWithTax bigint COMMENT '総計税金込み',
-	sumWithTax2 bigint COMMENT '総計税金込み２',
-	comment varchar(300) COMMENT 'コメント',
-	-- このデータが挿入された日時。又はこのデータが有効になった日時。
-	insertDate datetime DEFAULT CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
-	-- 更新日時
-	updateDate datetime COMMENT 'updateDate : 更新日時',
-	-- データの更新者のuserNum
-	updater int COMMENT '更新者 : データの更新者のuserNum',
-	PRIMARY KEY (documentNum)
-) COMMENT = '見積書１';
-
-
--- 見積書１のアイテム
-CREATE TABLE estimateSheet1Items
-(
-	rowNum int COMMENT '行数',
-	item varchar(2) COMMENT '項目',
-	itemName varchar(60) COMMENT '項目名',
-	amount int COMMENT '数量',
-	unit varchar(5) COMMENT '単位',
-	unitPrice int COMMENT '単価',
-	price bigint COMMENT '値段',
-	documentNum varchar(20) NOT NULL COMMENT 'documentNum'
-) COMMENT = '見積書１のアイテム';
-
 
 
 -- 見積書[Solution事業部]
@@ -493,14 +360,6 @@ ALTER TABLE userInform
 ;
 
 
-ALTER TABLE billSheet1Items
-	ADD FOREIGN KEY (documentNum)
-	REFERENCES billSheet1 (documentNum)
-	ON UPDATE RESTRICT
-	ON DELETE CASCADE
-;
-
-
 ALTER TABLE userInform
 	ADD FOREIGN KEY (departmentNum)
 	REFERENCES department (departmentNum)
@@ -541,30 +400,6 @@ ALTER TABLE documentMaster
 ;
 
 
-ALTER TABLE billSheet1
-	ADD FOREIGN KEY (documentNum)
-	REFERENCES estimateMaster (documentNum)
-	ON UPDATE RESTRICT
-	ON DELETE CASCADE
-;
-
-
-ALTER TABLE estimateSheet1
-	ADD FOREIGN KEY (documentNum)
-	REFERENCES estimateMaster (documentNum)
-	ON UPDATE RESTRICT
-	ON DELETE CASCADE
-;
-
-
-ALTER TABLE estimateSheet1Items
-	ADD FOREIGN KEY (documentNum)
-	REFERENCES estimateSheet1 (documentNum)
-	ON UPDATE RESTRICT
-	ON DELETE CASCADE
-;
-
-
 ALTER TABLE userInform
 	ADD FOREIGN KEY (positionNum)
 	REFERENCES position2 (positionNum)
@@ -592,22 +427,6 @@ ALTER TABLE workflow
 ALTER TABLE workflowInform
 	ADD FOREIGN KEY (systemNum)
 	REFERENCES systemType (systemNum)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE billSheet1
-	ADD FOREIGN KEY (userNum)
-	REFERENCES userInform (userNum)
-	ON UPDATE RESTRICT
-	ON DELETE RESTRICT
-;
-
-
-ALTER TABLE estimateSheet1
-	ADD FOREIGN KEY (userNum)
-	REFERENCES userInform (userNum)
 	ON UPDATE RESTRICT
 	ON DELETE RESTRICT
 ;
@@ -666,8 +485,6 @@ INSERT INTO `interline_estimatesystem`.`filenames` (`category`, `fileName`) VALU
 INSERT INTO `interline_estimatesystem`.`systemtype` (`systemNum`,`systemName`) VALUES (1,'estimateSystem');
 INSERT INTO `interline_estimatesystem`.`systemtype` (`systemNum`,`systemName`) VALUES (2,'billSystem');
 
-INSERT INTO `interline_estimatesystem`.`documenttype` (`documentTypeName`,`systemNum`) VALUES ('estimateSheet1',1);
-INSERT INTO `interline_estimatesystem`.`documenttype` (`documentTypeName`,`systemNum`) VALUES ('billSheet1',2);
 INSERT INTO `interline_estimatesystem`.`documenttype` (`documentTypeName`, `systemNum`) VALUES ('estimateSolution', '1');
 INSERT INTO `interline_estimatesystem`.`documenttype` (`documentTypeName`, `systemNum`) VALUES ('billSolution', '2');
 INSERT INTO `interline_estimatesystem`.`documenttype` (`documentTypeName`, `systemNum`) VALUES ('estimateLanguage', '1');
@@ -733,9 +550,8 @@ CREATE TABLE billSolution
 	userPosition varchar(10) COMMENT '作成者役職',
 	billDate varchar(20) COMMENT '作成日表示用',
 	-- これがOZRが参照するデータテーブル名になる。
-	-- 例）estimateSheet1 , BillSheet1
-	documentTypeName varchar(20) DEFAULT 'billSolution' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
-例）estimateSheet1 , BillSheet1',
+	-- 例）billSolution.ozr
+	documentTypeName varchar(20) DEFAULT 'billSolution' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。',
 	supplier varchar(40) COMMENT '供給者',
 	address varchar(120) COMMENT '供給者住所',
 	post varchar(10) COMMENT '供給者郵便番号',
@@ -813,8 +629,7 @@ CREATE TABLE estimateLanguage
 	estimateDate varchar(20) COMMENT '作成日表示用',
 	-- これがOZRが参照するデータテーブル名になる。
 	-- 例）estimateSolution , BillSolution
-	documentTypeName varchar(20) DEFAULT 'estimateLanguage' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
-例）estimateSolution , BillSolution',
+	documentTypeName varchar(20) DEFAULT 'estimateLanguage' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。',
 	supplier varchar(40) COMMENT '供給者',
 	address varchar(180) COMMENT '供給者住所',
 	post varchar(10) COMMENT '供給者郵便番号',
@@ -897,8 +712,7 @@ CREATE TABLE estimateSi
 	estimateDate varchar(20) COMMENT '作成日表示用',
 	-- これがOZRが参照するデータテーブル名になる。
 	-- 例）estimateSolution , BillSolution
-	documentTypeName varchar(20) DEFAULT 'estimateSi' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
-例）estimateSolution , BillSolution',
+	documentTypeName varchar(20) DEFAULT 'estimateSi' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。',
 	supplier varchar(40) COMMENT '供給者',
 	address varchar(180) COMMENT '供給者住所',
 	post varchar(10) COMMENT '供給者郵便番号',
@@ -973,8 +787,7 @@ CREATE TABLE billSi
 	billDate varchar(20) COMMENT '作成日表示用',
 	-- これがOZRが参照するデータテーブル名になる。
 	-- 例）estimateSolution , BillSolution
-	documentTypeName varchar(20) DEFAULT 'billSi' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。
-例）estimateSolution , BillSolution',
+	documentTypeName varchar(20) DEFAULT 'billSi' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。',
 	supplier varchar(40) COMMENT '供給者',
 	address varchar(180) COMMENT '供給者住所',
 	post varchar(10) COMMENT '供給者郵便番号',
@@ -1152,7 +965,7 @@ CREATE TABLE billC
 	billDate varchar(20) COMMENT '作成日表示用',
 	-- これがOZRが参照するデータテーブル名になる。
 	-- 例）estimateSolution , BillSolution
-	documentTypeName varchar(20) DEFAULT 'billC' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。 例）estimateSolution , BillSolution',
+	documentTypeName varchar(20) DEFAULT 'billC' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。',
 	address varchar(400) COMMENT '供給者住所',
 	stamp varchar(25) COMMENT '印鑑',
 	stampFileName varchar(25) COMMENT '印鑑ファイル名',
@@ -1232,7 +1045,7 @@ CREATE TABLE billD
 	billDate varchar(20) COMMENT '作成日表示用',
 	-- これがOZRが参照するデータテーブル名になる。
 	-- 例）estimateSolution , BillSolution
-	documentTypeName varchar(20) DEFAULT 'billC' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。 例）estimateSolution , BillSolution',
+	documentTypeName varchar(20) DEFAULT 'billC' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。',
 	address varchar(400) COMMENT '供給者住所',
 	stamp varchar(25) COMMENT '印鑑',
 	stampFileName varchar(25) COMMENT '印鑑ファイル名',

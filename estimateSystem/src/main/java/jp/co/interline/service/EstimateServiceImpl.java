@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -15,19 +17,17 @@ import jp.co.interline.dao.EstimateDAO;
 import jp.co.interline.dao.SystemDAO;
 import jp.co.interline.dao.WorkflowDAO;
 import jp.co.interline.dto.DocumentMasterDTO;
-import jp.co.interline.dto.EstimateLanguageDTO;
-import jp.co.interline.dto.EstimateLanguageItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
-import jp.co.interline.dto.EstimateSheet1DTO;
-import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
-import jp.co.interline.dto.EstimateSiDTO;
-import jp.co.interline.dto.EstimateSiItemsRecieveDTO;
-import jp.co.interline.dto.EstimateSolutionDTO;
-import jp.co.interline.dto.EstimateSolutionItemsRecieveDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
-import jp.co.interline.dto.testDTO;
+import jp.co.interline.dto.estimateSystem.EstimateCommonDTO;
+import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageDTO;
+import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageItemDTO;
+import jp.co.interline.dto.estimateSystem.estimateSi.EstimateSiDTO;
+import jp.co.interline.dto.estimateSystem.estimateSi.EstimateSiItemDTO;
+import jp.co.interline.dto.estimateSystem.estimateSolution.EstimateSolutionDTO;
+import jp.co.interline.dto.estimateSystem.estimateSolution.EstimateSolutionItemDTO;
 
 @Service
 public class EstimateServiceImpl implements EstimateService {
@@ -171,7 +171,7 @@ public class EstimateServiceImpl implements EstimateService {
 	}
 
 	@Override
-	public int insertEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever) {
+	public int insertEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItemsReciever) {
 		int result = estimateDao.insertEstimateSolutionItems(estimateSolutionItemsReciever);
 		return result;
 	}
@@ -188,7 +188,7 @@ public class EstimateServiceImpl implements EstimateService {
 	}
 
 	@Override
-	public int updateEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever) {
+	public int updateEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItemsReciever) {
 		int result = estimateDao.updateEstimateSolutionItems(estimateSolutionItemsReciever);
 		return result;
 	}
@@ -211,7 +211,7 @@ public class EstimateServiceImpl implements EstimateService {
 	}
 
 	@Override
-	public int insertEstimateLanguageItems(EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever) {
+	public int insertEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItemsReciever) {
 		int result = estimateDao.insertEstimateLanguageItems(estimateLanguageItemsReciever);
 		return result;
 	}
@@ -228,7 +228,7 @@ public class EstimateServiceImpl implements EstimateService {
 	}
 
 	@Override
-	public int updateEstimateLanguageItems(EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever) {
+	public int updateEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItemsReciever) {
 		int result = estimateDao.updateEstimateLanguageItems(estimateLanguageItemsReciever);
 		return result;
 	}
@@ -251,7 +251,7 @@ public class EstimateServiceImpl implements EstimateService {
 	}
 
 	@Override
-	public int insertEstimateSiItems(EstimateSiItemsRecieveDTO estimateSiItemsReciever) {
+	public int insertEstimateSiItems(EstimateSiItemDTO estimateSiItemsReciever) {
 		int result = estimateDao.insertEstimateSiItems(estimateSiItemsReciever);
 		return result;
 	}
@@ -268,16 +268,49 @@ public class EstimateServiceImpl implements EstimateService {
 	}
 
 	@Override
-	public int updateEstimateSiItems(EstimateSiItemsRecieveDTO estimateSiItemsReciever) {
+	public int updateEstimateSiItems(EstimateSiItemDTO estimateSiItemsReciever) {
 		int result = estimateDao.updateEstimateSiItems(estimateSiItemsReciever);
 		return result;
 	}
 //-------------------------------------------------------------------------------------------------------	
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
+	@Override
+	public <T extends EstimateCommonDTO> HashMap<String, String> insertDocument(UserInformDTO user, HttpSession session, Model model, String jsonStr, Class<T> type) {
+		T documentDTO = jacksonUtility.readValue(jsonStr, type);
+		//채번
+		String documentNum = this.getDocoumentNum();
+		//기본정보등록
+		documentDTO.setDocumentNum(documentNum);
+		documentDTO.setUpdater(user.getUserNum());
+		
+		HashMap<String, String> result = new HashMap<String, String>();
+		
+		int result1 = estimateDao.insertDocument(documentDTO);
+		if(result1 != 1) {
+			result.put("errorFlag", "1");
+			result.put("error", "見積基本情報格納エラー");
+			return result;
+		}
+		result.put("errorFlag", "0");
+		result.put("documentNum", documentNum);
+		return result;
+	}
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
+	@Override
+	public <T extends EstimateCommonDTO> HashMap<String, String> updateDocument(UserInformDTO user, HttpSession session, Model model, String jsonStr, Class<T> type) {
+		T documentDTO = jacksonUtility.readValue(jsonStr, type);
+		HashMap<String, String> result = new HashMap<String, String>();
+		int result1 = estimateDao.updateDocument(documentDTO);
+		if(result1 != 1) {
+			result.put("errorFlag", "1");
+			result.put("error", "見積基本情報格納エラー");
+			return result;
+		}
+		result.put("errorFlag", "0");
+		result.put("documentNum", documentDTO.getDocumentNum());
+		return result;
+	}
 
-
-	
-
-	
 	
 	@Override
 	public void test(String s) {
@@ -288,4 +321,5 @@ public class EstimateServiceImpl implements EstimateService {
 	public void test2(String s) {
 		estimateDao.test2(s);
 	}
+
 }

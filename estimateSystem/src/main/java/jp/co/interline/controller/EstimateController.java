@@ -1,15 +1,10 @@
 package jp.co.interline.controller;
 
-import java.io.File;
-import java.lang.reflect.Array;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,32 +17,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
-import jp.co.interline.dto.AccountDTO;
-import jp.co.interline.dto.BillSheet1DTO;
-import jp.co.interline.dto.CompanyDTO;
 import jp.co.interline.dto.DocumentMasterDTO;
-import jp.co.interline.dto.EstimateLanguageDTO;
-import jp.co.interline.dto.EstimateLanguageItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
-import jp.co.interline.dto.EstimateSheet1DTO;
-import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
-import jp.co.interline.dto.EstimateSiDTO;
-import jp.co.interline.dto.EstimateSiItemsRecieveDTO;
-import jp.co.interline.dto.EstimateSolutionDTO;
-import jp.co.interline.dto.EstimateSolutionItemsRecieveDTO;
-import jp.co.interline.dto.FileNamesDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
-import jp.co.interline.dto.WorkflowInformDTO;
-import jp.co.interline.service.AccountService;
-import jp.co.interline.service.CompanyService;
+import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageDTO;
+import jp.co.interline.dto.estimateSystem.estimateSi.EstimateSiDTO;
+import jp.co.interline.dto.estimateSystem.estimateSolution.EstimateSolutionDTO;
 import jp.co.interline.service.EstimateService;
 import jp.co.interline.service.WorkflowService;
 
@@ -62,8 +44,6 @@ public class EstimateController {
 	EstimateService estimateService;
 	
 	private static final Logger logger = LoggerFactory.getLogger(EstimateController.class);
-	
-	
 	/*
 	 * option:order by절에 들어갈 스트링
 	 * page: pageNavigator를 위한 page수
@@ -89,7 +69,6 @@ public class EstimateController {
 	public String selectEstimate(HttpSession session, Model model) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		logger.debug("EstimateController.selectEstimate,user:{}",user.getUserNum());
-		
 		return "estimateSystem/estimateSelect";
 	}
 	
@@ -148,63 +127,17 @@ public class EstimateController {
 		return "redirect:write"+documentTypeName.substring(0, 1).toUpperCase()+documentTypeName.substring(1);
 	}
 	
-//-----------------------------------------------------------------------------------------------------------------------------------
-	
-	
-/////////////////////////////////////estimateSolution///////////////////////////////////////////////////
-//write, write copy, insert, mod, update
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
-	@RequestMapping(value = "/all/writeEstimateSolution", method = RequestMethod.GET)
-	public String writeEstimateSolution(HttpSession session, Model model, String copy) {
+	public String getWriteDocumentPage(HttpSession session, Model model, String copy, String documentTypeName) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		Gson gson = new Gson();
 		String userString = gson.toJson(user);
 		model.addAttribute("user", userString);
 		model.addAttribute("copy", copy);
-		return "estimateSystem/estimateSolution/writeEstimateSolution";
+		return "estimateSystem/"+documentTypeName+"/write"+documentTypeName.substring(0, 1).toUpperCase()+documentTypeName.substring(1);
 	}
-	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
-	@ResponseBody
-	@RequestMapping(value = "/all/insertEstimateSolution", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-	public HashMap<String, String> insertEstimateSolution(HttpSession session, Model model, EstimateSolutionDTO estimateSolution, EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever) {
+	public String getModDocumentPage(HttpSession session, Model model, String documentNum, String documentTypeName) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		logger.debug("EstimateController.insertEstimateSolution,user:{}",user.getUserNum());
-		
-		//채번
-		String documentNum = estimateService.getDocoumentNum();
-		//기본정보등록
-		estimateSolution.setDocumentNum(documentNum);
-		estimateSolution.setUpdater(user.getUserNum());
-		
-		HashMap<String, String> result = new HashMap<String, String>();
-		
-		int result1 = estimateService.insertEstimateSolution(estimateSolution);
-		if(result1 != 1) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積基本情報格納エラー");
-			return result;
-		}
-		//아이템등록
-		estimateSolutionItemsReciever.setDocumentNum(documentNum);
-		int result2 = estimateService.insertEstimateSolutionItems(estimateSolutionItemsReciever);
-		if (result2 ==0) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積ITEM情報格納エラー");
-			return result;
-		}
-		result.put("errorFlag", "0");
-		result.put("documentNum", documentNum);
-		
-		return result;
-	}
-	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
-	@RequestMapping(value = "/all/modEstimateSolution", method = RequestMethod.POST)
-	public String modEstimateSolution(HttpSession session, Model model, String documentNum, String documentTypeName) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		//state를 가져옴.
-		//documentTypeName에따라 조인되는 DB가 다르니 주의!
+		//state를 가져옴. documentTypeName에따라 조인되는 DB가 다르니 주의!
 		SystemDTO system = new SystemDTO();
 		system.setDocumentNum(documentNum);
 		system.setDocumentTypeName(documentTypeName);
@@ -216,241 +149,95 @@ public class EstimateController {
 		Gson gson = new Gson();
 		String userString = gson.toJson(user);
 		model.addAttribute("user", userString);
-		return "estimateSystem/estimateSolution/modEstimateSolution";
+		return "estimateSystem/"+documentTypeName+"/mod"+documentTypeName.substring(0, 1).toUpperCase()+documentTypeName.substring(1);
 	}
 	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
+//-----------------------------------------------------------------------------------------------------------------------------------
+	
+	
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////estimateSolution///////////////////////////////////////////////////
+	@RequestMapping(value = "/all/writeEstimateSolution", method = RequestMethod.GET)
+	public String writeEstimateSolution(HttpSession session, Model model, String copy) {
+		return getWriteDocumentPage(session, model, copy, "estimateSolution");
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/all/insertEstimateSolution", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public HashMap<String, String> insertEstimateSolution(HttpSession session, Model model, String jsonStr) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("EstimateController.insertEstimateSolution,user:{}",user.getUserNum());
+		return estimateService.insertDocument(user, session, model, jsonStr, EstimateSolutionDTO.class);
+	}
+	
+	@RequestMapping(value = "/all/modEstimateSolution", method = RequestMethod.POST)
+	public String modEstimateSolution(HttpSession session, Model model, String documentNum, String documentTypeName) {
+		return getModDocumentPage(session, model, documentNum, documentTypeName);
+	}
+	
 	@ResponseBody
 	@RequestMapping(value = "/all/updateEstimateSolution", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-	public HashMap<String, String> updateEstimateSolution(HttpSession session, Model model, EstimateSolutionDTO estimateSolution, EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever) {
+	public HashMap<String, String> updateEstimateSolution(HttpSession session, Model model, String jsonStr) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		System.out.println(estimateSolution);
-		System.out.println(estimateSolutionItemsReciever);
-		
-		HashMap<String, String> result = new HashMap<String, String>();
-		//기본정보등록
-		int result1 = estimateService.updateEstimateSolution(estimateSolution);
-		if(result1 != 1) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積基本情報格納エラー");
-			return result;
-		}
-		//아이템등록
-		estimateSolutionItemsReciever.setDocumentNum(estimateSolution.getDocumentNum());
-		int result2 = estimateService.updateEstimateSolutionItems(estimateSolutionItemsReciever);
-		if (result2 ==0) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積ITEM情報格納エラー");
-			return result;
-		}
-		result.put("errorFlag", "0");
-		result.put("documentNum", estimateSolution.getDocumentNum());
-		return result;
+		logger.debug("BillController.updateEstimateSolution,user:{}",user.getUserNum());
+		return estimateService.updateDocument(user, session, model, jsonStr, EstimateSolutionDTO.class);
 	}
 //-----------------------------------------------------------------------------------------------------------------------------------	
 
 	
-	
-	
-	
-	
-	
 /////////////////////////////////////estimateLanguage///////////////////////////////////////////////////
-//write, write copy, insert, mod, update
-	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/writeEstimateLanguage", method = RequestMethod.GET)
 	public String writeEstimateLanguage(HttpSession session, Model model, String copy) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		Gson gson = new Gson();
-		String userString = gson.toJson(user);
-		model.addAttribute("user", userString);
-		model.addAttribute("copy", copy);
-		return "estimateSystem/estimateLanguage/writeEstimateLanguage";
+		return getWriteDocumentPage(session, model, copy, "estimateLanguage");
 	}
 	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/insertEstimateLanguage", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-	public HashMap<String, String> insertEstimateLanguage(HttpSession session, Model model, EstimateLanguageDTO estimateLanguage, EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever) {
+	public HashMap<String, String> insertEstimateLanguage(HttpSession session, Model model, String jsonStr) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		logger.debug("EstimateController.insertEstimateLanguage,user:{}",user.getUserNum());
-		
-		//채번
-		String documentNum = estimateService.getDocoumentNum();
-		//기본정보등록
-		estimateLanguage.setDocumentNum(documentNum);
-		estimateLanguage.setUpdater(user.getUserNum());
-		
-		HashMap<String, String> result = new HashMap<String, String>();
-		
-		int result1 = estimateService.insertEstimateLanguage(estimateLanguage);
-		if(result1 != 1) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積基本情報格納エラー");
-			return result;
-		}
-		//아이템등록
-		estimateLanguageItemsReciever.setDocumentNum(documentNum);
-		int result2 = estimateService.insertEstimateLanguageItems(estimateLanguageItemsReciever);
-		if (result2 ==0) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積ITEM情報格納エラー");
-			return result;
-		}
-		result.put("errorFlag", "0");
-		result.put("documentNum", documentNum);
-		
-		return result;
+		return estimateService.insertDocument(user, session, model, jsonStr, EstimateLanguageDTO.class);
 	}
 	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/modEstimateLanguage", method = RequestMethod.POST)
 	public String modEstimateLanguage(HttpSession session, Model model, String documentNum, String documentTypeName) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		//state를 가져옴.
-		//documentTypeName에따라 조인되는 DB가 다르니 주의!
-		SystemDTO system = new SystemDTO();
-		system.setDocumentNum(documentNum);
-		system.setDocumentTypeName(documentTypeName);
-		SystemDTO sys = estimateService.getEstimate(system);
-		model.addAttribute("state", sys.getState());
-		model.addAttribute("userNum", sys.getUserNum());
-		model.addAttribute("documentNum", documentNum);
-		
-		Gson gson = new Gson();
-		String userString = gson.toJson(user);
-		model.addAttribute("user", userString);
-		return "estimateSystem/estimateLanguage/modEstimateLanguage";
+		return getModDocumentPage(session, model, documentNum, documentTypeName);
 	}
 	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/updateEstimateLanguage", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-	public HashMap<String, String> updateEstimateLanguage(HttpSession session, Model model, EstimateLanguageDTO estimateLanguage, EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever) {
+	public HashMap<String, String> updateEstimateLanguage(HttpSession session, Model model, String jsonStr) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		System.out.println(estimateLanguage);
-		System.out.println(estimateLanguageItemsReciever);
-		
-		HashMap<String, String> result = new HashMap<String, String>();
-		//기본정보등록
-		int result1 = estimateService.updateEstimateLanguage(estimateLanguage);
-		if(result1 != 1) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積基本情報格納エラー");
-			return result;
-		}
-		//아이템등록
-		estimateLanguageItemsReciever.setDocumentNum(estimateLanguage.getDocumentNum());
-		int result2 = estimateService.updateEstimateLanguageItems(estimateLanguageItemsReciever);
-		if (result2 ==0) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積ITEM情報格納エラー");
-			return result;
-		}
-		result.put("errorFlag", "0");
-		result.put("documentNum", estimateLanguage.getDocumentNum());
-		return result;
+		logger.debug("BillController.updateEstimateLanguage,user:{}",user.getUserNum());
+		return estimateService.updateDocument(user, session, model, jsonStr, EstimateLanguageDTO.class);
 	}
 //-----------------------------------------------------------------------------------------------------------------------------------	
 	
-	
-	
 /////////////////////////////////////estimateSi///////////////////////////////////////////////////
-//write, write copy, insert, mod, update	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/writeEstimateSi", method = RequestMethod.GET)
 	public String writeEstimateSi(HttpSession session, Model model, String copy) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		Gson gson = new Gson();
-		String userString = gson.toJson(user);
-		model.addAttribute("user", userString);
-		model.addAttribute("copy", copy);
-		return "estimateSystem/estimateSi/writeEstimateSi";
+		return getWriteDocumentPage(session, model, copy, "estimateSi");
 	}
 	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/insertEstimateSi", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-	public HashMap<String, String> insertEstimateSi(HttpSession session, Model model, EstimateSiDTO estimateSi, EstimateSiItemsRecieveDTO estimateSiItemsReciever) {
+	public HashMap<String, String> insertEstimateSi(HttpSession session, Model model, String jsonStr) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		logger.debug("EstimateController.insertEstimateSi,user:{}",user.getUserNum());
-		
-		//채번
-		String documentNum = estimateService.getDocoumentNum();
-		//기본정보등록
-		estimateSi.setDocumentNum(documentNum);
-		estimateSi.setUpdater(user.getUserNum());
-		
-		HashMap<String, String> result = new HashMap<String, String>();
-		
-		int result1 = estimateService.insertEstimateSi(estimateSi);
-		if(result1 != 1) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積基本情報格納エラー");
-			return result;
-		}
-		//아이템등록
-		estimateSiItemsReciever.setDocumentNum(documentNum);
-		int result2 = estimateService.insertEstimateSiItems(estimateSiItemsReciever);
-		if (result2 ==0) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積ITEM情報格納エラー");
-			return result;
-		}
-		result.put("errorFlag", "0");
-		result.put("documentNum", documentNum);
-		
-		return result;
+		return estimateService.insertDocument(user, session, model, jsonStr, EstimateSiDTO.class);
 	}
 	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/modEstimateSi", method = RequestMethod.POST)
 	public String modEstimateSi(HttpSession session, Model model, String documentNum, String documentTypeName) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		//state를 가져옴.
-		//documentTypeName에따라 조인되는 DB가 다르니 주의!
-		SystemDTO system = new SystemDTO();
-		system.setDocumentNum(documentNum);
-		system.setDocumentTypeName(documentTypeName);
-		SystemDTO sys = estimateService.getEstimate(system);
-		model.addAttribute("state", sys.getState());
-		model.addAttribute("userNum", sys.getUserNum());
-		model.addAttribute("documentNum", documentNum);
-		
-		Gson gson = new Gson();
-		String userString = gson.toJson(user);
-		model.addAttribute("user", userString);
-		return "estimateSystem/estimateSi/modEstimateSi";
+		return getModDocumentPage(session, model, documentNum, documentTypeName);
 	}
 	
-	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
 	@RequestMapping(value = "/all/updateEstimateSi", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-	public HashMap<String, String> updateEstimateSi(HttpSession session, Model model, EstimateSiDTO estimateSi, EstimateSiItemsRecieveDTO estimateSiItemsReciever) {
+	public HashMap<String, String> updateEstimateSi(HttpSession session, Model model, String jsonStr) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		System.out.println(estimateSi);
-		System.out.println(estimateSiItemsReciever);
-		
-		HashMap<String, String> result = new HashMap<String, String>();
-		//기본정보등록
-		int result1 = estimateService.updateEstimateSi(estimateSi);
-		if(result1 != 1) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積基本情報格納エラー");
-			return result;
-		}
-		//아이템등록
-		estimateSiItemsReciever.setDocumentNum(estimateSi.getDocumentNum());
-		int result2 = estimateService.updateEstimateSiItems(estimateSiItemsReciever);
-		if (result2 ==0) {
-			result.put("errorFlag", "1");
-			result.put("error", "見積ITEM情報格納エラー");
-			return result;
-		}
-		result.put("errorFlag", "0");
-		result.put("documentNum", estimateSi.getDocumentNum());
-		return result;
+		logger.debug("BillController.updateEstimateSi,user:{}",user.getUserNum());
+		return estimateService.updateDocument(user, session, model, jsonStr, EstimateSiDTO.class);
 	}
 //-----------------------------------------------------------------------------------------------------------------------------------	
 	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})

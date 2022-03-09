@@ -123,275 +123,39 @@
 		select * from ${documentTypeName}items where documentNum = #{documentNum}
 	</select>
 	
-	
-<!-- estimateSheet1  insert update -->
-	<insert id="insertEstimateSheet1" parameterType="estimateSheet1DTO">
-		insert into documentMaster (
-			documentNum,
-			systemNum,
-			documentTypeName,
-			nextDocumentTypeName,
-			userNum, userName, userDepartment, userPosition,
-			workflowNum,
-			state,
-			updateDate,
-			updater
-		)
-		values(
-			#{documentNum},
-			#{systemNum},
-			#{documentTypeName},
-			#{nextDocumentTypeName},
-			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
-			<choose>
-				<when test="workflowNum == 0">
-					null,
-				</when>
-				<when test="workflowNum != 0">
-					#{workflowNum},
-				</when>
-			</choose>
-			#{state},
-			CURRENT_TIMESTAMP,
-			#{updater}
-		);
-		
-		insert into estimateMaster(
-			documentNum,
-			receiver,
-			documentName
-		)
-		values(
-			#{documentNum},
-			#{receiver},
-			#{documentName}
-		);
-		
-		insert into estimateSheet1 (
-			documentNum,
-			documentTypeName,
-			userNum, userName, userDepartment, userPosition,
-			estimateDate,
-			supplier,
-			address,
-			post,
-			phoneNumber,
-			representative,
-			stamp, stampFileName, logoFileName,
-			receiver,
-			documentName,
-			deadline,
-			supplyPoint,
-			expirationDate,
-			payCondition,
-			cautions,
-			sum, tax, sumWithTax, sumWithTax2,	
-			comment
-		) 
-		values(
-			#{documentNum},
-			#{documentTypeName},
-			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
-			#{estimateDate},
-			#{supplier},
-			#{address},
-			#{post},
-			#{phoneNumber},
-			#{representative},
-			#{stamp}, #{stampFileName}, #{logoFileName},
-			#{receiver},
-			#{documentName},
-			#{deadline},
-			#{supplyPoint},
-			#{expirationDate},
-			#{payCondition},
-			#{cautions},
-			#{sum}, #{tax}, #{sumWithTax}, #{sumWithTax2},	
-			#{comment}
-		)
-	</insert>
-	
-	<insert id="insertEstimateSheet1Items" parameterType="estimateSheet1ItemsRecieveDTO">
-		insert into estimateSheet1Items (
-			documentNum,rowNum,item,itemName,amount,unit,unitPrice,price
-		)
-		values
-		(#{documentNum},#{rowNum1},#{item1},#{itemName1},${amount1},#{unit1},${unitPrice1},${price1}),
-		(#{documentNum},#{rowNum2},#{item2},#{itemName2},${amount2},#{unit2},${unitPrice2},${price2}),
-		(#{documentNum},#{rowNum3},#{item3},#{itemName3},${amount3},#{unit3},${unitPrice3},${price3}),
-		(#{documentNum},#{rowNum4},#{item4},#{itemName4},${amount4},#{unit4},${unitPrice4},${price4}),
-		(#{documentNum},#{rowNum5},#{item5},#{itemName5},${amount5},#{unit5},${unitPrice5},${price5}),
-		(#{documentNum},#{rowNum6},#{item6},#{itemName6},${amount6},#{unit6},${unitPrice6},${price6}),
-		(#{documentNum},#{rowNum7},#{item7},#{itemName7},${amount7},#{unit7},${unitPrice7},${price7}),
-		(#{documentNum},#{rowNum8},#{item8},#{itemName8},${amount8},#{unit8},${unitPrice8},${price8}),
-		(#{documentNum},#{rowNum9},#{item9},#{itemName9},${amount9},#{unit9},${unitPrice9},${price9}),
-		(#{documentNum},#{rowNum10},#{item10},#{itemName10},${amount10},#{unit10},${unitPrice10},${price10}),
-		(#{documentNum},#{rowNum11},#{item11},#{itemName11},${amount11},#{unit11},${unitPrice11},${price11}),
-		(#{documentNum},#{rowNum12},#{item12},#{itemName12},${amount12},#{unit12},${unitPrice12},${price12})
-	</insert>
-	
-	<update id="updateEstimateSheet1" parameterType="estimateSheet1DTO">
-		update documentMaster set
-			userName = #{userName},
-			updateDate = CURRENT_TIMESTAMP,
-			updater = #{updater}
-		where
-			documentNum = #{documentNum};
-			
-		update estimateSheet1 set
-			userNum = #{userNum},
-			userName = #{userName},
-			userDepartment = #{userDepartment},
-			userPosition = #{userPosition},
-			estimateDate = #{estimateDate},
-			supplier = #{supplier},
-			address = #{address},
-			post = #{post},
-			phoneNumber = #{phoneNumber},
-			representative = #{representative},
-			stamp = #{stamp},
-			stampFileName = #{stampFileName},
-			logoFileName = #{logoFileName},
-			receiver = #{receiver},
-			documentName = #{documentName},
-			deadline = #{deadline},
-			supplyPoint = #{supplyPoint},
-			expirationDate = #{expirationDate},
-			payCondition = #{payCondition},
-			cautions = #{cautions},
-			sum = #{sum},
-			tax = #{tax},
-			sumWithTax = #{sumWithTax},
-			sumWithTax2 = #{sumWithTax2},	
-			comment = #{comment},
-			updateDate = CURRENT_TIMESTAMP,
-			updater = #{updater}
-		where
-			documentNum = #{documentNum}
-	</update>
-	
-	<update id="updateEstimateSheet1Items" parameterType="estimateSheet1ItemsRecieveDTO">
-		update estimateSheet1Items set
-			item = #{item1}, itemName = #{itemName1}, amount = ${amount1}, unit = #{unit1}, unitPrice = ${unitPrice1}, price = ${price1}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum1};
-			
-		update estimateSheet1Items set
-			item = #{item2}, itemName = #{itemName2}, amount = ${amount2}, unit = #{unit2}, unitPrice = ${unitPrice2}, price = ${price2}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum2};
-			
-		update estimateSheet1Items set
-			item = #{item3}, itemName = #{itemName3}, amount = ${amount3}, unit = #{unit3}, unitPrice = ${unitPrice3}, price = ${price3}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum3};
-			
-		update estimateSheet1Items set
-			item = #{item4}, itemName = #{itemName4}, amount = ${amount4}, unit = #{unit4}, unitPrice = ${unitPrice4}, price = ${price4}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum4};
-			
-		update estimateSheet1Items set
-			item = #{item5}, itemName = #{itemName5}, amount = ${amount5}, unit = #{unit5}, unitPrice = ${unitPrice5}, price = ${price5}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum5};
-			
-		update estimateSheet1Items set
-			item = #{item6}, itemName = #{itemName6}, amount = ${amount6}, unit = #{unit6}, unitPrice = ${unitPrice6}, price = ${price6}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum6};
-			
-		update estimateSheet1Items set
-			item = #{item7}, itemName = #{itemName7}, amount = ${amount7}, unit = #{unit7}, unitPrice = ${unitPrice7}, price = ${price7}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum7};
-			
-		update estimateSheet1Items set
-			item = #{item8}, itemName = #{itemName8}, amount = ${amount8}, unit = #{unit8}, unitPrice = ${unitPrice8}, price = ${price8}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum8};
-			
-		update estimateSheet1Items set
-			item = #{item9}, itemName = #{itemName9}, amount = ${amount9}, unit = #{unit9}, unitPrice = ${unitPrice9}, price = ${price9}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum9};
-			
-		update estimateSheet1Items set
-			item = #{item10}, itemName = #{itemName10}, amount = ${amount10}, unit = #{unit10}, unitPrice = ${unitPrice10}, price = ${price10}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum10};
-			
-		update estimateSheet1Items set
-			item = #{item11}, itemName = #{itemName11}, amount = ${amount11}, unit = #{unit11}, unitPrice = ${unitPrice11}, price = ${price11}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum11};
-		
-		update estimateSheet1Items set
-			item = #{item12}, itemName = #{itemName12}, amount = ${amount12}, unit = #{unit12}, unitPrice = ${unitPrice12}, price = ${price12}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum12}
-	</update>
-	
-	
-	
-	
-	
-	
-<!-- estimateSolution -->
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- //////////////////////////////////estimateSolution/////////////////////////////////////////////// -->
 	<insert id="insertEstimateSolution" parameterType="estimateSolutionDTO">
 		insert into documentMaster (
-			documentNum,
-			systemNum,
-			documentTypeName,
-			nextDocumentTypeName,
+			documentNum,systemNum,documentTypeName,nextDocumentTypeName,
 			userNum, userName, userDepartment, userPosition,
 			workflowNum,
-			state,
-			updateDate,
-			updater
+			state,updateDate,updater
 		)
 		values(
-			#{documentNum},
-			#{systemNum},
-			#{documentTypeName},
-			#{nextDocumentTypeName},
+			#{documentNum},#{systemNum},#{documentTypeName},#{nextDocumentTypeName},
 			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
 			<choose>
-				<when test="workflowNum == 0">
-					null,
-				</when>
-				<when test="workflowNum != 0">
-					#{workflowNum},
-				</when>
+				<when test="workflowNum == 0">null,</when>
+				<when test="workflowNum != 0">#{workflowNum},</when>
 			</choose>
-			#{state},
-			CURRENT_TIMESTAMP,
-			#{updater}
+			#{state},CURRENT_TIMESTAMP,#{updater}
 		);
 		
 		insert into estimateMaster(
-			documentNum,
-			receiver,
-			documentName
+			documentNum,receiver,documentName
 		)
 		values(
-			#{documentNum},
-			#{receiver},
-			#{documentName}
+			#{documentNum},#{receiver},#{documentName}
 		);
 		
 		insert into estimateSolution (
-			documentNum,
-			documentTypeName,
+			documentNum,documentTypeName,estimateDate,
 			userNum, userName, userDepartment, userPosition,
-			estimateDate,
-			supplier,
-			address,
-			post,
-			phoneNumber,
-			representative,
-			stamp, stampFileName, logoFileName, incharge,
+			stamp, stampFileName, logoFileName,
+			
 			receiver,
+			address,
 			documentName,
 			deadline,
 			supplyPoint,
@@ -402,17 +166,12 @@
 			comment
 		) 
 		values(
-			#{documentNum},
-			#{documentTypeName},
+			#{documentNum},#{documentTypeName},#{estimateDate},
 			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
-			#{estimateDate},
-			#{supplier},
-			#{address},
-			#{post},
-			#{phoneNumber},
-			#{representative},
-			#{stamp}, #{stampFileName}, #{logoFileName}, #{incharge},
+			#{stamp}, #{stampFileName}, #{logoFileName},
+			
 			#{receiver},
+			#{address},
 			#{documentName},
 			#{deadline},
 			#{supplyPoint},
@@ -421,26 +180,15 @@
 			#{cautions},
 			#{sum}, #{taxRate}, #{tax}, #{sumWithTax}, #{sumWithTax2},	
 			#{comment}
-		)
-	</insert>
-	
-	<insert id="insertEstimateSolutionItems" parameterType="estimateSolutionItemsRecieveDTO">
+		);
+		
 		insert into estimateSolutionItems (
 			documentNum,rowNum,item,itemName,amount,unit,unitPrice,price
 		)
 		values
-		(#{documentNum},#{rowNum1},#{item1},#{itemName1},${amount1},#{unit1},${unitPrice1},${price1}),
-		(#{documentNum},#{rowNum2},#{item2},#{itemName2},${amount2},#{unit2},${unitPrice2},${price2}),
-		(#{documentNum},#{rowNum3},#{item3},#{itemName3},${amount3},#{unit3},${unitPrice3},${price3}),
-		(#{documentNum},#{rowNum4},#{item4},#{itemName4},${amount4},#{unit4},${unitPrice4},${price4}),
-		(#{documentNum},#{rowNum5},#{item5},#{itemName5},${amount5},#{unit5},${unitPrice5},${price5}),
-		(#{documentNum},#{rowNum6},#{item6},#{itemName6},${amount6},#{unit6},${unitPrice6},${price6}),
-		(#{documentNum},#{rowNum7},#{item7},#{itemName7},${amount7},#{unit7},${unitPrice7},${price7}),
-		(#{documentNum},#{rowNum8},#{item8},#{itemName8},${amount8},#{unit8},${unitPrice8},${price8}),
-		(#{documentNum},#{rowNum9},#{item9},#{itemName9},${amount9},#{unit9},${unitPrice9},${price9}),
-		(#{documentNum},#{rowNum10},#{item10},#{itemName10},${amount10},#{unit10},${unitPrice10},${price10}),
-		(#{documentNum},#{rowNum11},#{item11},#{itemName11},${amount11},#{unit11},${unitPrice11},${price11}),
-		(#{documentNum},#{rowNum12},#{item12},#{itemName12},${amount12},#{unit12},${unitPrice12},${price12})
+			<foreach collection="items" item="item" separator=",">
+				(#{documentNum},#{item.rowNum},#{item.item},#{item.itemName},${item.amount},#{item.unit},${item.unitPrice},${item.price})
+			</foreach>
 	</insert>
 	
 	<update id="updateEstimateSolution" parameterType="estimateSolutionDTO">
@@ -457,16 +205,12 @@
 			userDepartment = #{userDepartment},
 			userPosition = #{userPosition},
 			estimateDate = #{estimateDate},
-			supplier = #{supplier},
-			address = #{address},
-			post = #{post},
-			phoneNumber = #{phoneNumber},
-			representative = #{representative},
+			
 			stamp = #{stamp},
 			stampFileName = #{stampFileName},
 			logoFileName = #{logoFileName},
-			incharge = #{incharge},
 			receiver = #{receiver},
+			address = #{address},
 			documentName = #{documentName},
 			deadline = #{deadline},
 			supplyPoint = #{supplyPoint},
@@ -482,131 +226,47 @@
 			updateDate = CURRENT_TIMESTAMP,
 			updater = #{updater}
 		where
-			documentNum = #{documentNum}
+			documentNum = #{documentNum};
+			
+		<foreach collection="items" item="item">
+			update estimateSolutionItems set
+				item = #{item.item}, itemName = #{item.itemName}, amount = ${item.amount}, unit = #{item.unit}, unitPrice = ${item.unitPrice}, price = ${item.price}
+			where documentNum=#{documentNum} and rowNum = #{item.rowNum};
+		</foreach>	
 	</update>
 	
-	<update id="updateEstimateSolutionItems" parameterType="estimateSolutionItemsRecieveDTO">
-		update estimateSolutionItems set
-			item = #{item1}, itemName = #{itemName1}, amount = ${amount1}, unit = #{unit1}, unitPrice = ${unitPrice1}, price = ${price1}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum1};
-			
-		update estimateSolutionItems set
-			item = #{item2}, itemName = #{itemName2}, amount = ${amount2}, unit = #{unit2}, unitPrice = ${unitPrice2}, price = ${price2}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum2};
-			
-		update estimateSolutionItems set
-			item = #{item3}, itemName = #{itemName3}, amount = ${amount3}, unit = #{unit3}, unitPrice = ${unitPrice3}, price = ${price3}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum3};
-			
-		update estimateSolutionItems set
-			item = #{item4}, itemName = #{itemName4}, amount = ${amount4}, unit = #{unit4}, unitPrice = ${unitPrice4}, price = ${price4}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum4};
-			
-		update estimateSolutionItems set
-			item = #{item5}, itemName = #{itemName5}, amount = ${amount5}, unit = #{unit5}, unitPrice = ${unitPrice5}, price = ${price5}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum5};
-			
-		update estimateSolutionItems set
-			item = #{item6}, itemName = #{itemName6}, amount = ${amount6}, unit = #{unit6}, unitPrice = ${unitPrice6}, price = ${price6}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum6};
-			
-		update estimateSolutionItems set
-			item = #{item7}, itemName = #{itemName7}, amount = ${amount7}, unit = #{unit7}, unitPrice = ${unitPrice7}, price = ${price7}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum7};
-			
-		update estimateSolutionItems set
-			item = #{item8}, itemName = #{itemName8}, amount = ${amount8}, unit = #{unit8}, unitPrice = ${unitPrice8}, price = ${price8}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum8};
-			
-		update estimateSolutionItems set
-			item = #{item9}, itemName = #{itemName9}, amount = ${amount9}, unit = #{unit9}, unitPrice = ${unitPrice9}, price = ${price9}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum9};
-			
-		update estimateSolutionItems set
-			item = #{item10}, itemName = #{itemName10}, amount = ${amount10}, unit = #{unit10}, unitPrice = ${unitPrice10}, price = ${price10}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum10};
-			
-		update estimateSolutionItems set
-			item = #{item11}, itemName = #{itemName11}, amount = ${amount11}, unit = #{unit11}, unitPrice = ${unitPrice11}, price = ${price11}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum11};
-		
-		update estimateSolutionItems set
-			item = #{item12}, itemName = #{itemName12}, amount = ${amount12}, unit = #{unit12}, unitPrice = ${unitPrice12}, price = ${price12}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum12}
-	</update>
-	
-
-
-
-
-
-<!-- estimateLanguage -->
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- //////////////////////////////////estimateLanguage/////////////////////////////////////////////// -->
 	<insert id="insertEstimateLanguage" parameterType="estimateLanguageDTO">
 		insert into documentMaster (
-			documentNum,
-			systemNum,
-			documentTypeName,
-			nextDocumentTypeName,
+			documentNum,systemNum,documentTypeName,nextDocumentTypeName,
 			userNum, userName, userDepartment, userPosition,
 			workflowNum,
-			state,
-			updateDate,
-			updater
+			state,updateDate,updater
 		)
 		values(
-			#{documentNum},
-			#{systemNum},
-			#{documentTypeName},
-			#{nextDocumentTypeName},
+			#{documentNum},#{systemNum},#{documentTypeName},#{nextDocumentTypeName},
 			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
 			<choose>
-				<when test="workflowNum == 0">
-					null,
-				</when>
-				<when test="workflowNum != 0">
-					#{workflowNum},
-				</when>
+				<when test="workflowNum == 0">null,</when>
+				<when test="workflowNum != 0">#{workflowNum},</when>
 			</choose>
-			#{state},
-			CURRENT_TIMESTAMP,
-			#{updater}
+			#{state},CURRENT_TIMESTAMP,#{updater}
 		);
 		
 		insert into estimateMaster(
-			documentNum,
-			receiver,
-			documentName
+			documentNum,receiver,documentName
 		)
 		values(
-			#{documentNum},
-			#{receiver},
-			#{documentName}
+			#{documentNum},#{receiver},#{documentName}
 		);
 		
 		insert into estimateLanguage (
-			documentNum,
-			documentTypeName,
+			documentNum,documentTypeName,estimateDate,
 			userNum, userName, userDepartment, userPosition,
-			estimateDate,
-			supplier,
-			address,
-			post,
-			phoneNumber,
-			representative,
-			stamp, stampFileName, logoFileName, incharge,
+			stamp, stampFileName, logoFileName,
 			receiver,
+			address,
 			documentName,
 			deadline,
 			expirationDate,
@@ -622,17 +282,11 @@
 			comment
 		) 
 		values(
-			#{documentNum},
-			#{documentTypeName},
+			#{documentNum},#{documentTypeName},#{estimateDate},
 			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
-			#{estimateDate},
-			#{supplier},
-			#{address},
-			#{post},
-			#{phoneNumber},
-			#{representative},
-			#{stamp}, #{stampFileName}, #{logoFileName}, #{incharge},
+			#{stamp}, #{stampFileName}, #{logoFileName},
 			#{receiver},
+			#{address},
 			#{documentName},
 			#{deadline},
 			#{expirationDate},
@@ -646,19 +300,15 @@
 			#{depositeClassification},	
 			#{cautions},
 			#{comment}
-		)
-	</insert>
-	
-	<insert id="insertEstimateLanguageItems" parameterType="estimateLanguageItemsRecieveDTO">
+		);
+		
 		insert into estimateLanguageItems (
 			documentNum,rowNum,itemName,amount,unitPrice,price
 		)
 		values
-		(#{documentNum},#{rowNum1},#{itemName1},${amount1},${unitPrice1},${price1}),
-		(#{documentNum},#{rowNum2},#{itemName2},${amount2},${unitPrice2},${price2}),
-		(#{documentNum},#{rowNum3},#{itemName3},${amount3},${unitPrice3},${price3}),
-		(#{documentNum},#{rowNum4},#{itemName4},${amount4},${unitPrice4},${price4}),
-		(#{documentNum},#{rowNum5},#{itemName5},${amount5},${unitPrice5},${price5})
+			<foreach collection="items" item="item" separator=",">
+				(#{documentNum},#{item.rowNum},#{item.itemName},${item.amount},${item.unitPrice},${item.price})
+			</foreach>
 	</insert>
 	
 	<update id="updateEstimateLanguage" parameterType="estimateLanguageDTO">
@@ -670,21 +320,16 @@
 			documentNum = #{documentNum};
 			
 		update estimateLanguage set
+			estimateDate = #{estimateDate},
 			userNum = #{userNum},
 			userName = #{userName},
 			userDepartment = #{userDepartment},
 			userPosition = #{userPosition},
-			estimateDate = #{estimateDate},
-			supplier = #{supplier},
-			address = #{address},
-			post = #{post},
-			phoneNumber = #{phoneNumber},
-			representative = #{representative},
 			stamp = #{stamp},
 			stampFileName = #{stampFileName},
 			logoFileName = #{logoFileName},
-			incharge = #{incharge},
 			receiver = #{receiver},
+			address = #{address},
 			documentName = #{documentName},
 			deadline = #{deadline},
 			expirationDate = #{expirationDate},
@@ -708,95 +353,48 @@
 			updateDate = CURRENT_TIMESTAMP,
 			updater = #{updater}
 		where
-			documentNum = #{documentNum}
+			documentNum = #{documentNum};
+			
+		<foreach collection="items" item="item">
+			update estimateLanguageItems set
+				itemName = #{item.itemName}, amount = ${item.amount}, unitPrice = ${item.unitPrice}, price = ${item.price}
+			where documentNum=#{documentNum} and rowNum = #{item.rowNum};
+		</foreach>	
 	</update>
 	
-	<update id="updateEstimateLanguageItems" parameterType="estimateLanguageItemsRecieveDTO">
-		update estimateLanguageItems set
-			itemName = #{itemName1}, amount = ${amount1}, unitPrice = ${unitPrice1}, price = ${price1}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum1};
-			
-		update estimateLanguageItems set
-			itemName = #{itemName2}, amount = ${amount2}, unitPrice = ${unitPrice2}, price = ${price2}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum2};
-			
-		update estimateLanguageItems set
-			itemName = #{itemName3}, amount = ${amount3}, unitPrice = ${unitPrice3}, price = ${price3}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum3};
-			
-		update estimateLanguageItems set
-			itemName = #{itemName4}, amount = ${amount4}, unitPrice = ${unitPrice4}, price = ${price4}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum4};
-			
-		update estimateLanguageItems set
-			itemName = #{itemName5}, amount = ${amount5}, unitPrice = ${unitPrice5}, price = ${price5}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum5};
-	</update>
-
-
-
-
-<!-- estimateSi -->
+<!-- ///////////////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- ///////////////////////////////////  estimateSi  //////////////////////////////////////////////// -->
 	<insert id="insertEstimateSi" parameterType="estimateSiDTO">
 		insert into documentMaster (
-			documentNum,
-			systemNum,
-			documentTypeName,
-			nextDocumentTypeName,
+			documentNum,systemNum,documentTypeName,nextDocumentTypeName,
 			userNum, userName, userDepartment, userPosition,
 			workflowNum,
-			state,
-			updateDate,
-			updater
+			state,updateDate,updater
 		)
 		values(
-			#{documentNum},
-			#{systemNum},
-			#{documentTypeName},
-			#{nextDocumentTypeName},
+			#{documentNum},#{systemNum},#{documentTypeName},#{nextDocumentTypeName},
 			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
 			<choose>
-				<when test="workflowNum == 0">
-					null,
-				</when>
-				<when test="workflowNum != 0">
-					#{workflowNum},
-				</when>
+				<when test="workflowNum == 0">null,</when>
+				<when test="workflowNum != 0">#{workflowNum},</when>
 			</choose>
-			#{state},
-			CURRENT_TIMESTAMP,
-			#{updater}
+			#{state},CURRENT_TIMESTAMP,#{updater}
 		);
 		
 		insert into estimateMaster(
-			documentNum,
-			receiver,
-			documentName
+			documentNum,receiver,documentName
 		)
 		values(
-			#{documentNum},
-			#{receiver},
-			#{documentName}
+			#{documentNum},#{receiver},#{documentName}
 		);
 		
 		insert into estimateSi (
-			documentNum,
-			documentTypeName,
+			documentNum,documentTypeName,estimateDate,
 			userNum, userName, userDepartment, userPosition,
-			estimateDate,
-			supplier,
-			address,
-			post,
-			phoneNumber,
-			representative,
-			stamp, stampFileName, logoFileName, incharge,
+			stamp, stampFileName, logoFileName,
 			
 			receiver,
+			address,
 			documentName,
 			workTime,
 			supplyment,
@@ -813,18 +411,12 @@
 			comment
 		) 
 		values(
-			#{documentNum},
-			#{documentTypeName},
+			#{documentNum},#{documentTypeName},#{estimateDate},
 			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
-			#{estimateDate},
-			#{supplier},
-			#{address},
-			#{post},
-			#{phoneNumber},
-			#{representative},
-			#{stamp}, #{stampFileName}, #{logoFileName}, #{incharge},
+			#{stamp}, #{stampFileName}, #{logoFileName},
 			
 			#{receiver},
+			#{address},
 			#{documentName},
 			#{workTime},
 			#{supplyment},
@@ -839,24 +431,15 @@
 			#{sum}, #{taxRate}, #{tax}, #{sumWithTax}, #{sumWithTax2},
 			#{cautions},
 			#{comment}
-		)
-	</insert>
-	
-	<insert id="insertEstimateSiItems" parameterType="estimateSiItemsRecieveDTO">
+		);
+		
 		insert into estimateSiItems (
 			documentNum,rowNum,item,itemName,workStart,workEnd,unitPrice,manMonth,price
 		)
 		values
-		(#{documentNum},#{rowNum1},#{item1},#{itemName1},#{workStart1},#{workEnd1},${unitPrice1},${manMonth1},${price1}),
-		(#{documentNum},#{rowNum2},#{item2},#{itemName2},#{workStart2},#{workEnd2},${unitPrice2},${manMonth2},${price2}),
-		(#{documentNum},#{rowNum3},#{item3},#{itemName3},#{workStart3},#{workEnd3},${unitPrice3},${manMonth3},${price3}),
-		(#{documentNum},#{rowNum4},#{item4},#{itemName4},#{workStart4},#{workEnd4},${unitPrice4},${manMonth4},${price4}),
-		(#{documentNum},#{rowNum5},#{item5},#{itemName5},#{workStart5},#{workEnd5},${unitPrice5},${manMonth5},${price5}),
-		(#{documentNum},#{rowNum6},#{item6},#{itemName6},#{workStart6},#{workEnd6},${unitPrice6},${manMonth6},${price6}),
-		(#{documentNum},#{rowNum7},#{item7},#{itemName7},#{workStart7},#{workEnd7},${unitPrice7},${manMonth7},${price7}),
-		(#{documentNum},#{rowNum8},#{item8},#{itemName8},#{workStart8},#{workEnd8},${unitPrice8},${manMonth8},${price8}),
-		(#{documentNum},#{rowNum9},#{item9},#{itemName9},#{workStart9},#{workEnd9},${unitPrice9},${manMonth9},${price9}),
-		(#{documentNum},#{rowNum10},#{item10},#{itemName10},#{workStart10},#{workEnd10},${unitPrice10},${manMonth10},${price10})
+			<foreach collection="items" item="item" separator=",">
+				(#{documentNum},#{item.rowNum},#{item.item},#{item.itemName},#{item.workStart},#{item.workEnd},${item.unitPrice},${item.manMonth},${item.price})
+			</foreach>
 	</insert>
 	
 	<update id="updateEstimateSi" parameterType="estimateSiDTO">
@@ -868,22 +451,17 @@
 			documentNum = #{documentNum};
 			
 		update estimateSi set
+			estimateDate = #{estimateDate},
 			userNum = #{userNum},
 			userName = #{userName},
 			userDepartment = #{userDepartment},
 			userPosition = #{userPosition},
-			estimateDate = #{estimateDate},
-			supplier = #{supplier},
-			address = #{address},
-			post = #{post},
-			phoneNumber = #{phoneNumber},
-			representative = #{representative},
 			stamp = #{stamp},
 			stampFileName = #{stampFileName},
 			logoFileName = #{logoFileName},
-			incharge = #{incharge},
 			
 			receiver = #{receiver},
+			address = #{address},
 			documentName = #{documentName},
 			workTime = #{workTime},
 			supplyment = #{supplyment},
@@ -905,63 +483,15 @@
 			updateDate = CURRENT_TIMESTAMP,
 			updater = #{updater}
 		where
-			documentNum = #{documentNum}
+			documentNum = #{documentNum};
+			
+		<foreach collection="items" item="item">
+			update estimateSiItems set
+				item = #{item.item}, itemName = #{item.itemName}, workStart = #{item.workStart}, workEnd = #{item.workEnd}, manMonth = ${item.manMonth}, unitPrice = ${item.unitPrice}, price = ${item.price}
+			where documentNum=#{documentNum} and rowNum = #{item.rowNum};
+		</foreach>	
 	</update>
 	
-	<update id="updateEstimateSiItems" parameterType="estimateSiItemsRecieveDTO">
-		update estimateSiItems set
-			item = #{item1}, itemName = #{itemName1}, workStart = #{workStart1}, workEnd = #{workEnd1}, manMonth = ${manMonth1}, unitPrice = ${unitPrice1}, price = ${price1}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum1};
-			
-		update estimateSiItems set
-			item = #{item2}, itemName = #{itemName2}, workStart = #{workStart2}, workEnd = #{workEnd2}, manMonth = ${manMonth2}, unitPrice = ${unitPrice2}, price = ${price2}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum2};
-			
-		update estimateSiItems set
-			item = #{item3}, itemName = #{itemName3}, workStart = #{workStart3}, workEnd = #{workEnd3}, manMonth = ${manMonth3}, unitPrice = ${unitPrice3}, price = ${price3}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum3};
-			
-		update estimateSiItems set
-			item = #{item4}, itemName = #{itemName4}, workStart = #{workStart4}, workEnd = #{workEnd4}, manMonth = ${manMonth4}, unitPrice = ${unitPrice4}, price = ${price4}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum4};
-			
-		update estimateSiItems set
-			item = #{item5}, itemName = #{itemName5}, workStart = #{workStart5}, workEnd = #{workEnd5}, manMonth = ${manMonth5}, unitPrice = ${unitPrice5}, price = ${price5}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum5};
-				
-		update estimateSiItems set
-			item = #{item6}, itemName = #{itemName6}, workStart = #{workStart6}, workEnd = #{workEnd6}, manMonth = ${manMonth6}, unitPrice = ${unitPrice6}, price = ${price6}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum6};
-				
-		update estimateSiItems set
-			item = #{item7}, itemName = #{itemName7}, workStart = #{workStart7}, workEnd = #{workEnd7}, manMonth = ${manMonth7}, unitPrice = ${unitPrice7}, price = ${price7}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum7};
-				
-		update estimateSiItems set
-			item = #{item8}, itemName = #{itemName8}, workStart = #{workStart8}, workEnd = #{workEnd8}, manMonth = ${manMonth8}, unitPrice = ${unitPrice8}, price = ${price8}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum8};
-				
-		update estimateSiItems set
-			item = #{item9}, itemName = #{itemName9}, workStart = #{workStart9}, workEnd = #{workEnd9}, manMonth = ${manMonth9}, unitPrice = ${unitPrice9}, price = ${price9}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum9};
-				
-		update estimateSiItems set
-			item = #{item10}, itemName = #{itemName10}, workStart = #{workStart10}, workEnd = #{workEnd10}, manMonth = ${manMonth10}, unitPrice = ${unitPrice10}, price = ${price10}
-		where
-			documentNum=#{documentNum} and rowNum = #{rowNum10};
-	</update>
-
-	
-		
 	<insert id="testTest" parameterType="String">
 		insert into test (col1,col2) values ("aaa",CURRENT_TIMESTAMP)
 	</insert>

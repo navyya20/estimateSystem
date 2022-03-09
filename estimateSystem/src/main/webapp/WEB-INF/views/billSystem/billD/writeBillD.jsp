@@ -23,7 +23,7 @@
 -->
 
 <script type="text/javascript" src="../js/jQuery-FontSpy.js" charset="utf-8"></script>
-<script type="text/javascript" src="../js/dataCompensation/dataCompensation.js?ver=1" charset="utf-8"></script>
+<script type="text/javascript" src="../js/dataCompensation/dataCompensation.js?ver=4" charset="utf-8"></script>
 
 
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
@@ -124,18 +124,16 @@ if ( self !== top ) {
 		function processJson(state){
 			var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
 			var inputJson=JSON.parse(inputJsonString);
-			inputJson["sum"] = getPureNumber(inputJson["sum"]);
-			inputJson["taxRate"] = getPureNumber(inputJson["taxRate"]);
-			inputJson["tax"] = getPureNumber(inputJson["tax"]);
-			inputJson["discountRate"] = getPureNumber(inputJson["discountRate"]);
-			inputJson["discount"] = getPureNumber(inputJson["discount"]);
-			inputJson["sumWithTax"] = getPureNumber(inputJson["sumWithTax"]);
-			inputJson["sumWithTax2"] = getPureNumber(inputJson["sumWithTax2"]);
+			var numberFieldArr = ["sum", "taxRate", "tax", "discountRate", "discount", "sumWithTax", "sumWithTax2"];
+			numberFieldArr.forEach(function(field){
+				inputJson[field] = getPureNumber(inputJson[field]);
+			})
 			inputJson["items"] = getItems(inputJson,["rowNum","itemName"],["unitPrice","amount","price"],repeat);
 			inputJson.state=state;
-			if(inputJson["workflowNum"]==""){inputJson.workflowNum=0};
-			if(inputJson["taxRate"]==""){inputJson.taxRate=0};
-			if(inputJson["discountRate"]==""){inputJson.taxRate=0};
+			var emptyToZeroFieldArr=["workflowNum", "taxRate", "discountRate"];
+			emptyToZeroFieldArr.forEach(function(field){
+				if(inputJson[field]==""){inputJson[field]=0};
+			})
 			console.log("제이슨:"+JSON.stringify(inputJson));
 			return inputJson;
 		}
@@ -176,7 +174,7 @@ if ( self !== top ) {
 					{
 						url: "insertBillD",
 						type: 'POST',
-						data: inputJson,
+						data: {"jsonStr":JSON.stringify(inputJson)},
 						dataType:"json",
 						success: function(r){
 							if(r["errorFlag"]==0){

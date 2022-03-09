@@ -7,22 +7,13 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import jp.co.interline.dto.BillCDTO;
-import jp.co.interline.dto.BillCItemsRecieveDTO;
-import jp.co.interline.dto.BillDDTO;
-import jp.co.interline.dto.BillDItemDTO;
-import jp.co.interline.dto.BillSheet1DTO;
-import jp.co.interline.dto.BillSheet1ItemsRecieveDTO;
-import jp.co.interline.dto.BillSiDTO;
-import jp.co.interline.dto.BillSiItemsRecieveDTO;
-import jp.co.interline.dto.BillSolutionDTO;
-import jp.co.interline.dto.BillSolutionItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
-import jp.co.interline.dto.EstimateSheet1DTO;
-import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
-import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
-import jp.co.interline.dto.WorkflowInformDTO;
+import jp.co.interline.dto.billSystem.BillCommonDTO;
+import jp.co.interline.dto.billSystem.billC.BillCDTO;
+import jp.co.interline.dto.billSystem.billD.BillDDTO;
+import jp.co.interline.dto.billSystem.billSi.BillSiDTO;
+import jp.co.interline.dto.billSystem.billSolution.BillSolutionDTO;
 
 
 @Repository
@@ -30,15 +21,6 @@ public class BillDAO {
 	@Autowired
 	SqlSession sqlsession;
 
-	/*
-	 * public SystemDTO getBillType(int documentTypeNum) { BillMapper mapper =
-	 * sqlsession.getMapper(BillMapper.class); SystemDTO system =
-	 * mapper.getBillType(documentTypeNum); return system; }
-	 * 
-	 * public SystemDTO getBillTypeName(int documentTypeNum) { BillMapper mapper =
-	 * sqlsession.getMapper(BillMapper.class); SystemDTO system =
-	 * mapper.getBillTypeName(documentTypeNum); return system; }
-	 */
 	public int getTotalBillSheet(UserInformWithOptionDTO userInformWithOption) {
 		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
 		int total = mapper.getTotalBillSheet(userInformWithOption);
@@ -51,127 +33,50 @@ public class BillDAO {
 			ArrayList<EstimateListDTO> billList = mapper.getBillList(rbs, userInformWithOption);
 			return billList;
 	}
-	
-//////////////////////////billSheet1//////////////////////////////////
-	public int insertBillSheet1(BillSheet1DTO billSheet1) {
+
+/////////////////////////////////////////////
+	public <T extends BillCommonDTO> int insertDocument(T dto) {
 		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.insertBillSheet1(billSheet1);
+		int result = 0;
+		switch (dto.getDocumentTypeName()) {
+		case "billSolution":
+			result = mapper.insertBillSolution((BillSolutionDTO)dto);
+			break;
+		case "billSi":
+			result = mapper.insertBillSi((BillSiDTO)dto);
+			break;
+		case "billC":
+			result = mapper.insertBillC((BillCDTO)dto);
+			break;
+		case "billD":
+			result = mapper.insertBillD((BillDDTO)dto);
+			break;
+		default:
+			return result;
+		}
 		return result;
 	}
 
-	public int insertBillSheet1Items(BillSheet1ItemsRecieveDTO billSheet1ItemsReciever) {
+	public <T extends BillCommonDTO> int updateDocument(T dto) {
 		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.insertBillSheet1Items(billSheet1ItemsReciever);
+		int result = 0;
+		switch (dto.getDocumentTypeName()) {
+		case "billSolution":
+			result = mapper.updateBillSolution((BillSolutionDTO)dto);
+			break;
+		case "billSi":
+			result = mapper.updateBillSi((BillSiDTO)dto);
+			break;
+		case "billC":
+			result = mapper.updateBillC((BillCDTO)dto);
+			break;
+		case "billD":
+			result = mapper.updateBillD((BillDDTO)dto);
+			break;
+		default:
+			return result;
+		}
 		return result;
 	}
-	public int updateBillSheet1(BillSheet1DTO billSheet1) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.updateBillSheet1(billSheet1);
-		return result;
-	}
-
-	public int updateBillSheet1Items(BillSheet1ItemsRecieveDTO billSheet1ItemsReciever) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.updateBillSheet1Items(billSheet1ItemsReciever);
-		return result;
-	}
-
-	
-///////////////////////////////////////////billSolution//////////////////////////////////////////	
-	
-	public int insertBillSolution(BillSolutionDTO billSolution) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.insertBillSolution(billSolution);
-		return result;
-	}
-
-	public int insertBillSolutionItems(BillSolutionItemsRecieveDTO billSolutionItemsReciever) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.insertBillSolutionItems(billSolutionItemsReciever);
-		return result;
-	}
-	
-	public int updateBillSolution(BillSolutionDTO billSolution) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.updateBillSolution(billSolution);
-		return result;
-	}
-
-	public int updateBillSolutionItems(BillSolutionItemsRecieveDTO billSolutionItemsReciever) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.updateBillSolutionItems(billSolutionItemsReciever);
-		return result;
-	}
-
-	
-
-///////////////////////////////////////////billSi//////////////////////////////////////////	
-	
-	public int insertBillSi(BillSiDTO billSi) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.insertBillSi(billSi);
-		return result;
-	}
-	
-	public int insertBillSiItems(BillSiItemsRecieveDTO billSiItemsReciever) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.insertBillSiItems(billSiItemsReciever);
-		return result;
-	}
-	
-	public int updateBillSi(BillSiDTO billSi) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.updateBillSi(billSi);
-		return result;
-	}
-	
-	public int updateBillSiItems(BillSiItemsRecieveDTO billSiItemsReciever) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.updateBillSiItems(billSiItemsReciever);
-		return result;
-	}
-	
-	
-///////////////////////////////////////////billC//////////////////////////////////////////	
-		
-	public int insertBillC(BillCDTO billC) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.insertBillC(billC);
-		return result;
-	}
-	
-	public int insertBillCItems(BillCItemsRecieveDTO billCItemsReciever) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.insertBillCItems(billCItemsReciever);
-		return result;
-	}
-	
-	public int updateBillC(BillCDTO billC) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.updateBillC(billC);
-		return result;
-	}
-	
-	public int updateBillCItems(BillCItemsRecieveDTO billCItemsReciever) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.updateBillCItems(billCItemsReciever);
-		return result;
-	}
-
-	
-///////////////////////////////////////////billD//////////////////////////////////////////		
-	public int insertBillD(BillDDTO billD) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.insertBillD(billD);
-		return result;
-	}
-	
-	
-	public int updateBillD(BillDDTO billD) {
-		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
-		int result = mapper.updateBillD(billD);
-		return result;
-	}
-	
 	
 }

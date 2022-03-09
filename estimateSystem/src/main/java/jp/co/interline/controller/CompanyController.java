@@ -1,15 +1,10 @@
 package jp.co.interline.controller;
 
 import java.io.File;
-import java.lang.reflect.Array;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import jp.co.interline.dto.CompanyDTO;
@@ -51,7 +45,6 @@ public class CompanyController {
 	
 	@RequestMapping(value = "/all/companyReg", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
 	public String companyReg(HttpSession session, Model model) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		return "companyInform/companyReg";
 	}
 	
@@ -72,7 +65,6 @@ public class CompanyController {
 	
 	@RequestMapping(value = "/all/companyMod", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public String companyMod(HttpSession session, Model model, int companyInformNum) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		CompanyDTO company = companyService.getCompany(companyInformNum);
 		model.addAttribute("company", company);
 		return "companyInform/companyMod";
@@ -108,7 +100,6 @@ public class CompanyController {
 	
 	@RequestMapping(value = "/all/imgList", method = RequestMethod.GET)
 	public String imgList(HttpSession session, Model model) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		FileNamesDTO stampFileName = companyService.getfileName("stamp");
 		FileNamesDTO logoFileName = companyService.getfileName("logo");
 		model.addAttribute("stampFileName", stampFileName);
@@ -128,13 +119,11 @@ public class CompanyController {
 		path = path.replace('/', File.separatorChar);
 		logger.info("save path : {}",path);
 		
-		FileService fileService = new FileService();
 		if (!imgFile.isEmpty()) {		//파일 관련 일들  이름을 다시지어준다던가 결로를 정해준다던가 복사해서 저장한다던가 자부자리한것들이많아 하나의 객체로 조종하는게 편하다.
 			String savedfile = FileService.saveFile(imgFile, path, user.getUserId(),category);
 			logger.info("fileName : {}",savedfile);
 			//디비에 파일 이름 저장
 			int result = companyService.setFileName(category, savedfile);
-			
 		}
 		return "redirect:/all/imgList";
 	}

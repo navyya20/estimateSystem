@@ -23,7 +23,7 @@
 -->
 
 <script type="text/javascript" src="../js/jQuery-FontSpy.js" charset="utf-8"></script>
-
+<script type="text/javascript" src="../js/dataCompensation/dataCompensation.js?ver=4" charset="utf-8"></script>
 
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../css/common/common.css">
@@ -127,37 +127,16 @@ if ( self !== top ) {
 		function processJson(state){
 			var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
 			var inputJson=JSON.parse(inputJsonString);
-			inputJson["sum"] = inputJson["sum"].replace(/,/gi, "").replace(/￥/gi, "");
-			inputJson["taxRate"] = inputJson["taxRate"].replace(/,/gi, "").replace(/%/gi, "");
-			inputJson["tax"] = inputJson["tax"].replace(/,/gi, "").replace(/￥/gi, "");
-			inputJson["sumWithTax"] = inputJson["sumWithTax"].replace(/,/gi, "").replace(/￥/gi, "");
-			inputJson["sumWithTax2"] = inputJson["sumWithTax2"].replace(/,/gi, "").replace(/￥/gi, "");
-			inputJson["expenseTotal"] = inputJson["expenseTotal"].replace(/,/gi, "").replace(/￥/gi, "");
-			inputJson["benefitTotal"] = inputJson["benefitTotal"].replace(/,/gi, "").replace(/￥/gi, "");
-			inputJson["total"] = inputJson["total"].replace(/,/gi, "").replace(/￥/gi, "");
-			for(i=1 ; i<=repeat ; i++){
-				inputJson["monthlyUnitPrice"+i] =inputJson["monthlyUnitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");
-				inputJson["overTimeUnitPrice"+i] = inputJson["overTimeUnitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");				
-				inputJson["underTimeUnitPrice"+i] = inputJson["underTimeUnitPrice"+i].replace(/,/gi, "").replace(/￥/gi, "");				
-				inputJson["price"+i] = inputJson["price"+i].replace(/,/gi, "").replace(/￥/gi, "");				
-				inputJson["expense"+i] = inputJson["expense"+i].replace(/,/gi, "").replace(/￥/gi, "");				
-				inputJson["benefit"+i] = inputJson["benefit"+i].replace(/,/gi, "").replace(/￥/gi, "");
-				inputJson["subtotal"+i] = inputJson["subtotal"+i].replace(/,/gi, "").replace(/￥/gi, "");
-				if(inputJson["monthlyUnitPrice"+i]==""){inputJson["monthlyUnitPrice"+i]="null"}
-				if(inputJson["standardMin"+i]==""){inputJson["standardMin"+i]="null"}
-				if(inputJson["standardMax"+i]==""){inputJson["standardMax"+i]="null"}
-				if(inputJson["workTime"+i]==""){inputJson["workTime"+i]="null"}
-				if(inputJson["extraTime"+i]==""){inputJson["extraTime"+i]="null"}
-				if(inputJson["overTimeUnitPrice"+i]==""){inputJson["overTimeUnitPrice"+i]="null"}
-				if(inputJson["underTimeUnitPrice"+i]==""){inputJson["underTimeUnitPrice"+i]="null"}
-				if(inputJson["price"+i]==""){inputJson["price"+i]="null"}
-				if(inputJson["expense"+i]==""){inputJson["expense"+i]="null"}
-				if(inputJson["benefit"+i]==""){inputJson["benefit"+i]="null"}
-				if(inputJson["subtotal"+i]==""){inputJson["subtotal"+i]="null"}
-			}
+			var numberFieldArr = ["sum", "taxRate", "tax", "sumWithTax", "sumWithTax2", "expenseTotal", "benefitTotal", "total"];
+			numberFieldArr.forEach(function(field){
+				inputJson[field] = getPureNumber(inputJson[field]);
+			})
+			inputJson["items"] = getItems(inputJson,["rowNum"],["monthlyUnitPrice", "standardMin", "standardMax", "workTime", "extraTime", "overTimeUnitPrice", "underTimeUnitPrice", "price", "expense", "benefit", "subtotal"],repeat);
 			inputJson.state=state;
-			if(inputJson["workflowNum"]==""){inputJson.workflowNum=0};
-			if(inputJson["taxRate"]==""){inputJson.taxRate=0};
+			var emptyToZeroFieldArr=["workflowNum", "taxRate"];
+			emptyToZeroFieldArr.forEach(function(field){
+				if(inputJson[field]==""){inputJson[field]=0};
+			})
 			return inputJson;
 		}
 		
@@ -169,7 +148,7 @@ if ( self !== top ) {
 					{
 						url: "insertBillSi",
 						type: 'POST',
-						data: inputJson,
+						data: {"jsonStr":JSON.stringify(inputJson)},
 						dataType:"json",
 						success: function(r){
 							if(r["errorFlag"]==0){
@@ -197,7 +176,7 @@ if ( self !== top ) {
 					{
 						url: "insertBillSi",
 						type: 'POST',
-						data: inputJson,
+						data: {"jsonStr":JSON.stringify(inputJson)},
 						dataType:"json",
 						success: function(r){
 							if(r["errorFlag"]==0){

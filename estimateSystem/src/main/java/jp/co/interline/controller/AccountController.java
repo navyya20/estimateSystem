@@ -1,13 +1,9 @@
 package jp.co.interline.controller;
 
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import jp.co.interline.dto.AccountDTO;
 import jp.co.interline.dto.UserInformDTO;
@@ -33,7 +28,6 @@ public class AccountController {
 	
 	@RequestMapping(value = "/all/accountList", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
 	public String accountList(HttpSession session, Model model) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		ArrayList<AccountDTO> accountList = accountService.getAccountList();
 		model.addAttribute("accountList", accountList);
 		return "accountInform/accountList";
@@ -41,7 +35,6 @@ public class AccountController {
 	
 	@RequestMapping(value = "/all/accountReg", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
 	public String accountReg(HttpSession session, Model model) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		return "accountInform/accountReg";
 	}
 	
@@ -62,7 +55,6 @@ public class AccountController {
 	
 	@RequestMapping(value = "/all/accountMod", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public String accountMod(HttpSession session, Model model, int accountInformNum) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		AccountDTO account = accountService.getAccount(accountInformNum);
 		model.addAttribute("account", account);
 		return "accountInform/accountMod";

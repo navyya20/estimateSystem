@@ -1,6 +1,5 @@
 package jp.co.interline.dao;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -8,41 +7,24 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import jp.co.interline.dto.DocumentMasterDTO;
-import jp.co.interline.dto.EstimateLanguageDTO;
-import jp.co.interline.dto.EstimateLanguageItemsRecieveDTO;
 import jp.co.interline.dto.EstimateListDTO;
-import jp.co.interline.dto.EstimateSheet1DTO;
-import jp.co.interline.dto.EstimateSheet1ItemsRecieveDTO;
-import jp.co.interline.dto.EstimateSiDTO;
-import jp.co.interline.dto.EstimateSiItemsRecieveDTO;
-import jp.co.interline.dto.EstimateSolutionDTO;
-import jp.co.interline.dto.EstimateSolutionItemsRecieveDTO;
 import jp.co.interline.dto.SystemDTO;
-import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
-import jp.co.interline.dto.WorkflowInformDTO;
+import jp.co.interline.dto.estimateSystem.EstimateCommonDTO;
+import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageDTO;
+import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageItemDTO;
+import jp.co.interline.dto.estimateSystem.estimateSi.EstimateSiDTO;
+import jp.co.interline.dto.estimateSystem.estimateSi.EstimateSiItemDTO;
+import jp.co.interline.dto.estimateSystem.estimateSolution.EstimateSolutionDTO;
+import jp.co.interline.dto.estimateSystem.estimateSolution.EstimateSolutionItemDTO;
 
 
 @Repository
 public class EstimateDAO {
 	@Autowired
 	SqlSession sqlsession;
-	
-	public int insertEstimateSheet1(EstimateSheet1DTO estimateSheet1) {
-		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
-		int result = mapper.insertEstimateSheet1(estimateSheet1);
-		return result;
-	}
-
-	public int insertEstimateSheet1Items(EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever) {
-		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
-		int result = mapper.insertEstimateSheet1Items(estimateSheet1ItemsReciever);
-		return result;
-	}
 
 	public int getTotalEstimateSheet(UserInformWithOptionDTO userInformWithOption) {
 		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
@@ -57,18 +39,6 @@ public class EstimateDAO {
 		RowBounds rbs = new RowBounds(st,ctt);
 		ArrayList<EstimateListDTO> estimateList = mapper.getEstimateList(rbs, userInformWithOption);
 		return estimateList;
-	}
-
-	public int updateEstimateSheet1(EstimateSheet1DTO estimateSheet1) {
-		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
-		int result = mapper.updateEstimateSheet1(estimateSheet1);
-		return result;
-	}
-
-	public int updateEstimateSheet1Items(EstimateSheet1ItemsRecieveDTO estimateSheet1ItemsReciever) {
-		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
-		int result = mapper.updateEstimateSheet1Items(estimateSheet1ItemsReciever);
-		return result;
 	}
 
 	public int deleteSheet(SystemDTO system) {
@@ -95,7 +65,7 @@ public class EstimateDAO {
 		return result;
 	}
 
-	public int insertEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever) {
+	public int insertEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItemsReciever) {
 		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
 		int result = mapper.insertEstimateSolutionItems(estimateSolutionItemsReciever);
 		return result;
@@ -107,7 +77,7 @@ public class EstimateDAO {
 		return result;
 	}
 
-	public int updateEstimateSolutionItems(EstimateSolutionItemsRecieveDTO estimateSolutionItemsReciever) {
+	public int updateEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItemsReciever) {
 		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
 		int result = mapper.updateEstimateSolutionItems(estimateSolutionItemsReciever);
 		return result;
@@ -122,7 +92,7 @@ public class EstimateDAO {
 		return result;
 	}
 
-	public int insertEstimateLanguageItems(EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever) {
+	public int insertEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItemsReciever) {
 		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
 		int result = mapper.insertEstimateLanguageItems(estimateLanguageItemsReciever);
 		return result;
@@ -134,7 +104,7 @@ public class EstimateDAO {
 		return result;
 	}
 
-	public int updateEstimateLanguageItems(EstimateLanguageItemsRecieveDTO estimateLanguageItemsReciever) {
+	public int updateEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItemsReciever) {
 		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
 		int result = mapper.updateEstimateLanguageItems(estimateLanguageItemsReciever);
 		return result;
@@ -149,7 +119,7 @@ public class EstimateDAO {
 		return result;
 	}
 
-	public int insertEstimateSiItems(EstimateSiItemsRecieveDTO estimateSiItemsReciever) {
+	public int insertEstimateSiItems(EstimateSiItemDTO estimateSiItemsReciever) {
 		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
 		int result = mapper.insertEstimateSiItems(estimateSiItemsReciever);
 		return result;
@@ -161,7 +131,7 @@ public class EstimateDAO {
 		return result;
 	}
 
-	public int updateEstimateSiItems(EstimateSiItemsRecieveDTO estimateSiItemsReciever) {
+	public int updateEstimateSiItems(EstimateSiItemDTO estimateSiItemsReciever) {
 		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
 		int result = mapper.updateEstimateSiItems(estimateSiItemsReciever);
 		return result;
@@ -183,6 +153,46 @@ public class EstimateDAO {
 		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
 		ArrayList<HashMap<String, Object>> items = mapper.getItemsToList(document);
 		return items;
+	}
+	
+	///////////////////////////////////////////////////////
+	
+	public <T extends EstimateCommonDTO> int insertDocument(T dto) {
+		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
+		int result = 0;
+		switch (dto.getDocumentTypeName()) {
+		case "estimateSolution":
+			result = mapper.insertEstimateSolution((EstimateSolutionDTO)dto);
+			break;
+		case "estimateSi":
+			result = mapper.insertEstimateSi((EstimateSiDTO)dto);
+			break;
+		case "estimateLanguage":
+			result = mapper.insertEstimateLanguage((EstimateLanguageDTO)dto);
+			break;
+		default:
+			return result;
+		}
+		return result;
+	}
+
+	public <T extends EstimateCommonDTO> int updateDocument(T dto) {
+		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
+		int result = 0;
+		switch (dto.getDocumentTypeName()) {
+		case "estimateSolution":
+			result = mapper.updateEstimateSolution((EstimateSolutionDTO)dto);
+			break;
+		case "estimateSi":
+			result = mapper.updateEstimateSi((EstimateSiDTO)dto);
+			break;
+		case "estimateLanguage":
+			result = mapper.updateEstimateLanguage((EstimateLanguageDTO)dto);
+			break;
+		default:
+			return result;
+		}
+		return result;
 	}
 
 
