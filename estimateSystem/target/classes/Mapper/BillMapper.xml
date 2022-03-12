@@ -71,34 +71,48 @@
 		order by ${option}
 	</select>
 	
-	
-<!-- ///////////////////////////////////////////////////////////////////////////////////////// -->
-<!-- /////////////////////////billSolution//////////////////////////////////////////////////// -->
-	<insert id="insertBillSolution" parameterType="billSolutionDTO">
+	<insert id="insertMasterInform" parameterType="billCommonDTO">
 		insert into documentMaster (
-			documentNum,systemNum,documentTypeName,nextDocumentTypeName,
+			documentNum, systemNum, documentTypeName, nextDocumentTypeName,
 			userNum, userName, userDepartment, userPosition,
-			workflowNum,
-			state,updateDate,updater
+			workflowNum, 
+			state, updateDate, updater
 		)
 		values(
-			#{documentNum},#{systemNum},#{documentTypeName},#{nextDocumentTypeName},
+			#{documentNum}, #{systemNum}, #{documentTypeName}, #{nextDocumentTypeName},
 			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
 			<choose>
 				<when test="workflowNum == 0">null,</when>
 				<otherwise>#{workflowNum},</otherwise>
 			</choose>
-			#{state},CURRENT_TIMESTAMP,#{updater}
+			#{state}, CURRENT_TIMESTAMP, #{updater}
 		);
 		
 		insert into estimateMaster(
-			documentNum,receiver,documentName,
+			documentNum, receiver, documentName,
 			estimateNum
 		)values(
-			#{documentNum},#{receiver},#{documentName},
+			#{documentNum}, #{receiver}, #{documentName},
 			<choose><when test='estimateNum == ""'>null</when><otherwise>#{estimateNum}</otherwise></choose><!-- 유니크속성때문에 ""는 안됨. -->
-		);
+		)
+	</insert>
+	
+	<update id="updateMasterInform" parameterType="billCommonDTO">
+		update documentMaster set
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where 
+			documentNum = #{documentNum};
 		
+		update estimateMaster set
+			receiver = #{receiver},
+			documentName = #{documentName}
+		where
+			documentNum = #{documentNum}
+	</update>
+<!-- ///////////////////////////////////////////////////////////////////////////////////////// -->
+<!-- /////////////////////////billSolution//////////////////////////////////////////////////// -->
+	<insert id="insertBillSolution" parameterType="billSolutionDTO">
 		insert into billSolution (
 			documentNum,userNum,userName,userDepartment,userPosition,billDate,documentTypeName,
 			stamp,stampFileName,logoFileName,
@@ -161,18 +175,6 @@
 	</insert>
 	
 	<update id="updateBillSolution" parameterType="billSolutionDTO">
-		update documentMaster set
-			updateDate = CURRENT_TIMESTAMP,
-			updater = #{updater}
-		where 
-			documentNum = #{documentNum};
-		
-		update estimateMaster set
-			receiver = #{receiver},
-			documentName = #{documentName}
-		where
-			documentNum = #{documentNum};
-		
 		update billSolution set
 			userNum = #{userNum},
 			userName = #{userName},
@@ -222,30 +224,6 @@
 <!-- /////////////////////////////////////////////////////////////////////////////////// -->
 <!-- /////////////////////////billSi//////////////////////////////////////////////////// -->
 	<insert id="insertBillSi" parameterType="billSiDTO">
-		insert into documentMaster (
-			documentNum,systemNum,documentTypeName,nextDocumentTypeName,
-			userNum, userName, userDepartment, userPosition,
-			workflowNum,
-			state,updateDate,updater
-		)
-		values(
-			#{documentNum},#{systemNum},#{documentTypeName},#{nextDocumentTypeName},
-			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
-			<choose>
-				<when test="workflowNum == 0">null,</when>
-				<otherwise>#{workflowNum},</otherwise>
-			</choose>
-			#{state},CURRENT_TIMESTAMP,#{updater}
-		);
-		
-		insert into estimateMaster(
-			documentNum,receiver,documentName,
-			estimateNum
-		)values(
-			#{documentNum},#{receiver},#{documentName},
-			<choose><when test='estimateNum == ""'>null</when><otherwise>#{estimateNum}</otherwise></choose><!-- 유니크속성때문에 ""는 안됨. -->
-		);
-		
 		insert into billSi (
 			documentNum,userNum,userName,userDepartment,userPosition,billDate,documentTypeName,
 			stamp,stampFileName,logoFileName,
@@ -320,18 +298,6 @@
 	</insert>
 	
 	<update id="updateBillSi" parameterType="billSiDTO">
-		update documentMaster set
-			updateDate = CURRENT_TIMESTAMP,
-			updater = #{updater}
-		where 
-			documentNum = #{documentNum};
-		
-		update estimateMaster set
-			receiver = #{receiver},
-			documentName = #{documentName}
-		where
-			documentNum = #{documentNum};
-		
 		update billSi set
 			userNum = #{userNum},
 			userName = #{userName},
@@ -392,30 +358,6 @@
 <!-- ////////////////////////////////////////////////////////////////////////////////// -->	
 <!-- /////////////////////////billC//////////////////////////////////////////////////// -->	
 	<insert id="insertBillC" parameterType="billCDTO">
-		insert into documentMaster (
-			documentNum,systemNum,documentTypeName,nextDocumentTypeName,
-			userNum, userName, userDepartment, userPosition,
-			workflowNum,
-			state,updateDate,updater
-		)
-		values(
-			#{documentNum},#{systemNum},#{documentTypeName},#{nextDocumentTypeName},
-			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
-			<choose>
-				<when test="workflowNum == 0">null,</when>
-				<otherwise>#{workflowNum},</otherwise>
-			</choose>
-			#{state},CURRENT_TIMESTAMP,#{updater}
-		);
-		
-		insert into estimateMaster(
-			documentNum,receiver,documentName,
-			estimateNum
-		)values(
-			#{documentNum},#{receiver},#{receiver},     <!-- billC에 한해서 documentName에 고객명(receiver)를 넣는다. billC는 documentName이 없음...-->	
-			<choose><when test='estimateNum == ""'>null</when><otherwise>#{estimateNum}</otherwise></choose><!-- 유니크속성때문에 ""는 안됨. -->
-		);
-		
 		insert into billC (
 			documentNum, userNum, userName, userDepartment, userPosition, billDate, documentTypeName,
 			stamp, stampFileName, logoFileName,
@@ -480,18 +422,6 @@
 	</insert>
 	
 	<update id="updateBillC" parameterType="billCDTO">
-		update documentMaster set
-			updateDate = CURRENT_TIMESTAMP,
-			updater = #{updater}
-		where 
-			documentNum = #{documentNum};
-		
-		update estimateMaster set
-			receiver = #{receiver},
-			documentName = #{receiver}     <!-- billC에 한해서 documentName에 고객명(receiver)를 넣는다. billC는 documentName이 없음...-->
-		where
-			documentNum = #{documentNum};
-		
 		update billC set
 			userNum = #{userNum},
 			userName = #{userName},
@@ -541,30 +471,6 @@
 <!-- ////////////////////////////////////////////////////////////////////////////////// -->
 <!-- /////////////////////////billD//////////////////////////////////////////////////// -->
 	<insert id="insertBillD" parameterType="billDDTO">
-		insert into documentMaster (
-			documentNum, systemNum, documentTypeName, nextDocumentTypeName,
-			userNum, userName, userDepartment, userPosition,
-			workflowNum, 
-			state, updateDate, updater
-		)
-		values(
-			#{documentNum}, #{systemNum}, #{documentTypeName}, #{nextDocumentTypeName},
-			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
-			<choose>
-				<when test="workflowNum == 0">null,</when>
-				<otherwise>#{workflowNum},</otherwise>
-			</choose>
-			#{state}, CURRENT_TIMESTAMP, #{updater}
-		);
-		
-		insert into estimateMaster(
-			documentNum, receiver, documentName,
-			estimateNum
-		)values(
-			#{documentNum}, #{receiver}, #{receiver},     <!-- billD에 한해서 documentName에 고객명(receiver)를 넣는다. billD는 documentName이 없음...-->	
-			<choose><when test='estimateNum == ""'>null</when><otherwise>#{estimateNum}</otherwise></choose><!-- 유니크속성때문에 ""는 안됨. -->
-		);
-		
 		insert into billD (
 			documentNum,userNum,userName,userDepartment,userPosition,billDate,documentTypeName,
 			stamp,stampFileName,logoFileName,
@@ -640,18 +546,6 @@
 	
 	
 	<update id="updateBillD" parameterType="billDDTO">
-		update documentMaster set
-			updateDate = CURRENT_TIMESTAMP,
-			updater = #{updater}
-		where 
-			documentNum = #{documentNum};
-		
-		update estimateMaster set
-			receiver = #{receiver},
-			documentName = #{receiver}     <!-- billD에 한해서 documentName에 고객명(receiver)를 넣는다. billD는 documentName이 없음...-->
-		where
-			documentNum = #{documentNum};
-		
 		update billD set
 			userNum = #{userNum},
 			userName = #{userName},

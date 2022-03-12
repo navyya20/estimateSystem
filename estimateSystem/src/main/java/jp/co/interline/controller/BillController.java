@@ -100,24 +100,25 @@ public class BillController {
 	
 	//bill의 copy기능은 estimate의 copy기능을 공유한다.
 	
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/////////////////////////////   billSolution    //////////////////////////////////////////////////////////////
-	@RequestMapping(value = "/all/writeBillSolution", method = RequestMethod.GET)
-	public String writeBillSolution(HttpSession session, Model model, String copy) {
-		return getWriteDocumentPage(session, model, copy, "billSolution");
+	//각 서식(billC,billD)에 맞는 ozr 페이지로 연계한다.
+	@RequestMapping(value = {"/all/writeBillSolution","/all/writeBillSi","/all/writeBillC","/all/writeBillD"}, method = RequestMethod.GET)
+	public String writeBillSolution(HttpSession session, Model model, String copy, String documentTypeName) {
+		return getWriteDocumentPage(session, model, copy, documentTypeName);
 	}
 	
+	//각 서식(billC,billD)에 맞는 ozr 페이지로 연계한다.
+	@RequestMapping(value = {"/all/modBillSolution","/all/modBillSi","/all/modBillC","/all/modBillD"}, method = RequestMethod.POST)
+	public String modBillSolution(HttpSession session, Model model, String documentNum, String documentTypeName) {
+		return getModDocumentPage(session, model, documentNum, documentTypeName);
+	}
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////   billSolution    //////////////////////////////////////////////////////////////
 	@ResponseBody
 	@RequestMapping(value = "/all/insertBillSolution", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertBillSolution(HttpSession session, Model model, String jsonStr) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		logger.debug("BillController.insertBillSolution,user:{}",user.getUserNum());
 		return billService.insertDocument(user, session, model, jsonStr, BillSolutionDTO.class);
-	}
-	
-	@RequestMapping(value = "/all/modBillSolution", method = RequestMethod.POST)
-	public String modBillSolution(HttpSession session, Model model, String documentNum, String documentTypeName) {
-		return getModDocumentPage(session, model, documentNum, documentTypeName);
 	}
 	
 	@ResponseBody
@@ -128,15 +129,8 @@ public class BillController {
 		return billService.updateDocument(user, session, model, jsonStr, BillSolutionDTO.class);
 	}
 	
-	
-	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////   billSi    ////////////////////////////////////////////////////////////////////
-	@RequestMapping(value = "/all/writeBillSi", method = RequestMethod.GET)
-	public String writeBillSi(HttpSession session, Model model, String estimateNum, String copy) {
-		return getWriteDocumentPage(session, model, copy, "billSi");
-	}
-	
 	@ResponseBody
 	@RequestMapping(value = "/all/insertBillSi", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertBillSi(HttpSession session, Model model, String jsonStr) {
@@ -144,12 +138,6 @@ public class BillController {
 		logger.debug("BillController.insertBillSi,user:{}",user.getUserNum());
 		return billService.insertDocument(user, session, model, jsonStr, BillSiDTO.class);
 	}
-	
-	@RequestMapping(value = "/all/modBillSi", method = RequestMethod.POST)
-	public String modBillSi(HttpSession session, Model model, String documentNum, String documentTypeName) {
-		return getModDocumentPage(session, model, documentNum, documentTypeName);
-	}
-
 	@ResponseBody
 	@RequestMapping(value = "/all/updateBillSi", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> updateBillSi(HttpSession session, Model model, String jsonStr) {
@@ -160,11 +148,6 @@ public class BillController {
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////   billC    /////////////////////////////////////////////////////////////////////	
-	@RequestMapping(value = "/all/writeBillC", method = RequestMethod.GET)
-	public String writeBillC(HttpSession session, Model model, String estimateNum, String copy) {
-		return getWriteDocumentPage(session, model, copy, "billC");
-	}
-	
 	@ResponseBody
 	@RequestMapping(value = "/all/insertBillC", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertBillC(HttpSession session, Model model, String jsonStr) {
@@ -172,12 +155,6 @@ public class BillController {
 		logger.debug("BillController.insertBillC,user:{}",user.getUserNum());
 		return billService.insertDocument(user, session,model,jsonStr,BillCDTO.class);
 	}
-	
-	@RequestMapping(value = "/all/modBillC", method = RequestMethod.POST)
-	public String modBillC(HttpSession session, Model model, String documentNum, String documentTypeName) {
-		return getModDocumentPage(session, model, documentNum, documentTypeName);
-	}
-	
 	@ResponseBody
 	@RequestMapping(value = "/all/updateBillC", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> updateBillC(HttpSession session, Model model, String jsonStr) {
@@ -188,11 +165,6 @@ public class BillController {
 	
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////   billD    /////////////////////////////////////////////////////////////////////
-	@RequestMapping(value = "/all/writeBillD", method = RequestMethod.GET)
-	public String writeBillD(HttpSession session, Model model, String estimateNum, String copy) {
-		return getWriteDocumentPage(session, model, copy, "billD");
-	}
-	
 	@ResponseBody
 	@RequestMapping(value = "/all/insertBillD", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertBillD(HttpSession session, Model model, String jsonStr) {
@@ -200,25 +172,6 @@ public class BillController {
 		logger.debug("BillController.insertBillD,user:{}",user.getUserNum());
 		return billService.insertDocument(user, session,model,jsonStr,BillDDTO.class);
 	}
-	
-	@RequestMapping(value = "/all/modBillD", method = RequestMethod.POST)
-	public String modBillD(HttpSession session, Model model, String documentNum, String documentTypeName) {
-		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		//state를 가져옴. documentTypeName에따라 조인되는 DB가 다르니 주의!
-		SystemDTO system = new SystemDTO();
-		system.setDocumentNum(documentNum);
-		system.setDocumentTypeName(documentTypeName);
-		SystemDTO sys = estimateService.getEstimate(system);
-		model.addAttribute("state", sys.getState());
-		model.addAttribute("userNum", sys.getUserNum());
-		model.addAttribute("billNum", documentNum);
-		
-		Gson gson = new Gson();
-		String userString = gson.toJson(user);
-		model.addAttribute("user", userString);
-		return "billSystem/billD/modBillD";
-	}
-	
 	@ResponseBody
 	@RequestMapping(value = "/all/updateBillD", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> updateBillD(HttpSession session, Model model, String jsonStr) {

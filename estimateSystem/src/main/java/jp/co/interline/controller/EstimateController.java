@@ -3,6 +3,7 @@ package jp.co.interline.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -27,6 +28,7 @@ import jp.co.interline.dto.DocumentMasterDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
+import jp.co.interline.dto.estimateSystem.EstimateCommonDTO;
 import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageDTO;
 import jp.co.interline.dto.estimateSystem.estimateSi.EstimateSiDTO;
 import jp.co.interline.dto.estimateSystem.estimateSolution.EstimateSolutionDTO;
@@ -122,8 +124,9 @@ public class EstimateController {
 		estimateService.makeHashMap(contents,items);
 		ObjectMapper mapper = new ObjectMapper();
 		String copy = mapper.writeValueAsString(contents);
-		redirectAttributes.addAttribute("copy", copy);
 		String documentTypeName = document.getDocumentTypeName();
+		redirectAttributes.addAttribute("copy", copy);
+		redirectAttributes.addAttribute("documentTypeName", documentTypeName);
 		return "redirect:write"+documentTypeName.substring(0, 1).toUpperCase()+documentTypeName.substring(1);
 	}
 	
@@ -152,29 +155,27 @@ public class EstimateController {
 		return "estimateSystem/"+documentTypeName+"/mod"+documentTypeName.substring(0, 1).toUpperCase()+documentTypeName.substring(1);
 	}
 	
+	@RequestMapping(value = {"/all/writeEstimateSolution","/all/writeEstimateLanguage","/all/writeEstimateSi"}, method = RequestMethod.GET)
+	public String writeEstimateSolution(HttpSession session, Model model, String copy, String documentTypeName) {
+		return getWriteDocumentPage(session, model, copy, documentTypeName);
+	}
+	
+	@RequestMapping(value = {"/all/modEstimateSolution","/all/modEstimateLanguage","/all/modEstimateSi"}, method = RequestMethod.POST)
+	public String modEstimateSolution(HttpSession session, Model model, String documentNum, String documentTypeName) {
+		return getModDocumentPage(session, model, documentNum, documentTypeName);
+	}
 //-----------------------------------------------------------------------------------------------------------------------------------
 	
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////estimateSolution///////////////////////////////////////////////////
-	@RequestMapping(value = "/all/writeEstimateSolution", method = RequestMethod.GET)
-	public String writeEstimateSolution(HttpSession session, Model model, String copy) {
-		return getWriteDocumentPage(session, model, copy, "estimateSolution");
-	}
-	
 	@ResponseBody
 	@RequestMapping(value = "/all/insertEstimateSolution", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
-	public HashMap<String, String> insertEstimateSolution(HttpSession session, Model model, String jsonStr) {
+	public HashMap<String, String> insertEstimateSolution(HttpSession session, Model model, String jsonStr, String documentTypeName) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		logger.debug("EstimateController.insertEstimateSolution,user:{}",user.getUserNum());
 		return estimateService.insertDocument(user, session, model, jsonStr, EstimateSolutionDTO.class);
 	}
-	
-	@RequestMapping(value = "/all/modEstimateSolution", method = RequestMethod.POST)
-	public String modEstimateSolution(HttpSession session, Model model, String documentNum, String documentTypeName) {
-		return getModDocumentPage(session, model, documentNum, documentTypeName);
-	}
-	
 	@ResponseBody
 	@RequestMapping(value = "/all/updateEstimateSolution", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> updateEstimateSolution(HttpSession session, Model model, String jsonStr) {
@@ -182,26 +183,15 @@ public class EstimateController {
 		logger.debug("BillController.updateEstimateSolution,user:{}",user.getUserNum());
 		return estimateService.updateDocument(user, session, model, jsonStr, EstimateSolutionDTO.class);
 	}
-//-----------------------------------------------------------------------------------------------------------------------------------	
 
-	
-/////////////////////////////////////estimateLanguage///////////////////////////////////////////////////
-	@RequestMapping(value = "/all/writeEstimateLanguage", method = RequestMethod.GET)
-	public String writeEstimateLanguage(HttpSession session, Model model, String copy) {
-		return getWriteDocumentPage(session, model, copy, "estimateLanguage");
-	}
-	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////estimateLanguage///////////////////////////////////////////////////////
 	@ResponseBody
 	@RequestMapping(value = "/all/insertEstimateLanguage", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertEstimateLanguage(HttpSession session, Model model, String jsonStr) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		logger.debug("EstimateController.insertEstimateLanguage,user:{}",user.getUserNum());
 		return estimateService.insertDocument(user, session, model, jsonStr, EstimateLanguageDTO.class);
-	}
-	
-	@RequestMapping(value = "/all/modEstimateLanguage", method = RequestMethod.POST)
-	public String modEstimateLanguage(HttpSession session, Model model, String documentNum, String documentTypeName) {
-		return getModDocumentPage(session, model, documentNum, documentTypeName);
 	}
 	
 	@ResponseBody
@@ -211,25 +201,15 @@ public class EstimateController {
 		logger.debug("BillController.updateEstimateLanguage,user:{}",user.getUserNum());
 		return estimateService.updateDocument(user, session, model, jsonStr, EstimateLanguageDTO.class);
 	}
-//-----------------------------------------------------------------------------------------------------------------------------------	
-	
-/////////////////////////////////////estimateSi///////////////////////////////////////////////////
-	@RequestMapping(value = "/all/writeEstimateSi", method = RequestMethod.GET)
-	public String writeEstimateSi(HttpSession session, Model model, String copy) {
-		return getWriteDocumentPage(session, model, copy, "estimateSi");
-	}
-	
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////estimateSi/////////////////////////////////////////////////////////
 	@ResponseBody
 	@RequestMapping(value = "/all/insertEstimateSi", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> insertEstimateSi(HttpSession session, Model model, String jsonStr) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		logger.debug("EstimateController.insertEstimateSi,user:{}",user.getUserNum());
 		return estimateService.insertDocument(user, session, model, jsonStr, EstimateSiDTO.class);
-	}
-	
-	@RequestMapping(value = "/all/modEstimateSi", method = RequestMethod.POST)
-	public String modEstimateSi(HttpSession session, Model model, String documentNum, String documentTypeName) {
-		return getModDocumentPage(session, model, documentNum, documentTypeName);
 	}
 	
 	@ResponseBody
@@ -239,6 +219,7 @@ public class EstimateController {
 		logger.debug("BillController.updateEstimateSi,user:{}",user.getUserNum());
 		return estimateService.updateDocument(user, session, model, jsonStr, EstimateSiDTO.class);
 	}
+	
 //-----------------------------------------------------------------------------------------------------------------------------------	
 	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@RequestMapping(value = "/all/test", method = RequestMethod.GET)

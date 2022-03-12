@@ -9,21 +9,12 @@ import jp.co.interline.dto.estimateSystem.EstimateCommonDTO;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class EstimateLanguageDTO extends EstimateCommonDTO{
-	String documentNum;
-	int userNum;
-	String userName;
-	String userDepartment;
-	String userPosition;
 	String estimateDate;
 	String documentTypeName;
 	String nextDocumentTypeName;
 	String stamp;
-	String stampFileName;
-	String logoFileName;
 	
-	String receiver;
 	String address;
-	String documentName;
 	String deadline;
 	String expirationDate;
 	String payCondition;
@@ -46,43 +37,10 @@ public class EstimateLanguageDTO extends EstimateCommonDTO{
 	String tax;
 	String sumWithTax;
 	String sumWithTax2;	
-	String state;
+	
 	String comment;
-	int workflowNum;
 	String insertDate;
-	String updateDate;
-	int updater;
-	int systemNum;
-	public String getDocumentNum() {
-		return documentNum;
-	}
-	public void setDocumentNum(String documentNum) {
-		this.documentNum = documentNum;
-	}
-	public int getUserNum() {
-		return userNum;
-	}
-	public void setUserNum(int userNum) {
-		this.userNum = userNum;
-	}
-	public String getUserName() {
-		return userName;
-	}
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-	public String getUserDepartment() {
-		return userDepartment;
-	}
-	public void setUserDepartment(String userDepartment) {
-		this.userDepartment = userDepartment;
-	}
-	public String getUserPosition() {
-		return userPosition;
-	}
-	public void setUserPosition(String userPosition) {
-		this.userPosition = userPosition;
-	}
+	
 	public String getEstimateDate() {
 		return estimateDate;
 	}
@@ -107,35 +65,11 @@ public class EstimateLanguageDTO extends EstimateCommonDTO{
 	public void setStamp(String stamp) {
 		this.stamp = stamp;
 	}
-	public String getStampFileName() {
-		return stampFileName;
-	}
-	public void setStampFileName(String stampFileName) {
-		this.stampFileName = stampFileName;
-	}
-	public String getLogoFileName() {
-		return logoFileName;
-	}
-	public void setLogoFileName(String logoFileName) {
-		this.logoFileName = logoFileName;
-	}
-	public String getReceiver() {
-		return receiver;
-	}
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
-	}
 	public String getAddress() {
 		return address;
 	}
 	public void setAddress(String address) {
 		this.address = address;
-	}
-	public String getDocumentName() {
-		return documentName;
-	}
-	public void setDocumentName(String documentName) {
-		this.documentName = documentName;
 	}
 	public String getDeadline() {
 		return deadline;
@@ -251,23 +185,11 @@ public class EstimateLanguageDTO extends EstimateCommonDTO{
 	public void setSumWithTax2(String sumWithTax2) {
 		this.sumWithTax2 = sumWithTax2;
 	}
-	public String getState() {
-		return state;
-	}
-	public void setState(String state) {
-		this.state = state;
-	}
 	public String getComment() {
 		return comment;
 	}
 	public void setComment(String comment) {
 		this.comment = comment;
-	}
-	public int getWorkflowNum() {
-		return workflowNum;
-	}
-	public void setWorkflowNum(int workflowNum) {
-		this.workflowNum = workflowNum;
 	}
 	public String getInsertDate() {
 		return insertDate;
@@ -275,41 +197,5 @@ public class EstimateLanguageDTO extends EstimateCommonDTO{
 	public void setInsertDate(String insertDate) {
 		this.insertDate = insertDate;
 	}
-	public String getUpdateDate() {
-		return updateDate;
-	}
-	public void setUpdateDate(String updateDate) {
-		this.updateDate = updateDate;
-	}
-	public int getUpdater() {
-		return updater;
-	}
-	public void setUpdater(int updater) {
-		this.updater = updater;
-	}
-	public int getSystemNum() {
-		return systemNum;
-	}
-	public void setSystemNum(int systemNum) {
-		this.systemNum = systemNum;
-	}
-	@Override
-	public String toString() {
-		return "EstimateLanguageDTO [documentNum=" + documentNum + ", userNum=" + userNum + ", userName=" + userName
-				+ ", userDepartment=" + userDepartment + ", userPosition=" + userPosition + ", estimateDate="
-				+ estimateDate + ", documentTypeName=" + documentTypeName + ", nextDocumentTypeName="
-				+ nextDocumentTypeName + ", stamp=" + stamp + ", stampFileName=" + stampFileName + ", logoFileName="
-				+ logoFileName + ", receiver=" + receiver + ", address=" + address + ", documentName=" + documentName
-				+ ", deadline=" + deadline + ", expirationDate=" + expirationDate + ", payCondition=" + payCondition
-				+ ", items=" + items + ", bankName=" + bankName + ", branchName=" + branchName + ", accountName="
-				+ accountName + ", hurigana=" + hurigana + ", accountNumber=" + accountNumber
-				+ ", depositeClassification=" + depositeClassification + ", cautions=" + cautions + ", sum=" + sum
-				+ ", discountName=" + discountName + ", discountRate=" + discountRate + ", discount=" + discount
-				+ ", taxRate=" + taxRate + ", tax=" + tax + ", sumWithTax=" + sumWithTax + ", sumWithTax2="
-				+ sumWithTax2 + ", state=" + state + ", comment=" + comment + ", workflowNum=" + workflowNum
-				+ ", insertDate=" + insertDate + ", updateDate=" + updateDate + ", updater=" + updater + ", systemNum="
-				+ systemNum + "]";
-	}
-	
 	
 }

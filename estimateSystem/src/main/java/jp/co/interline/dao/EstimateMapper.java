@@ -9,6 +9,7 @@ import jp.co.interline.dto.DocumentMasterDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
+import jp.co.interline.dto.estimateSystem.EstimateCommonDTO;
 import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageDTO;
 import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageItemDTO;
 import jp.co.interline.dto.estimateSystem.estimateSi.EstimateSiDTO;
@@ -29,32 +30,35 @@ public interface EstimateMapper {
 
 	String getBillNum(String documentNum);
 
+	SystemDTO getEstimate(SystemDTO system);
+	
+	int insertMasterInform(EstimateCommonDTO masterInform);
+	
+	int updateMasterInform(EstimateCommonDTO masterInform);
+
 	int insertEstimateSolution(EstimateSolutionDTO estimateSolution);
 
-	int insertEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItemsReciever);
-
-	SystemDTO getEstimate(SystemDTO system);
+	int insertEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItem);
 
 	int updateEstimateSolution(EstimateSolutionDTO estimateSolution);
 
-	int updateEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItemsReciever);
+	int updateEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItem);
 
 	int insertEstimateLanguage(EstimateLanguageDTO estimateLanguage);
 
-	int insertEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItemsReciever);
+	int insertEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItem);
 
 	int updateEstimateLanguage(EstimateLanguageDTO estimateLanguage);
 
-	int updateEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItemsReciever);
-	
+	int updateEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItem);
 
 	int insertEstimateSi(EstimateSiDTO estimateSi);
 
-	int insertEstimateSiItems(EstimateSiItemDTO estimateSiItemsReciever);
+	int insertEstimateSiItems(EstimateSiItemDTO estimateSiItem);
 
 	int updateEstimateSi(EstimateSiDTO estimateSi);
 
-	int updateEstimateSiItems(EstimateSiItemDTO estimateSiItemsReciever);
+	int updateEstimateSiItems(EstimateSiItemDTO estimateSiItem);
 
 	DocumentMasterDTO getDocumentMaster(String documentNum);
 
@@ -66,6 +70,7 @@ public interface EstimateMapper {
 	void testTest(String s);
 
 	void testTest2(String s);
+
 	
 	
 }

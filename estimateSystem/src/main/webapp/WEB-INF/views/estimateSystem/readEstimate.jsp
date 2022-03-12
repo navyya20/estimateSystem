@@ -111,28 +111,15 @@ function rejectButton(){
 	);
 }
 
-
+//modDocument폼테그를 공유하여 사용한다.
 function copyButton(){
 	var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
 	var inputJson=JSON.parse(inputJsonString);
-	var documentTypeName = inputJson["documentTypeName"];
-	var url = "write"+documentTypeName.charAt(0).toUpperCase()+documentTypeName.slice(1);
-	if(inputJson.hasOwnProperty("updater"))delete inputJson.updater;
-	if(inputJson.hasOwnProperty("userNum"))delete inputJson.userNum;
-	if(inputJson.hasOwnProperty("userName"))delete inputJson.userName;
-	if(inputJson.hasOwnProperty("userPosition"))delete inputJson.userPosition;
-	if(inputJson.hasOwnProperty("userDepartment"))delete inputJson.userDepartment;
-	if(inputJson.hasOwnProperty("workflowNum"))delete inputJson.workflowNum;
-	if(inputJson.hasOwnProperty("logoFileName"))delete inputJson.logoFileName;
-	if(inputJson.hasOwnProperty("documentNum"))delete inputJson.documentNum;
-	if(inputJson.hasOwnProperty("documentTypeName"))delete inputJson.documentTypeName;
-	if(inputJson.hasOwnProperty("nextDocumentTypeName"))delete inputJson.nextDocumentTypeName;
-	var jsonString = JSON.stringify(inputJson);
-	console.log(jsonString);
-	alert();
-	$('#copyDocument').attr("action",url);
-	$('#copy').val(jsonString);
-	$('#copyDocument').submit();
+	var documentNum = inputJson["documentNum"];
+	var url="copyDocument";
+	$('#modDocument').attr("action",url);
+	$('#documentNum').val(documentNum);
+	$('#modDocument').submit();
 }
 
 
@@ -247,9 +234,6 @@ function copyButton(){
 	<form id="modDocument" action="" method="post" accept-charset="utf-8">
 		<input type="hidden" id="documentNum" name="documentNum" value="">
 		<input type="hidden" id="documentTypeName" name="documentTypeName" value="">
-	</form>
-	<form id="copyDocument" action="" method="post" accept-charset="utf-8">
-		<input type="hidden" id="copy" name="copy" value="">
 	</form>
 </body>
 </html>

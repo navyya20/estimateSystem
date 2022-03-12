@@ -33,8 +33,19 @@ public class BillDAO {
 			ArrayList<EstimateListDTO> billList = mapper.getBillList(rbs, userInformWithOption);
 			return billList;
 	}
+	
+	
 
-/////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+	public int insertMasterInform(BillCommonDTO masterInform) {
+		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
+		return mapper.insertMasterInform(masterInform);
+	}
+	public int updateMasterInform(BillCommonDTO masterInform) {
+		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
+		return mapper.updateMasterInform(masterInform);
+	}
+	
 	public <T extends BillCommonDTO> int insertDocument(T dto) {
 		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
 		int result = 0;
@@ -78,5 +89,9 @@ public class BillDAO {
 		}
 		return result;
 	}
+
+	
+
+	
 	
 }

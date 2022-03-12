@@ -48,28 +48,28 @@ if ( self !== top ) {
 				<img src="../resources/img/billSolution.jpg" class="card-img-top" alt="...">
 				<div class="card-body">
 					<p class="card-text">請求書A</p>
-					<a href="writeBillSolution" class="btn btn-primary">新規作成</a>
+					<a href="writeBillSolution?documentTypeName=billSolution" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>
 			<div class="card" style="width: 17rem;">
 				<img src="../resources/img/billSi.jpg" class="card-img-top" alt="...">
 				<div class="card-body">
 					<p class="card-text">請求書B</p>
-					<a href="writeBillSi" class="btn btn-primary">新規作成</a>
+					<a href="writeBillSi?documentTypeName=billSi" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>
 			<div class="card" style="width: 17rem;">
 				<img src="../resources/img/billC.jpg" class="card-img-top" alt="...">
 				<div class="card-body">
 					<p class="card-text">請求書C</p>
-					<a href="writeBillC" class="btn btn-primary">新規作成</a>
+					<a href="writeBillC?documentTypeName=billC" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>
 			<div class="card" style="width: 17rem;">
 				<img src="../resources/img/billC.jpg" class="card-img-top" alt="...">
 				<div class="card-body">
 					<p class="card-text">請求書D</p>
-					<a href="writeBillD" class="btn btn-primary">新規作成</a>
+					<a href="writeBillD?documentTypeName=billD" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>
 		</div>

@@ -99,8 +99,15 @@ public class BillServiceImpl<T> implements BillService {
 		String logoFileName=returnFileName(system, "logo");
 		documentDTO.setStampFileName(stampFileName);
 		documentDTO.setLogoFileName(logoFileName);
-
+		
 		HashMap<String, String> result = new HashMap<String, String>();
+		BillCommonDTO masterInform = (BillCommonDTO)documentDTO;
+		int result0 = billDao.insertMasterInform(masterInform);
+		if(result0 != 1) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求書登録エラー");
+			return result;
+		}
 		int result1 = billDao.insertDocument(documentDTO);
 		if(result1 != 1) {
 			result.put("errorFlag", "1");
@@ -118,6 +125,13 @@ public class BillServiceImpl<T> implements BillService {
 		T documentDTO = jacksonUtility.readValue(jsonStr, type);
 		documentDTO.setUpdater(user.getUserNum());
 		HashMap<String, String> result = new HashMap<String, String>();
+		BillCommonDTO masterInform = (BillCommonDTO)documentDTO;
+		int result0 = billDao.updateMasterInform(masterInform);
+		if(result0 != 1) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求書登録情報修正エラー");
+			return result;
+		}
 		int result1 = billDao.updateDocument(documentDTO);
 		if(result1 != 1) {
 			result.put("errorFlag", "1");

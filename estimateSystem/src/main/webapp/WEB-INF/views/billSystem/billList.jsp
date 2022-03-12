@@ -42,6 +42,7 @@ function writeBill(estimateNum,nextDocumentTypeName){
 	location.href=url+"?estimateNum="+estimateNum;
 }
 
+//문서번호클릭시 실행되는 함수
 function readBill(billNum,documentTypeName){
 	var url="readEstimate";
 	$('#readDocument').attr("action",url);
@@ -50,14 +51,17 @@ function readBill(billNum,documentTypeName){
 	$('#readDocument').submit();
 }
 
+//카피기능클릭시 실행되는 함수
 //readDocument폼테그를 공유하여 사용한다.
 function copyDocument(documentNum,documentTypeName){
-	var url="copyDocument"
+	var url="copyDocument";
 	$('#readDocument').attr("action",url);
 	$('#documentNum').val(documentNum);
 	$('#readDocument').submit();
 }
 
+//삭제클릭시 실행되는 함수
+//체크박스에 체크된 문서들의 문서번호들을 arr로 만들어서 요청보냄.
 function deleteSheets(){
 	var checkBox=$('input[name="selectedRow"]');
 	var documentArr=new Array();

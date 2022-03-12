@@ -6,6 +6,7 @@ import org.apache.ibatis.session.RowBounds;
 
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
+import jp.co.interline.dto.billSystem.BillCommonDTO;
 import jp.co.interline.dto.billSystem.billC.BillCDTO;
 import jp.co.interline.dto.billSystem.billC.BillCItemDTO;
 import jp.co.interline.dto.billSystem.billD.BillDDTO;
@@ -22,6 +23,10 @@ public interface BillMapper {
 	int getTotalBillSheet(UserInformWithOptionDTO userInformWithOption);
 
 	ArrayList<EstimateListDTO> getBillList(RowBounds rbs, UserInformWithOptionDTO userInformWithOption);
+
+	int insertMasterInform(BillCommonDTO masterInform);
+	
+	int updateMasterInform(BillCommonDTO masterInform);
 	
 	int insertBillSolution(BillSolutionDTO billSolution);
 

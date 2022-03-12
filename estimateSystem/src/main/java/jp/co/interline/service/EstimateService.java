@@ -29,31 +29,7 @@ public interface EstimateService {
 	
 	String returnFileName(ArrayList<SystemDTO> systems, String category);
 
-	int insertEstimateSolution(EstimateSolutionDTO estimateSolution);
-
-	int insertEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItemsReciever);
-
 	SystemDTO getEstimate(SystemDTO system);
-
-	int updateEstimateSolution(EstimateSolutionDTO estimateSolution);
-
-	int updateEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItemsReciever);
-
-	int insertEstimateLanguage(EstimateLanguageDTO estimateLanguage);
-
-	int insertEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItemsReciever);
-
-	int updateEstimateLanguage(EstimateLanguageDTO estimateLanguage);
-
-	int updateEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItemsReciever);
-
-	int insertEstimateSi(EstimateSiDTO estimateSi);
-
-	int insertEstimateSiItems(EstimateSiItemDTO estimateSiItemsReciever);
-
-	int updateEstimateSi(EstimateSiDTO estimateSi);
-
-	int updateEstimateSiItems(EstimateSiItemDTO estimateSiItemsReciever);
 
 	DocumentMasterDTO getDocumentMaster(String documentNum);
 

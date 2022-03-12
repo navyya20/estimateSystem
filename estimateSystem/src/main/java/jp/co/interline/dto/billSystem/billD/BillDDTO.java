@@ -9,22 +9,10 @@ import jp.co.interline.dto.billSystem.BillCommonDTO;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class BillDDTO extends BillCommonDTO{
-	int systemNum;
-	String documentNum;
-	String estimateNum;
-	int userNum;
-	String userName;
-	String userDepartment;
-	String userPosition;
 	String billDate;
-	String documentTypeName;
-	String nextDocumentTypeName;
 	
 	String address;
 	String stamp;
-	String stampFileName;
-	String logoFileName;
-	String receiver;
 	
 	@JsonProperty("items")
 	ArrayList<BillDItemDTO> items;
@@ -55,65 +43,11 @@ public class BillDDTO extends BillCommonDTO{
 	String insertDate;
 	String updateDate;
 	int updater;
-	public int getSystemNum() {
-		return systemNum;
-	}
-	public void setSystemNum(int systemNum) {
-		this.systemNum = systemNum;
-	}
-	public String getDocumentNum() {
-		return documentNum;
-	}
-	public void setDocumentNum(String documentNum) {
-		this.documentNum = documentNum;
-	}
-	public String getEstimateNum() {
-		return estimateNum;
-	}
-	public void setEstimateNum(String estimateNum) {
-		this.estimateNum = estimateNum;
-	}
-	public int getUserNum() {
-		return userNum;
-	}
-	public void setUserNum(int userNum) {
-		this.userNum = userNum;
-	}
-	public String getUserName() {
-		return userName;
-	}
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-	public String getUserDepartment() {
-		return userDepartment;
-	}
-	public void setUserDepartment(String userDepartment) {
-		this.userDepartment = userDepartment;
-	}
-	public String getUserPosition() {
-		return userPosition;
-	}
-	public void setUserPosition(String userPosition) {
-		this.userPosition = userPosition;
-	}
 	public String getBillDate() {
 		return billDate;
 	}
 	public void setBillDate(String billDate) {
 		this.billDate = billDate;
-	}
-	public String getDocumentTypeName() {
-		return documentTypeName;
-	}
-	public void setDocumentTypeName(String documentTypeName) {
-		this.documentTypeName = documentTypeName;
-	}
-	public String getNextDocumentTypeName() {
-		return nextDocumentTypeName;
-	}
-	public void setNextDocumentTypeName(String nextDocumentTypeName) {
-		this.nextDocumentTypeName = nextDocumentTypeName;
 	}
 	public String getAddress() {
 		return address;
@@ -127,23 +61,11 @@ public class BillDDTO extends BillCommonDTO{
 	public void setStamp(String stamp) {
 		this.stamp = stamp;
 	}
-	public String getStampFileName() {
-		return stampFileName;
+	public ArrayList<BillDItemDTO> getItems() {
+		return items;
 	}
-	public void setStampFileName(String stampFileName) {
-		this.stampFileName = stampFileName;
-	}
-	public String getLogoFileName() {
-		return logoFileName;
-	}
-	public void setLogoFileName(String logoFileName) {
-		this.logoFileName = logoFileName;
-	}
-	public String getReceiver() {
-		return receiver;
-	}
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
+	public void setItems(ArrayList<BillDItemDTO> items) {
+		this.items = items;
 	}
 	public String getSum() {
 		return sum;
@@ -282,28 +204,6 @@ public class BillDDTO extends BillCommonDTO{
 	}
 	public void setUpdater(int updater) {
 		this.updater = updater;
-	}
-	public void setItems(ArrayList<BillDItemDTO> items) {
-		this.items = items;
-	}
-	public ArrayList<BillDItemDTO> getItems() {
-		return items;
-	}
-	
-	@Override
-	public String toString() {
-		return "BillDDTO [systemNum=" + systemNum + ", documentNum=" + documentNum + ", estimateNum=" + estimateNum
-				+ ", userNum=" + userNum + ", userName=" + userName + ", userDepartment=" + userDepartment
-				+ ", userPosition=" + userPosition + ", billDate=" + billDate + ", documentTypeName=" + documentTypeName
-				+ ", nextDocumentTypeName=" + nextDocumentTypeName + ", address=" + address + ", stamp=" + stamp
-				+ ", stampFileName=" + stampFileName + ", logoFileName=" + logoFileName + ", receiver=" + receiver
-				+ ", sum=" + sum + ", taxRate=" + taxRate + ", tax=" + tax + ", discountRate=" + discountRate
-				+ ", discount=" + discount + ", sumWithTax=" + sumWithTax + ", sumWithTax2=" + sumWithTax2 + ", note="
-				+ note + ", bnSwiftCode=" + bnSwiftCode + ", bnBankName=" + bnBankName + ", bnBranchName="
-				+ bnBranchName + ", bnBankAddress=" + bnBankAddress + ", bnName=" + bnName + ", bnAddress=" + bnAddress
-				+ ", bnAccountNumber=" + bnAccountNumber + ", bnAccountName=" + bnAccountName + ", imSwiftCode="
-				+ imSwiftCode + ", imBankName=" + imBankName + ", state=" + state + ", workflowNum=" + workflowNum
-				+ ", insertDate=" + insertDate + ", updateDate=" + updateDate + ", updater=" + updater + "]";
 	}
 	
 }

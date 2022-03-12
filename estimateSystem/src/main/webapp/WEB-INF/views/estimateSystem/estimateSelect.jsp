@@ -48,7 +48,7 @@ if ( self !== top ) {
 				<img src="../resources/img/estimateSi.jpg" class="card-img-top" alt="...">
 				<div class="card-body">
 					<p class="card-text">見積書Ａ（SI事業部）</p>
-					<a href="writeEstimateSi" class="btn btn-primary">新規作成</a>
+					<a href="writeEstimateSi?documentTypeName=estimateSi" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>
 			
@@ -56,7 +56,7 @@ if ( self !== top ) {
 				<img src="../resources/img/estimateSolution.jpg" class="card-img-top" alt="...">
 				<div class="card-body">
 					<p class="card-text">見積書Ｂ（ソリューション事業部）</p>
-					<a href="writeEstimateSolution" class="btn btn-primary">新規作成</a>
+					<a href="writeEstimateSolution?documentTypeName=estimateSolution" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>
 			
@@ -64,7 +64,7 @@ if ( self !== top ) {
 				<img src="../resources/img/estimateLanguage.jpg" class="card-img-top" alt="...">
 				<div class="card-body">
 					<p class="card-text">見積書Ｃ（語学事業部）</p>
-					<a href="writeEstimateLanguage" class="btn btn-primary">新規作成</a>
+					<a href="writeEstimateLanguage?documentTypeName=estimateLanguage" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>
 			

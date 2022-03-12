@@ -104,22 +104,6 @@ function deleteSheets(){
 	);
 }
 
-
-/* $(document).ready(function(){
-	$("#eDOTupdateDate,#bDOTupdateDate").click(function(e){
-		var object = $(e.target);
-		var option = object.attr('id').replace("DOT",".")+" desc";
-		sort(option);
-	});
-	$("#eDOTupdateDate,#bDOTupdateDate").dblclick(function(e){
-		alert("db");
-		var object = $(e.target);
-		var option = object.attr('id').replace("DOT",".")+" asc";
-		sort(option);
-	});
-})
- */
-
 //더블클릭 감지기
 var numClicks = 0;
 var timeOut;
@@ -296,11 +280,5 @@ function sort(option){
 		<input type="hidden" id="documentTypeName" name="documentTypeName" value="">
 	</form>
 	
-
-	<!-- <form id="pageNavi" action="" method="post" accept-charset="utf-8">
-		<input type="hidden" id="targetPage" name="page" value="">
-		<input type="hidden" id="targetOption" name="option" value="">
-		<input type="hidden" id="flagObject" name="flagObject" value="">
-	</form> -->
 </body>
 </html>

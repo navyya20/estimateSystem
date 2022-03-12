@@ -21,6 +21,7 @@ import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
+import jp.co.interline.dto.billSystem.BillCommonDTO;
 import jp.co.interline.dto.estimateSystem.EstimateCommonDTO;
 import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageDTO;
 import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageItemDTO;
@@ -143,9 +144,6 @@ public class EstimateServiceImpl implements EstimateService {
 		return sys;
 	}
 	
-
-	
-
 	@Override
 	public String returnFileName(ArrayList<SystemDTO> systems, String category) {
 		SystemDTO sys=null;
@@ -156,121 +154,6 @@ public class EstimateServiceImpl implements EstimateService {
 			}
 		}
 		return "";
-	}
-
-/////////////////////////////////EstimateSolution//////////////////////////////////////////////////
-	@Override
-	public int insertEstimateSolution(EstimateSolutionDTO estimateSolution) {
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		estimateSolution.setStampFileName(stampFileName);
-		estimateSolution.setLogoFileName(logoFileName);
-		int result = estimateDao.insertEstimateSolution(estimateSolution);
-		return result;
-	}
-
-	@Override
-	public int insertEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItemsReciever) {
-		int result = estimateDao.insertEstimateSolutionItems(estimateSolutionItemsReciever);
-		return result;
-	}
-
-	@Override
-	public int updateEstimateSolution(EstimateSolutionDTO estimateSolution) {
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		estimateSolution.setStampFileName(stampFileName);
-		estimateSolution.setLogoFileName(logoFileName);
-		int result = estimateDao.updateEstimateSolution(estimateSolution);
-		return result;
-	}
-
-	@Override
-	public int updateEstimateSolutionItems(EstimateSolutionItemDTO estimateSolutionItemsReciever) {
-		int result = estimateDao.updateEstimateSolutionItems(estimateSolutionItemsReciever);
-		return result;
-	}
-
-//-------------------------------------------------------------------------------------------------------	
-
-	
-	
-	
-/////////////////////////////////EstimateLanguage//////////////////////////////////////////////////
-	@Override
-	public int insertEstimateLanguage(EstimateLanguageDTO estimateLanguage) {
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		estimateLanguage.setStampFileName(stampFileName);
-		estimateLanguage.setLogoFileName(logoFileName);
-		int result = estimateDao.insertEstimateLanguage(estimateLanguage);
-		return result;
-	}
-
-	@Override
-	public int insertEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItemsReciever) {
-		int result = estimateDao.insertEstimateLanguageItems(estimateLanguageItemsReciever);
-		return result;
-	}
-
-	@Override
-	public int updateEstimateLanguage(EstimateLanguageDTO estimateLanguage) {
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		estimateLanguage.setStampFileName(stampFileName);
-		estimateLanguage.setLogoFileName(logoFileName);
-		int result = estimateDao.updateEstimateLanguage(estimateLanguage);
-		return result;
-	}
-
-	@Override
-	public int updateEstimateLanguageItems(EstimateLanguageItemDTO estimateLanguageItemsReciever) {
-		int result = estimateDao.updateEstimateLanguageItems(estimateLanguageItemsReciever);
-		return result;
-	}
-//-------------------------------------------------------------------------------------------------------	
-
-	
-	
-	
-	
-/////////////////////////////////EstimateSi//////////////////////////////////////////////////
-	@Override
-	public int insertEstimateSi(EstimateSiDTO estimateSi) {
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		estimateSi.setStampFileName(stampFileName);
-		estimateSi.setLogoFileName(logoFileName);
-		int result = estimateDao.insertEstimateSi(estimateSi);
-		return result;
-	}
-
-	@Override
-	public int insertEstimateSiItems(EstimateSiItemDTO estimateSiItemsReciever) {
-		int result = estimateDao.insertEstimateSiItems(estimateSiItemsReciever);
-		return result;
-	}
-
-	@Override
-	public int updateEstimateSi(EstimateSiDTO estimateSi) {
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		estimateSi.setStampFileName(stampFileName);
-		estimateSi.setLogoFileName(logoFileName);
-		int result = estimateDao.updateEstimateSi(estimateSi);
-		return result;
-	}
-
-	@Override
-	public int updateEstimateSiItems(EstimateSiItemDTO estimateSiItemsReciever) {
-		int result = estimateDao.updateEstimateSiItems(estimateSiItemsReciever);
-		return result;
 	}
 //-------------------------------------------------------------------------------------------------------	
 	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
@@ -284,7 +167,13 @@ public class EstimateServiceImpl implements EstimateService {
 		documentDTO.setUpdater(user.getUserNum());
 		
 		HashMap<String, String> result = new HashMap<String, String>();
-		
+		EstimateCommonDTO masterInform = (EstimateCommonDTO)documentDTO;
+		int result0 = estimateDao.insertMasterInform(masterInform);
+		if(result0 != 1) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求書登録エラー");
+			return result;
+		}
 		int result1 = estimateDao.insertDocument(documentDTO);
 		if(result1 != 1) {
 			result.put("errorFlag", "1");
@@ -295,11 +184,19 @@ public class EstimateServiceImpl implements EstimateService {
 		result.put("documentNum", documentNum);
 		return result;
 	}
+	
 	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@Override
 	public <T extends EstimateCommonDTO> HashMap<String, String> updateDocument(UserInformDTO user, HttpSession session, Model model, String jsonStr, Class<T> type) {
 		T documentDTO = jacksonUtility.readValue(jsonStr, type);
 		HashMap<String, String> result = new HashMap<String, String>();
+		EstimateCommonDTO masterInform = (EstimateCommonDTO)documentDTO;
+		int result0 = estimateDao.updateMasterInform(masterInform);
+		if(result0 != 1) {
+			result.put("errorFlag", "1");
+			result.put("error", "請求書登録情報修正エラー");
+			return result;
+		}
 		int result1 = estimateDao.updateDocument(documentDTO);
 		if(result1 != 1) {
 			result.put("errorFlag", "1");
