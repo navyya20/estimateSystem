@@ -27,7 +27,7 @@
 
 
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="../css/common/common.css">
+<link rel="stylesheet" type="text/css" href="../css/common/common.css?ver=1.130">
 <script src="../js/bootstrap.bundle.js"></script>
 <title>modBillD</title>
 <style type="text/css">
@@ -105,7 +105,7 @@ if ( self !== top ) {
             }
         }
 		console.log("fontSpy함수를 실행합니다.");
-        fontSpy("SawarabiGothic", { //위의 font-face에서 설정한 이름을 여기에 설정해주시기 바랍니다.
+        fontSpy("Sawarabi Gothic", { //위의 font-face에서 설정한 이름을 여기에 설정해주시기 바랍니다.
             success: function() {
             	isFont = true;
             	console.log("뷰어를 실행합니다.")

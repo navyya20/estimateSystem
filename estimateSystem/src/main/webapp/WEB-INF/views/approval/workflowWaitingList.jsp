@@ -46,13 +46,15 @@ function readDocument(system,documentTypeName,documentNum){
 	
 	<div class="d-block" style="height: 8px;"></div>
 	
-	<div class="p-0 container-lg">
+	<div class="container-fluid pr-md-3 pl-md-3">
 		<div class="p-0 d-flex bg-dark text-white">
 			<div class="p-0 col-12 d-flex">
-				<div class="mt-2 mb-2 col-3 p-0 text-center">種類</div>
-				<div class="mt-2 mb-2 col-2 p-0 text-center">文書番号</div>
-				<div class="mt-2 mb-2 col-2 p-0 text-center">部署</div>
-				<div class="mt-2 mb-2 col-2 p-0 text-center">作成者</div>
+				<div class="mt-2 mb-2 col-2 p-0 text-center">種類</div>
+				<div class="mt-2 mb-2 col-1 p-0 text-center">文書番号</div>
+				<div class="mt-2 mb-2 col-2 p-0 text-center">顧客</div>
+  				<div class="mt-2 mb-2 col-2 p-0 text-center">件名</div>
+				<div class="mt-2 mb-2 col-1 p-0 text-center">部署</div>
+				<div class="mt-2 mb-2 col-1 p-0 text-center">作成者</div>
 				<div class="mt-2 mb-2 col-2 p-0 text-center">承認依頼日時</div>
 				<!--지금은 어차피 승인경로가1명이라 필요없는 정보 <div class="mt-2 mb-2 col-2 p-0 text-center">更新日時</div> -->
 			</div>
@@ -61,13 +63,15 @@ function readDocument(system,documentTypeName,documentNum){
 	<c:set var = "arr" value='<%= new String[]{"","見積書","請求書"} %>' />
 	<c:set var = "sysArr" value='<%= new String[]{"","estimate","bill"} %>' />
 	<c:forEach items="${workflowList}" var="w" varStatus="status">
-		<div class="p-0 container-lg">
+		<div class="container-fluid pr-md-3 pl-md-3 smallSize">
 			<div class="p-0 d-flex ">
 				<div class="p-0 col-12 d-flex">
-					<div class="mt-2 mb-2 col-3 p-0 text-center align-self-center">${w.explanation}</div>
-					<div class="mt-2 mb-2 col-2 p-0 text-center align-self-center link" onclick="readDocument('${sysArr[w.systemNum]}','${w.documentTypeName}','${w.documentNum}')">${w.documentNum}</div>
-					<div class="mt-2 mb-2 col-2 p-0 text-center align-self-center">${w.userDepartment}</div>
-					<div class="mt-2 mb-2 col-2 p-0 text-center align-self-center">${w.userName}</div>
+					<div class="mt-2 mb-2 col-2 p-0 text-center align-self-center">${w.explanation}</div>
+					<div class="mt-2 mb-2 col-1 p-0 text-center align-self-center link" onclick="readDocument('${sysArr[w.systemNum]}','${w.documentTypeName}','${w.documentNum}')">${w.documentNum}</div>
+					<div class="mt-2 mb-2 col-2 p-0 text-center align-self-center d-none d-md-inline">${w.receiver}</div>
+	  				<div class="mt-2 mb-2 col-2 p-0 text-center align-self-center">${w.documentName}</div>
+					<div class="mt-2 mb-2 col-1 p-0 text-center align-self-center">${w.userDepartment}</div>
+					<div class="mt-2 mb-2 col-1 p-0 text-center align-self-center">${w.userName}</div>
 					<div class="mt-2 mb-2 col-2 p-0 text-center"><fmt:parseDate value="${w.insertDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/><br><fmt:formatDate value="${noticePostDate}" pattern="HH:mm"/></div>
 					<!--지금은 어차피 승인경로가1명이라 필요없는 정보 <div class="mt-2 mb-2 col-2 p-0 text-center"><fmt:parseDate value="${w.updateDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/><br><fmt:formatDate value="${noticePostDate}" pattern="HH:mm"/></div> -->
 				</div>

@@ -12,7 +12,6 @@ import jp.co.interline.dto.DocumentMasterDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
-import jp.co.interline.dto.billSystem.BillCommonDTO;
 import jp.co.interline.dto.estimateSystem.EstimateCommonDTO;
 import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageDTO;
 import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageItemDTO;

@@ -2,7 +2,12 @@ package jp.co.interline.dao;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.session.RowBounds;
+
+import jp.co.interline.dto.ApprovedListDTO;
+import jp.co.interline.dto.DocumentMasterDTO;
 import jp.co.interline.dto.SystemDTO;
+import jp.co.interline.dto.UserInformWithOptionDTO;
 import jp.co.interline.dto.WorkflowDTO;
 import jp.co.interline.dto.WorkflowInformDTO;
 
@@ -42,5 +47,13 @@ public interface WorkflowMapper {
 	int deleteWorkflow(int workflowNum);
 
 	int stampConfirm(SystemDTO system);
+
+	String getSystemBySystemNum(int systemNum);
+
+	int setfileName(DocumentMasterDTO documentMaster);
+
+	int getTotalApprovedSheet(UserInformWithOptionDTO userInformWithOption);
+
+	ArrayList<ApprovedListDTO> getApprovedList(RowBounds rbs, UserInformWithOptionDTO userInformWithOption);
 
 }

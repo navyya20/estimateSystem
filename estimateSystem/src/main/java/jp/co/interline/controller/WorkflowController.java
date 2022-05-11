@@ -14,8 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import jp.co.interline.dto.ApprovedListDTO;
+import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.dto.WorkflowDTO;
 import jp.co.interline.dto.WorkflowInformDTO;
@@ -91,7 +94,7 @@ public class WorkflowController {
 		int result1 = workflowService.renewWorkflow(workflowNum,user);
 		if (result1==0) {return "workflow更新失敗";}
 		//워크플로우 최종승인확인.
-		Boolean result2 = workflowService.confirmation(workflowNum,documentNum,documentTypeName);
+		Boolean result2 = workflowService.confirmation(workflowNum,documentNum,documentTypeName,systemNum);
 		if (result2==false) {return "承認確認失敗";}
 		
 		return "承認依頼完了";
@@ -140,12 +143,24 @@ public class WorkflowController {
 		int result1 = workflowService.renewWorkflow(workflow.getWorkflowNum(),user);
 		if (result1==0) {return "workflow更新失敗";}
 		//워크플로우 최종승인확인.
-		Boolean result2 = workflowService.confirmation(workflowNum,documentNum,documentTypeName);
-		if (result2=false) {return "承認確認失敗";}
+		Boolean result2 = workflowService.confirmation(workflowNum,documentNum,documentTypeName,workflow.getSystemNum());
+		if (result2==false) {return "承認確認失敗";}
 		
 		return "承認完了";
 	}
 	
+	//문서를 파일로 저장한다.
+	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
+	@ResponseBody
+	@RequestMapping(value = "/all/generateFile", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
+	public String generateFile(HttpSession session, Model model, int systemNum, String documentTypeName, String documentNum, int workflowNum) {
+		//문서를 파일로 변환하여 저장(만약 최종승인상태이면)
+		Boolean result = workflowService.generateFile(workflowNum,documentNum,documentTypeName,systemNum);
+		if (result==false) {
+			return "承認はしましたが、ファイル生成は失敗しました。";
+		}
+		return "承認完了";
+	}
 	//승인거절한다.
 	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@ResponseBody
@@ -153,7 +168,9 @@ public class WorkflowController {
 	public String reject(HttpSession session, Model model, String documentTypeName, String documentNum, int workflowNum) {
 		//workflow삭제 문서에 저장됬던 workflowNum은 자동으로 null
 		int result1 = workflowService.deleteWorkflow(workflowNum);
-		
+		if (result1 != 1) {
+			return "workflow削除失敗。";
+		}
 		//문서상태 wri로
 		int result2 =  workflowService.updateStateWRI(documentNum);
 		if (result2 != 1) {
@@ -162,4 +179,28 @@ public class WorkflowController {
 		
 		return "差し戻し完了";
 	}
+	
+	
+	/*
+	 * 승인완료된 문서리스트를 뽑아줌.
+	 * option:order by절에 들어갈 스트링
+	 * page: pageNavigator를 위한 page수
+	 */
+	@RequestMapping(value = "/all/approvedList", method = RequestMethod.GET)
+	public String approvedList(HttpSession session, Model model,String flagObj, 
+			@RequestParam(value="option", defaultValue="wf.updateDate desc")String option,
+			@RequestParam(value="page", defaultValue="1") int page,
+			@RequestParam(value="countPerPage", defaultValue="20") int countPerPage) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("WorkflowController.approvedList,user:{}",user.getUserNum());
+		
+		ArrayList<ApprovedListDTO> approvedList = workflowService.getApprovedList(model, user,option,page,countPerPage);
+		model.addAttribute("approvedList", approvedList);
+		model.addAttribute("option", option);
+		model.addAttribute("flagObj", flagObj);
+		model.addAttribute("countPerPage", countPerPage);
+		//네비게이션에대한 모델은 서비스에서 넣어준다.
+		return "approval/approvedList";
+	}
+	
 }

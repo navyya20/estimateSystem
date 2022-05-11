@@ -10,7 +10,7 @@
 <script src="../js/jquery-3.5.1.min.js"></script>
 
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="../css/common/common.css">
+<link rel="stylesheet" type="text/css" href="../css/common/common.css?ver=1.130">
 <script src="../js/bootstrap.bundle.js"></script>
 	<title>userReg</title>
 <style type="text/css">

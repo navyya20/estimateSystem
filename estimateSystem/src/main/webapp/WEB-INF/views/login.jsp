@@ -64,7 +64,7 @@ $(document).ready(function(){
 });
 
 function ozlicenseCheck(){
-	var expirationDate = new Date(2022,5,1) ;//라이센스받으면 만료일 경신 필요함.
+	var expirationDate = new Date(2022,10,1) ;//라이센스받으면 만료일 경신 필요함.
 	var nowDate = new Date();
 	var startDate = new Date(nowDate.getFullYear(),nowDate.getMonth()+1,nowDate.getDate());
 	var diff = (expirationDate-startDate)/(1000*60*60*24);	
@@ -84,7 +84,7 @@ if ( self !== top ) {
 
 <body class="body" style="height: 100%;">
 <div id="notice" style="position: absolute; left: 0;top: 0;">
-VER 1.10	
+VER 1.20	
 </div>
 	<div class="row align-items-center col-12 p-0 m-0" style="height: 100%;">
 		<div id="login_div" class="d-flex justify-content-center col-12 p-0">

@@ -26,7 +26,7 @@
 
 
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
-<link rel="stylesheet" type="text/css" href="../css/common/common.css">
+<link rel="stylesheet" type="text/css" href="../css/common/common.css?ver=4">
 <script src="../js/bootstrap.bundle.js"></script>
 <title>readEstimate</title>
 <style type="text/css">
@@ -61,7 +61,13 @@ function requestButton(){
 				dataType:"text",
 				success: function(r){
 					alert(r);
-					location.href="estimateList";
+					if(inputJson["systemNum"]=="1"){
+						location.href="estimateList";
+					}else if(inputJson["systemNum"]=="2"){
+						location.href="billList";
+					}else{
+						alert("SYSTEMNUMERが定義されていません。必ず管理者にお問い合わせください。");
+					}
 				},
 				error: function(e){
 					console.log(JSON.stringify(e));
@@ -73,6 +79,7 @@ function requestButton(){
 function approveButton(){
 	var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
 	var inputJson=JSON.parse(inputJsonString);
+	$("#progressDiv").css("z-index",9998);
 	$.ajax(
 			{
 				url: "approval",
@@ -80,7 +87,11 @@ function approveButton(){
 				data: {"documentTypeName":inputJson["documentTypeName"], "documentNum" : inputJson["documentNum"], "workflowNum":inputJson["workflowNum"]},
 				dataType:"text",
 				success: function(r){
-					alert(r);
+					if (r!="承認完了"){ 
+						alert("承認失敗");
+					}else{
+						generateFile(inputJson);
+					}
 					location.href="estimateList";
 				},
 				error: function(e){
@@ -123,45 +134,36 @@ function copyButton(){
 }
 
 
+//승인완료후 파일생성을 하러간다. 파일생성을 할지말지는 가서 정해진다.
+function generateFile(inputJson){
+	$.ajax(
+			{
+				url: "generateFile",
+				type: 'POST',
+				data: {"systemNum":inputJson["systemNum"], "documentTypeName":inputJson["documentTypeName"], "documentNum" : inputJson["documentNum"], "workflowNum":inputJson["workflowNum"]},
+				dataType:"text",
+				async: false,
+				success: function(r){
+					$("#progressDiv").html("完了");
+					alert(r);
+				},
+				error: function(e){
+					console.log(JSON.stringify(e));
+					alert('エラー！');
+				}
+			}		
+	);
+}
 </script>
 </head>
 
-<body class="body" style="height: 100%;">
+<body id="body" class="body" style="height: 100%;">
 	<header class="mb-3">
 		<jsp:include page="../menubar.jsp"></jsp:include>
 	</header>
 	
 	<div id="OZViewer" style="width:99%;height:97.6%"></div>
 	
-	<!--buttons -->
-	<%-- <div class="p-0 d-flex col-12">
-		<div class="pl-2 pr-2 d-flex col-3">
-			<!-- (유져&작성중)  or 관리자-->
-			<c:if test="${(userInform.auth eq 'u' and state eq 'wri') or userInform.auth eq 'a'}">
-				<button type="button" class="col-12 mr-2 ml-2 btn btn-secondary" onclick="modButton()">修正モード</button>
-			</c:if>
-		</div>
-		<div class="pl-2 pr-2 d-flex col-3">
-			<!-- (유져&작성중)  or 관리자-->
-			<c:if test="${state eq 'wri' and userNum eq userInform.userNum}">
-				<button type="button" class="col-12 mr-2 ml-2 btn btn-secondary" onclick="requestButton()">承認依頼</button>
-			</c:if>
-			<c:if test="${approveMode eq 'on'}">
-				<button type="button" class="col-12 mr-2 ml-2 btn btn-secondary" onclick="approveButton()">承認</button>
-			</c:if>
-		</div>
-		<div class="pl-2 pr-2 d-flex col-3">
-			<c:if test="${approveMode eq 'on'}">
-				<button type="button" class="col-12 mr-2 ml-2 btn btn-secondary" onclick="rejectButton()">差し戻し</button>
-			</c:if>
-			<c:if test="${approveMode eq null}">
-				<button type="button" class="col-12 mr-2 ml-2 btn btn-secondary" onclick="copyButton()">コピーする</button>
-			</c:if>
-		</div>
-		<div class="pl-2 pr-2 d-flex col-3">
-			<button type="button" class="col-12 mr-2 ml-2 btn btn-secondary" onclick="location.href='estimateList'">戻る</button>
-		</div>
-	</div>	 --%>
 	<div class="d-block" style="height: 8px;"></div>
 	<!--buttons -->
 	<div class="p-0 d-flex col-12 justify-content-center">
@@ -205,8 +207,19 @@ function copyButton(){
 			oz.sendToActionScript("odi.odinames", odiName);
 	 		oz.sendToActionScript("odi."+odiName+".pcount", "1");
 			oz.sendToActionScript("odi."+odiName+".args1", "documentNum="+'${estimateNum}');
+
+			oz.sendToActionScript("font.fontnames", "font1"); // 폰트에 대한 이름 임의로 설정
+			oz.sendToActionScript("font.font1.name", "Sawarabi Gothic"); // 맑은 고딕 유니코드 문자
+			oz.sendToActionScript("font.font1.url", "../resources/fonts/SawarabiGothic-Regular.ttf"); // 폰트 경로 기입, url이나 시스템 절대경로 지정 가능
+
 			
+			oz.sendToActionScript("pdf.filename",'${estimateNum}');
+			oz.sendToActionScript("pdf.title","INTERLINE");
+			oz.sendToActionScript("pdf.author","INTERLINE");
 			oz.sendToActionScript("pdf.fontembedding","true");
+			oz.sendToActionScript("pdf.fontembedding_subset", "true");
+
+			
 			return true;
 		}
 		
@@ -220,7 +233,7 @@ function copyButton(){
             }
         }
 		console.log("fontSpy함수를 실행합니다.");
-        fontSpy("SawarabiGothic", { //위의 font-face에서 설정한 이름을 여기에 설정해주시기 바랍니다.
+        fontSpy("Sawarabi Gothic", { //위의 font-face에서 설정한 이름을 여기에 설정해주시기 바랍니다.
             success: function() {
             	isFont = true;
             	console.log("뷰어를 실행합니다.")
@@ -235,5 +248,9 @@ function copyButton(){
 		<input type="hidden" id="documentNum" name="documentNum" value="">
 		<input type="hidden" id="documentTypeName" name="documentTypeName" value="">
 	</form>
+	
+	<div id="progressDiv" style="z-index:-1;width:300px; height:200px; position:absolute; left:50%; top:50%; margin-left:-150px; margin-top:-100px;text-align:center; line-height:200px;background:rgba(0, 0, 0, 0.6); font-size:x-large;;font-weight: bolder;">
+		承認処理中。。。
+	</div>
 </body>
 </html>

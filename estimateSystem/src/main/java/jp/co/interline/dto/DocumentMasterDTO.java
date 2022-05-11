@@ -15,6 +15,7 @@ public class DocumentMasterDTO {
 	String updateDate;
 	int updater;
 	String approvedDate;
+	String fileName;
 	
 	public String getDocumentNum() {
 		return documentNum;
@@ -100,13 +101,20 @@ public class DocumentMasterDTO {
 	public void setApprovedDate(String approvedDate) {
 		this.approvedDate = approvedDate;
 	}
+	public String getFileName() {
+		return fileName;
+	}
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
 	@Override
 	public String toString() {
 		return "DocumentMasterDTO [documentNum=" + documentNum + ", systemNum=" + systemNum + ", documentTypeName="
 				+ documentTypeName + ", nextDocumentTypeName=" + nextDocumentTypeName + ", userNum=" + userNum
 				+ ", userName=" + userName + ", userDepartment=" + userDepartment + ", userPosition=" + userPosition
 				+ ", workflowNum=" + workflowNum + ", state=" + state + ", insertDate=" + insertDate + ", updateDate="
-				+ updateDate + ", updater=" + updater + ", approvedDate=" + approvedDate + "]";
+				+ updateDate + ", updater=" + updater + ", approvedDate=" + approvedDate + ", fileName=" + fileName
+				+ "]";
 	}
 	
 }

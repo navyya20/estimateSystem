@@ -1,9 +1,9 @@
 package jp.co.interline.controller;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
@@ -28,11 +28,12 @@ import jp.co.interline.dto.DocumentMasterDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
-import jp.co.interline.dto.estimateSystem.EstimateCommonDTO;
 import jp.co.interline.dto.estimateSystem.estimateLanguage.EstimateLanguageDTO;
 import jp.co.interline.dto.estimateSystem.estimateSi.EstimateSiDTO;
 import jp.co.interline.dto.estimateSystem.estimateSolution.EstimateSolutionDTO;
 import jp.co.interline.service.EstimateService;
+import jp.co.interline.service.FileService;
+import jp.co.interline.service.GetProperties;
 import jp.co.interline.service.WorkflowService;
 
 /**
@@ -93,7 +94,6 @@ public class EstimateController {
 		return "estimateSystem/readEstimate";
 	}
 	
-	
 	/*
 	 * 지울 다큐먼트 리스트를 가져온다.
 	 * estiamteMaster에서 딸린 청구서가 있는지 확인한다.
@@ -103,11 +103,19 @@ public class EstimateController {
 	@ResponseBody
 	@RequestMapping(value = "/all/deleteSheets", method = RequestMethod.POST, produces="application/json;charset=UTF-8")
 	public HashMap<String, String> updateEstimateSheet1(HttpSession session, Model model, String[] documentArr) {
+		GetProperties properties= new GetProperties();
+		String projectRoot = properties.getProjectRoot();
+		String path =  session.getServletContext().getRealPath("");
+		path = path.replaceFirst(projectRoot, "files");
+		path = path+ "application/pdf/";
+		path = path.replace('/', File.separatorChar);
 		for (int i = 0; i < documentArr.length; i++) {
 			System.out.println(documentArr[i]);
 			String documentNum = documentArr[i];
 			estimateService.deleteSheet(documentNum);
+			FileService.deleteFile(path+documentNum+".pdf");
 		}
+		
 		return null;
 	}
 	

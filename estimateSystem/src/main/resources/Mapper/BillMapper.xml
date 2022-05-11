@@ -46,7 +46,8 @@
 			b.userDepartment userDepartmentB,
 			b.userPosition userPositionB,
 			b.state stateB,
-			b.stateName stateNameB
+			b.stateName stateNameB,
+			b.approvedDate approvedDateB
 		from
 			(
 				select d.*,em1.receiver,em1.documentName,em1.estimateNum,ds.name stateName from
@@ -459,7 +460,7 @@
 			documentNum = #{documentNum};
 			
 		<foreach collection="items" item="item">
-			update billDItems set
+			update billCItems set
 				itemName = #{item.itemName}, 
 				unitPrice = ${item.unitPrice},
 				amount = ${item.amount},

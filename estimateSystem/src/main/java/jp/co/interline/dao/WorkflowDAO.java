@@ -2,11 +2,16 @@ package jp.co.interline.dao;
 
 import java.util.ArrayList;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import jp.co.interline.dto.ApprovedListDTO;
+import jp.co.interline.dto.DocumentMasterDTO;
+import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.SystemDTO;
+import jp.co.interline.dto.UserInformWithOptionDTO;
 import jp.co.interline.dto.WorkflowDTO;
 import jp.co.interline.dto.WorkflowInformDTO;
 
@@ -102,8 +107,26 @@ public class WorkflowDAO {
 		int result = mapper.stampConfirm(system);
 		return result;
 	}
+	public String getSystemBySystemNum(int systemNum) {
+		WorkflowMapper mapper = sqlsession.getMapper(WorkflowMapper.class);
+		String result = mapper.getSystemBySystemNum(systemNum);
+		return result;
+	}
+	public int setfileName(DocumentMasterDTO documentMaster) {
+		WorkflowMapper mapper = sqlsession.getMapper(WorkflowMapper.class);
+		int result = mapper.setfileName(documentMaster);
+		return result;
+	}
+	public int getTotalApprovedSheet(UserInformWithOptionDTO userInformWithOption) {
+		WorkflowMapper mapper = sqlsession.getMapper(WorkflowMapper.class);
+		int total = mapper.getTotalApprovedSheet(userInformWithOption);
+		return total;
+	}
+	public ArrayList<ApprovedListDTO> getApprovedList(int st, int ctt, UserInformWithOptionDTO userInformWithOption) {
+		WorkflowMapper mapper = sqlsession.getMapper(WorkflowMapper.class);
+		RowBounds rbs = new RowBounds(st,ctt);
+		ArrayList<ApprovedListDTO> approvedList = mapper.getApprovedList(rbs, userInformWithOption);
+		return approvedList;
+	}
 
-	
-	
-	
 }

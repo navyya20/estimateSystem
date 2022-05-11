@@ -104,6 +104,7 @@ if(flagObjString!=""){
 	flagObj.bDOTstateNameFlg=0;
 	flagObj.bDOTuserNameFlg=0;
 	flagObj.bDOTuserDepartmentFlg=0;
+	flagObj.bDOTapprovedDateFlg=0;
 }
 //flag가 짝수면 asc정렬  flag가 홀수면 desc정렬. 
 function countClickNum(o){
@@ -205,39 +206,13 @@ function sort(option){
 	  				</div>
 	  				<div class="col-1 row p-0 m-0 text-center">
 		  				<div class="col-12 p-0 m-0 align-self-center">
-							<input id='row${status.count}' type='checkbox' name='selectedRow' value='${bill.documentNumB}'>
+							<input id='row${status.count}' type='checkbox' name='selectedRow' value='${bill.documentNumB}' ${userInform.auth == 'u' and (bill.stateB == 'app') ? 'disabled':''}>
 						</div>
 	  				</div>
 				</div>
 			</div>
 		</div>
 	</c:forEach>
-	<!-- 
-	<c:forEach items="${billList}" var="bill" varStatus="status">
-		<div class="d-block" style="height: 3px;"></div>
-		<div class="d-block d-md-none" style="height: 5px;"></div>
-		<div class="container-xl p-0 smallSize">
-			<div class="row p-0 m-0 bgGray3">
-				<div class="col-11 p-0 m-0 text-center" style="border-right: 1px solid white;">
-	  				<div class="col-12 row p-0 m-0">
-	  					<div class="col-3 col-md-2 p-0 m-0 link" onclick="readBill('${bill.documentNumB}','${bill.documentTypeNameB}')">
-	  						${fn:substring(bill.documentNumB,0,4)}<br>${fn:substring(bill.documentNumB,5,14)}
-	  					</div>
-	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center d-none d-md-inline">${bill.receiverB}</div>
-	  					<div class="col-4 col-md-2 p-0 m-0 align-self-center">${bill.documentNameB}</div>
-	  					<div class="col-3 col-md-2 p-0 m-0"><fmt:parseDate value="${bill.updateDateB}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/><br><fmt:formatDate value="${noticePostDate}" pattern="HH:mm"/></div>
-	  					<div class="col-2 col-md-1 p-0 m-0 align-self-center">${bill.stateNameB}</div>
-	  					<div class="col-md-2 p-0 m-0 align-self-center d-none  d-md-inline">${bill.userNameB}</div>
-	  					<div class="col-md-1 p-0 m-0 align-self-center d-none d-md-inline">${bill.userDepartmentB}</div>
-	  				</div>
-				</div>
-				<div class="col-1 p-0 m-0 align-self-center text-center">
-					<input id='row${status.count}' type='checkbox' name='selectedRow' value='${bill.documentNumB}' ${userInform.auth == 'u' and bill.stateB != 'wri' ? 'disabled':''}>
-				</div>
-			</div>
-		</div>
-	</c:forEach>
-	 -->
 	<div id = "navigator" style="text-align: center;">
 		<a href="javascript:formSubmit(${pn.currentPage - pn.pagePerGroup})">◁◁</a>&nbsp;
 		<a href="javascript:formSubmit(${pn.currentPage-1})">◀</a> &nbsp;&nbsp;

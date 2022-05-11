@@ -10,7 +10,8 @@
 			count(e.documentNum)
 		from
 			(
-				select d.*,em1.receiver,em1.documentName,ds.name stateName from
+				select d.*,em1.receiver,em1.documentName,ds.name stateName 
+					from
 						(select * from documentMaster where systemNum=1) d 
 					join 
 						estimateMaster em1 
@@ -21,24 +22,9 @@
 					on
 						(d.state = ds.state)
 			) e
-		left outer join
-			(
-				select d.*,em1.receiver,em1.documentName,em1.estimateNum,ds.name stateName from
-						(select * from documentMaster where systemNum=2) d 
-					join 
-						estimateMaster em1 
-					on 
-						(d.documentNum = em1.documentNum)
-					join
-						documentState ds
-					on
-						(d.state = ds.state)
-			) b
-		on
-			(e.documentNum = b.estimateNum)
 			<choose>
 				<when test='auth == "u"'>
-					where e.userNum=#{userNum} or b.userNum=#{userNum}
+					where e.userNum=#{userNum}
 				</when>
 				<when test='auth == "a"'>
 					

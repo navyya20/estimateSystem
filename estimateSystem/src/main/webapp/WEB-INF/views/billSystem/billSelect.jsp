@@ -45,30 +45,30 @@ if ( self !== top ) {
 			 -->
 			
 			<div class="card" style="width: 17rem;">
-				<img src="../resources/img/billSolution.jpg" class="card-img-top" alt="...">
+				<img src="../resources/img/billSolution.jpg?ver=1" class="card-img-top" alt="...">
 				<div class="card-body">
-					<p class="card-text">請求書A</p>
+					<p class="card-text">請求書Ａ（ソリューション事業部）</p>
 					<a href="writeBillSolution?documentTypeName=billSolution" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>
 			<div class="card" style="width: 17rem;">
 				<img src="../resources/img/billSi.jpg" class="card-img-top" alt="...">
 				<div class="card-body">
-					<p class="card-text">請求書B</p>
+					<p class="card-text">請求書Ｂ（SI事業部）</p>
 					<a href="writeBillSi?documentTypeName=billSi" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>
 			<div class="card" style="width: 17rem;">
 				<img src="../resources/img/billC.jpg" class="card-img-top" alt="...">
 				<div class="card-body">
-					<p class="card-text">請求書C</p>
+					<p class="card-text">請求書Ｃ（語学事業部）</p>
 					<a href="writeBillC?documentTypeName=billC" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>
 			<div class="card" style="width: 17rem;">
-				<img src="../resources/img/billC.jpg" class="card-img-top" alt="...">
+				<img src="../resources/img/billD.jpg" class="card-img-top" alt="...">
 				<div class="card-body">
-					<p class="card-text">請求書D</p>
+					<p class="card-text">請求書Ｄ（語学事業部）</p>
 					<a href="writeBillD?documentTypeName=billD" class="btn btn-primary">新規作成</a>
 				</div>
 			</div>

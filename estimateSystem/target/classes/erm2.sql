@@ -1063,16 +1063,16 @@ CREATE TABLE billD
     
     note varchar(300) COMMENT '注意事項・備考',
     
-    bnSwiftCode varchar(40),
-	bnBankName varchar(40),
-	bnBranchName varchar(40),
-	bnBankAddress varchar(40),
-	bnName varchar(40),
-	bnAddress varchar(40),
-	bnAccountNumber varchar(40),
-	bnAccountName varchar(40),
-	imSwiftCode	varchar(40),
-	imBankName varchar(40),
+    bnSwiftCode varchar(65),
+	bnBankName varchar(65),
+	bnBranchName varchar(65),
+	bnBankAddress varchar(65),
+	bnName varchar(65),
+	bnAddress varchar(65),
+	bnAccountNumber varchar(65),
+	bnAccountName varchar(65),
+	imSwiftCode	varchar(65),
+	imBankName varchar(65),
     
 	insertDate datetime DEFAULT CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
 	updateDate datetime COMMENT 'updateDate : 更新日時',
@@ -1095,3 +1095,25 @@ CREATE TABLE billDItems
 ALTER TABLE billD ADD FOREIGN KEY (documentNum) REFERENCES estimateMaster (documentNum) ON UPDATE RESTRICT ON DELETE CASCADE;
 ALTER TABLE billDItems ADD FOREIGN KEY (documentNum) REFERENCES billD (documentNum) ON UPDATE RESTRICT ON DELETE CASCADE;
 ALTER TABLE billD ADD FOREIGN KEY (documentTypeName) REFERENCES documentType (documentTypeName) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+
+-- ver 1.20
+ALTER TABLE `interline_estimatesystem`.`documentmaster` 
+ADD COLUMN `fileName` VARCHAR(45) NULL DEFAULT NULL AFTER `approvedDate`;
+UPDATE `interline_estimatesystem`.`systemtype` SET `explanation` = '見積書' WHERE (`systemNum` = '1');
+UPDATE `interline_estimatesystem`.`systemtype` SET `explanation` = '請求書' WHERE (`systemNum` = '2');
+delete from documentMaster where (`documentTypeName` = 'billSheet1');
+delete from documentMaster where (`nextDocumentTypeName` = 'billSheet1');
+delete from documentMaster where (`documentTypeName` = 'estimateSheet1');
+delete from documentMaster where (`nextDocumentTypeName` = 'estimateSheet1');
+DELETE FROM `interline_estimatesystem`.`documenttype` WHERE (`documentTypeName` = 'billSheet1');
+DELETE FROM `interline_estimatesystem`.`documenttype` WHERE (`documentTypeName` = 'estimateSheet1');
+UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '請求書C(語学事業部)' WHERE (`documentTypeName` = 'billC');
+UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '請求書D(語学事業部eng)' WHERE (`documentTypeName` = 'billD');
+UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '請求書B(SI事業部)' WHERE (`documentTypeName` = 'billSi');
+UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '請求書A(ソリューション事業部)' WHERE (`documentTypeName` = 'billSolution');
+UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '見積書C(語学事業部)' WHERE (`documentTypeName` = 'estimateLanguage');
+UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '見積書A(SI事業部)' WHERE (`documentTypeName` = 'estimateSi');
+UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '見積書B(ソリューション事業部)' WHERE (`documentTypeName` = 'estimateSolution');
+

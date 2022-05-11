@@ -26,6 +26,9 @@ public class WorkflowDTO {
 	String userName;
 	String userDepartment;
 	
+	String receiver;
+	String documentName;
+	
 	public int getWorkflowNum() {
 		return workflowNum;
 	}
@@ -158,6 +161,18 @@ public class WorkflowDTO {
 	}
 	public void setExplanation(String explanation) {
 		this.explanation = explanation;
+	}
+	public String getReceiver() {
+		return receiver;
+	}
+	public void setReceiver(String receiver) {
+		this.receiver = receiver;
+	}
+	public String getDocumentName() {
+		return documentName;
+	}
+	public void setDocumentName(String documentName) {
+		this.documentName = documentName;
 	}
 	
 }

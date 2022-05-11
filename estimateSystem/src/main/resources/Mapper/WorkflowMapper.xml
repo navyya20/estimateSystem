@@ -128,7 +128,8 @@
 		select count(workflowNum) from workflow where presentApprover = #{value} and targetValue != 'aaa'
 	</select>
 	<select id="getWorkflowWaitingList" parameterType="int" resultType="workflowDTO">
-		select w.*, u1.userName ,d1.department userDepartment, dt.explanation explanation
+		select w.*, u1.userName ,d1.department userDepartment, dt.explanation explanation,
+				em.receiver, em.documentName
 			from
 				workflow w
 			left outer join 
@@ -137,6 +138,10 @@
 				department d1 on (u1.departmentNum = d1.departmentNum)
 			left outer join
 				documentType dt on (w.documentTypeName = dt.documentTypeName)
+			join
+				estimateMaster em
+			on
+				w.documentNum = em.documentNum
 		where
 			presentApprover = #{value} and targetValue != 'aaa'
 	</select>
@@ -175,4 +180,106 @@
 		where
 			documentNum=#{documentNum}
 	</update>
+	
+	<select id="getSystemBySystemNum" parameterType="int" resultType="String">
+		select systemName from systemType where systemNum = #{systemNum}
+	</select>
+	
+	<update id="setfileName" parameterType="documentMasterDTO">
+		update documentMaster set
+			fileName = #{fileName}
+		where
+			documentNum = #{documentNum}
+	</update>
+	
+	
+	<select id="getTotalApprovedSheet" parameterType="userInformWithOptionDTO" resultType="int">
+		select 
+			count(wf.documentNum)
+		from 
+			(select *,if(approver3 = -1, if(approver2 = -1 , approver1, null), approver3) as approver from workflow) as wf 
+			join 
+				userInform as ui1 
+			on 
+				wf.userNum = ui1.userNum
+			join
+				userInform as ui2
+			on
+				wf.approver = ui2.userNum
+			join
+				documentType as dt
+			on
+				wf.documentTypeName = dt.documentTypeName
+			join
+				documentMaster dm
+			on
+				wf.documentNum = dm.documentNum
+			join
+				estimateMaster em
+			on
+				wf.documentNum = em.documentNum
+			where
+			<choose>
+				<when test='auth == "u"'>
+					wf.userNum=#{userNum} and
+				</when>
+				<when test='auth == "a"'>
+					
+				</when>
+			</choose>
+				dm.state = "app"
+			order by ${option}
+	</select>
+	
+	<select id="getApprovedList" parameterType="userInformWithOptionDTO" resultType="approvedListDTO">
+		select 
+			wf.workflowNum,
+			wf.userNum,
+			wf.documentTypeName,
+			wf.documentNum,
+			wf.insertDate,
+			wf.updateDate,
+			wf.updater,
+			wf.approver, 
+			ui1.userName,
+			ui2.userName as approverName,
+			dt.explanation,
+			dm.state,
+			dm.fileName,
+			em.receiver,
+			em.documentName
+		from 
+			(select *,if(approver3 = -1, if(approver2 = -1 , approver1, null), approver3) as approver from workflow) as wf 
+			join 
+				userInform as ui1 
+			on 
+				wf.userNum = ui1.userNum
+			join
+				userInform as ui2
+			on
+				wf.approver = ui2.userNum
+			join
+				documentType as dt
+			on
+				wf.documentTypeName = dt.documentTypeName
+			join
+				documentMaster dm
+			on
+				wf.documentNum = dm.documentNum
+			join
+				estimateMaster em
+			on
+				wf.documentNum = em.documentNum
+			where
+			<choose>
+				<when test='auth == "u"'>
+					wf.userNum=#{userNum} and
+				</when>
+				<when test='auth == "a"'>
+					
+				</when>
+			</choose>
+				dm.state = "app"
+			order by ${option}
+	</select>
 </mapper>

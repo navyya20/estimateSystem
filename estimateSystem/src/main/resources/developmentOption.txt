@@ -1,18 +1,18 @@
 (dev)
-webIP=localhost:8887
-ozIP=localhost:8888
-projectRoot=estimateSystem
+webIP=LAPTOP-8M79HCKV:8887
+ozIP=LAPTOP-8M79HCKV:8888
+schedulerIP=LAPTOP-8M79HCKV:9521
+projectRoot=estimate
 
 diver=com.mysql.jdbc.Driver
 url=jdbc:mysql://localhost:3306/interline_EstimateSystem?characterEncoding=UTF-8&serverTimezone=UTC&allowMultiQueries=true
 user=EstimateSystem
 password=EstimateSystem123456#
 
-
-
 (gcp)
 webIP=35.238.7.204:80
 ozIP=35.238.7.204:80
+schedulerIP=35.238.7.204:9521
 projectRoot=estimate
 
 diver=com.mysql.jdbc.Driver
@@ -20,3 +20,13 @@ url=jdbc:mysql://localhost:3306/interline_EstimateSystem?characterEncoding=UTF-8
 user=hrhr6
 password=hrhr
 
+(company)
+webIP=ozserver-ideapad
+ozIP=ozserver-ideapad
+schedulerIP=ozserver-ideapad:9521
+projectRoot=estimate
+
+diver=com.mysql.jdbc.Driver
+url=jdbc:mysql://localhost:3306/interline_EstimateSystem?characterEncoding=UTF-8&serverTimezone=UTC&allowMultiQueries=true
+user=EstimateSystem
+password=EstimateSystem123456#

@@ -16,6 +16,7 @@
 		<typeAlias type="jp.co.interline.dto.WorkflowDTO" alias="workflowDTO"/>
 		<typeAlias type="jp.co.interline.dto.SystemDTO" alias="systemDTO"/>
 		<typeAlias type="jp.co.interline.dto.DocumentMasterDTO" alias="documentMasterDTO"/>
+		<typeAlias type="jp.co.interline.dto.ApprovedListDTO" alias="approvedListDTO"/>
 		
 		<typeAlias type="jp.co.interline.dto.estimateSystem.EstimateCommonDTO" alias="estimateCommonDTO"/>
 		<typeAlias type="jp.co.interline.dto.estimateSystem.estimateSolution.EstimateSolutionDTO" alias="estimateSolutionDTO"/>
