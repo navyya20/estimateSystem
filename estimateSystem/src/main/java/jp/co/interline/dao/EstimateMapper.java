@@ -6,6 +6,7 @@ import java.util.HashMap;
 import org.apache.ibatis.session.RowBounds;
 
 import jp.co.interline.dto.DocumentMasterDTO;
+import jp.co.interline.dto.DocumentTypeDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
@@ -31,6 +32,8 @@ public interface EstimateMapper {
 	String getBillNum(String documentNum);
 
 	SystemDTO getEstimate(SystemDTO system);
+	
+	ArrayList<DocumentTypeDTO> getEstimateTypeList();
 	
 	int insertMasterInform(EstimateCommonDTO masterInform);
 	
@@ -70,6 +73,8 @@ public interface EstimateMapper {
 	void testTest(String s);
 
 	void testTest2(String s);
+
+	
 
 	
 	

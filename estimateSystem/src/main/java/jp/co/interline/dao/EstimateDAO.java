@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import jp.co.interline.dto.DocumentMasterDTO;
+import jp.co.interline.dto.DocumentTypeDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
@@ -155,6 +156,12 @@ public class EstimateDAO {
 		return items;
 	}
 	
+	public ArrayList<DocumentTypeDTO> getEstimateTypeList() {
+		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
+		ArrayList<DocumentTypeDTO> typeList = mapper.getEstimateTypeList();
+		return typeList;
+	}
+	
 	///////////////////////////////////////////////////////
 	public int insertMasterInform(EstimateCommonDTO masterInform) {
 		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
@@ -215,6 +222,8 @@ public class EstimateDAO {
 		EstimateMapper mapper = sqlsession.getMapper(EstimateMapper.class);
 		mapper.testTest2(s);
 	}
+
+	
 
 
 

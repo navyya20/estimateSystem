@@ -84,7 +84,7 @@ if ( self !== top ) {
 
 <body class="body" style="height: 100%;">
 <div id="notice" style="position: absolute; left: 0;top: 0;">
-VER 1.21	
+VER 1.30	
 </div>
 	<div class="row align-items-center col-12 p-0 m-0" style="height: 100%;">
 		<div id="login_div" class="d-flex justify-content-center col-12 p-0">

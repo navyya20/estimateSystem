@@ -131,7 +131,7 @@ if ( self !== top ) {
 			numberFieldArr.forEach(function(field){
 				inputJson[field] = getPureNumber(inputJson[field]);
 			})
-			inputJson["items"] = getItems(inputJson,["rowNum"],["monthlyUnitPrice", "standardMin", "standardMax", "workTime", "extraTime", "overTimeUnitPrice", "underTimeUnitPrice", "price", "expense", "benefit", "subtotal"],repeat);
+			inputJson["items"] = getItems(inputJson,["rowNum", "workerName"],["monthlyUnitPrice", "standardMin", "standardMax", "workTime", "extraTime", "overTimeUnitPrice", "underTimeUnitPrice", "price", "expense", "benefit", "subtotal"],repeat);
 			inputJson.state=state;
 			var emptyToZeroFieldArr=["workflowNum", "taxRate"];
 			emptyToZeroFieldArr.forEach(function(field){

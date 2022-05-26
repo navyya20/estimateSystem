@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.google.gson.Gson;
 
+import jp.co.interline.dto.DocumentTypeDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
@@ -24,6 +25,8 @@ import jp.co.interline.dto.billSystem.billC.BillCDTO;
 import jp.co.interline.dto.billSystem.billD.BillDDTO;
 import jp.co.interline.dto.billSystem.billSi.BillSiDTO;
 import jp.co.interline.dto.billSystem.billSolution.BillSolutionDTO;
+import jp.co.interline.dto.billSystem.monthlyBillTotal.MonthlyBillTotalAjaxDTO;
+import jp.co.interline.dto.billSystem.monthlyBillTotal.MonthlyBillTotalAjaxForBillSiDTO;
 import jp.co.interline.service.BillService;
 import jp.co.interline.service.EstimateService;
 import jp.co.interline.service.WorkflowService;
@@ -69,7 +72,8 @@ public class BillController {
 	public String selectBill(HttpSession session, Model model) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		logger.debug("BillController.selectBill,user:{}",user.getUserNum());
-		
+		ArrayList<DocumentTypeDTO> typeList = billService.getBillTypeList();
+		model.addAttribute("typeList", typeList);
 		return "billSystem/billSelect";
 	}
 	
@@ -97,6 +101,48 @@ public class BillController {
 		model.addAttribute("user", userString);
 		return "billSystem/"+documentTypeName+"/mod"+documentTypeName.substring(0, 1).toUpperCase()+documentTypeName.substring(1);
 	}
+	
+	
+	@RequestMapping(value = "/all/monthlyBillTotal", method = RequestMethod.GET)
+	public String monthlyBillTotal(HttpSession session, Model model) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("BillController.monthlyBillTotal,user:{}",user.getUserNum());
+		ArrayList<DocumentTypeDTO> typeList = billService.getBillTypeList();
+		model.addAttribute("typeList", typeList);
+		return "billSystem/monthlyBillTotal/monthlyBillTotal";
+	}
+	
+	@RequestMapping(value = "/all/monthlyBillTotal/monthlyBillTotalAjax", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
+	public String monthlyBillTotalAjax(HttpSession session, Model model, String billType, int year, int month) {
+		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
+		logger.debug("BillController.monthlyBillTotal.monthlyBillTotalAjax,user:{}",user.getUserNum());
+		if("billSi".equals(billType)) {
+			ArrayList<MonthlyBillTotalAjaxForBillSiDTO> billList = billService.getMonthlyBillSiTotalList(year, month, user.getUserNum(), user.getAuth());
+			float totalPrice = 0;
+			float totalExpenses = 0;
+			for (MonthlyBillTotalAjaxForBillSiDTO monthlyBillTotalAjaxForBillSiDTO : billList) {
+				totalPrice += monthlyBillTotalAjaxForBillSiDTO.getPrice();
+				totalExpenses += monthlyBillTotalAjaxForBillSiDTO.getSubtotal();
+			}
+			model.addAttribute("billList", billList);
+			model.addAttribute("totalPrice", totalPrice);
+			model.addAttribute("totalExpenses", totalExpenses);
+			return "billSystem/monthlyBillTotal/monthlyBillTotalAjaxForBillSi";
+		}
+		ArrayList<MonthlyBillTotalAjaxDTO> monthlyBillTotalList = billService.getMonthlyBillTotalList(billType, year, month, user.getUserNum(), user.getAuth());
+		float total = 0;
+		for (MonthlyBillTotalAjaxDTO monthlyBillTotalAjaxDTO : monthlyBillTotalList) {
+			total += monthlyBillTotalAjaxDTO.getSumWithTax();
+		}
+		model.addAttribute("billList", monthlyBillTotalList);
+		model.addAttribute("total", total);
+		return "billSystem/monthlyBillTotal/monthlyBillTotalAjax";
+	}
+	
+	
+	
+	
+	
 	
 	//bill의 copy기능은 estimate의 copy기능을 공유한다.
 	

@@ -46,6 +46,11 @@
 					</c:if>
 				</li>
 				<li class="nav-item active">
+					<c:if test="${sessionScope.userInform.auth eq 'a' or sessionScope.userInform.auth eq 'u'}">
+						<a class="nav-link" href="./monthlyBillTotal">月別請求確認 <span class="sr-only">(current)</span></a>
+					</c:if>
+				</li>
+				<li class="nav-item active">
 					<c:if test="${sessionScope.userInform.auth eq 'sa'}">
 						<a class="nav-link" href="./imgList">印鑑・LOGO</a>
 					</c:if>

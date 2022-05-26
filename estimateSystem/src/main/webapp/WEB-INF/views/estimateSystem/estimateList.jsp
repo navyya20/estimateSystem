@@ -30,11 +30,6 @@ if(option=""){
 	option="e.documentNum asc";
 }
 
-function goToUserMod(userNum){
-	$("#userNum").val(userNum);
-	$("#goToUserMod").submit();
-}
-
 function formSubmit(page){
 	var countPerPage = $("#countPerPage").val();
 	document.location.href = "estimateList?page=" + page +"&option="+option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj))+"&countPerPage="+countPerPage;

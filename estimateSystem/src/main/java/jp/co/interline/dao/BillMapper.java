@@ -1,9 +1,11 @@
 package jp.co.interline.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 
+import jp.co.interline.dto.DocumentTypeDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
 import jp.co.interline.dto.billSystem.BillCommonDTO;
@@ -14,6 +16,8 @@ import jp.co.interline.dto.billSystem.billSi.BillSiDTO;
 import jp.co.interline.dto.billSystem.billSi.BillSiItemDTO;
 import jp.co.interline.dto.billSystem.billSolution.BillSolutionDTO;
 import jp.co.interline.dto.billSystem.billSolution.BillSolutionItemDTO;
+import jp.co.interline.dto.billSystem.monthlyBillTotal.MonthlyBillTotalAjaxDTO;
+import jp.co.interline.dto.billSystem.monthlyBillTotal.MonthlyBillTotalAjaxForBillSiDTO;
 
 
 
@@ -23,6 +27,12 @@ public interface BillMapper {
 	int getTotalBillSheet(UserInformWithOptionDTO userInformWithOption);
 
 	ArrayList<EstimateListDTO> getBillList(RowBounds rbs, UserInformWithOptionDTO userInformWithOption);
+	
+	ArrayList<DocumentTypeDTO> getBillTypeList();
+	
+	ArrayList<MonthlyBillTotalAjaxDTO> getMonthlyBillTotalList(HashMap<String, String> map);
+	
+	ArrayList<MonthlyBillTotalAjaxForBillSiDTO> getMonthlyBillSiTotalList(HashMap<String, String> map);
 
 	int insertMasterInform(BillCommonDTO masterInform);
 	
@@ -55,5 +65,8 @@ public interface BillMapper {
 	int insertBillD(BillDDTO billD);
 
 	int updateBillD(BillDDTO billD);
+
+	
+
 
 }

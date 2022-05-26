@@ -1117,3 +1117,31 @@ UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '見積書C
 UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '見積書A(SI事業部)' WHERE (`documentTypeName` = 'estimateSi');
 UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '見積書B(ソリューション事業部)' WHERE (`documentTypeName` = 'estimateSolution');
 
+
+-- ver 1.30
+-- 청구서 집계를위한 뷰생성
+CREATE VIEW billTotalView AS
+SELECT v.documentNum, v.userNum, v.documentName, v.receiver, v.sumWithTax, v.insertDate, v.updateDate, v.updater, v.documentTypeName
+FROM (select t.documentNum, t.userNum, t.documentName, t.receiver, t.sumWithTax, t.insertDate, t.updateDate, t.updater, t.documentTypeName from 
+(SELECT documentNum, userNum, documentName, receiver, sumWithTax, insertDate, updateDate, updater, documentTypeName from billSi as si union
+SELECT documentNum, userNum, documentName, receiver, sumWithTax, insertDate, updateDate, updater, documentTypeName from billSolution as so union
+SELECT documentNum, userNum, documentName, receiver, sumWithTax, insertDate, updateDate, updater, documentTypeName from billC as c union
+SELECT documentNum, userNum, documentName, receiver, sumWithTax, insertDate, updateDate, updater, documentTypeName from billD as d) as t
+join (select documentNum, targetValue from workflow where systemNum = 2 and targetValue = "aaa") as w
+on t.documentNum = w.documentNum) as v;
+
+-- billSelect 순서 변경 및 표시항목 모델화
+UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '請求書A(SI事業部)' WHERE (`documentTypeName` = 'billSi');
+UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '請求書B(ソリューション事業部)' WHERE (`documentTypeName` = 'billSolution');
+ALTER TABLE `interline_estimatesystem`.`documenttype` ADD COLUMN `orderNum` INT NULL AFTER `systemNum`, ADD UNIQUE INDEX `order` (`systemNum` ASC, `orderNum` ASC);
+UPDATE `interline_estimatesystem`.`documenttype` SET `orderNum` = '1' WHERE (`documentTypeName` = 'billSi');
+UPDATE `interline_estimatesystem`.`documenttype` SET `orderNum` = '2' WHERE (`documentTypeName` = 'billSolution');
+UPDATE `interline_estimatesystem`.`documenttype` SET `orderNum` = '3' WHERE (`documentTypeName` = 'billC');
+UPDATE `interline_estimatesystem`.`documenttype` SET `orderNum` = '4' WHERE (`documentTypeName` = 'billD');
+UPDATE `interline_estimatesystem`.`documenttype` SET `orderNum` = '1' WHERE (`documentTypeName` = 'estimateSi');
+UPDATE `interline_estimatesystem`.`documenttype` SET `orderNum` = '2' WHERE (`documentTypeName` = 'estimateSolution');
+UPDATE `interline_estimatesystem`.`documenttype` SET `orderNum` = '3' WHERE (`documentTypeName` = 'estimateLanguage');
+
+-- billsi 아이템 컬럼추가(작업자)
+ALTER TABLE `interline_estimatesystem`.`billsiitems` ADD COLUMN `workerName` VARCHAR(10) NULL DEFAULT NULL AFTER `rowNum`;
+

@@ -16,11 +16,14 @@ import org.springframework.ui.Model;
 import jp.co.interline.dao.BillDAO;
 import jp.co.interline.dao.SystemDAO;
 import jp.co.interline.dao.WorkflowDAO;
+import jp.co.interline.dto.DocumentTypeDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
 import jp.co.interline.dto.billSystem.BillCommonDTO;
+import jp.co.interline.dto.billSystem.monthlyBillTotal.MonthlyBillTotalAjaxDTO;
+import jp.co.interline.dto.billSystem.monthlyBillTotal.MonthlyBillTotalAjaxForBillSiDTO;
 
 @Service
 public class BillServiceImpl<T> implements BillService {
@@ -84,6 +87,42 @@ public class BillServiceImpl<T> implements BillService {
 		return "";
 	}
 	
+	/*
+	 * documentType테이블에서 sysnum=2(청구서)인 데이터를 모두 가져온다. 순서는  orderNum의 오름차순으로
+	 */
+	@Override
+	public ArrayList<DocumentTypeDTO> getBillTypeList() {
+		ArrayList<DocumentTypeDTO> typeList = billDao.getBillTypeList();
+		return typeList;
+	}
+	/*
+	 * billTotalView뷰에서 청구서타입,해당 년,월에 해당하는 청구서 목록을 가져온다.
+	 */
+	@Override
+	public ArrayList<MonthlyBillTotalAjaxDTO> getMonthlyBillTotalList(String billType, int year, int month, int userNum, String auth) {
+		String start = year + "-" + month + "-" + "1";
+		if(month == 12) {
+			year++;
+			month = 0;
+		}
+		String end = year + "-" + (month+1) + "-" + "1";
+		ArrayList<MonthlyBillTotalAjaxDTO> monthlyBillTotalList = billDao.getMonthlyBillTotalList(billType, start, end, userNum, auth);
+		return monthlyBillTotalList;
+	}
+	/*
+	 * billTotalView뷰에서 Si만을 위한 별도 데이터불러오기.해당 년,월에 해당하는 Si청구서 목록을 가져온다.
+	 */
+	@Override
+	public ArrayList<MonthlyBillTotalAjaxForBillSiDTO> getMonthlyBillSiTotalList(int year, int month, int userNum, String auth) {
+		String start = year + "-" + month + "-" + "1";
+		if(month == 12) {
+			year++;
+			month = 0;
+		}
+		String end = year + "-" + (month+1) + "-" + "1";
+		ArrayList<MonthlyBillTotalAjaxForBillSiDTO> billList = billDao.getMonthlyBillSiTotalList(start, end, userNum, auth);
+		return billList;
+	}
 ////////////////////////////////////////////////
 	@SuppressWarnings("hiding")
 	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
@@ -142,4 +181,10 @@ public class BillServiceImpl<T> implements BillService {
 		result.put("documentNum", documentDTO.getDocumentNum()+"更新エラー");
 		return result;
 	}
+
+	
+
+	
+
+	
 }

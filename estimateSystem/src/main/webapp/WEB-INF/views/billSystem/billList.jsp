@@ -25,10 +25,6 @@ if ( self !== top ) {
 	window.parent.location.href="login";
 }
 var option="${option}";
-function goToUserMod(userNum){
-	$("#userNum").val(userNum);
-	$("#goToUserMod").submit();
-}
 
 function formSubmit(page){
 	var countPerPage = $("#countPerPage").val();
@@ -218,9 +214,8 @@ function sort(option){
 		<a href="javascript:formSubmit(${pn.currentPage-1})">◀</a> &nbsp;&nbsp;
 		
 		<c:forEach var="counter" begin="${pn.startPageGroup}" end="${pn.endPageGroup}">
-		<c:if test="${counter == pn.currentPage}"><b></c:if>
-		<a href="javascript:formSubmit(${counter})">${counter}</a>&nbsp;
-		<c:if test="${counter == pn.currentPage}"></b></c:if>
+		<c:if test="${counter == pn.currentPage}"><b><a href="javascript:formSubmit(${counter})">${counter}</a>&nbsp;</b></c:if>
+		<c:if test="${counter != pn.currentPage}"><a href="javascript:formSubmit(${counter})">${counter}</a>&nbsp;</c:if>
 		</c:forEach>
 		&nbsp;&nbsp;
 		<a href="javascript:formSubmit(${pn.currentPage + 1})">▶</a> &nbsp;&nbsp;

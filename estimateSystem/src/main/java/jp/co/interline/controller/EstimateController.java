@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 
 import jp.co.interline.dto.DocumentMasterDTO;
+import jp.co.interline.dto.DocumentTypeDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
@@ -72,6 +73,8 @@ public class EstimateController {
 	public String selectEstimate(HttpSession session, Model model) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		logger.debug("EstimateController.selectEstimate,user:{}",user.getUserNum());
+		ArrayList<DocumentTypeDTO> typeList = estimateService.getEstimateTypeList();
+		model.addAttribute("typeList", typeList);
 		return "estimateSystem/estimateSelect";
 	}
 	

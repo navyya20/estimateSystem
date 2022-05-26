@@ -17,6 +17,7 @@ import jp.co.interline.dao.EstimateDAO;
 import jp.co.interline.dao.SystemDAO;
 import jp.co.interline.dao.WorkflowDAO;
 import jp.co.interline.dto.DocumentMasterDTO;
+import jp.co.interline.dto.DocumentTypeDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
@@ -155,6 +156,12 @@ public class EstimateServiceImpl implements EstimateService {
 		}
 		return "";
 	}
+	
+	@Override
+	public ArrayList<DocumentTypeDTO> getEstimateTypeList() {
+		ArrayList<DocumentTypeDTO> typeList = estimateDao.getEstimateTypeList();
+		return typeList;
+	}
 //-------------------------------------------------------------------------------------------------------	
 	@Transactional(rollbackFor = {Exception.class, DataAccessException.class})
 	@Override
@@ -218,5 +225,7 @@ public class EstimateServiceImpl implements EstimateService {
 	public void test2(String s) {
 		estimateDao.test2(s);
 	}
+
+	
 
 }

@@ -72,6 +72,53 @@
 		order by ${option}
 	</select>
 	
+	
+	<select id="getBillTypeList" resultType="documentTypeDTO">
+		select * from documentType where systemNum=2 order by orderNum asc;
+	</select>
+	
+	<select id="getMonthlyBillTotalList" parameterType="HashMap" resultType="monthlyBillTotalAjaxDTO">
+		select * from billTotalView 
+		
+		where
+			<choose>
+				<when test='auth == "u"'>
+					userNum=#{userNum} and
+				</when>
+				<when test='auth == "a"'>
+					
+				</when>
+			</choose>
+			<choose>
+				<when test='billType == "all"'>
+				
+				</when>
+				<otherwise>
+					documentTypeName = #{billType} and
+				</otherwise>
+			</choose>
+			updateDate >= #{start} and updateDate <![CDATA[<]]> #{end} order by documentTypeName asc;
+	</select>
+	
+	<select id="getMonthlyBillSiTotalList" parameterType="HashMap" resultType="monthlyBillTotalAjaxForBillSiDTO">
+		SELECT b.userNum, b.receiver, b.updater, b.updateDate, b.documentTypeName, i.* FROM billSi as b
+		join (select * from billSiItems where monthlyUnitPrice is not null OR subtotal is not null)  as i
+			on b.documentNum = i.documentNum 
+		join (select documentNum, targetValue from workflow where systemNum = 2 and targetValue = "aaa") as w
+			on i.documentNum = w.documentNum
+		where
+			<choose>
+				<when test='auth == "u"'>
+					userNum=#{userNum} and
+				</when>
+				<when test='auth == "a"'>
+					
+				</when>
+			</choose>
+			updateDate >= #{start} and updateDate <![CDATA[<]]> #{end} order by i.documentNum asc, i.rowNum asc;
+	</select>
+	
+	
 	<insert id="insertMasterInform" parameterType="billCommonDTO">
 		insert into documentMaster (
 			documentNum, systemNum, documentTypeName, nextDocumentTypeName,
@@ -289,12 +336,12 @@
 		
 		insert into billSiItems (
 			documentNum,rowNum,
-			monthlyUnitPrice,standardMin,standardMax,workTime,extraTime,overTimeUnitPrice,underTimeUnitPrice,price,expense,benefit,subtotal
+			workerName,monthlyUnitPrice,standardMin,standardMax,workTime,extraTime,overTimeUnitPrice,underTimeUnitPrice,price,expense,benefit,subtotal
 		)
 		values
 			<foreach collection="items" item="item" separator=",">
 				(#{documentNum},#{item.rowNum},
-				${item.monthlyUnitPrice},${item.standardMin},${item.standardMax},${item.workTime},${item.extraTime},${item.overTimeUnitPrice},${item.underTimeUnitPrice},${item.price},${item.expense},${item.benefit},${item.subtotal})
+				#{item.workerName},${item.monthlyUnitPrice},${item.standardMin},${item.standardMax},${item.workTime},${item.extraTime},${item.overTimeUnitPrice},${item.underTimeUnitPrice},${item.price},${item.expense},${item.benefit},${item.subtotal})
 			</foreach>
 	</insert>
 	
@@ -341,6 +388,7 @@
 		
 		<foreach collection="items" item="item">
 			update billSiItems set
+				workerName = #{item.workerName}, 
 				monthlyUnitPrice = ${item.monthlyUnitPrice}, 
 				standardMin = ${item.standardMin}, 
 				standardMax = ${item.standardMax}, 

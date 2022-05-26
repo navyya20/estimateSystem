@@ -109,7 +109,9 @@
 		select * from ${documentTypeName}items where documentNum = #{documentNum}
 	</select>
 	
-	
+	<select id="getEstimateTypeList" resultType="documentTypeDTO">
+		select * from documentType where systemNum=1 order by orderNum asc;
+	</select>
 	
 	<insert id="insertMasterInform" parameterType="billCommonDTO">
 		insert into documentMaster (

@@ -32,23 +32,9 @@ if(option=""){
 	option="wf.documentNum asc";
 }
 
-function goToUserMod(userNum){
-	$("#userNum").val(userNum);
-	$("#goToUserMod").submit();
-}
-
 function formSubmit(page){
 	var countPerPage = $("#countPerPage").val();
 	document.location.href = "approvedList?page=" + page +"&option="+option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj))+"&countPerPage="+countPerPage;
-}
-
-function writeBill(estimateNum,nextDocumentTypeName){
-	if(nextDocumentTypeName==""||nextDocumentTypeName==null){
-		alert("この書式は連係の請求書がない書式です。");
-		return;
-	}
-	var url = "write"+nextDocumentTypeName.charAt(0).toUpperCase()+nextDocumentTypeName.slice(1);
-	location.href=url+"?estimateNum="+estimateNum;
 }
 
 //readDocument폼테그를 공유하여 사용한다.
@@ -60,23 +46,6 @@ function readEstimate(estimateNum,documentTypeName){
 	$('#readDocument').submit();
 }
 
-//readDocument폼테그를 공유하여 사용한다.
-function readBill(billNum,documentTypeName){
-	//read는 어차피 ozr,odi읽는 것이므로 readEstimate와 통일
-	var url="readEstimate";
-	$('#readDocument').attr("action",url);
-	$('#documentNum').val(billNum);
-	$('#documentTypeName').val(documentTypeName);
-	$('#readDocument').submit();
-}
-
-//readDocument폼테그를 공유하여 사용한다.
-function copyDocument(documentNum,documentTypeName){
-	var url="copyDocument"
-	$('#readDocument').attr("action",url);
-	$('#documentNum').val(documentNum);
-	$('#readDocument').submit();
-}
 
 function deleteSheets(){
 	var checkBox=$('input[name="selectedRow"]');
@@ -270,9 +239,8 @@ function sort(option){
 		<a href="javascript:formSubmit(${pn.currentPage-1})">◀</a> &nbsp;&nbsp;
 		
 		<c:forEach var="counter" begin="${pn.startPageGroup}" end="${pn.endPageGroup}">
-		<c:if test="${counter == pn.currentPage}"><b></c:if>
-		<a href="javascript:formSubmit(${counter})">${counter}</a>&nbsp;
-		<c:if test="${counter == pn.currentPage}"></b></c:if>
+		<c:if test="${counter == pn.currentPage}"><b><a href="javascript:formSubmit(${counter})">${counter}</a>&nbsp;</b></c:if>
+		<c:if test="${counter != pn.currentPage}"><a href="javascript:formSubmit(${counter})">${counter}</a>&nbsp;</c:if>
 		</c:forEach>
 		&nbsp;&nbsp;
 		<a href="javascript:formSubmit(${pn.currentPage + 1})">▶</a> &nbsp;&nbsp;

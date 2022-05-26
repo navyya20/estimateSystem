@@ -14,6 +14,8 @@ public class BillSiItemDTO {
 	String expense;
 	String benefit;
 	String subtotal;
+	String workerName;
+	
 	public int getRowNum() {
 		return rowNum;
 	}
@@ -85,6 +87,12 @@ public class BillSiItemDTO {
 	}
 	public void setSubtotal(String subtotal) {
 		this.subtotal = subtotal;
+	}
+	public String getWorkerName() {
+		return workerName;
+	}
+	public void setWorkerName(String workerName) {
+		this.workerName = workerName;
 	}
 	@Override
 	public String toString() {

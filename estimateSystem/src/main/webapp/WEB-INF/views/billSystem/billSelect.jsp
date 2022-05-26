@@ -32,46 +32,17 @@ if ( self !== top ) {
 	<header class="mb-3">
 		<jsp:include page="../menubar.jsp"></jsp:include>
 	</header>
-	<div class="p-0 container-lg">
+	<div class="p-0 container-fluid">
 		<div  class="p-0 d-flex flex-wrap justify-content-center">
-			<!-- 
-			<div class="card" style="width: 17rem;">
-				<img src="../resources/img/billSheet1.jpg" class="card-img-top" alt="...">
-				<div class="card-body">
-					<p class="card-text">汎用見積書・請求書セット</p>
-					<a href="writeBillSheet1" class="btn btn-primary">新規作成</a>
+			<c:forEach items="${typeList}" var="type" varStatus="status">
+				<div class="card" style="width: 20rem;">
+					<img src="../resources/img/${type.documentTypeName}.jpg?ver=1" class="card-img-top" alt="...">
+					<div class="card-body">
+						<p class="card-text">${type.explanation}</p>
+						<a href="write${fn:toUpperCase(fn:substring(type.documentTypeName, 0, 1))}${fn:substring(type.documentTypeName, 1, -1)}?documentTypeName=${type.documentTypeName}" class="btn btn-primary">新規作成</a>
+					</div>
 				</div>
-			</div>
-			 -->
-			
-			<div class="card" style="width: 17rem;">
-				<img src="../resources/img/billSolution.jpg?ver=1" class="card-img-top" alt="...">
-				<div class="card-body">
-					<p class="card-text">請求書Ａ（ソリューション事業部）</p>
-					<a href="writeBillSolution?documentTypeName=billSolution" class="btn btn-primary">新規作成</a>
-				</div>
-			</div>
-			<div class="card" style="width: 17rem;">
-				<img src="../resources/img/billSi.jpg" class="card-img-top" alt="...">
-				<div class="card-body">
-					<p class="card-text">請求書Ｂ（SI事業部）</p>
-					<a href="writeBillSi?documentTypeName=billSi" class="btn btn-primary">新規作成</a>
-				</div>
-			</div>
-			<div class="card" style="width: 17rem;">
-				<img src="../resources/img/billC.jpg" class="card-img-top" alt="...">
-				<div class="card-body">
-					<p class="card-text">請求書Ｃ（語学事業部）</p>
-					<a href="writeBillC?documentTypeName=billC" class="btn btn-primary">新規作成</a>
-				</div>
-			</div>
-			<div class="card" style="width: 17rem;">
-				<img src="../resources/img/billD.jpg" class="card-img-top" alt="...">
-				<div class="card-body">
-					<p class="card-text">請求書Ｄ（語学事業部）</p>
-					<a href="writeBillD?documentTypeName=billD" class="btn btn-primary">新規作成</a>
-				</div>
-			</div>
+			</c:forEach>
 		</div>
 	</div>
 	

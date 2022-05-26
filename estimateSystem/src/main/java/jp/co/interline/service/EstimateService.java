@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 
 import jp.co.interline.dto.DocumentMasterDTO;
+import jp.co.interline.dto.DocumentTypeDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
@@ -46,5 +47,7 @@ public interface EstimateService {
 	void test(String string);
 
 	void test2(String string);
+
+	ArrayList<DocumentTypeDTO> getEstimateTypeList();
 
 }

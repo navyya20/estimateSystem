@@ -1,12 +1,14 @@
 package jp.co.interline.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import jp.co.interline.dto.DocumentTypeDTO;
 import jp.co.interline.dto.EstimateListDTO;
 import jp.co.interline.dto.UserInformWithOptionDTO;
 import jp.co.interline.dto.billSystem.BillCommonDTO;
@@ -14,6 +16,8 @@ import jp.co.interline.dto.billSystem.billC.BillCDTO;
 import jp.co.interline.dto.billSystem.billD.BillDDTO;
 import jp.co.interline.dto.billSystem.billSi.BillSiDTO;
 import jp.co.interline.dto.billSystem.billSolution.BillSolutionDTO;
+import jp.co.interline.dto.billSystem.monthlyBillTotal.MonthlyBillTotalAjaxDTO;
+import jp.co.interline.dto.billSystem.monthlyBillTotal.MonthlyBillTotalAjaxForBillSiDTO;
 
 
 @Repository
@@ -34,7 +38,34 @@ public class BillDAO {
 			return billList;
 	}
 	
+	public ArrayList<DocumentTypeDTO> getBillTypeList() {
+		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
+		ArrayList<DocumentTypeDTO> typeList = mapper.getBillTypeList();
+		return typeList;
+	}
 	
+	public ArrayList<MonthlyBillTotalAjaxDTO> getMonthlyBillTotalList(String billType, String start, String end, int userNum, String auth) {
+		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
+		HashMap<String, String> map = new HashMap<>();
+		map.put("billType", billType);
+		map.put("start", start);
+		map.put("end", end);
+		map.put("userNum", userNum+"");
+		map.put("auth", auth);	
+		ArrayList<MonthlyBillTotalAjaxDTO> monthlyBillTotalList = mapper.getMonthlyBillTotalList(map);
+		return monthlyBillTotalList;
+	}
+	
+	public ArrayList<MonthlyBillTotalAjaxForBillSiDTO> getMonthlyBillSiTotalList(String start, String end, int userNum, String auth) {
+		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
+		HashMap<String, String> map = new HashMap<>();
+		map.put("start", start);
+		map.put("end", end);
+		map.put("userNum", userNum+"");
+		map.put("auth", auth);	
+		ArrayList<MonthlyBillTotalAjaxForBillSiDTO> billList = mapper.getMonthlyBillSiTotalList(map);
+		return billList;
+	}
 
 //////////////////////////////////////////////////////////////////////////////
 	public int insertMasterInform(BillCommonDTO masterInform) {
@@ -90,8 +121,7 @@ public class BillDAO {
 		return result;
 	}
 
-	
 
-	
+
 	
 }

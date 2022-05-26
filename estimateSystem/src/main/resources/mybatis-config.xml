@@ -17,6 +17,7 @@
 		<typeAlias type="jp.co.interline.dto.SystemDTO" alias="systemDTO"/>
 		<typeAlias type="jp.co.interline.dto.DocumentMasterDTO" alias="documentMasterDTO"/>
 		<typeAlias type="jp.co.interline.dto.ApprovedListDTO" alias="approvedListDTO"/>
+		<typeAlias type="jp.co.interline.dto.DocumentTypeDTO" alias="documentTypeDTO"/>
 		
 		<typeAlias type="jp.co.interline.dto.estimateSystem.EstimateCommonDTO" alias="estimateCommonDTO"/>
 		<typeAlias type="jp.co.interline.dto.estimateSystem.estimateSolution.EstimateSolutionDTO" alias="estimateSolutionDTO"/>
@@ -28,6 +29,8 @@
 		<typeAlias type="jp.co.interline.dto.billSystem.billSi.BillSiDTO" alias="billSiDTO"/>
 		<typeAlias type="jp.co.interline.dto.billSystem.billC.BillCDTO" alias="billCDTO"/>
 		<typeAlias type="jp.co.interline.dto.billSystem.billD.BillDDTO" alias="billDDTO"/>
+		<typeAlias type="jp.co.interline.dto.billSystem.monthlyBillTotal.MonthlyBillTotalAjaxDTO" alias="monthlyBillTotalAjaxDTO"/>
+		<typeAlias type="jp.co.interline.dto.billSystem.monthlyBillTotal.MonthlyBillTotalAjaxForBillSiDTO" alias="monthlyBillTotalAjaxForBillSiDTO"/>
 		
 		<typeAlias type="jp.co.interline.dto.EstimateListDTO" alias="estimateListDTO"/>
 		<typeAlias type="jp.co.interline.dto.testDTO" alias="testDTO"/>
