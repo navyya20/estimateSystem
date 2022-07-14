@@ -23,7 +23,7 @@
 -->
 
 <script type="text/javascript" src="../js/jQuery-FontSpy.js" charset="utf-8"></script>
-<script type="text/javascript" src="../js/dataCompensation/dataCompensation.js?ver=2" charset="utf-8"></script>
+<script type="text/javascript" src="../js/dataCompensation/dataCompensation.js?ver=5" charset="utf-8"></script>
 
 
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">

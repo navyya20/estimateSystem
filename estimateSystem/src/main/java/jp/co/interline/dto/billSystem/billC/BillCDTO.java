@@ -43,6 +43,7 @@ public class BillCDTO extends BillCommonDTO{
 	String sum;
 	String taxRate;
 	String tax;
+	String commissionName;
 	String commissionRate;
 	String commission;
 	String sumWithTax;
@@ -268,6 +269,12 @@ public class BillCDTO extends BillCommonDTO{
 	}
 	public void setItemTitle(String itemTitle) {
 		this.itemTitle = itemTitle;
+	}
+	public String getCommissionName() {
+		return commissionName;
+	}
+	public void setCommissionName(String commissionName) {
+		this.commissionName = commissionName;
 	}
 	public String getCommissionRate() {
 		return commissionRate;

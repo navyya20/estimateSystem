@@ -1,4 +1,6 @@
 package jp.co.interline.service;
+import java.util.HashMap;
+
 import oz.framework.api.Scheduler;
 import oz.framework.api.Service;
 import oz.framework.cp.OZCPException;
@@ -40,7 +42,7 @@ public class ExportReport {
 		schedulerIp=ipScheduler;
 		schedulerPort=portScheduler;
 	}
-	public boolean exportMethod(String jsonData,String nameOzr, String[] ozrParamValue, 
+	public HashMap<String,String> exportMethod(String jsonData,String nameOzr, String[] ozrParamValue, 
 			String nameOdi, String[] odiParamValue,
 			String formatExport, String fileNameExport) throws Exception {
 		
@@ -55,6 +57,7 @@ public class ExportReport {
 		String		exportFormat= formatExport;
 		String		exportFileName= fileNameExport;
 		
+		HashMap<String, String> result = new HashMap<>();
 		try {
 			Service service = new Service(serverUrl, ozServerID, ozServerPW, false, false);
 			scheduler = new Scheduler(schedulerIp, schedulerPort);
@@ -157,6 +160,26 @@ public class ExportReport {
 				scheduler.directExport(serverInfo, configMap, exportMap);
 				
 				DirectExportResult t = scheduler.directExport(serverInfo, configMap, exportMap);
+				/*
+				result="";
+				result+="<div>오즈스케줄러 DirectExport 결과</div>\r";
+				result+="<table border=1>\r";
+				result+="<tr><td>태스크 아이디</td><td>" + t.taskID+"</td></tr>\r";
+				result+="<tr><td>태스크 이름</td><td>" + t.taskName+"</td></tr>\r";
+				result+="<tr><td>태스크 그룹이름</td><td>" + t.taskGroupName+"</td></tr>\r";
+				result+="<tr><td>성공여부</td><td>" + t.isSuccessful+"</td></tr>\r";
+				result+="<tr><td>수행시간</td><td>" + t.executeTime + "sec</td></tr>\r";
+				result+="<tr><td>완료시간</td><td>" + t.completedTime+"</td></tr>\r";
+				result+="<tr><td>export파일경로</td><td>" + t.exportFileList+"</td></tr>\r";
+				result+="<tr><td>보고서명</td><td>" + t.formName+"</td></tr>\r";
+				result+="<tr><td>익스포트된 페이지 수 </td><td>" + t.pageCount+"</td></tr>\r";
+				result+="</table>";
+				 */
+				
+				result.put("result", "true");
+				result.put("filePath", t.exportFileList);
+				result.put("fileName", exportFileName+"."+exportFormat);
+				result.put("fileSuccess", t.isSuccessful? "true":"false");
 				
 			}
 			else {
@@ -171,6 +194,6 @@ public class ExportReport {
 		catch (Exception e) {
 			throw e;
 		}
-		return true;
+		return result;
 	}
 }

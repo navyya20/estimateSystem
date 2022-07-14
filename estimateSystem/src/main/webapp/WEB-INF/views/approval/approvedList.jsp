@@ -13,7 +13,10 @@
 <meta name="format-detection" content="telephone=no">
 
 <script src="../js/jquery-3.5.1.min.js"></script>
- 
+
+<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="../css/common/common.css?ver=2">
 <script src="../js/bootstrap.bundle.js"></script>
@@ -21,20 +24,43 @@
 <style type="text/css">
 </style>
 <script>
+$(document).ready(function(){
+	getApprovedListAjax();
+	$("#datepicker,#datepicker2").on('focusout', function(event) {
+		var dateString = $(this).val();
+		if(dateString.length >= 11){
+			dateString = dateString.substr(0,10);
+			$(this).val(dateString);
+		}
+	    var datatimeRegexp = /[0-9]{4}-[0-9]{2}-[0-9]{2}/;
+	    if (dateString!="" && !datatimeRegexp.test(dateString) ) {
+	        alert("yyyy-mm-dd形式で入力してください。");
+	        $(this).val("");
+	        return false;
+	    }
+    });
+});
+$( function() {
+    $( "#datepicker,#datepicker2" ).datepicker({
+		monthNames : ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+		monthNamesShort : ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+        changeMonth : true,
+        changeYear : true,
+        dateFormat : "yy-mm-dd"
+        });
+  } );
 //인터셉터로 로그인 들어왔는데 현제페이지가 아이프레임 내부일경우 부모요소를 로그인 페이지로 페이지이동
 if ( self !== top ) {
 	  // you're in an iframe
 	window.parent.location.href="login";
 }
 //이전에 sort했던 옵션. 페이지navi 이동해도 sort가 그대로 적용되도록 유지하기위해.
-var option="${option}";
-if(option=""){
-	option="wf.documentNum asc";
-}
+var presentOption = null;
+var presentPage = null;
 
 function formSubmit(page){
-	var countPerPage = $("#countPerPage").val();
-	document.location.href = "approvedList?page=" + page +"&option="+option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj))+"&countPerPage="+countPerPage;
+	presentPage = page;
+	getApprovedListAjax();
 }
 
 //readDocument폼테그를 공유하여 사용한다.
@@ -140,9 +166,39 @@ function countClickNum(o){
 
 //option내용대로 order by 절 내용이 들어간다.
 function sort(option){
-	var page = $("#page").val();
+	presentOption = option;
+	getApprovedListAjax();
+}
+
+function getApprovedListAjax(){
 	var countPerPage = $("#countPerPage").val();
-	document.location.href ="approvedList?page="+page+"&option="+option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj))+"&countPerPage="+countPerPage;
+	var page = presentPage;
+	var option = presentOption;
+	var start = $("#datepicker").val();
+	var end = $("#datepicker2").val();
+	var searchString = $("#searchString").val();
+	$.ajax({
+		url: "approvedList/approvedListAjax",
+		type: "get",
+		data: {"countPerPage" : countPerPage, "page": page, "option": option, "start": start, "end": end, "searchString": searchString},
+		success : function(result){
+			var html = jQuery('<div>').html(result);
+			if(html.find("title").html()=="Login"){
+				alert("ログインが解除されました。再度ログインしてください。");
+				document.location.href="../";
+			}
+			var contents = html.find("div#ajaxBody").html();
+			$("#ajaxContents").html(contents);
+		},
+		error : function(e){
+			console.log(e);
+			alert("error");
+		}
+	});
+}
+
+function searchButton(){
+	getApprovedListAjax();
 }
 </script>
 </head>
@@ -154,10 +210,25 @@ function sort(option){
 	<div class="mb-3 col-12 container-lg text-center font-weight-bold">
 		承認済み文書リスト
 	</div>
-	<div class="container-lg pr-md-3 pl-md-3">
-		
+	<div class="container-fluid pr-md-3 pl-md-3 ">
+		<div class="row text-center pr-md-3 pl-md-3 col-12 col-md-10">
+			<div class="p-0 col-2">
+				<input type="text" id="datepicker" class="form-control" placeholder="yyyy-mm-dd">
+			</div>
+			<div class="p-0 col-1 align-self-center">から</div>
+			<div class="p-0 col-2">
+				<input type="text" id="datepicker2" class="form-control" placeholder="yyyy-mm-dd">
+			</div>
+			<div class="p-0 col-1 align-self-center">まで</div>
+			<div class="p-0 col-3">
+				<input type="text" id="searchString" class="form-control" placeholder="検索語">
+			</div>
+			<div class="pl-2 col-1">
+				<button type="button" class="col-12 btn btn-secondary" onclick="searchButton()">検索</button>
+			</div>
+		</div>
 	</div>
-	<div class="container-lg pr-md-3 pl-md-3">
+	<div class="container-fluid pr-md-3 pl-md-3">
 		<div class="p-0 d-flex">
 			<div class="p-0 d-flex col-6">
 				<div class="p-0 d-flex col-12 col-md-4">
@@ -180,72 +251,7 @@ function sort(option){
 	</div>
 	
 	<div class="d-block" style="height: 8px;"></div>
-	
-	<div class="container-fluid pr-md-3 pl-md-3">
-		<div class="row p-0 m-0 bg-dark text-white">
-			<div class="col-12 row p-0 m-0 text-center" style="border-right: 1px solid white;">
-  				<div class="col-11 row p-0 m-0">
-  					<div class="col-0 col-md-1 p-0 m-0 d-none d-md-inline" id="wfDOTupdateDate" onclick="countClickNum(this);">承認日時</div>
-  					<div class="col-0 col-md-1 p-0 m-0 d-none d-md-inline" id="ui2DOTuserName" onclick="countClickNum(this);">承認者</div>
-  					<div class="col-3 col-md-1 p-0 m-0" id="wfDOTinsertDate" onclick="countClickNum(this);">承認依頼日時</div>
-  					<div class="col-0 col-md-1 p-0 m-0 d-none d-md-inline" id="ui1DOTuserName" onclick="countClickNum(this);">作成者</div>
-  					<div class="col-2 col-md-2 p-0 m-0" id="dtDOTexplanation" onclick="countClickNum(this);">種類</div>
-  					<div class="col-3 col-md-1 p-0 m-0" id="wfDOTdocumentNum" onclick="countClickNum(this);">文書番号</div>
-  					<div class="col-3 col-md-2 p-0 m-0" id="emDOTreceiver" onclick="countClickNum(this);">顧客</div>
-  					<div class="col-3 col-md-2 p-0 m-0" id="emDOTdocumentName" onclick="countClickNum(this);">件名</div>
-  					<div class="col-1 col-md-1 p-0 m-0">ファイル</div>
-  				</div>
-  				<div class="col-1 p-0 m-0">
-  					<div class="col-12 p-0 m-0 align-self-center">削除</div>
-  				</div>
-			</div>
-		</div>
-	</div>
-	<c:forEach items="${approvedList}" var="approved" varStatus="status">
-		<div class="d-block" style="height: 3px;"></div>
-		<div class="d-block d-md-none" style="height: 5px;"></div>
-		<div class="container-fluid pr-md-3 pl-md-3 smallSize">
-			<div class="row p-0 m-0 bgGray3">
-				<div class="col-12 row p-0 m-0 text-center" style="border-right: 1px solid white;">
-	  				<div class="col-11 row p-0 m-0">
-	  					<div class="col-0 col-md-1 p-0 m-0 d-none d-md-inline"><fmt:parseDate value="${approved.updateDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/><br><fmt:formatDate value="${noticePostDate}" pattern="HH:mm"/></div>
-	  					<div class="col-0 col-md-1 p-0 m-0 align-self-center d-none  d-md-inline">${approved.approverName}</div>
-	  					<div class="col-3 col-md-1 p-0 m-0"><fmt:parseDate value="${approved.insertDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM/dd"/><br><fmt:formatDate value="${noticePostDate}" pattern="HH:mm"/></div>
-	  					<div class="col-0 col-md-1 p-0 m-0 align-self-center d-none  d-md-inline">${approved.userName}</div>
-	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center">${approved.explanation}</div>
-	  					<div class="col-3 col-md-1 p-0 m-0 link" onclick="readEstimate('${approved.documentNum}','${approved.documentTypeName}')">
-	  						${fn:substring(approved.documentNum,0,4)}<br>${fn:substring(approved.documentNum,5,14)}
-	  					</div>
-	  					<div class="col-0 col-md-2 p-0 m-0 align-self-center d-none d-md-inline">${approved.receiver}</div>
-	  					<div class="col-3 col-md-2 p-0 m-0 align-self-center">${approved.documentName}</div>
-	  					<div class="col-1 col-md-1 p-0 m-0 align-self-center">
-	  						<c:if test="${approved.fileName != null}">
-		  						<a href="http://<%out.print(properties.getWebIP());%>/files/application/pdf/${approved.fileName}" download target='_blank'><img src="../resources/img/downloadButton.png" alt="..." width="30rem" height="30rem"></a>
-	  						</c:if>
-	  					</div>
-	  				</div>
-	  				<div class="col-1 row p-0 m-0 text-center">
-		  				<div class="col-12 p-0 m-0 align-self-center">
-							<input id='row${status.count}' type='checkbox' name='selectedRow' value='${approved.documentNum}' ${userInform.auth == 'u' and (approved.state == 'app') ? 'disabled':''}>
-						</div>
-	  				</div>
-				</div>
-			</div>
-		</div>
-	</c:forEach>
-
-	<div id = "navigator" style="text-align: center;">
-		<a href="javascript:formSubmit(${pn.currentPage - pn.pagePerGroup})">◁◁</a>&nbsp;
-		<a href="javascript:formSubmit(${pn.currentPage-1})">◀</a> &nbsp;&nbsp;
-		
-		<c:forEach var="counter" begin="${pn.startPageGroup}" end="${pn.endPageGroup}">
-		<c:if test="${counter == pn.currentPage}"><b><a href="javascript:formSubmit(${counter})">${counter}</a>&nbsp;</b></c:if>
-		<c:if test="${counter != pn.currentPage}"><a href="javascript:formSubmit(${counter})">${counter}</a>&nbsp;</c:if>
-		</c:forEach>
-		&nbsp;&nbsp;
-		<a href="javascript:formSubmit(${pn.currentPage + 1})">▶</a> &nbsp;&nbsp;
-		<a href="javascript:formSubmit(${pn.currentPage + pn.pagePerGroup})">▷▷</a>
-		<input type="hidden" id="page" value="${pn.currentPage}">
+	<div id="ajaxContents">
 	</div>
 	
 	<form id="readDocument" action="" method="post" accept-charset="utf-8">

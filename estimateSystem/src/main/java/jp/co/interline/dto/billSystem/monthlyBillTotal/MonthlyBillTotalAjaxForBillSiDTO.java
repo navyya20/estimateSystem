@@ -2,10 +2,12 @@ package jp.co.interline.dto.billSystem.monthlyBillTotal;
 
 public class MonthlyBillTotalAjaxForBillSiDTO {
 	String documentNum;
+	String billDate;
 	int userNum;
 	String documentName;
 	String receiver;
-	Float sumWithTax;
+	String sumWithTax;
+	String sumWithTax2;
 	String insertDate;
 	String updateDate;
 	int updater;
@@ -19,7 +21,7 @@ public class MonthlyBillTotalAjaxForBillSiDTO {
 	float extraTime;
 	int overTimeUnitPrice;
 	int underTimeUnitPrice;
-	float price;
+	String price;
 	int expense;
 	int benefit;
 	int subtotal;
@@ -48,11 +50,17 @@ public class MonthlyBillTotalAjaxForBillSiDTO {
 	public void setReceiver(String receiver) {
 		this.receiver = receiver;
 	}
-	public Float getSumWithTax() {
+	public String getSumWithTax() {
 		return sumWithTax;
 	}
-	public void setSumWithTax(Float sumWithTax) {
+	public void setSumWithTax(String sumWithTax) {
 		this.sumWithTax = sumWithTax;
+	}
+	public String getSumWithTax2() {
+		return sumWithTax2;
+	}
+	public void setSumWithTax2(String sumWithTax2) {
+		this.sumWithTax2 = sumWithTax2;
 	}
 	public String getInsertDate() {
 		return insertDate;
@@ -126,10 +134,10 @@ public class MonthlyBillTotalAjaxForBillSiDTO {
 	public void setUnderTimeUnitPrice(int underTimeUnitPrice) {
 		this.underTimeUnitPrice = underTimeUnitPrice;
 	}
-	public float getPrice() {
+	public String getPrice() {
 		return price;
 	}
-	public void setPrice(float price) {
+	public void setPrice(String price) {
 		this.price = price;
 	}
 	public int getExpense() {
@@ -149,6 +157,12 @@ public class MonthlyBillTotalAjaxForBillSiDTO {
 	}
 	public void setSubtotal(int subtotal) {
 		this.subtotal = subtotal;
+	}
+	public String getBillDate() {
+		return billDate;
+	}
+	public void setBillDate(String billDate) {
+		this.billDate = billDate;
 	}
 	@Override
 	public String toString() {

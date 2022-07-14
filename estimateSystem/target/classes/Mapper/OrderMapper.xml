@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="jp.co.interline.dao.OrderMapper">
+
+	<select id="getTotalOrderSheet" parameterType="userInformWithOptionDTO" resultType="int">
+		select
+			count(o.documentNum)
+		from
+			(
+				select d.*,om.receiver,om.documentName,ds.name stateName from
+						(select * from documentMaster where systemNum=3) d 
+					join 
+						orderMaster om 
+					on 
+						(d.documentNum = om.documentNum)
+					join
+						documentState ds
+					on
+						(d.state = ds.state)
+			) o
+		<choose>
+			<when test='auth == "u"'>
+				where o.userNum=#{userNum}
+			</when>
+			<when test='auth == "a"'>
+				
+			</when>
+		</choose>
+		order by ${option}
+	</select>
+	
+	<select id="getOrderList" parameterType="userInformWithOptionDTO" resultType="orderListDTO">
+		select
+			o.documentNum documentNum,
+			o.documentTypeName documentTypeName,
+			o.receiver receiver,
+			o.documentName documentName,
+			o.updateDate updateDate,
+			o.userNum userNum,
+			o.userName userName,
+			o.userDepartment userDepartment,
+			o.userPosition userPosition,
+			o.state state,
+			o.stateName stateName,
+			o.approvedDate approvedDate
+		from
+			(
+				select d.*,om.receiver,om.documentName,ds.name stateName from
+						(select * from documentMaster where systemNum=3) d 
+					join 
+						orderMaster om 
+					on 
+						(d.documentNum = om.documentNum)
+					join
+						documentState ds
+					on
+						(d.state = ds.state)
+			) o
+		<choose>
+			<when test='auth == "u"'>
+				where o.userNum=#{userNum}
+			</when>
+			<when test='auth == "a"'>
+				
+			</when>
+		</choose>
+		order by ${option}
+	</select>
+	
+	
+	<select id="getOrderTypeList" resultType="documentTypeDTO">
+		select * from documentType where systemNum=3 order by orderNum asc;
+	</select>
+	
+	<insert id="insertMasterInform" parameterType="billCommonDTO">
+		insert into documentMaster (
+			documentNum, systemNum, documentTypeName,
+			userNum, userName, userDepartment, userPosition,
+			workflowNum, 
+			state, updateDate, updater
+		)
+		values(
+			#{documentNum}, #{systemNum}, #{documentTypeName},
+			#{userNum}, #{userName}, #{userDepartment}, #{userPosition},
+			<choose>
+				<when test="workflowNum == 0">null,</when>
+				<otherwise>#{workflowNum},</otherwise>
+			</choose>
+			#{state}, CURRENT_TIMESTAMP, #{updater}
+		);
+		
+		insert into orderMaster(
+			documentNum, receiver, documentName
+		)values(
+			#{documentNum}, #{receiver}, #{documentName}
+		)
+	</insert>
+	
+	<update id="updateMasterInform" parameterType="billCommonDTO">
+		update documentMaster set
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where 
+			documentNum = #{documentNum};
+		
+		update orderMaster set
+			receiver = #{receiver},
+			documentName = #{documentName}
+		where
+			documentNum = #{documentNum}
+	</update>
+	
+<!-- /////////////////////////////////////////////////////////////////////////////////// -->
+<!-- /////////////////////////orderA (orderSi)//////////////////////////////////////////////////// -->
+	<insert id="insertOrderA" parameterType="orderADTO">
+		insert into orderA (
+			documentNum,userNum,userName,userDepartment,userPosition,orderDate,documentTypeName,
+			stamp,stampFileName,logoFileName,
+			
+			receiver,
+			address,
+			documentName,
+			deadline,
+			place,
+			contractType,
+			output,
+			payCondition,
+			etc1,
+			etc2,
+			sumWithoutTax,
+			sumWithoutTax2,
+			
+			updateDate,updater
+		) 
+		values
+		(
+			#{documentNum},#{userNum},#{userName},#{userDepartment},#{userPosition},#{orderDate},#{documentTypeName},
+			#{stamp},#{stampFileName},#{logoFileName},
+			
+			#{receiver},
+			#{address},
+			#{documentName},
+			#{deadline},
+			#{place},
+			#{contractType},
+			#{output},
+			#{payCondition},
+			#{etc1},
+			#{etc2},
+			#{sumWithoutTax},
+			#{sumWithoutTax2},
+			
+			CURRENT_TIMESTAMP,#{updater}
+		);
+		
+		insert into orderAItems (
+			documentNum,rowNum,
+			item,itemName,workStart,workEnd,manMonth,price,note,unitPrice,standardMin,standardMax,underTimeUnitPrice,overTimeUnitPrice,note2
+		)
+		values
+			<foreach collection="items" item="item" separator=",">
+				(#{documentNum},#{item.rowNum},
+				#{item.item},#{item.itemName},#{item.workStart},#{item.workEnd},${item.manMonth},${item.price},#{item.note},${item.unitPrice},${item.standardMin},${item.standardMax},${item.underTimeUnitPrice},${item.overTimeUnitPrice},#{item.note2})
+			</foreach>
+	</insert>
+	
+	<update id="updateOrderA" parameterType="orderADTO">
+		update orderA set
+			userNum = #{userNum},
+			userName = #{userName},
+			userDepartment = #{userDepartment},
+			userPosition = #{userPosition},
+			orderDate = #{orderDate},
+			stamp = #{stamp},
+			stampFileName = #{stampFileName},
+			
+			logoFileName = #{logoFileName},
+			receiver = #{receiver},
+			address = #{address},
+			documentName = #{documentName},
+			deadline = #{deadline},
+			place = #{place},
+			contractType = #{contractType},
+			output = #{output},
+			payCondition = #{payCondition},
+			etc1 = #{etc1},
+			etc2 = #{etc2},
+			sumWithoutTax = #{sumWithoutTax},
+			sumWithoutTax2 = #{sumWithoutTax2},
+				
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where
+			documentNum = #{documentNum};
+		
+		<foreach collection="items" item="item">
+			update orderAItems set
+				item = #{item.item}, 
+				itemName = #{item.itemName}, 
+				workStart = #{item.workStart}, 
+				workEnd = #{item.workEnd}, 
+				price = ${item.price}, 
+				note = #{item.note}, 
+				
+				unitPrice = ${item.unitPrice}, 
+				standardMin = ${item.standardMin}, 
+				standardMax = ${item.standardMax}, 
+				overTimeUnitPrice = ${item.overTimeUnitPrice}, 
+				underTimeUnitPrice = ${item.underTimeUnitPrice},
+				note2 = #{item.note2}
+			where documentNum=#{documentNum} and rowNum = #{item.rowNum};
+		</foreach>	
+	</update>
+	
+<!-- ////////////////////////////////////////////////////////////////////////////////// -->	
+<!-- ///////////////////////////////////////////////////////////////////////////// -->	
+
+</mapper>

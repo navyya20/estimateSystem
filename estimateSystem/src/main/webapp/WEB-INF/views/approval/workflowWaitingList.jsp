@@ -27,6 +27,7 @@ if ( self !== top ) {
 function readDocument(system,documentTypeName,documentNum){
 	//billSystem은 열람페이지를 estimateSystem와 공유하기때문에 bill로 들어올경우 estimate로 바꿔준다.
 	if(system == "bill"){system="estimate"}
+	if(system == "order"){system="estimate"}
 	
 	$('#readDocument').attr("action","read"+system.charAt(0).toUpperCase()+system.slice(1));
 	$('#documentNum').val(documentNum);
@@ -61,7 +62,7 @@ function readDocument(system,documentTypeName,documentNum){
 		</div>
 	</div>
 	<c:set var = "arr" value='<%= new String[]{"","見積書","請求書"} %>' />
-	<c:set var = "sysArr" value='<%= new String[]{"","estimate","bill"} %>' />
+	<c:set var = "sysArr" value='<%= new String[]{"","estimate","bill","order"} %>' />
 	<c:forEach items="${workflowList}" var="w" varStatus="status">
 		<div class="container-fluid pr-md-3 pl-md-3 smallSize">
 			<div class="p-0 d-flex ">

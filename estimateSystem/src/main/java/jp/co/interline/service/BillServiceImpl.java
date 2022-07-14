@@ -31,6 +31,9 @@ public class BillServiceImpl<T> implements BillService {
 	WorkflowDAO workflowDao;
 	
 	@Autowired
+	CompanyService companyService;
+	
+	@Autowired
 	BillDAO billDao;
 	
 	@Autowired
@@ -75,18 +78,6 @@ public class BillServiceImpl<T> implements BillService {
 		return billList;
 	}
 	
-	@Override
-	public String returnFileName(ArrayList<SystemDTO> systems, String category) {
-		SystemDTO sys=null;
-		for (int i = 0; i < systems.size(); i++) {
-			sys = systems.get(i);
-			if (sys.getCategory().equals(category)) {
-				return sys.getFileName();
-			}
-		}
-		return "";
-	}
-	
 	/*
 	 * documentType테이블에서 sysnum=2(청구서)인 데이터를 모두 가져온다. 순서는  orderNum의 오름차순으로
 	 */
@@ -99,28 +90,28 @@ public class BillServiceImpl<T> implements BillService {
 	 * billTotalView뷰에서 청구서타입,해당 년,월에 해당하는 청구서 목록을 가져온다.
 	 */
 	@Override
-	public ArrayList<MonthlyBillTotalAjaxDTO> getMonthlyBillTotalList(String billType, int year, int month, int userNum, String auth) {
+	public ArrayList<MonthlyBillTotalAjaxDTO> getMonthlyBillTotalList(String billType, int year, int month, int userNum, String auth, String order) {
 		String start = year + "-" + month + "-" + "1";
 		if(month == 12) {
 			year++;
 			month = 0;
 		}
 		String end = year + "-" + (month+1) + "-" + "1";
-		ArrayList<MonthlyBillTotalAjaxDTO> monthlyBillTotalList = billDao.getMonthlyBillTotalList(billType, start, end, userNum, auth);
+		ArrayList<MonthlyBillTotalAjaxDTO> monthlyBillTotalList = billDao.getMonthlyBillTotalList(billType, start, end, userNum, auth, order);
 		return monthlyBillTotalList;
 	}
 	/*
 	 * billTotalView뷰에서 Si만을 위한 별도 데이터불러오기.해당 년,월에 해당하는 Si청구서 목록을 가져온다.
 	 */
 	@Override
-	public ArrayList<MonthlyBillTotalAjaxForBillSiDTO> getMonthlyBillSiTotalList(int year, int month, int userNum, String auth) {
+	public ArrayList<MonthlyBillTotalAjaxForBillSiDTO> getMonthlyBillSiTotalList(int year, int month, int userNum, String auth, String order) {
 		String start = year + "-" + month + "-" + "1";
 		if(month == 12) {
 			year++;
 			month = 0;
 		}
 		String end = year + "-" + (month+1) + "-" + "1";
-		ArrayList<MonthlyBillTotalAjaxForBillSiDTO> billList = billDao.getMonthlyBillSiTotalList(start, end, userNum, auth);
+		ArrayList<MonthlyBillTotalAjaxForBillSiDTO> billList = billDao.getMonthlyBillSiTotalList(start, end, userNum, auth, order);
 		return billList;
 	}
 ////////////////////////////////////////////////
@@ -133,11 +124,9 @@ public class BillServiceImpl<T> implements BillService {
 		//기본정보등록
 		documentDTO.setDocumentNum(documentNum);
 		documentDTO.setUpdater(user.getUserNum());
-		ArrayList<SystemDTO> system = systemDao.getFileNames();
-		String stampFileName=returnFileName(system, "stamp");
-		String logoFileName=returnFileName(system, "logo");
-		documentDTO.setStampFileName(stampFileName);
-		documentDTO.setLogoFileName(logoFileName);
+		HashMap<String,String> fileNamesMap = companyService.getfileNames();
+		documentDTO.setStampFileName(fileNamesMap.get("stamp"));
+		documentDTO.setLogoFileName(fileNamesMap.get("logo"));
 		
 		HashMap<String, String> result = new HashMap<String, String>();
 		BillCommonDTO masterInform = (BillCommonDTO)documentDTO;
@@ -178,7 +167,7 @@ public class BillServiceImpl<T> implements BillService {
 			return result;
 		}
 		result.put("errorFlag", "0");
-		result.put("documentNum", documentDTO.getDocumentNum()+"更新エラー");
+		result.put("documentNum", documentDTO.getDocumentNum());
 		return result;
 	}
 

@@ -1,6 +1,7 @@
 package jp.co.interline.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import jp.co.interline.dto.CompanyDTO;
 import jp.co.interline.dto.DepartmentDTO;
@@ -23,6 +24,8 @@ public interface CompanyService {
 	int setFileName(String category, String savedfile);
 
 	FileNamesDTO getfileName(String string);
+	
+	HashMap<String,String> getfileNames();
 
 	ArrayList<PositionDTO> getPositionList();
 
@@ -39,6 +42,8 @@ public interface CompanyService {
 	int deleteDepartment(DepartmentDTO department);
 
 	int updateDepartment(DepartmentDTO department);
+
+	
 	
 	
 }

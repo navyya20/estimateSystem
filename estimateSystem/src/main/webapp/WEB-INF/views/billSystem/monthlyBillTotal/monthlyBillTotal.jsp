@@ -23,8 +23,7 @@
 <script>
 $(document).ready(function(){
 	setToday();
-	var billType = $("#typeSelect").val();
-	getBillListAjax(billType);
+	getBillListAjax();
 });
 function setToday(){
 	var today = new Date();   
@@ -32,17 +31,6 @@ function setToday(){
 	var month = today.getMonth() + 1;
 	$("#year").html(year);
 	$("#month").html(month);
-}
-
-//이전에 sort했던 옵션. 페이지navi 이동해도 sort가 그대로 적용되도록 유지하기위해.
-var option="${option}";
-if(option=""){
-	option="wf.documentNum asc";
-}
-//페이지네비게이션(정렬 옵션을 유지하기위해  option, flagObj도 가져감.)
-function formSubmit(page){
-	var countPerPage = $("#countPerPage").val();
-	document.location.href = "approvedList?page=" + page +"&option="+option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj))+"&countPerPage="+countPerPage;
 }
 
 //readDocument폼테그를 공유하여 사용한다.
@@ -55,34 +43,6 @@ function readBill(estimateNum,documentTypeName){
 }
 
 
-//더블클릭 감지기
-var numClicks = 0;
-var timeOut;
-function startClick(o) {
-	numClicks++;
-    var op = o.getAttribute('id').replace("DOT",".");
-    switch(numClicks) {
-        case 2:
-            doDouble(op);
-            break;
-        case 1:
-            timeOut = setTimeout("doSingle('"+op+"')", 500);
-            break;
-    }
-}
-
-function doSingle(op) {
-	numClicks=0;
-	sort(op+" desc");
-}
-
-function doDouble(op) {
-	clearTimeout(timeOut);
-	numClicks=0;
-	sort(op+" asc");
-}
-//여기까지 더블클릭 감지
-
 //클릭횟수(홀,짝)감지기. 홀,짝에의해 해당 컬럼의 정렬이 오름일지 내림일지 결정된다.
 	//flags. 처음들어오면 전부 0으로 세팅. 모델에 정보가있으면 그걸로 세팅.
 var flagObjString='${flagObj}'
@@ -90,50 +50,65 @@ var flagObj=new Object();
 if(flagObjString!=""){
 	flagObj=JSON.parse(flagObjString);
 }else{
-	flagObj.wfDOTupdateDateFlg=0;
-	flagObj.ui2DOTuserNameFlg=0;
-	flagObj.wfDOTinsertDateFlg=0;
-	flagObj.ui1DOTuserNameFlg=0;
-	flagObj.dtDOTexplanationFlg=0;
-	flagObj.wfDOTdocumentNumFlg=0;
-	flagObj.emDOTreceiverFlg=0;
-	flagObj.emDOTdocumentNameFlg=0;
+	//si이외의 플레그
+	flagObj.totalDOTbillDateFlg=0;
+	flagObj.totalDOTdocumentNumFlg=0;
+	flagObj.totalDOTreceiverFlg=0;
+	flagObj.totalDOTsumWithTax2Flg=0;
+
+	//si플래그
+	flagObj.bDOTbillDateFlg=0;
+	flagObj.iDOTdocumentNumFlg=0;
+	flagObj.bDOTreceiverFlg=0;
+	flagObj.iDOTmonthlyUnitPriceFlg=0;
+	flagObj.iDOTworkTimeFlg=0;
+	flagObj.iDOTextraTimeFlg=0;
+	flagObj.iDOToverTimeUnitPriceFlg=0;
+	flagObj.iDOTunderTimeUnitPriceFlg=0;
+	flagObj.iDOTpriceFlg=0;
+	flagObj.iDOTexpenseFlg=0;
+	flagObj.iDOTbenefitFlg=0;
+	flagObj.iDOTsubtotalFlg=0;
+	flagObj.iDOTworkerNameFlg=0;
 }
 	//flag가 짝수면 asc정렬  flag가 홀수면 desc정렬. 
 function countClickNum(o){
 	var targetId = o.getAttribute('id');
 	var target = o.getAttribute('id').replace("DOT",".");
+		flagObj[targetId+"Flg"]=flagObj[targetId+"Flg"]+1;
 	var flg=flagObj[targetId+"Flg"]%2;
 	switch(flg) {
-	    case 0:
-			flagObj[targetId+"Flg"]=flagObj[targetId+"Flg"]+1;
-	    	sort(target+" asc");
-	        break;
-	    case 1:
-	    	flagObj[targetId+"Flg"]=flagObj[targetId+"Flg"]+1;
-	    	sort(target+" desc");
-	        break;
+		case 0:
+			sort(target+" desc");
+	    break;
+		case 1:
+    		sort(target+" asc");
+        break;
+	    
 	}
 }
 //여기까지클릭횟수(홀,짝)감지기
 
 
 //option내용대로 order by 절 내용이 들어간다.
-function sort(option){
-	var page = $("#page").val();
-	var countPerPage = $("#countPerPage").val();
-	document.location.href ="approvedList?page="+page+"&option="+option+"&flagObj="+encodeURIComponent(JSON.stringify(flagObj))+"&countPerPage="+countPerPage;
+function sort(order){
+	getBillListAjax(order)
 }
 
-function getBillListAjax(type){
+function getBillListAjax(order){
+	var billType = $("#typeSelect").val();
 	var year = $("#year").html();
 	var month = $("#month").html();
 	$.ajax({
 		url: "monthlyBillTotal/monthlyBillTotalAjax",
 		type: "get",
-		data: {"billType" : type, "year": year, "month": month},
+		data: {"billType" : billType, "year": year, "month": month, "order": order},
 		success : function(result){
 			var html = jQuery('<div>').html(result);
+			if(html.find("title").html()=="Login"){
+				alert("ログインが解除されました。再度ログインしてください。");
+				document.location.href="../";
+			}
 			var contents = html.find("div#ajaxBody").html();
 			$("#ajaxContents").html(contents);
 		},
@@ -154,8 +129,7 @@ function previousMonth(){
 	}
 	$("#year").html(year);
 	$("#month").html(month);
-	var billType = $("#typeSelect").val();
-	getBillListAjax(billType);
+	getBillListAjax();
 }
 function nextMonth(){
 	var year = $("#year").html();
@@ -167,8 +141,7 @@ function nextMonth(){
 	}
 	$("#year").html(year);
 	$("#month").html(month);
-	var billType = $("#typeSelect").val();
-	getBillListAjax(billType);
+	getBillListAjax();
 }
 </script>
 </head>
@@ -188,7 +161,7 @@ function nextMonth(){
 						<div class="input-group-prepend">
 							<label class="input-group-text bg-light" for="inputGroupSelect02">請求書タイプ</label>
 						</div>
-						<select id="typeSelect" class="custom-select border border-secondary" onchange="getBillListAjax(this.value)">
+						<select id="typeSelect" class="custom-select border border-secondary" onchange="getBillListAjax()">
 							<option value="all" selected>全体</option>
 							<c:forEach items="${typeList}" var="type" varStatus="status">
 								<option value="${type.documentTypeName}">${type.explanation}</option>
@@ -228,5 +201,6 @@ function nextMonth(){
 		<input type="hidden" id="documentTypeName" name="documentTypeName" value="">
 	</form>
 	
+	<input type="hidden" id="option" name="option" value="">
 </body>
 </html>

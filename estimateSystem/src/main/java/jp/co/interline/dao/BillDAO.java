@@ -44,7 +44,7 @@ public class BillDAO {
 		return typeList;
 	}
 	
-	public ArrayList<MonthlyBillTotalAjaxDTO> getMonthlyBillTotalList(String billType, String start, String end, int userNum, String auth) {
+	public ArrayList<MonthlyBillTotalAjaxDTO> getMonthlyBillTotalList(String billType, String start, String end, int userNum, String auth, String order) {
 		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
 		HashMap<String, String> map = new HashMap<>();
 		map.put("billType", billType);
@@ -52,17 +52,19 @@ public class BillDAO {
 		map.put("end", end);
 		map.put("userNum", userNum+"");
 		map.put("auth", auth);	
+		map.put("order", order);	
 		ArrayList<MonthlyBillTotalAjaxDTO> monthlyBillTotalList = mapper.getMonthlyBillTotalList(map);
 		return monthlyBillTotalList;
 	}
 	
-	public ArrayList<MonthlyBillTotalAjaxForBillSiDTO> getMonthlyBillSiTotalList(String start, String end, int userNum, String auth) {
+	public ArrayList<MonthlyBillTotalAjaxForBillSiDTO> getMonthlyBillSiTotalList(String start, String end, int userNum, String auth, String order) {
 		BillMapper mapper = sqlsession.getMapper(BillMapper.class);
 		HashMap<String, String> map = new HashMap<>();
 		map.put("start", start);
 		map.put("end", end);
 		map.put("userNum", userNum+"");
 		map.put("auth", auth);	
+		map.put("order", order);	
 		ArrayList<MonthlyBillTotalAjaxForBillSiDTO> billList = mapper.getMonthlyBillSiTotalList(map);
 		return billList;
 	}

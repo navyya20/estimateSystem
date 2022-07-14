@@ -23,7 +23,7 @@
 -->
 
 <script type="text/javascript" src="../js/jQuery-FontSpy.js" charset="utf-8"></script>
-<script type="text/javascript" src="../js/dataCompensation/dataCompensation.js?ver=4" charset="utf-8"></script>
+<script type="text/javascript" src="../js/dataCompensation/dataCompensation.js?ver=5" charset="utf-8"></script>
 
 
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
@@ -58,7 +58,6 @@ if ( self !== top ) {
 	</div>	
 
 	<script type="text/javascript" >
-		var estimateNum = '${estimateNum}';
 		var copy = "";
 		<c:if test="${copy != null}">
 			copy = '${copy}';
@@ -86,12 +85,8 @@ if ( self !== top ) {
 			oz.sendToActionScript("connection.args4","userDepartment="+(user.department==null? '':user.department));
 			oz.sendToActionScript("connection.args5","userName="+user.userName);
 			oz.sendToActionScript("connection.args6","path=http://"+'<%out.print(properties.getWebIP());%>'+"/files/estimateSystem/uploaded/");
-			oz.sendToActionScript("connection.args7","estimateNum="+estimateNum);
 
 			oz.sendToActionScript("global.language", "ja_JP");
-			oz.sendToActionScript("odi.odinames", "writeBillD");
-	 		oz.sendToActionScript("odi.writeBillD.pcount", "1");
-			oz.sendToActionScript("odi.writeBillD.args1", "documentNum="+estimateNum);
 			
 			oz.sendToActionScript("pdf.fontembedding","true");
 			return true;
@@ -154,11 +149,7 @@ if ( self !== top ) {
 							}else{
 								alert(r["error"]);
 							}
-							if(estimateNum ==''){
-								location.href="billList";
-							}else{
-								location.href="estimateList";
-							}
+							location.href="billList";
 						},
 						error: function(e){
 							console.log(JSON.stringify(e));
@@ -204,11 +195,7 @@ if ( self !== top ) {
 						dataType:"text",
 						success: function(r){
 							alert(r);
-							if(estimateNum ==''){
-								location.href="billList";
-							}else{
-								location.href="estimateList";
-							}
+							location.href="billList";
 						},
 						error: function(e){
 							console.log(JSON.stringify(e));

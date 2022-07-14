@@ -1,6 +1,7 @@
 package jp.co.interline.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,11 @@ public class CompanyDAO implements CompanyMapper {
 		FileNamesDTO fileName = mapper.getfileName(category);
 		return fileName;
 	}
+	public ArrayList<FileNamesDTO> getfileNames() {
+		CompanyMapper mapper = sqlsession.getMapper(CompanyMapper.class);
+		ArrayList<FileNamesDTO> fileNames = mapper.getfileNames();
+		return fileNames;
+	}
 	public ArrayList<PositionDTO> getPositionList() {
 		CompanyMapper mapper = sqlsession.getMapper(CompanyMapper.class);
 		ArrayList<PositionDTO> positionList = mapper.getPositionList();
@@ -95,6 +101,7 @@ public class CompanyDAO implements CompanyMapper {
 		int result = mapper.updateDepartment(department);
 		return result;
 	}
+	
 	
 
 }

@@ -24,6 +24,8 @@ public interface CompanyMapper {
 	int setFileName(FileNamesDTO file);
 
 	FileNamesDTO getfileName(String category);
+	
+	ArrayList<FileNamesDTO> getfileNames();
 
 	ArrayList<PositionDTO> getPositionList();
 	
@@ -40,6 +42,8 @@ public interface CompanyMapper {
 	int deleteDepartment(DepartmentDTO department);
 
 	int updateDepartment(DepartmentDTO department);
+
+
 
 
 	

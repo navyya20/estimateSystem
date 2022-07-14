@@ -1,6 +1,7 @@
 package jp.co.interline.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,8 @@ public class WorkflowServiceImpl implements WorkflowService {
 	WorkflowDAO workflowDao;
 	@Autowired
 	CompanyDAO companyDao;
+	@Autowired
+	CompanyService companyService;
 	
 	//private static final int countPerPage=20;	
 	private static final int pagePerGroup=10;
@@ -127,10 +130,110 @@ public class WorkflowServiceImpl implements WorkflowService {
 		return workflowNum;
 	}
 	@Override
+	public HashMap<String,String> updateApprove(WorkflowDTO workflow, UserInformDTO user, String fileName, String filePath) {
+		HashMap<String,String> result = new HashMap<>();
+		workflow.setUpdater(user.getUserNum());
+		int order = workflow.getPresentApproverNum();
+		switch (order) {
+		case 1:
+			workflow.setApprover1State("a");
+			break;
+		case 2:
+			workflow.setApprover2State("a");
+			break;
+		case 3:
+			workflow.setApprover3State("a");
+			break;
+		default:
+			break;
+		}
+		
+		//승인1~3단계 차례차례 검사하여 승인이 안된단계 approverState = "n"일 경우. 
+		//현제 승인대기자(presentApprover)와 현제단계(approverNum)에 해당 approver와 단계n을 넣는다.
+		String as1 = workflow.getApprover1State();
+		String as2 = workflow.getApprover2State();
+		String as3 = workflow.getApprover3State();
+		if (as1.equals("n")) {
+			workflow.setPresentApprover(workflow.getApprover1());
+			workflow.setPresentApproverNum(1);
+		}else if (as2.equals("n")) {
+			workflow.setPresentApprover(workflow.getApprover2());
+			workflow.setPresentApproverNum(2);
+		}else if (as3.equals("n")) {
+			workflow.setPresentApprover(workflow.getApprover3());
+			workflow.setPresentApproverNum(3);
+		}else {
+			//1,2,3단계 모두 승인상태인경우 현제 승인대기자(presentApprover)와 현제단계(approverNum)에 false를 의미하는  -1을 설정.
+			workflow.setPresentApprover(-1);
+			workflow.setPresentApproverNum(-1);
+		}
+		//각단계의 승인상태를 합쳐서 targetValue에 저장한다. ex) ana, nnn, aaa등등. confirmation에서 aaa가 확인되면 최종승인이된다.
+		String targetValue = as1+as2+as3;
+		workflow.setTargetValue(targetValue);
+		workflow.setUpdater(user.getUserNum());
+		
+		int result0 = workflowDao.updateApprove(workflow);
+		if (result0!=1) {
+			result.put("result", "false");
+			result.put("msg", "承認状態を更新中、問題が発生しました。1");
+			return result;
+		}
+		
+		//TargetKey는 aaa고정이다. workflowInform을 만들때 승인자가 없을경우를 대비해 aaa이외의 상태도 고려하였지만, 
+		//승인자가 없을경우 renew메서드에서 n->a로 바꿔주기때문에  aaa로 통일하면된다.
+		//TargetKey("aaa") == TargetValue("aaa")이면 승인이 완료된 상태라는 뜻으로 승인완료절차 진행. 
+		boolean state = workflow.getTargetKey().equals(workflow.getTargetValue());
+		if (state == true) {
+			//documentMaster테이블에 문서 상태를 승인완료(app)로
+			workflow.setState("app");
+			int result2 =  workflowDao.updateState(workflow);
+			if (result2!=1) {
+				result.put("result", "false");
+				result.put("msg", "承認状態を更新中、問題が発生しました。2");
+				return result;
+			}
+			//해당 document의 stamp칼럼 logoFileName칼럼에 도장 로고
+			HashMap<String,String> fileNamesMap = companyService.getfileNames();
+			SystemDTO system = new SystemDTO();
+			system.setStampFileName(fileNamesMap.get("stamp"));
+			system.setLogoFileName(fileNamesMap.get("logo"));
+			system.setDocumentTypeName(workflow.getDocumentTypeName());
+			system.setDocumentNum(workflow.getDocumentNum());
+			int result3=workflowDao.stampConfirm(system);
+			if (result3!=1) {
+				result.put("result", "false");
+				result.put("msg", "承認状態を更新中、問題が発生しました。3");
+				return result;
+			}
+			//만약 파일 생성한것이 있다면 파일 생성으로 
+			if(fileName.isEmpty() || fileName == null) {
+				result.put("result", "true");
+				return result;
+			}else {
+				int result4 = registFile(workflow.getDocumentNum(),fileName , filePath);
+				if (result4!=1) {
+					result.put("result", "false");
+					result.put("msg", "ファイア登録中、問題が発生しました。");
+					return result;
+				}
+			}
+		}else {
+			//문서상태 req로
+			workflow.setDocumentNum(workflow.getDocumentNum());
+			workflow.setState("req");
+			int result5 =  workflowDao.updateState(workflow);
+			if (result5!=1) {
+				result.put("result", "false");
+				result.put("msg", "承認状態を更新中、問題が発生しました。4");
+				return result;
+			}
+		}
+		result.put("result", "true");
+		return result;
+	}
+	@Override
 	public int renewWorkflow(int workflowNum, UserInformDTO user) {
-		System.out.println("workflowNum:"+workflowNum);
 		WorkflowDTO w = workflowDao.getWorkflowByWorkflowNum(workflowNum);
-		System.out.println(w);
 		//승인자가 지정되어있지않을경우(approver가-1) approved되었다(approver#State가 a)고 친다.
 		int a1 = w.getApprover1();
 		int a2 = w.getApprover2();
@@ -189,11 +292,10 @@ public class WorkflowServiceImpl implements WorkflowService {
 			int result1 =  workflowDao.updateState(workflow);
 			if (result1==0) {return false;}
 			//도장 로고
-			FileNamesDTO stampFileName = companyDao.getfileName("stamp");
-			FileNamesDTO logoFileName = companyDao.getfileName("logo");
+			HashMap<String,String> fileNamesMap = companyService.getfileNames();
 			SystemDTO system = new SystemDTO();
-			system.setStampFileName(stampFileName.getFileName());
-			system.setLogoFileName(logoFileName.getFileName());
+			system.setStampFileName(fileNamesMap.get("stamp"));
+			system.setLogoFileName(fileNamesMap.get("logo"));
 			system.setDocumentTypeName(documentTypeName);
 			system.setDocumentNum(documentNum);
 			int result2=workflowDao.stampConfirm(system);
@@ -209,12 +311,12 @@ public class WorkflowServiceImpl implements WorkflowService {
 		return true;
 	}
 	@Override
-	public Boolean generateFile(int workflowNum, String documentNum, String documentTypeName, int systemNum) {
+	public HashMap<String,String> generateFile(int workflowNum, String documentNum, String documentTypeName, int systemNum) {
+		boolean state = true;
 		WorkflowDTO w = workflowDao.getWorkflowByWorkflowNum(workflowNum);
-		//TargetKey는 aaa고정이다. workflowInform을 만들때 승인자가 없을경우를 대비해 aaa이외의 상태도 고려하였지만, 
-		//승인자가 없을경우 renew메서드에서 n->a로 바꿔주기때문에  aaa로 통일하면된다.
-		//TargetKey("aaa") == TargetValue("aaa")이면 승인이 완료된 상태라는 뜻으로 승인완료절차 진행. 
-		boolean state = w.getTargetKey().equals(w.getTargetValue());
+		//파일을 생성하기전 생성해도될지 상태(승인 등)를 점검하는 것은 여기서 state값을 조정하는 코드 삽입
+		//------
+		HashMap<String,String> resultFileExport = null;
 		if (state == true) {
 			//승인완료된 문서를 파일로 저장
 			GetProperties properties = new GetProperties();
@@ -231,28 +333,45 @@ public class WorkflowServiceImpl implements WorkflowService {
 			}
 			ExportReport exportDocument = new ExportReport("admin", "admin1", OZserverURL, ipScheduler, portScheduler);
 			String systemName = workflowDao.getSystemBySystemNum(systemNum);
-			systemName.substring(0, 1);
+			//systemName.substring(0, 1);
 			String jsonData = null;
 			String nameOzr = systemName+"/"+documentTypeName+"/read"+documentTypeName.substring(0,1).toUpperCase()+documentTypeName.substring(1)+".ozr";
-			String[] ozrParamValue = {"path=http://"+properties.getWebIP()+"/files/estimateSystem/uploaded/"};
+			
+			//도장 로고
+			HashMap<String,String> fileNamesMap = companyService.getfileNames();
+
+			String[] ozrParamValue = {"path=http://"+properties.getWebIP()+"/files/estimateSystem/uploaded/",
+					"stamp="+fileNamesMap.get("stamp"),
+					"logo="+fileNamesMap.get("logo")
+				};
 			String nameOdi = "read"+documentTypeName.substring(0,1).toUpperCase()+documentTypeName.substring(1);
 			String[] odiParamValue = {"documentNum="+documentNum};
 			String fileName=documentNum;
 			try {
-				exportDocument.exportMethod(jsonData, nameOzr, ozrParamValue, nameOdi, odiParamValue, "pdf", fileName);
-				DocumentMasterDTO documentMaster= new DocumentMasterDTO();
-				documentMaster.setDocumentNum(documentNum);
-				documentMaster.setFileName(fileName+".pdf");
-				int result = workflowDao.setfileName(documentMaster);
-				if (result == 0) {return false;}
+				resultFileExport = exportDocument.exportMethod(jsonData, nameOzr, ozrParamValue, nameOdi, odiParamValue, "pdf", fileName);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
-				return false;
+				resultFileExport = new HashMap<>();
+				resultFileExport.put("result", "fasle");
+				resultFileExport.put("msg", "ファイル生成中に例外発生");
+				return resultFileExport;
 			}
 		}
-		return true;
+		return resultFileExport;
 	}
-	
+	@Override
+	public int registFile(String documentNum, String fileName, String filePath) {
+		DocumentMasterDTO documentMaster= new DocumentMasterDTO();
+		documentMaster.setDocumentNum(documentNum);
+		documentMaster.setFileName(fileName);
+		//documentMaster에 파일명을 등록하고 온다.
+		int resultWorkFlow = workflowDao.setfileName(documentMaster); 
+		if (resultWorkFlow != 1) {
+			return resultWorkFlow;
+		}
+		return resultWorkFlow;
+	}
 	@Override
 	public int updateStateWRI(String documentNum) {
 		//문서상태 wri로
@@ -282,26 +401,7 @@ public class WorkflowServiceImpl implements WorkflowService {
 		WorkflowDTO workflow = workflowDao.getWorkflowByDocumentNum(documentNum);
 		return workflow;
 	}
-	@Override
-	public int updateApprove(WorkflowDTO workflow, UserInformDTO user) {
-		workflow.setUpdater(user.getUserNum());
-		int order = workflow.getPresentApproverNum();
-		switch (order) {
-		case 1:
-			workflow.setApprover1State("a");
-			break;
-		case 2:
-			workflow.setApprover2State("a");
-			break;
-		case 3:
-			workflow.setApprover3State("a");
-			break;
-		default:
-			break;
-		}
-		int result = workflowDao.updateApprove(workflow);
-		return result;
-	}
+	
 	@Override
 	public int deleteWorkflow(int workflowNum) {
 		int result = workflowDao.deleteWorkflow(workflowNum);
@@ -323,19 +423,28 @@ public class WorkflowServiceImpl implements WorkflowService {
 	 * estimateList: 견적청구서 목록
 	 */
 	@Override
-	public ArrayList<ApprovedListDTO> getApprovedList(Model model, UserInformDTO user, String option, int page, int countPerPage) {
+	public ArrayList<ApprovedListDTO> getApprovedList(Model model, UserInformDTO user, String option, int page, int countPerPage, String start, String end, String searchString) {
 		UserInformWithOptionDTO userInformWithOption = new UserInformWithOptionDTO();
 		userInformWithOption.setAuth(user.getAuth());
 		userInformWithOption.setUserNum(user.getUserNum());
 		userInformWithOption.setOption(option);
-		int total = workflowDao.getTotalApprovedSheet(userInformWithOption);
+		HashMap<String, String> param =  new HashMap<>();
+		param.put("auth", user.getAuth());
+		param.put("userNum", user.getUserNum()+"");
+		param.put("option", option);
+		param.put("start", start);
+		param.put("end", "".equals(end)? end : end+" 23:59:59");
+		param.put("searchString", "".equals(searchString)? searchString : "%"+searchString+"%");
+		
+		int total = workflowDao.getTotalApprovedSheet(param);
 		System.out.println("total:" + total);
 		PageNavigator navi = new PageNavigator(countPerPage, pagePerGroup, page, total);
-		ArrayList<ApprovedListDTO> approvedList = workflowDao.getApprovedList(navi.getStartRecord(), navi.getCountPerPage(), userInformWithOption);
+		ArrayList<ApprovedListDTO> approvedList = workflowDao.getApprovedList(navi.getStartRecord(), navi.getCountPerPage(), param);
 
 		model.addAttribute("pn", navi);
 		
 		return approvedList;
 	}
+	
 
 }

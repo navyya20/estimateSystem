@@ -23,7 +23,7 @@
 			) b
 		<choose>
 			<when test='auth == "u"'>
-				where b.userNum=#{userNum} or b.state='app'
+				where b.userNum=#{userNum}
 			</when>
 			<when test='auth == "a"'>
 				
@@ -78,7 +78,7 @@
 	</select>
 	
 	<select id="getMonthlyBillTotalList" parameterType="HashMap" resultType="monthlyBillTotalAjaxDTO">
-		select * from billTotalView 
+		select * from billTotalView as total
 		
 		where
 			<choose>
@@ -97,11 +97,20 @@
 					documentTypeName = #{billType} and
 				</otherwise>
 			</choose>
-			updateDate >= #{start} and updateDate <![CDATA[<]]> #{end} order by documentTypeName asc;
+			billDate >= #{start} and billDate <![CDATA[<]]> #{end} 
+		order by 
+			<choose>
+				<when test='order == null or order == ""'>
+					documentTypeName asc
+				</when>
+				<otherwise>
+					${order}
+				</otherwise>
+			</choose>;
 	</select>
 	
 	<select id="getMonthlyBillSiTotalList" parameterType="HashMap" resultType="monthlyBillTotalAjaxForBillSiDTO">
-		SELECT b.userNum, b.receiver, b.updater, b.updateDate, b.documentTypeName, i.* FROM billSi as b
+		SELECT b.userNum, b.receiver, b.updater, b.updateDate, b.billDate, b.documentTypeName, b.sumWithTax2, i.* FROM billSi as b
 		join (select * from billSiItems where monthlyUnitPrice is not null OR subtotal is not null)  as i
 			on b.documentNum = i.documentNum 
 		join (select documentNum, targetValue from workflow where systemNum = 2 and targetValue = "aaa") as w
@@ -115,7 +124,18 @@
 					
 				</when>
 			</choose>
-			updateDate >= #{start} and updateDate <![CDATA[<]]> #{end} order by i.documentNum asc, i.rowNum asc;
+			billDate >= #{start} and billDate <![CDATA[<]]> #{end} 
+		order by 
+			<choose>
+				<when test='order == null or order == ""'>
+					i.documentNum asc
+				</when>
+				<otherwise>
+					${order}
+				</otherwise>
+			</choose>, i.rowNum asc;
+		
+		
 	</select>
 	
 	
@@ -427,6 +447,7 @@
 			sum,
 			taxRate,
 			tax,
+			commissionName,
 			commissionRate,
 			commission,
 			sumWithTax,
@@ -454,6 +475,7 @@
 			#{sum},
 			#{taxRate},
 			#{tax},
+			#{commissionName},
 			#{commissionRate},
 			#{commission},
 			#{sumWithTax},
@@ -498,6 +520,7 @@
 			sum = #{sum},
 			taxRate = #{taxRate},
 			tax = #{tax},
+			commissionName = #{commissionName},
 			commissionRate = #{commissionRate},
 			commission = #{commission},
 			sumWithTax = #{sumWithTax},

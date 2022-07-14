@@ -1,7 +1,9 @@
 package jp.co.interline.controller;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import javax.servlet.http.HttpSession;
 
@@ -56,7 +58,7 @@ public class BillController {
 			@RequestParam(value="page", defaultValue="1") int page,
 			@RequestParam(value="countPerPage", defaultValue="20") int countPerPage) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
-		logger.debug("BillController.esimateList,user:{}",user.getUserNum());
+		logger.debug("BillController.billList,user:{}",user.getUserNum());
 		
 		ArrayList<EstimateListDTO> billList = billService.getBillList(model, user,option,page,countPerPage);
 		
@@ -113,29 +115,47 @@ public class BillController {
 	}
 	
 	@RequestMapping(value = "/all/monthlyBillTotal/monthlyBillTotalAjax", method = RequestMethod.GET, produces="application/json;charset=UTF-8")
-	public String monthlyBillTotalAjax(HttpSession session, Model model, String billType, int year, int month) {
+	public String monthlyBillTotalAjax(HttpSession session, Model model, String billType, int year, int month, String order) {
 		UserInformDTO user = (UserInformDTO)session.getAttribute("userInform");
 		logger.debug("BillController.monthlyBillTotal.monthlyBillTotalAjax,user:{}",user.getUserNum());
+		System.out.println("order: "+order);
 		if("billSi".equals(billType)) {
-			ArrayList<MonthlyBillTotalAjaxForBillSiDTO> billList = billService.getMonthlyBillSiTotalList(year, month, user.getUserNum(), user.getAuth());
-			float totalPrice = 0;
-			float totalExpenses = 0;
+			ArrayList<MonthlyBillTotalAjaxForBillSiDTO> billList = billService.getMonthlyBillSiTotalList(year, month, user.getUserNum(), user.getAuth(), order);
+			//sumwithTax2의 합계를 구한다.
+			BigInteger totalPrice = new BigInteger("0");
+			ArrayList<String> documentNumList = new ArrayList<String>();
 			for (MonthlyBillTotalAjaxForBillSiDTO monthlyBillTotalAjaxForBillSiDTO : billList) {
-				totalPrice += monthlyBillTotalAjaxForBillSiDTO.getPrice();
-				totalExpenses += monthlyBillTotalAjaxForBillSiDTO.getSubtotal();
+				documentNumList.add(monthlyBillTotalAjaxForBillSiDTO.getDocumentNum());
+				if(monthlyBillTotalAjaxForBillSiDTO.getPrice()==null || monthlyBillTotalAjaxForBillSiDTO.getPrice()=="") {
+					monthlyBillTotalAjaxForBillSiDTO.setPrice("0");
+				}
 			}
+			//documentNumList의 중복을 제거
+			HashSet<String> hashSet = new HashSet<>(documentNumList);
+			for (String string : hashSet) {
+				for (MonthlyBillTotalAjaxForBillSiDTO monthlyBillTotalAjaxForBillSiDTO : billList) {
+					if(monthlyBillTotalAjaxForBillSiDTO.getDocumentNum().equals(string)) {
+						totalPrice = totalPrice.add(new BigInteger(monthlyBillTotalAjaxForBillSiDTO.getSumWithTax2()));
+						break;
+					}
+				}
+			}
+			
 			model.addAttribute("billList", billList);
-			model.addAttribute("totalPrice", totalPrice);
-			model.addAttribute("totalExpenses", totalExpenses);
+			model.addAttribute("totalPrice", totalPrice.toString());
 			return "billSystem/monthlyBillTotal/monthlyBillTotalAjaxForBillSi";
 		}
-		ArrayList<MonthlyBillTotalAjaxDTO> monthlyBillTotalList = billService.getMonthlyBillTotalList(billType, year, month, user.getUserNum(), user.getAuth());
-		float total = 0;
+		
+		ArrayList<MonthlyBillTotalAjaxDTO> monthlyBillTotalList = billService.getMonthlyBillTotalList(billType, year, month, user.getUserNum(), user.getAuth(), order);
+		//sumwithTax2의 합계를 구한다.
+		BigInteger total = new BigInteger("0");
 		for (MonthlyBillTotalAjaxDTO monthlyBillTotalAjaxDTO : monthlyBillTotalList) {
-			total += monthlyBillTotalAjaxDTO.getSumWithTax();
+			if (monthlyBillTotalAjaxDTO.getSumWithTax() != null) {
+				total = total.add(new BigInteger(monthlyBillTotalAjaxDTO.getSumWithTax2()));
+			}
 		}
 		model.addAttribute("billList", monthlyBillTotalList);
-		model.addAttribute("total", total);
+		model.addAttribute("total", total.toString());
 		return "billSystem/monthlyBillTotal/monthlyBillTotalAjax";
 	}
 	

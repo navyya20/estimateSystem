@@ -1,7 +1,7 @@
 ﻿//순수 숫자 스트링으로 만들어주는 함수
 //숫자형데이터, 예를들어 "1,500￥"가 인수로오면 "1500"만 남기고 잘라냄.
 function getPureNumber(numberStr){
-	return numberStr.replace(/%/gi, "").replace(/,/gi, "").replace(/￥/gi, "").replace("JPY ", "").replace("人月", "");
+	return numberStr.replace(/%/gi, "").replace(/,/gi, "").replace(/￥/gi, "").replace("JPY ", "").replace("人月", "").replace("h", "");
 }
 
 //1차원 아이템들을  배열로 만들어줌.

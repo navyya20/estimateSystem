@@ -72,6 +72,9 @@
 	<select id="getfileName" parameterType="String" resultType="fileNamesDTO">
 		select * from fileNames where category=#{category}
 	</select>
+	<select id="getfileNames" resultType="fileNamesDTO">
+		select * from fileNames
+	</select>
 
 
 

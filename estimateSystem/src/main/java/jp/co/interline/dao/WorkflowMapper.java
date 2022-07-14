@@ -1,6 +1,7 @@
 package jp.co.interline.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 
@@ -52,8 +53,8 @@ public interface WorkflowMapper {
 
 	int setfileName(DocumentMasterDTO documentMaster);
 
-	int getTotalApprovedSheet(UserInformWithOptionDTO userInformWithOption);
+	int getTotalApprovedSheet(HashMap<String, String> param);
 
-	ArrayList<ApprovedListDTO> getApprovedList(RowBounds rbs, UserInformWithOptionDTO userInformWithOption);
+	ArrayList<ApprovedListDTO> getApprovedList(RowBounds rbs, HashMap<String, String> param);
 
 }

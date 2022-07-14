@@ -21,13 +21,11 @@ public interface BillService {
 
 	ArrayList<EstimateListDTO> getBillList(Model model, UserInformDTO user, String option, int page, int countPerPage);
 
-	String returnFileName(ArrayList<SystemDTO> systems, String category);
-
 	ArrayList<DocumentTypeDTO> getBillTypeList();
 	
-	ArrayList<MonthlyBillTotalAjaxDTO> getMonthlyBillTotalList(String billType, int year, int month, int userNum, String auth);
+	ArrayList<MonthlyBillTotalAjaxDTO> getMonthlyBillTotalList(String billType, int year, int month, int userNum, String auth, String order);
 	
-	ArrayList<MonthlyBillTotalAjaxForBillSiDTO> getMonthlyBillSiTotalList(int year, int month, int userNum, String auth);
+	ArrayList<MonthlyBillTotalAjaxForBillSiDTO> getMonthlyBillSiTotalList(int year, int month, int userNum, String auth, String order);
 	
 	<T extends BillCommonDTO> HashMap<String, String> insertDocument(UserInformDTO user, HttpSession session, Model model, String jsonStr, Class<T> type);
 

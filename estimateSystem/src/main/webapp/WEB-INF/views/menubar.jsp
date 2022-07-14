@@ -4,9 +4,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1" >
-<meta name="format-detection" content="telephone=no">
+
 <!-- 아래 주석은 IE와 Opera에서의 뷰포트 룰. 필요하다면 css파일에 셋팅해주어야한다. -->
 <!-- <style type="text/css">
 @-ms-viewport{width:device-width;}
@@ -32,6 +30,11 @@
 				<li class="nav-item active">
 					<c:if test="${sessionScope.userInform.auth eq 'a' or sessionScope.userInform.auth eq 'u'}">
 						<a class="nav-link" href="./billList">請求書 <span class="sr-only">(current)</span></a>
+					</c:if>
+				</li>
+				<li class="nav-item active">
+					<c:if test="${sessionScope.userInform.auth eq 'a' or sessionScope.userInform.auth eq 'u'}">
+						<a class="nav-link" href="./orderList">注文書 <span class="sr-only">(current)</span></a>
 					</c:if>
 				</li>
 				<li class="nav-item active">

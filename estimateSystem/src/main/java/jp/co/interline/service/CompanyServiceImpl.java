@@ -1,6 +1,7 @@
 package jp.co.interline.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -62,6 +63,16 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
+	public HashMap<String,String> getfileNames() {
+		ArrayList<FileNamesDTO> fileNames = companyDao.getfileNames();
+		HashMap<String,String> fileNamesMap = new HashMap<>();
+		for (FileNamesDTO fileNamesDTO : fileNames) {
+			fileNamesMap.put(fileNamesDTO.getCategory(), fileNamesDTO.getFileName());
+		}
+		return fileNamesMap;
+	}
+	
+	@Override
 	public ArrayList<PositionDTO> getPositionList() {
 		ArrayList<PositionDTO> positionList = companyDao.getPositionList();
 		return positionList;
@@ -102,5 +113,6 @@ public class CompanyServiceImpl implements CompanyService {
 		int result = companyDao.updateDepartment(department);
 		return result;
 	}
+
 	
 }

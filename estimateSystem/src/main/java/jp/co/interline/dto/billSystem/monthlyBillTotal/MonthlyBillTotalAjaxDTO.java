@@ -2,10 +2,12 @@ package jp.co.interline.dto.billSystem.monthlyBillTotal;
 
 public class MonthlyBillTotalAjaxDTO {
 	String documentNum;
+	String billDate;
 	int userNum;
 	String documentName;
 	String receiver;
-	Float sumWithTax;
+	String sumWithTax;
+	String sumWithTax2;
 	String insertDate;
 	String updateDate;
 	int updater;
@@ -35,11 +37,17 @@ public class MonthlyBillTotalAjaxDTO {
 	public void setReceiver(String receiver) {
 		this.receiver = receiver;
 	}
-	public Float getSumWithTax() {
+	public String getSumWithTax() {
 		return sumWithTax;
 	}
-	public void setSumWithTax(Float sumWithTax) {
+	public void setSumWithTax(String sumWithTax) {
 		this.sumWithTax = sumWithTax;
+	}
+	public String getSumWithTax2() {
+		return sumWithTax2;
+	}
+	public void setSumWithTax2(String sumWithTax2) {
+		this.sumWithTax2 = sumWithTax2;
 	}
 	public String getInsertDate() {
 		return insertDate;
@@ -64,6 +72,12 @@ public class MonthlyBillTotalAjaxDTO {
 	}
 	public void setDocumentTypeName(String documentTypeName) {
 		this.documentTypeName = documentTypeName;
+	}
+	public String getBillDate() {
+		return billDate;
+	}
+	public void setBillDate(String billDate) {
+		this.billDate = billDate;
 	}
 	@Override
 	public String toString() {

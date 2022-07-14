@@ -94,6 +94,19 @@
 	<select id="getWorkflowByWorkflowNum" parameterType="int" resultType="workflowDTO">
 		select * from workflow where workflowNum = #{value}
 	</select>
+	<update id="updateApprove" parameterType="workflowDTO">
+		update workflow set
+			approver1State = #{approver1State},
+			approver2State = #{approver2State},
+			approver3State = #{approver3State},
+			presentApprover = #{presentApprover},
+			presentApproverNum = #{presentApproverNum},
+			targetValue = #{targetValue},
+			updateDate = CURRENT_TIMESTAMP,
+			updater = #{updater}
+		where
+			documentNum = #{documentNum}
+	</update>
 	<update id="renewWorkflow" parameterType="workflowDTO">
 		update workflow set
 			approver1State = #{approver1State},
@@ -138,7 +151,9 @@
 			left outer join
 				documentType dt on (w.documentTypeName = dt.documentTypeName)
 			join
-				estimateMaster em
+				(select documentNum, receiver, documentName from estimateMaster 
+				union 
+				select documentNum, receiver, documentName from orderMaster) em
 			on
 				w.documentNum = em.documentNum
 		where
@@ -157,16 +172,7 @@
 			w.documentNum = #{documentNum}
 	</select>
 	
-	<update id="updateApprove" parameterType="workflowDTO">
-		update workflow set
-			approver1State = #{approver1State},
-			approver2State = #{approver2State},
-			approver3State = #{approver3State},
-			updateDate = CURRENT_TIMESTAMP,
-			updater = #{updater}
-		where
-			documentNum = #{documentNum}
-	</update>
+	
 	
 	<delete	id="deleteWorkflow" parameterType="int">
 		delete from workflow where workflowNum = #{workflowNum}
@@ -214,7 +220,7 @@
 			on
 				wf.documentNum = dm.documentNum
 			join
-				estimateMaster em
+				(select documentNum, receiver, documentName from estimateMaster union select documentNum, receiver, documentName from orderMaster) em
 			on
 				wf.documentNum = em.documentNum
 			where
@@ -227,6 +233,20 @@
 				</when>
 			</choose>
 				dm.state = "app"
+			<choose>
+				<when test='start!="" and end!=""'>
+					and wf.updateDate between #{start} and #{end}
+				</when>
+				<when test='start!="" and end==""'>
+					and #{start} <![CDATA[<]]> wf.updateDate
+				</when>
+				<when test='start=="" and end!=""'>
+					and wf.updateDate <![CDATA[<]]> #{end}
+				</when>
+			</choose>
+			<if test='searchString!=""'>
+				and concat_ws("",ui2.userName, ui1.userName, dt.explanation, wf.documentNum, em.receiver, em.documentName) like #{searchString} 
+			</if>
 			order by ${option}
 	</select>
 	
@@ -266,7 +286,7 @@
 			on
 				wf.documentNum = dm.documentNum
 			join
-				estimateMaster em
+				(select documentNum, receiver, documentName from estimateMaster union select documentNum, receiver, documentName from orderMaster) em
 			on
 				wf.documentNum = em.documentNum
 			where
@@ -279,6 +299,20 @@
 				</when>
 			</choose>
 				dm.state = "app"
+			<choose>
+				<when test='start!="" and end!=""'>
+					and wf.updateDate between #{start} and #{end}
+				</when>
+				<when test='start!="" and end==""'>
+					and #{start} <![CDATA[<]]> wf.updateDate
+				</when>
+				<when test='start=="" and end!=""'>
+					and wf.updateDate <![CDATA[<]]> #{end}
+				</when>
+			</choose>
+			<if test='searchString!=""'>
+				and concat_ws("",ui2.userName, ui1.userName, dt.explanation, wf.documentNum, em.receiver, em.documentName) like #{searchString} 
+			</if>
 			order by ${option}
 	</select>
 </mapper>

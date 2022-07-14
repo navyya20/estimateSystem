@@ -13,10 +13,9 @@
 <div id="ajaxBody">
 	<div class="container-lg pr-md-3 pl-md-3">
 		<div class="p-0 d-flex">
-			<div class="p-0 d-flex col-6">
-			</div>
+			<div class="p-0 d-flex col-6"></div>
 			<div class="p-0 d-flex col-6 justify-content-end">
-				<div class="pr-2 d-flex col-4 col-md-2">total:&nbsp;<span><fmt:parseNumber value="${total}" var="totalInt" integerOnly="true"/>${totalInt}</span>&nbsp;円</div>
+				合計(税込):&nbsp;<span><fmt:parseNumber value="${total}" var="totalInt" integerOnly="true"/><fmt:formatNumber value="${totalInt}" type="currency" currencySymbol=""/></span>&nbsp;円
 			</div>
 		</div>
 	</div>
@@ -24,11 +23,10 @@
 		<div class="row p-0 m-0 bg-dark text-white">
 			<div class="col-12 row p-0 m-0 text-center" style="border-right: 1px solid white;">
   				<div class="col-12 row p-0 m-0">
-  					<div class="col-2 col-md-2 p-0 m-0 d-none d-md-inline" id="wfDOTupdateDate" onclick="countClickNum(this);">請求月</div>
-  					<div class="col-2 col-md-2 p-0 m-0" id="ui2DOTuserName" onclick="countClickNum(this);">請求書番号</div>
-  					<div class="col-3 col-md-3 p-0 m-0" id="wfDOTinsertDate" onclick="countClickNum(this);">顧客名</div>
-  					<div class="col-3 col-md-3 p-0 m-0" id="wfDOTinsertDate" onclick="countClickNum(this);">件名</div>
-  					<div class="col-2 col-md-2 p-0 m-0" id="ui1DOTuserName" onclick="countClickNum(this);">合計金額</div>
+  					<div class="col-2 col-md-2 p-0 m-0 d-none d-md-inline" id="totalDOTbillDate" onclick="countClickNum(this);">請求月</div>
+  					<div class="col-2 col-md-2 p-0 m-0" id="totalDOTdocumentNum" onclick="countClickNum(this);">請求書番号</div>
+  					<div class="col-6 col-md-6 p-0 m-0" id="totalDOTreceiver" onclick="countClickNum(this);">顧客名</div>
+  					<div class="col-2 col-md-2 p-0 m-0" id="totalDOTsumWithTax2" onclick="countClickNum(this);">合計金額</div>
   				</div>
 			</div>
 		</div>
@@ -40,11 +38,10 @@
 			<div class="row p-0 m-0 bgGray3">
 				<div class="col-12 row p-0 m-0 text-center" style="border-right: 1px solid white;">
 	  				<div class="col-12 row p-0 m-0">
-	  					<div class="col-2 col-md-2 p-0 m-0 d-none d-md-inline"><fmt:parseDate value="${bill.updateDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM"/></div>
+	  					<div class="col-2 col-md-2 p-0 m-0 d-none d-md-inline"><fmt:parseDate value="${bill.billDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM"/></div>
 	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center link" onclick="readBill('${bill.documentNum}','${bill.documentTypeName}')">${bill.documentNum}</div>
-	  					<div class="col-3 col-md-3 p-0 m-0 align-self-center">${bill.receiver}</div>
-	  					<div class="col-3 col-md-3 p-0 m-0 align-self-center">${bill.documentName}</div>
-	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center"><span id="sum${status.index}"><fmt:parseNumber value="${bill.sumWithTax}" var="sum" integerOnly="true"/>${sum}</span> 円</div>
+	  					<div class="col-6 col-md-6 p-0 m-0 align-self-center">${bill.receiver}</div>
+	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center"><span id="sum${status.index}"><fmt:parseNumber value="${bill.sumWithTax2}" var="sum" integerOnly="true"/><fmt:formatNumber value="${sum}" type="currency" currencySymbol=""/></span> 円</div>
 	  				</div>
 				</div>
 			</div>

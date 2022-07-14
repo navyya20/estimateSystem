@@ -1,6 +1,7 @@
 package jp.co.interline.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
@@ -117,15 +118,15 @@ public class WorkflowDAO {
 		int result = mapper.setfileName(documentMaster);
 		return result;
 	}
-	public int getTotalApprovedSheet(UserInformWithOptionDTO userInformWithOption) {
+	public int getTotalApprovedSheet(HashMap<String,String> param) {
 		WorkflowMapper mapper = sqlsession.getMapper(WorkflowMapper.class);
-		int total = mapper.getTotalApprovedSheet(userInformWithOption);
+		int total = mapper.getTotalApprovedSheet(param);
 		return total;
 	}
-	public ArrayList<ApprovedListDTO> getApprovedList(int st, int ctt, UserInformWithOptionDTO userInformWithOption) {
+	public ArrayList<ApprovedListDTO> getApprovedList(int st, int ctt, HashMap<String,String> param) {
 		WorkflowMapper mapper = sqlsession.getMapper(WorkflowMapper.class);
 		RowBounds rbs = new RowBounds(st,ctt);
-		ArrayList<ApprovedListDTO> approvedList = mapper.getApprovedList(rbs, userInformWithOption);
+		ArrayList<ApprovedListDTO> approvedList = mapper.getApprovedList(rbs, param);
 		return approvedList;
 	}
 

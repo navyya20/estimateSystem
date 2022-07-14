@@ -32,7 +32,6 @@
 <style type="text/css">
 </style>
 <script>
-
 //인터셉터로 로그인 들어왔는데 현제페이지가 아이프레임 내부일경우 부모요소를 로그인 페이지로 페이지이동
 if ( self !== top ) {
 	  // you're in an iframe
@@ -65,6 +64,8 @@ function requestButton(){
 						location.href="estimateList";
 					}else if(inputJson["systemNum"]=="2"){
 						location.href="billList";
+					}else if(inputJson["systemNum"]=="3"){
+						location.href="orderList";
 					}else{
 						alert("SYSTEMNUMERが定義されていません。必ず管理者にお問い合わせください。");
 					}
@@ -76,27 +77,26 @@ function requestButton(){
 			}		
 	);
 }
-function approveButton(){
-	var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
-	var inputJson=JSON.parse(inputJsonString);
-	$("#progressDiv").css("z-index",9998);
+function approveButton(inputJson, fileName, filePath){
 	$.ajax(
 			{
 				url: "approval",
 				type: 'POST',
-				data: {"documentTypeName":inputJson["documentTypeName"], "documentNum" : inputJson["documentNum"], "workflowNum":inputJson["workflowNum"]},
-				dataType:"text",
+				data: {"documentTypeName":inputJson["documentTypeName"], "documentNum" : inputJson["documentNum"], "workflowNum":inputJson["workflowNum"], "fileName":fileName, "filePath":filePath},
+				dataType:"json",
 				success: function(r){
-					if (r!="承認完了"){ 
-						alert("承認失敗");
+					$("#progressDiv").html("完了");
+					if (r.result!="true"){ 
+						alert("承認失敗。/n"+r.msg);
+						return;
 					}else{
-						generateFile(inputJson);
+						alert("承認完了");
 					}
-					location.href="estimateList";
+					location.href="workflowWaitingList";
 				},
 				error: function(e){
 					console.log(JSON.stringify(e));
-					alert('エラー！');
+					alert('AJAXエラー！');
 				}
 			}		
 	);
@@ -112,11 +112,11 @@ function rejectButton(){
 				dataType:"text",
 				success: function(r){
 					alert(r);
-					location.href="estimateList";
+					location.href="workflowWaitingList";
 				},
 				error: function(e){
 					console.log(JSON.stringify(e));
-					alert('エラー！');
+					alert('AJAXエラー！');
 				}
 			}		
 	);
@@ -134,22 +134,35 @@ function copyButton(){
 }
 
 
+function wait(ms) {
+    let start = Date.now(), now = start;
+    while (now - start < ms) {
+        now = Date.now();
+    }
+}
 //승인완료후 파일생성을 하러간다. 파일생성을 할지말지는 가서 정해진다.
-function generateFile(inputJson){
+function generateFile(){
+	$("#progressDiv").css("z-index",9998);//화면 중앙에 승인처리중 메세지div를 띄워줌.
+	var inputJsonString = OZViewer.GetInformation("INPUT_JSON_ALL");
+	var inputJson=JSON.parse(inputJsonString);
 	$.ajax(
 			{
 				url: "generateFile",
 				type: 'POST',
 				data: {"systemNum":inputJson["systemNum"], "documentTypeName":inputJson["documentTypeName"], "documentNum" : inputJson["documentNum"], "workflowNum":inputJson["workflowNum"]},
-				dataType:"text",
-				async: false,
+				dataType: 'json',
 				success: function(r){
-					$("#progressDiv").html("完了");
-					alert(r);
+					console.log(JSON.stringify(r));
+					if(r.result=="true" && r.fileSuccess=="true"){
+						approveButton(inputJson, r.fileName, r.filePath);
+					}else{
+						alert("ファイル作成に失敗したため、承認できません。");
+						$("#progressDiv").css("z-index",-1);//화면 중앙에 승인처리중 메세지div를 뒤로감춤.
+					}
 				},
 				error: function(e){
 					console.log(JSON.stringify(e));
-					alert('エラー！');
+					alert('AJAXエラー！');
 				}
 			}		
 	);
@@ -177,7 +190,8 @@ function generateFile(inputJson){
 				<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="requestButton()">承認依頼</button>
 			</c:if>
 			<c:if test="${approveMode eq 'on'}">
-				<button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="approveButton()">承認</button>
+				<button id="appBtn" type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="generateFile()">承認</button>
+				<!-- <button type="button" class="col-3 mr-2 ml-2 btn btn-secondary" onclick="approveButton()">承認</button> -->
 			</c:if>
 
 			<c:if test="${approveMode eq 'on'}">

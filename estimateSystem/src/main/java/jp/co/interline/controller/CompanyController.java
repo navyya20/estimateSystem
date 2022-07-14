@@ -2,6 +2,7 @@ package jp.co.interline.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,6 +21,7 @@ import jp.co.interline.dto.CompanyDTO;
 import jp.co.interline.dto.DepartmentDTO;
 import jp.co.interline.dto.FileNamesDTO;
 import jp.co.interline.dto.PositionDTO;
+import jp.co.interline.dto.SystemDTO;
 import jp.co.interline.dto.UserInformDTO;
 import jp.co.interline.service.CompanyService;
 import jp.co.interline.service.FileService;
@@ -100,10 +102,9 @@ public class CompanyController {
 	
 	@RequestMapping(value = "/all/imgList", method = RequestMethod.GET)
 	public String imgList(HttpSession session, Model model) {
-		FileNamesDTO stampFileName = companyService.getfileName("stamp");
-		FileNamesDTO logoFileName = companyService.getfileName("logo");
-		model.addAttribute("stampFileName", stampFileName);
-		model.addAttribute("logoFileName", logoFileName);
+		HashMap<String,String> fileNamesMap = companyService.getfileNames();
+		model.addAttribute("stampFileName", fileNamesMap.get("stamp"));
+		model.addAttribute("logoFileName", fileNamesMap.get("logo"));
 		return "companyInform/imgList";
 	}
 	

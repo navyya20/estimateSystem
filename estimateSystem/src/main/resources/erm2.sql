@@ -1118,18 +1118,13 @@ UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '見積書A
 UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '見積書B(ソリューション事業部)' WHERE (`documentTypeName` = 'estimateSolution');
 
 
--- ver 1.30
--- 청구서 집계를위한 뷰생성
-CREATE VIEW billTotalView AS
-SELECT v.documentNum, v.userNum, v.documentName, v.receiver, v.sumWithTax, v.insertDate, v.updateDate, v.updater, v.documentTypeName
-FROM (select t.documentNum, t.userNum, t.documentName, t.receiver, t.sumWithTax, t.insertDate, t.updateDate, t.updater, t.documentTypeName from 
-(SELECT documentNum, userNum, documentName, receiver, sumWithTax, insertDate, updateDate, updater, documentTypeName from billSi as si union
-SELECT documentNum, userNum, documentName, receiver, sumWithTax, insertDate, updateDate, updater, documentTypeName from billSolution as so union
-SELECT documentNum, userNum, documentName, receiver, sumWithTax, insertDate, updateDate, updater, documentTypeName from billC as c union
-SELECT documentNum, userNum, documentName, receiver, sumWithTax, insertDate, updateDate, updater, documentTypeName from billD as d) as t
-join (select documentNum, targetValue from workflow where systemNum = 2 and targetValue = "aaa") as w
-on t.documentNum = w.documentNum) as v;
+-- 1.22
+-- 청구서C 테수료 항목 이름을 변경할수 있게.
+ALTER TABLE `interline_estimatesystem`.`billc` ADD COLUMN `commissionName` VARCHAR(10) NULL DEFAULT NULL AFTER `tax`;
 
+
+
+-- ver 1.30
 -- billSelect 순서 변경 및 표시항목 모델화
 UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '請求書A(SI事業部)' WHERE (`documentTypeName` = 'billSi');
 UPDATE `interline_estimatesystem`.`documenttype` SET `explanation` = '請求書B(ソリューション事業部)' WHERE (`documentTypeName` = 'billSolution');
@@ -1142,6 +1137,141 @@ UPDATE `interline_estimatesystem`.`documenttype` SET `orderNum` = '1' WHERE (`do
 UPDATE `interline_estimatesystem`.`documenttype` SET `orderNum` = '2' WHERE (`documentTypeName` = 'estimateSolution');
 UPDATE `interline_estimatesystem`.`documenttype` SET `orderNum` = '3' WHERE (`documentTypeName` = 'estimateLanguage');
 
+
+-- estimateDate, billDate 항목을 날짜 크기 비교하기 위해 date형식으로 변경. 조건절에 str_to_date()함수를 쓰지않기위해
+ALTER TABLE `interline_estimatesystem`.`estimatelanguage` 
+CHANGE COLUMN `estimateDate` `estimateDate` DATETIME NULL DEFAULT NULL COMMENT '作成日表示用' ;
+ALTER TABLE `interline_estimatesystem`.`estimatesolution` 
+CHANGE COLUMN `estimateDate` `estimateDate` DATETIME NULL DEFAULT NULL COMMENT '作成日表示用' ;
+ALTER TABLE `interline_estimatesystem`.`estimatesi` 
+CHANGE COLUMN `estimateDate` `estimateDate` DATETIME NULL DEFAULT NULL COMMENT '作成日表示用' ;
+ALTER TABLE `interline_estimatesystem`.`billsi` 
+CHANGE COLUMN `billDate` `billDate` DATETIME NULL DEFAULT NULL COMMENT '作成日表示用' ;
+ALTER TABLE `interline_estimatesystem`.`billsolution` 
+CHANGE COLUMN `billDate` `billDate` DATETIME NULL DEFAULT NULL COMMENT '作成日表示用' ;
+ALTER TABLE `interline_estimatesystem`.`billc` 
+CHANGE COLUMN `billDate` `billDate` DATETIME NULL DEFAULT NULL COMMENT '作成日表示用' ;
+ALTER TABLE `interline_estimatesystem`.`billd` 
+CHANGE COLUMN `billDate` `billDate` DATETIME NULL DEFAULT NULL COMMENT '作成日表示用' ;
+
 -- billsi 아이템 컬럼추가(작업자)
 ALTER TABLE `interline_estimatesystem`.`billsiitems` ADD COLUMN `workerName` VARCHAR(10) NULL DEFAULT NULL AFTER `rowNum`;
 
+-- 청구서 집계를위한 뷰생성
+CREATE VIEW billTotalView AS
+SELECT v.documentNum, v.billDate, v.userNum, v.documentName, v.receiver, v.sumWithTax, v.sumWithTax2, v.insertDate, v.updateDate, v.updater, v.documentTypeName
+FROM (select t.documentNum, t.billDate, t.userNum, t.documentName, t.receiver, t.sumWithTax, t.sumWithTax2, t.insertDate, t.updateDate, t.updater, t.documentTypeName from 
+(SELECT documentNum, billDate, userNum, documentName, receiver, sumWithTax, sumWithTax2, insertDate, updateDate, updater, documentTypeName from billSi as si union
+SELECT documentNum, billDate, userNum, documentName, receiver, sumWithTax, sumWithTax2, insertDate, updateDate, updater, documentTypeName from billSolution as so union
+SELECT documentNum, billDate, userNum, documentName, receiver, sumWithTax, sumWithTax2, insertDate, updateDate, updater, documentTypeName from billC as c union
+SELECT documentNum, billDate, userNum, documentName, receiver, sumWithTax, sumWithTax2, insertDate, updateDate, updater, documentTypeName from billD as d) as t
+join (select documentNum, targetValue from workflow where systemNum = 2 and targetValue = "aaa") as w
+on t.documentNum = w.documentNum) as v;
+
+
+-- 1.40 주문서시스템추가
+INSERT INTO `interline_estimatesystem`.`systemtype` (`systemNum`, `systemName`, `explanation`) VALUES ('3', 'orderSystem', '注文書');
+INSERT INTO `interline_estimatesystem`.`documenttype` (`documentTypeName`, `explanation`, `systemNum`, `orderNum`) VALUES ('orderA', '注文書Ａ(SI事業部)', '3', '1');
+INSERT INTO `interline_estimatesystem`.`workflowinform` (`workflowInformNum`, `approver1`, `approver2`, `approver3`, `targetKey`, `insertDate`, `systemNum`) VALUES ('3', '2', '-1', '-1', 'aaa', CURRENT_TIMESTAMP, '3');
+INSERT INTO masterSeq VALUES (0, 'orderSeq');
+
+-- 주문서 마스터 테이블
+CREATE TABLE orderMaster
+(
+	documentNum varchar(20) NOT NULL COMMENT 'documentNum',
+	receiver varchar(40) COMMENT '顧客名',
+	documentName varchar(40) COMMENT '件名',
+	-- 関われている見積書のdocumentNum
+	PRIMARY KEY (documentNum)
+) COMMENT = '新規テーブル';
+
+ALTER TABLE orderMaster
+	ADD FOREIGN KEY (documentNum)
+	REFERENCES documentMaster (documentNum)
+	ON UPDATE RESTRICT
+	ON DELETE CASCADE
+;
+
+-- 주문서A[SI事業部]
+CREATE TABLE orderA
+(
+	documentNum varchar(20) NOT NULL COMMENT 'documentNum',
+	-- ユーザ情報の固有ナンバー
+	userNum int NOT NULL COMMENT '作成者 : ユーザ情報の固有ナンバー',
+	userName varchar(30) COMMENT '作成者名前',
+	userDepartment varchar(10) COMMENT '依頼部署',
+	userPosition varchar(10) COMMENT '作成者役職',
+	orderDate datetime COMMENT '作成日表示用',
+	-- これがOZRが参照するデータテーブル名になる。
+	-- 例）estimateSolution , BillSolution
+	documentTypeName varchar(20) DEFAULT 'orderA' NOT NULL COMMENT '文書種類の名前 : これがOZRが参照するデータテーブル名になる。',
+	address varchar(400) COMMENT '供給者住所',
+	stamp varchar(25) COMMENT '印鑑',
+	stampFileName varchar(25) COMMENT '印鑑ファイル名',
+	-- logoイメージのファイル名
+	logoFileName varchar(25) COMMENT 'logoFileName : logoイメージのファイル名',
+	receiver varchar(100) COMMENT '顧客名',
+	documentName varchar(100) COMMENT '件名',
+    deadline varchar(40) COMMENT '納入期日',
+    place varchar(40) COMMENT '納品場所',
+    contractType varchar(40) COMMENT '契約区分',
+	output varchar(40) COMMENT '納品物',
+	payCondition varchar(100) COMMENT '支払い条件',
+    etc1 varchar(80) COMMENT 'その他1',
+	etc2 varchar(400) COMMENT 'その他2',
+	sumWithoutTax bigint COMMENT '総計税金込み',
+	sumWithoutTax2 bigint COMMENT '総計税金込み２',
+	insertDate datetime DEFAULT CURRENT_TIMESTAMP COMMENT '格納日時 : このデータが挿入された日時。又はこのデータが有効になった日時。',
+	-- 更新日時
+	updateDate datetime COMMENT 'updateDate : 更新日時',
+	-- データの更新者のuserNum
+	updater int COMMENT '更新者 : データの更新者のuserNum',
+	PRIMARY KEY (documentNum)
+) COMMENT = 'SI注文書';
+
+
+-- 주문서A아이템[SI事業部]
+CREATE TABLE orderAItems
+(
+	rowNum int COMMENT '行数',
+    item varchar(2) COMMENT '項目名',
+	itemName varchar(30) COMMENT '項目名',
+	workStart varchar(12),
+    workEnd varchar(12),
+    manMonth DECIMAL(4,1),
+    price bigint COMMENT '値段',
+    note varchar(30) COMMENT '備考1',
+	unitPrice int COMMENT '単価',
+	standardMin int COMMENT '基準時間下限',
+    standardMax int COMMENT '基準時間上限',
+    underTimeUnitPrice int COMMENT '下限時間による控除',
+    overTimeUnitPrice int COMMENT '上限時間による精算',
+    note2 varchar(30) COMMENT '備考2',
+	documentNum varchar(20) NOT NULL COMMENT 'documentNum'
+) COMMENT = 'SI注文書のアイテム';
+
+ALTER TABLE orderA
+	ADD FOREIGN KEY (documentNum)
+	REFERENCES orderMaster (documentNum)
+	ON UPDATE RESTRICT
+	ON DELETE CASCADE
+;
+
+ALTER TABLE orderAItems
+	ADD FOREIGN KEY (documentNum)
+	REFERENCES orderA (documentNum)
+	ON UPDATE RESTRICT
+	ON DELETE CASCADE
+;
+
+-- 매 0시마다 인덱스를 0으로 세팅 이벤트에 orderSeq 추가
+DROP EVENT IF EXISTS setSeqZero;
+CREATE EVENT IF NOT EXISTS setSeqZero
+    ON SCHEDULE
+           EVERY 1 DAY
+           STARTS '2021-06-16 23:59:59'
+    ON COMPLETION PRESERVE
+    ENABLE
+    COMMENT 'setSeqZero'
+    DO 
+		update masterSeq set id = 0 where seqName in ('estimateSeq','billSeq','orderSeq');

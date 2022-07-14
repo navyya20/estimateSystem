@@ -17,8 +17,8 @@ projectRoot=estimate
 
 diver=com.mysql.jdbc.Driver
 url=jdbc:mysql://localhost:3306/interline_EstimateSystem?characterEncoding=UTF-8&serverTimezone=UTC&allowMultiQueries=true
-user=hrhr6
-password=hrhr
+user=EstimateSystem
+password=EstimateSystem123456#
 
 (company)
 webIP=ozserver-ideapad

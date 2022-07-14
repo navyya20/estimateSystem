@@ -32,6 +32,9 @@
 		<typeAlias type="jp.co.interline.dto.billSystem.monthlyBillTotal.MonthlyBillTotalAjaxDTO" alias="monthlyBillTotalAjaxDTO"/>
 		<typeAlias type="jp.co.interline.dto.billSystem.monthlyBillTotal.MonthlyBillTotalAjaxForBillSiDTO" alias="monthlyBillTotalAjaxForBillSiDTO"/>
 		
+		<typeAlias type="jp.co.interline.dto.orderSystem.OrderListDTO" alias="orderListDTO"/>
+		<typeAlias type="jp.co.interline.dto.orderSystem.orderA.OrderADTO" alias="orderADTO"/>
+		
 		<typeAlias type="jp.co.interline.dto.EstimateListDTO" alias="estimateListDTO"/>
 		<typeAlias type="jp.co.interline.dto.testDTO" alias="testDTO"/>
 	</typeAliases>
@@ -44,5 +47,6 @@
 		<mapper resource="Mapper/SystemMapper.xml"/>
 		<mapper resource="Mapper/EstimateMapper.xml"/>
 		<mapper resource="Mapper/BillMapper.xml"/>
+		<mapper resource="Mapper/OrderMapper.xml"/>
 	</mappers>
 </configuration>

@@ -16,12 +16,8 @@
 			<div class="p-0 d-flex col-8">
 			</div>
 			<div class="p-0 d-flex col-4">
-				<div class="p-0 d-flex col-2"></div>
-				<div class="p-0 d-flex col-6">
-					金額合計:&nbsp;<span><fmt:parseNumber value="${totalPrice}" var="totalPriceInt" integerOnly="true"/><fmt:formatNumber value="${totalPriceInt}" type="currency" currencySymbol=""/></span>&nbsp;円
-				</div>
-				<div class="p-0 d-flex col-4">
-					経費合計:&nbsp;<span><fmt:parseNumber value="${totalExpenses}" var="totalExpensesInt" integerOnly="true"/><fmt:formatNumber value="${totalExpensesInt}" type="currency" currencySymbol=""/></span>&nbsp;円
+				<div class="p-0 d-flex col-7">
+					合計(税込):&nbsp;<span><fmt:parseNumber value="${totalPrice}" var="totalPriceInt" integerOnly="true"/><fmt:formatNumber value="${totalPriceInt}" type="currency" currencySymbol=""/></span>&nbsp;円
 				</div>
 			</div>
 		</div>
@@ -29,24 +25,25 @@
 	<div class="container-fluid pr-md-3 pl-md-3 smallSize">
 		<div class="row p-0 m-0 bg-dark text-white">
 			<div class="col-12 row p-0 m-0 text-center" style="border-right: 1px solid white;">
-  				<div class="col-4 row p-0 m-0">
-  					<div class="col-3 col-md-3 p-0 m-0" id="wfDOTupdateDate" onclick="countClickNum(this);">請求月</div>
-  					<div class="col-4 col-md-4 p-0 m-0" id="ui2DOTuserName" onclick="countClickNum(this);">請求書番号</div>
-  					<div class="col-5 col-md-5 p-0 m-0" id="wfDOTinsertDate" onclick="countClickNum(this);">顧客名</div>
+  				<div class="col-3 row p-0 m-0">
+  					<div class="col-3 col-md-3 p-0 m-0" id="bDOTbillDate" onclick="countClickNum(this);">請求月</div>
+  					<div class="col-4 col-md-4 p-0 m-0" id="iDOTdocumentNum" onclick="countClickNum(this);">請求書番号</div>
+  					<div class="col-5 col-md-5 p-0 m-0" id="bDOTreceiver" onclick="countClickNum(this);">顧客名</div>
+  				</div>
+  				<div class="col-5 row p-0 m-0">
+  					<div class="col-2 col-md-2 p-0 m-0" id="iDOTmonthlyUnitPrice" onclick="countClickNum(this);">月額単価</div>
+  					<div class="col-2 col-md-2 p-0 m-0" id="standardTime">基準時間</div>
+  					<div class="col-2 col-md-2 p-0 m-0" id="iDOTworkTime" onclick="countClickNum(this);">作業時間</div>
+  					<div class="col-2 col-md-2 p-0 m-0" id="iDOTextraTime" onclick="countClickNum(this);">過不足時間</div>
+  					<div class="col-2 col-md-2 p-0 m-0" id="iDOToverTimeUnitPrice" onclick="countClickNum(this);">超過時間単価</div>
+  					<div class="col-2 col-md-2 p-0 m-0" id="iDOTunderTimeUnitPrice" onclick="countClickNum(this);">控除時間単価</div>
   				</div>
   				<div class="col-4 row p-0 m-0">
-  					<div class="col-2 col-md-2 p-0 m-0" id="wfDOTinsertDate" onclick="countClickNum(this);">月額単価</div>
-  					<div class="col-3 col-md-3 p-0 m-0" id="wfDOTinsertDate" onclick="countClickNum(this);">基準時間</div>
-  					<div class="col-2 col-md-2 p-0 m-0" id="wfDOTinsertDate" onclick="countClickNum(this);">作業時間</div>
-  					<div class="col-2 col-md-2 p-0 m-0" id="wfDOTinsertDate" onclick="countClickNum(this);">過不足時間</div>
-  					<div class="col-3 col-md-3 p-0 m-0" id="wfDOTinsertDate" onclick="countClickNum(this);">超過時間単価</div>
-  				</div>
-  				<div class="col-4 row p-0 m-0">
-  					<div class="col-3 col-md-3 p-0 m-0" id="wfDOTinsertDate" onclick="countClickNum(this);">控除時間単価</div>
-  					<div class="col-3 col-md-3 p-0 m-0" id="ui1DOTuserName" onclick="countClickNum(this);">金額</div>
-  					<div class="col-2 col-md-2 p-0 m-0" id="wfDOTinsertDate" onclick="countClickNum(this);">旅費</div>
-  					<div class="col-2 col-md-2 p-0 m-0" id="wfDOTinsertDate" onclick="countClickNum(this);">日当</div>
-  					<div class="col-2 col-md-2 p-0 m-0" id="wfDOTinsertDate" onclick="countClickNum(this);">小計</div>
+  					<div class="col-3 col-md-3 p-0 m-0" id="iDOTprice" onclick="countClickNum(this);">金額(税抜)</div>
+  					<div class="col-2 col-md-2 p-0 m-0" id="iDOTexpense" onclick="countClickNum(this);">旅費</div>
+  					<div class="col-2 col-md-2 p-0 m-0" id="iDOTbenefit" onclick="countClickNum(this);">日当</div>
+  					<div class="col-3 col-md-3 p-0 m-0" id="iDOTsubtotal" onclick="countClickNum(this);">小計</div>
+  					<div class="col-2 col-md-2 p-0 m-0" id="iDOTworkerName" onclick="countClickNum(this);">作業者</div>
   				</div>
 			</div>
 		</div>
@@ -57,24 +54,25 @@
 		<div class="container-fluid pr-md-3 pl-md-3 smallSize">
 			<div class="row p-0 m-0 bgGray3">
 				<div class="col-12 row p-0 m-0 text-center" style="border-right: 1px solid white;">
-	  				<div class="col-4 row p-0 m-0">
-	  					<div class="col-3 col-md-3 p-0 m-0 align-self-center"><fmt:parseDate value="${bill.updateDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM"/></div>
+	  				<div class="col-3 row p-0 m-0">
+	  					<div class="col-3 col-md-3 p-0 m-0 align-self-center"><fmt:parseDate value="${bill.billDate}" var="noticePostDate" pattern="yyyy-MM-dd HH:mm:ss"/><fmt:formatDate value="${noticePostDate}" pattern="yyyy/MM"/></div>
 	  					<div class="col-4 col-md-4 p-0 m-0 align-self-center link" onclick="readBill('${bill.documentNum}','${bill.documentTypeName}')">${bill.documentNum}</div>
 	  					<div class="col-5 col-md-5 p-0 m-0 align-self-center">${bill.receiver}</div>
 	  				</div>
-	  				<div class="col-4 row p-0 m-0">
-	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center">${bill.monthlyUnitPrice}</div>
-	  					<div class="col-3 col-md-3 p-0 m-0 align-self-center"><span><fmt:formatNumber value="${bill.standardMin}" pattern=".00"/></span>&nbsp;~&nbsp;<span><fmt:formatNumber value="${bill.standardMax}" pattern=".00"/></span></div>
-	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center"><span><fmt:formatNumber value="${bill.workTime}" pattern=".00"/></span></div>
-	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center"><span><fmt:formatNumber value="${bill.extraTime}" pattern=".00"/></span></div>
-	  					<div class="col-3 col-md-3 p-0 m-0 align-self-center"><fmt:formatNumber value="${bill.overTimeUnitPrice}" type="currency" currencySymbol=""/></div>
+	  				<div class="col-5 row p-0 m-0">
+	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center"><fmt:formatNumber value="${bill.monthlyUnitPrice}" type="currency" currencySymbol=""/></div>
+	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center"><span><fmt:formatNumber value="${bill.standardMin}" pattern="0.00"/></span>&nbsp;~&nbsp;<span><fmt:formatNumber value="${bill.standardMax}" pattern=".00"/></span></div>
+	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center"><span><fmt:formatNumber value="${bill.workTime}" pattern="0.00"/></span></div>
+	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center"><span><fmt:formatNumber value="${bill.extraTime}" pattern="0.00"/></span></div>
+	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center"><fmt:formatNumber value="${bill.overTimeUnitPrice}" type="currency" currencySymbol=""/></div>
+	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center"><fmt:formatNumber value="${bill.underTimeUnitPrice}" type="currency" currencySymbol=""/></div>
 	  				</div>
 	  				<div class="col-4 row p-0 m-0">
-	  					<div class="col-3 col-md-3 p-0 m-0 align-self-center"><fmt:formatNumber value="${bill.underTimeUnitPrice}" type="currency" currencySymbol=""/></div>
 	  					<div class="col-3 col-md-3 p-0 m-0 align-self-center"><span><fmt:parseNumber value="${bill.price}" var="priceInt" integerOnly="true"/><fmt:formatNumber value="${priceInt}" type="currency" currencySymbol=""/></span>&nbsp;円</div>
 	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center"><fmt:formatNumber value="${bill.expense}" type="currency" currencySymbol=""/></div>
 	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center"><fmt:formatNumber value="${bill.benefit}" type="currency" currencySymbol=""/></div>
-	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center"><span><fmt:parseNumber value="${bill.subtotal}" var="subtotalInt" integerOnly="true"/><fmt:formatNumber value="${subtotalInt}" type="currency" currencySymbol=""/></span>&nbsp;円</div>
+	  					<div class="col-3 col-md-3 p-0 m-0 align-self-center"><span><fmt:parseNumber value="${bill.subtotal}" var="subtotalInt" integerOnly="true"/><fmt:formatNumber value="${subtotalInt}" type="currency" currencySymbol=""/></span>&nbsp;円</div>
+	  					<div class="col-2 col-md-2 p-0 m-0 align-self-center">${bill.workerName}</div>
 	  				</div>
 				</div>
 			</div>

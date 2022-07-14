@@ -120,6 +120,28 @@ function saveApprover(){
 						<input type="text" class="pl-2 pr-0 col-8 form-control" id="approver3Estimate" name="approver3" value="${billSystem.approver3 eq -1? '設定なし':billSystem.approver3Name}" readonly onclick="selectedSystem(2,3)" data-toggle="modal" data-target="#exampleModal">
 					</div>
 					
+					<!-- orderSystem -->
+					<!-- 3명까지 선택가능 하나 현제 요구사항이 1명지정이므로 나머지 2명에대한 항목은 d-none옵션으로 보이지 않게 했음. d-none만 풀어주면 최대 3명짜리로 작동가능 -->
+					<div class="mt-3 pl-3">注文書</div>
+					<div class="input-group">
+						<div class="p-0 col-4 input-group-prepend">
+							<label class="col-12 input-group-text d-flex justify-content-center" for="approver1" id="inputGroup-sizing-default">承認者1</label>
+						</div>
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="approver1Estimate" name="approver1" value="${orderSystem.approver1 eq -1? '設定なし':orderSystem.approver1Name}" readonly onclick="selectedSystem(3,1)" data-toggle="modal" data-target="#exampleModal">
+					</div>
+					<div class="input-group d-none">
+						<div class="p-0 col-4 input-group-prepend">
+							<label class="col-12 input-group-text d-flex justify-content-center" for="approver2" id="inputGroup-sizing-default">承認者2</label>
+						</div>
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="approver2Estimate" name="approver2" value="${orderSystem.approver2 eq -1? '設定なし':orderSystem.approver2Name}" readonly onclick="selectedSystem(3,2)" data-toggle="modal" data-target="#exampleModal">
+					</div>
+					<div class="input-group d-none">
+						<div class="p-0 col-4 input-group-prepend">
+							<label class="col-12 input-group-text d-flex justify-content-center" for="approver3" id="inputGroup-sizing-default">承認者3</label>
+						</div>
+						<input type="text" class="pl-2 pr-0 col-8 form-control" id="approver3Estimate" name="approver3" value="${orderSystem.approver3 eq -1? '設定なし':orderSystem.approver3Name}" readonly onclick="selectedSystem(3,3)" data-toggle="modal" data-target="#exampleModal">
+					</div>
+					
 					
 					
 					

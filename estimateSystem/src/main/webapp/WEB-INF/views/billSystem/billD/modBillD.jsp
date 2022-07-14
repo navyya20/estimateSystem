@@ -23,7 +23,7 @@
 -->
 
 <script type="text/javascript" src="../js/jQuery-FontSpy.js" charset="utf-8"></script>
-<script type="text/javascript" src="../js/dataCompensation/dataCompensation.js?ver=4" charset="utf-8"></script>
+<script type="text/javascript" src="../js/dataCompensation/dataCompensation.js?ver=5" charset="utf-8"></script>
 
 
 <link rel="stylesheet" type="text/css" href="../css/bootstrap.css">
@@ -195,7 +195,7 @@ if ( self !== top ) {
 						dataType:"text",
 						success: function(r){
 							alert(r);
-							location.href="estimateList";
+							location.href="billList";
 						},
 						error: function(e){
 							console.log(JSON.stringify(e));
